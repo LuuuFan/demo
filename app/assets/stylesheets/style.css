@@ -65,4 +65,20 @@ input[type="submit"] {
   display: block;
   clear: both; }
 
+.main {
+  height: 100vh; }
+
+.session-main {
+  height: 100%; }
+
+.session-form {
+  width: 30%;
+  margin: 200px auto;
+  height: 20%; }
+  .session-form form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; }
+
 /*# sourceMappingURL=style.css.map */

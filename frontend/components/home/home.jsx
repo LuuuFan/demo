@@ -1,5 +1,5 @@
 import React from 'react';
-
+import SessionFormContainer from '../session/session_form_container';
 
 class Home extends React.Component {
 	constructor(){

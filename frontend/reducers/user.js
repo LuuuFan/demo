@@ -1,4 +1,4 @@
-// import {RECEIVE_USER} from '../actions/user_actions';
+import {RECEIVE_USER} from '../actions/user_actions';
 
 const userReducer = (state={}, action) => {
 	Object.freeze(state);
