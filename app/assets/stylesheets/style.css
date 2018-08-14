@@ -98,4 +98,86 @@ input[type="submit"] {
     text-decoration: none;
     font-weight: bold; }
 
+.canvas-container {
+  width: 100%;
+  margin: 50px auto;
+  display: flex; }
+  .canvas-container canvas {
+    box-shadow: 0 8px 6px -6px black; }
+
+#sidebar {
+  position: fixed;
+  width: 6vw;
+  display: flex;
+  flex-direction: column;
+  height: 93vh;
+  background-color: lightgray; }
+
+#sidebar > li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  padding: 4vh; }
+
+#sidebar > .selected {
+  background-color: white; }
+
+.nav-text {
+  margin-top: 10px;
+  font-size: 12px; }
+
+.nav-link > i {
+  font-size: 25px; }
+
+.nav-link > * {
+  display: block;
+  text-align: center; }
+
+li > .nav-link {
+  border-radius: 3px;
+  color: var(--primary-color);
+  width: auto; }
+
+#side-content {
+  position: absolute;
+  left: 7vw;
+  width: 18vw;
+  height: 66vh;
+  border: solid 1px darkgrey;
+  overflow: auto; }
+
+.tab-pane > label, .tab-pane > #button-wrapper {
+  width: 100%;
+  text-align: center; }
+
+.tab-pane > label {
+  margin-top: 1vh; }
+
+#layouts-list, #shapes-list, #templates-list {
+  margin-top: 1vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  padding-left: 0; }
+
+.layouts-item, .shapes-item, .templates-item {
+  list-style: none; }
+
+#shapes-list .ui-selected {
+  border-radius: 2px;
+  background-color: white; }
+
+.shapes-item > img {
+  height: 6vh;
+  width: 3.25vw; }
+
+.selected-color {
+  height: 30px;
+  width: 30px;
+  border-radius: 2px;
+  border: solid 1px black; }
+
 /*# sourceMappingURL=style.css.map */

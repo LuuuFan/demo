@@ -9,17 +9,18 @@ import Canvas from './canvas';
 class Home extends React.Component {
 	constructor(){
 		super();
-		const s = this;
-    	s.vx01 = 1;
 		this.state = {};
 	}
 
 	componentDidMount(){
-		this.props.fetchAllImgs(this.props.currentUser['access-token']);
+		this.props.fetchAllImgs(this.props.currentUser['access-token'])
+			.catch((err)=>{
+				localStorage.removeItem('access_token');
+				this.props.history.push('/login');
+			});
 	}
 
 	render(){
-		const s = this;
 		const {imgs} = this.props;
 		return(
 			<div>
@@ -32,9 +33,5 @@ class Home extends React.Component {
 		);
 	}
 }
-
-Home.propTypes = {
-	optionalBool: PropTypes.bool,
-};
 
 export default Home;
