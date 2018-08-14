@@ -36078,18 +36078,13 @@ var Canvas = function (_React$Component) {
 	_createClass(Canvas, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			var canvas = new _fabric.fabric.Canvas("canvas");
-			canvas.setBackgroundColor('rgba(255, 73, 64, 0.6)', canvas.renderAll.bind(canvas));
-			console.log(canvas);
-			debugger;
+			var canvas = new _fabric.fabric.Canvas("c");
+			canvas.setBackgroundColor('rgba(255, 73, 64)', canvas.renderAll.bind(canvas));
 		}
-	}, {
-		key: 'componentDidUpdate',
-		value: function componentDidUpdate() {}
 	}, {
 		key: 'render',
 		value: function render() {
-			return _react2.default.createElement('canvas', null);
+			return _react2.default.createElement('canvas', { ref: 'c', id: 'c' });
 		}
 	}]);
 

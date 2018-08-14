@@ -11,18 +11,14 @@ class Canvas extends React.Component{
 	}
 
 	componentDidMount(){
-		let canvas = new fabric.Canvas("canvas");
-		canvas.setBackgroundColor('rgba(255, 73, 64, 0.6)', canvas.renderAll.bind(canvas));
-		console.log(canvas);
-		debugger
+		let canvas = new fabric.Canvas("c");
+		canvas.setBackgroundColor('rgba(255, 73, 64)', canvas.renderAll.bind(canvas));
 	}
 
-	componentDidUpdate(){
-	}
 
 	render(){
 		return (
-			<canvas>
+			<canvas ref='c' id='c'>
 			</canvas>
 		);
 	}
