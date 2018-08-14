@@ -15,15 +15,35 @@ class Canvas extends React.Component{
 			textColor: 'Black',
 			backgroundColor: 'white',
 			selectedShape: 'circle',
+			selectedDialog: '',
+			backgroundImg: {
+				height: 0,
+				width: 0,
+			},
 		};
 	}
 
 	componentDidMount(){
-		let canvas = new fabric.Canvas("c");
-		canvas.setHeight(320);
-		canvas.setHeight(500);
+		let canvas = new fabric.Canvas("c", {width: 320, height: 500});
 		canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 		this.setState({canvas: canvas});
+		// this.props.receiveCanvas(canvas);
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Backspace' || e.key === 'Delete') {
+				canvasUtil.deleteItem(this.state.canvas);				
+			}
+		});
+	}
+
+	componentWillReceiveProps(nextProps){
+		if (nextProps.img) {
+			const img = new Image;
+			img.src = nextProps.img;
+			img.onload = (e) => {
+				debugger
+			};
+			this.state.canvas.setBackgroundImage(nextProps.img, this.state.canvas.renderAll.bind(this.state.canvas));
+		}
 	}
 
 	handleInput(){
@@ -41,8 +61,8 @@ class Canvas extends React.Component{
 		this.setState({[type]: e.target.options[e.target.options.selectedIndex].textContent});
 	}
 
-	changeShape(e){
-		this.setState({selectedShape: e.currentTarget.id});
+	changeShape(e, type){
+		this.setState({[type]: e.currentTarget.id});
 	}
 
 	render(){
@@ -53,6 +73,12 @@ class Canvas extends React.Component{
 			        <a className="nav-link" id="shapes-button" data-toggle="tab" href="#shapes" aria-controls="shapes" aria-selected="false">
 			          <i className="fas fa-shapes"></i>
 			          <div className="nav-text">Shapes</div>
+			        </a>
+			      </li>
+			      <li className={`nav-item ${this.state.active === 'Dialog' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
+			        <a className="nav-link" id="shapes-button" data-toggle="tab" href="#dialog" aria-controls="dialog" aria-selected="false">
+			          <i className="fas fa-comment"></i>
+			          <div className="nav-text">Dialog</div>
 			        </a>
 			      </li>
 			      <li className={`nav-item ${this.state.active === 'Text' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
@@ -73,13 +99,13 @@ class Canvas extends React.Component{
 			        <div className={`tab-pane fade ${this.state.active === 'Shapes' ? 'show active' : ""}`} id="shapes" role="tabpanel" aria-labelledby="shapes-button">
 						<label>Shapes: </label>
 						<ol id="shapes-list">
-							<li className={`shapes-item ${this.state.selectedShape === 'circle' ? 'ui-selected' : ''}`} id="circle" onClick={(e)=>this.changeShape(e)}>
+							<li className={`shapes-item ${this.state.selectedShape === 'circle' ? 'ui-selected' : ''}`} id="circle" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 							  <img src="https://raw.githubusercontent.com/Kelvin-K-Cho/edwrd.io/master/public/images/circle.png" />
 							</li>
-							<li className={`shapes-item ${this.state.selectedShape === 'square' ? 'ui-selected' : ''}`} id="square" onClick={(e)=>this.changeShape(e)}>
+							<li className={`shapes-item ${this.state.selectedShape === 'square' ? 'ui-selected' : ''}`} id="square" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 							  <img src="https://github.com/Kelvin-K-Cho/edwrd.io/blob/master/public/images/square.png?raw=true" />
 							</li>
-							<li className={`shapes-item ${this.state.selectedShape === 'line' ? 'ui-selected' : ''}`} id="line" onClick={(e)=>this.changeShape(e)}>
+							<li className={`shapes-item ${this.state.selectedShape === 'line' ? 'ui-selected' : ''}`} id="line" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 							  <img src="https://github.com/Kelvin-K-Cho/edwrd.io/blob/master/public/images/line.png?raw=true" />
 							</li>
 						</ol>
@@ -112,6 +138,19 @@ class Canvas extends React.Component{
 			          	<br />
 			        	<div id="button-wrapper">
 			            	<button type="button" className="btn btn-outline-primary btn-sm" id="addShape" onClick={()=>canvasUtil.addShape(this.state.selectedShape, this.state.canvas)}>Add Shape</button>
+			        	</div>
+			        </div>
+			        <div className={`tab-pane fade ${this.state.active === 'Dialog' ? 'show active' : ""}`} id="dialog" role="tabpanel" aria-labelledby='dialog-button'>
+						<label>Shapes: </label>
+			        	<br />
+			        	<ol id="shapes-list">
+							<li className={`shapes-item ${this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''}`} id="dialog_1" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
+							  <img src="app/assets/images/dialog_1.png" />
+							</li>
+			        	</ol>
+			        	<br />
+			        	<div id="button-wrapper">
+			            	<button type="button" className="btn btn-outline-primary btn-sm" id="addDialog" onClick={()=>canvasUtil.addDialog(this.state.selectedDialog, this.state.canvas)}>Add Dialog</button>
 			        	</div>
 			        </div>
 			        <div className={`tab-pane fade ${this.state.active === 'Text' ? 'show active' : ""}`} id="text" role="tabpanel" aria-labelledby="text-button">

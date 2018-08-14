@@ -1,6 +1,6 @@
 import {RECEIVE_ALL_IMGS} from '../actions/images';
 
-const imgReducer = (state={}, action) => {
+const imgReducer = (state=[], action) => {
 	Object.freeze(state);
 	let newState;
 	switch(action.type){

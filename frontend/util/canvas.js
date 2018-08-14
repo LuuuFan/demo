@@ -124,21 +124,42 @@ export const changeBackground = (color, canvas) => {
   canvas.setBackgroundColor(color, canvas.renderAll.bind(canvas));
 };  
 
-export const changeColor = (event) => {
-  let eventId = event.currentTarget.id;
-  let color = $(`#${eventId}`).val();
-  $(`#${eventId}`).next(`.selected-color`).css(`background-color`, `${color}`);
-  if (eventId === `background-color`) {
-    changeBackground(color);
-  }
+export const addDialog = (selectedDialog, canvas) => {
+  let img = new fabric.Image.fromURL(`app/assets/images/${selectedDialog}.png`);
+  debugger
+  img.setWidth(100);
+  img.Height(100);
+
+  let text = new fabric.Text('Comment Here', {
+    fontSize: 14,
+  });
+
+  text.set('top' (img.getBoundingRectHeight() / 2) - (text.height / 2));
+  text.set('top' (img.getBoundingRectWidth() / 2) - (text.width / 2));
+
+  let group = new fabric.Group([img, text], {
+    left: 100,
+    top: 25,
+  });
+
+  canvas.add(group);
 };
+
+// export const changeColor = (event) => {
+//   let eventId = event.currentTarget.id;
+//   let color = $(`#${eventId}`).val();
+//   $(`#${eventId}`).next(`.selected-color`).css(`background-color`, `${color}`);
+//   if (eventId === `background-color`) {
+//     changeBackground(color);
+//   }
+// };
 
   // Events
   // $("#addText").click(addText);
-
   // $("#addShape").click(addShape);
   // $("#changeBackground").click(changeBackground);
   // $("#deleteItem").click(deleteItem);
+
   // $("#downloadTemplate").click(downloadTemplate);
   // $("#saveTemplate").click(saveTemplate);
   // $(`#searchButton`).click(searchTemplates);

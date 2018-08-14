@@ -90,6 +90,15 @@ input[type="submit"] {
   .alert span:last-of-type {
     cursor: pointer; }
 
+.img-group {
+  position: absolute;
+  left: 8vw;
+  width: 92vw; }
+  .img-group .img-container {
+    float: left;
+    width: 90px;
+    margin-right: 10px; }
+
 .navbar {
   font-size: 24px; }
   .navbar i {

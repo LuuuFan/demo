@@ -5,11 +5,14 @@ import SessionFormContainer from '../session/session_form_container';
 import PropTypes from 'prop-types';
 import Header from './header';
 import Canvas from './canvas';
+import {} from '../../util/canvas';
 
 class Home extends React.Component {
 	constructor(){
 		super();
-		this.state = {};
+		this.state = {
+			selectedImgURL: ''
+		};
 	}
 
 	componentDidMount(){
@@ -20,14 +23,22 @@ class Home extends React.Component {
 			});
 	}
 
+	selectImg(e){
+		const idx = e.currentTarget.id.split('-')[1] * 1;
+		this.setState({selectedImgURL: this.props.imgs[idx].webformatURL});
+	}
+
 	render(){
-		const {imgs} = this.props;
+		const {imgs, receiveCanvas} = this.props;
 		return(
 			<div>
 				<Header />
-				<Canvas />
-				<div className='img-group'>
-					{Object.keys(imgs).map(img => <div><img src=''/></div>)}
+				<Canvas receiveCanvas={receiveCanvas} img={this.state.selectedImgURL}/>
+				<div className='img-group group'>
+					{imgs.map((img, key) => 
+						<div className='img-container' key={key} id={`img-${key}`} onClick={(e)=>this.selectImg(e)}>
+							<img src={img.previewURL} />
+						</div>)}
 				</div>
 			</div>
 		);
