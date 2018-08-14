@@ -33648,23 +33648,26 @@ var addText = exports.addText = function addText(canvas) {
 var deleteItem = exports.deleteItem = function deleteItem(canvas) {
   var activeObject = canvas.getActiveObject();
   canvas.remove(activeObject);
+  activeObject = canvas.getActiveObject();
 };
 
-var addPhoto = exports.addPhoto = function addPhoto(e, canvas) {
-  var reader = new FileReader();
-  reader.onload = function (event) {
-    var img = new Image();
-    img.src = event.target.result;
-    img.onload = function () {
-      var image = new _fabric.fabric.Image(img);
-      image.set({
-        left: 0,
-        top: 0
-      }).scale(0.1);
-      canvas.add(image);
-    };
+var addPhoto = exports.addPhoto = function addPhoto(url, canvas) {
+  // let reader = new FileReader();
+  // reader.onload = function(event) {
+  var img = new Image();
+  img.src = url;
+  img.onload = function () {
+    var image = new _fabric.fabric.Image(img);
+    image.set({
+      left: 0,
+      top: 0
+    }).scale(0.5);
+    canvas.setHeight(img.height / 2);
+    canvas.setWidth(img.width / 2);
+    canvas.add(image);
   };
-  reader.readAsDataURL(e.target.files[0]);
+  // };
+  // reader.readAsDataURL(e.target.files[0]);
 };
 
 var changeImage = exports.changeImage = function changeImage(event) {
@@ -33717,19 +33720,23 @@ var changeBackground = exports.changeBackground = function changeBackground(colo
 };
 
 var addDialog = exports.addDialog = function addDialog(selectedDialog, canvas) {
-  var img = new _fabric.fabric.Image.fromURL("app/assets/images/" + selectedDialog + ".png");
-  debugger;
-  img.setWidth(100);
-  img.Height(100);
-
-  var text = new _fabric.fabric.Text('Comment Here', {
-    fontSize: 14
+  var img = new _fabric.fabric.Image.fromURL("app/assets/images/" + selectedDialog + ".png", function (oImg) {
+    oImg.set({
+      heigit: 100,
+      width: 100
+    });
   });
 
-  text.set('top'(img.getBoundingRectHeight() / 2) - text.height / 2);
-  text.set('top'(img.getBoundingRectWidth() / 2) - text.width / 2);
+  var text = new _fabric.fabric.Text('Comment Here', {
+    fontSize: 14,
+    originX: 'center',
+    originY: 'center'
+  });
 
-  var group = new _fabric.fabric.Group([img, text], {
+  // text.set('top' (img.getBoundingRectHeight() / 2) - (text.height / 2));
+  // text.set('top' (img.getBoundingRectWidth() / 2) - (text.width / 2));
+
+  var group = new _fabric.fabric.Group([img], {
     left: 100,
     top: 25
   });
@@ -57758,7 +57765,7 @@ var Canvas = function (_React$Component) {
 			textColor: 'Black',
 			backgroundColor: 'white',
 			selectedShape: 'circle',
-			selectedDialog: '',
+			selectedDialog: 'dialog_1',
 			backgroundImg: {
 				height: 0,
 				width: 0
@@ -57783,15 +57790,22 @@ var Canvas = function (_React$Component) {
 			});
 		}
 	}, {
+		key: 'getMeta',
+		value: function getMeta(url) {
+			var w = void 0,
+			    h = void 0;
+			var img = new Image();
+			img.src = url;
+			img.onload = function () {
+				w = this.width;h = this.height;
+			};
+			return { w: w, h: h };
+		}
+	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
 			if (nextProps.img) {
-				var img = new Image();
-				img.src = nextProps.img;
-				img.onload = function (e) {
-					debugger;
-				};
-				this.state.canvas.setBackgroundImage(nextProps.img, this.state.canvas.renderAll.bind(this.state.canvas));
+				canvasUtil.addPhoto(nextProps.img, this.state.canvas);
 			}
 		}
 	}, {

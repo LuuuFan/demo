@@ -15,7 +15,7 @@ class Canvas extends React.Component{
 			textColor: 'Black',
 			backgroundColor: 'white',
 			selectedShape: 'circle',
-			selectedDialog: '',
+			selectedDialog: 'dialog_1',
 			backgroundImg: {
 				height: 0,
 				width: 0,
@@ -35,14 +35,17 @@ class Canvas extends React.Component{
 		});
 	}
 
+	getMeta(url){
+		let w, h;
+		const img = new Image();
+		img.src = url;
+		img.onload = function(){w=this.width; h=this.height};
+		return {w:w, h:h};
+	}
+
 	componentWillReceiveProps(nextProps){
 		if (nextProps.img) {
-			const img = new Image;
-			img.src = nextProps.img;
-			img.onload = (e) => {
-				debugger
-			};
-			this.state.canvas.setBackgroundImage(nextProps.img, this.state.canvas.renderAll.bind(this.state.canvas));
+			canvasUtil.addPhoto(nextProps.img, this.state.canvas);
 		}
 	}
 

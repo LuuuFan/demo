@@ -56,23 +56,24 @@ export const addText = (canvas) => {
 export const deleteItem = (canvas) => {
   let activeObject = canvas.getActiveObject();
   canvas.remove(activeObject);
+  activeObject = canvas.getActiveObject();
 };
 
-export const addPhoto = (e, canvas) => {
-  let reader = new FileReader();
-  reader.onload = function(event) {
+export const addPhoto = (url, canvas) => {
     let img = new Image();
-    img.src = event.target.result;
+    img.src = url;
     img.onload = function() {
       let image = new fabric.Image(img);
       image.set({
         left: 0,
         top: 0
-      }).scale(0.1);
+      }).scale(0.5);
+      canvas.setHeight(img.height / 2);
+      canvas.setWidth(img.width / 2);
       canvas.add(image);
     };
-  };
-  reader.readAsDataURL(e.target.files[0]);
+  // };
+  // reader.readAsDataURL(e.target.files[0]);
 };
 
 export const changeImage = (event) => {
@@ -125,19 +126,23 @@ export const changeBackground = (color, canvas) => {
 };  
 
 export const addDialog = (selectedDialog, canvas) => {
-  let img = new fabric.Image.fromURL(`app/assets/images/${selectedDialog}.png`);
-  debugger
-  img.setWidth(100);
-  img.Height(100);
+  let img = new fabric.Image.fromURL(`app/assets/images/${selectedDialog}.png`, (oImg)=>{
+    oImg.set({
+      heigit: 100,
+      width: 100,
+    });
+  });
 
   let text = new fabric.Text('Comment Here', {
     fontSize: 14,
+    originX: 'center',
+    originY: 'center',
   });
 
-  text.set('top' (img.getBoundingRectHeight() / 2) - (text.height / 2));
-  text.set('top' (img.getBoundingRectWidth() / 2) - (text.width / 2));
+  // text.set('top' (img.getBoundingRectHeight() / 2) - (text.height / 2));
+  // text.set('top' (img.getBoundingRectWidth() / 2) - (text.width / 2));
 
-  let group = new fabric.Group([img, text], {
+  let group = new fabric.Group([img], {
     left: 100,
     top: 25,
   });
