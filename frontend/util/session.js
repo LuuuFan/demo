@@ -1,6 +1,5 @@
 
 export const registration = (user) => {
-	debugger;
 	return (
 		$.ajax({
 			url: 'http://0.0.0.0:8999/registration',

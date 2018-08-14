@@ -8,13 +8,17 @@ class Home extends React.Component {
 	}
 
 	componentDidMount(){
-		
+		this.props.fetchAllImgs(this.props.currentUser['access-token']);
 	}
 
 	render(){
+		const {imgs} = this.props;
 		return(
 			<div>
-				<h1>Hey~~</h1>
+				<h1>HomePage</h1>
+				<div className='img-group'>
+					{Object.keys(imgs).map(img => <div><img src=''/></div>)}
+				</div>
 			</div>
 		);
 	}

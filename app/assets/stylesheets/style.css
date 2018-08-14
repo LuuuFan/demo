@@ -80,5 +80,14 @@ input[type="submit"] {
     flex-direction: column;
     justify-content: space-between;
     height: 100%; }
+    .session-form form input {
+      width: 92%; }
+
+.alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; }
+  .alert span:last-of-type {
+    cursor: pointer; }
 
 /*# sourceMappingURL=style.css.map */
