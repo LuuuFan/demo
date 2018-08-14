@@ -10,9 +10,11 @@ class Canvas extends React.Component{
 		this.state = {
 			active: 'Shapes',
 			textSize: '12',
-			textColor: 'Black',
 			canvas: {},
+			shapeColor: 'Black',
+			textColor: 'Black',
 			backgroundColor: 'white',
+			selectedShape: 'circle',
 		};
 	}
 
@@ -37,6 +39,10 @@ class Canvas extends React.Component{
 
 	selectColor(e, type){
 		this.setState({[type]: e.target.options[e.target.options.selectedIndex].textContent});
+	}
+
+	changeShape(e){
+		this.setState({selectedShape: e.currentTarget.id});
 	}
 
 	render(){
@@ -67,19 +73,19 @@ class Canvas extends React.Component{
 			        <div className={`tab-pane fade ${this.state.active === 'Shapes' ? 'show active' : ""}`} id="shapes" role="tabpanel" aria-labelledby="shapes-button">
 						<label>Shapes: </label>
 						<ol id="shapes-list">
-							<li className="shapes-item" id="circle">
+							<li className={`shapes-item ${this.state.selectedShape === 'circle' ? 'ui-selected' : ''}`} id="circle" onClick={(e)=>this.changeShape(e)}>
 							  <img src="https://raw.githubusercontent.com/Kelvin-K-Cho/edwrd.io/master/public/images/circle.png" />
 							</li>
-							<li className="shapes-item" id="square">
+							<li className={`shapes-item ${this.state.selectedShape === 'square' ? 'ui-selected' : ''}`} id="square" onClick={(e)=>this.changeShape(e)}>
 							  <img src="https://github.com/Kelvin-K-Cho/edwrd.io/blob/master/public/images/square.png?raw=true" />
 							</li>
-							<li className="shapes-item" id="line">
+							<li className={`shapes-item ${this.state.selectedShape === 'line' ? 'ui-selected' : ''}`} id="line" onClick={(e)=>this.changeShape(e)}>
 							  <img src="https://github.com/Kelvin-K-Cho/edwrd.io/blob/master/public/images/line.png?raw=true" />
 							</li>
 						</ol>
 						<div className="form-inline d-flex justify-content-around">
 							<label htmlFor="shape-color">Color: </label>
-							<select className="form-control" id="shape-color">
+							<select className="form-control" id="shape-color" onChange={(e)=>this.selectColor(e, 'shapeColor')}>
 							<option value="black">Black</option>
 							<option value="red">Red</option>
 							<option value="orange">Orange</option>
@@ -90,7 +96,7 @@ class Canvas extends React.Component{
 							<option value="purple">Purple</option>
 							<option value="white">White</option>
 							</select>
-							<div className="selected-color">
+							<div className="selected-color" style={{backgroundColor: `${this.state.shapeColor}`}}>
 							</div>
 						</div>
 			          	<br />
@@ -105,7 +111,7 @@ class Canvas extends React.Component{
 			          	</div>
 			          	<br />
 			        	<div id="button-wrapper">
-			            	<button type="button" className="btn btn-outline-primary btn-sm" id="addShape">Add Shape</button>
+			            	<button type="button" className="btn btn-outline-primary btn-sm" id="addShape" onClick={()=>canvasUtil.addShape(this.state.selectedShape, this.state.canvas)}>Add Shape</button>
 			        	</div>
 			        </div>
 			        <div className={`tab-pane fade ${this.state.active === 'Text' ? 'show active' : ""}`} id="text" role="tabpanel" aria-labelledby="text-button">
@@ -124,7 +130,7 @@ class Canvas extends React.Component{
 							  <option value="purple">Purple</option>
 							  <option value="white">White</option>
 							</select>
-							<div className="selected-color" style={{backgroundColor: `${textColor}`}}>
+							<div className="selected-color" style={{backgroundColor: `${this.state.textColor}`}}>
 							</div>
 			          	</div>
 			          	<br />

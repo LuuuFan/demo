@@ -1,14 +1,9 @@
 import {fabric} from './fabric';
 
-export const addShape = () => {
-  let shape = selectedShape;
+export const addShape = (selectedShape, canvas) => {
   let color = $(`#shape-color`).val();
   let opacity = parseFloat($(`#shape-opacity`).val());
-  if (!shape) {
-    alert(`Please select a shape`);
-    return false;
-  }
-  switch (shape) {
+  switch (selectedShape) {
     case "circle":
       let circle = new fabric.Circle({
         left: 50,

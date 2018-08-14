@@ -49713,9 +49713,11 @@ var Canvas = function (_React$Component) {
 		_this.state = {
 			active: 'Shapes',
 			textSize: '12',
-			textColor: 'Black',
 			canvas: {},
-			backgroundColor: 'white'
+			shapeColor: 'Black',
+			textColor: 'Black',
+			backgroundColor: 'white',
+			selectedShape: 'circle'
 		};
 		return _this;
 	}
@@ -49748,6 +49750,11 @@ var Canvas = function (_React$Component) {
 		key: 'selectColor',
 		value: function selectColor(e, type) {
 			this.setState(_defineProperty({}, type, e.target.options[e.target.options.selectedIndex].textContent));
+		}
+	}, {
+		key: 'changeShape',
+		value: function changeShape(e) {
+			this.setState({ selectedShape: e.currentTarget.id });
 		}
 	}, {
 		key: 'render',
@@ -49825,17 +49832,23 @@ var Canvas = function (_React$Component) {
 							{ id: 'shapes-list' },
 							_react2.default.createElement(
 								'li',
-								{ className: 'shapes-item', id: 'circle' },
+								{ className: 'shapes-item ' + (this.state.selectedShape === 'circle' ? 'ui-selected' : ''), id: 'circle', onClick: function onClick(e) {
+										return _this3.changeShape(e);
+									} },
 								_react2.default.createElement('img', { src: 'https://raw.githubusercontent.com/Kelvin-K-Cho/edwrd.io/master/public/images/circle.png' })
 							),
 							_react2.default.createElement(
 								'li',
-								{ className: 'shapes-item', id: 'square' },
+								{ className: 'shapes-item ' + (this.state.selectedShape === 'square' ? 'ui-selected' : ''), id: 'square', onClick: function onClick(e) {
+										return _this3.changeShape(e);
+									} },
 								_react2.default.createElement('img', { src: 'https://github.com/Kelvin-K-Cho/edwrd.io/blob/master/public/images/square.png?raw=true' })
 							),
 							_react2.default.createElement(
 								'li',
-								{ className: 'shapes-item', id: 'line' },
+								{ className: 'shapes-item ' + (this.state.selectedShape === 'line' ? 'ui-selected' : ''), id: 'line', onClick: function onClick(e) {
+										return _this3.changeShape(e);
+									} },
 								_react2.default.createElement('img', { src: 'https://github.com/Kelvin-K-Cho/edwrd.io/blob/master/public/images/line.png?raw=true' })
 							)
 						),
@@ -49849,7 +49862,9 @@ var Canvas = function (_React$Component) {
 							),
 							_react2.default.createElement(
 								'select',
-								{ className: 'form-control', id: 'shape-color' },
+								{ className: 'form-control', id: 'shape-color', onChange: function onChange(e) {
+										return _this3.selectColor(e, 'shapeColor');
+									} },
 								_react2.default.createElement(
 									'option',
 									{ value: 'black' },
@@ -49896,7 +49911,7 @@ var Canvas = function (_React$Component) {
 									'White'
 								)
 							),
-							_react2.default.createElement('div', { className: 'selected-color' })
+							_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.shapeColor } })
 						),
 						_react2.default.createElement('br', null),
 						_react2.default.createElement(
@@ -49938,7 +49953,9 @@ var Canvas = function (_React$Component) {
 							{ id: 'button-wrapper' },
 							_react2.default.createElement(
 								'button',
-								{ type: 'button', className: 'btn btn-outline-primary btn-sm', id: 'addShape' },
+								{ type: 'button', className: 'btn btn-outline-primary btn-sm', id: 'addShape', onClick: function onClick() {
+										return canvasUtil.addShape(_this3.state.selectedShape, _this3.state.canvas);
+									} },
 								'Add Shape'
 							)
 						)
@@ -50011,7 +50028,7 @@ var Canvas = function (_React$Component) {
 									'White'
 								)
 							),
-							_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + textColor } })
+							_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.textColor } })
 						),
 						_react2.default.createElement('br', null),
 						_react2.default.createElement(
@@ -94200,15 +94217,10 @@ exports.changeColor = exports.changeBackground = exports.changeImage = exports.a
 
 var _fabric = __webpack_require__(198);
 
-var addShape = exports.addShape = function addShape() {
-  var shape = selectedShape;
+var addShape = exports.addShape = function addShape(selectedShape, canvas) {
   var color = $("#shape-color").val();
   var opacity = parseFloat($("#shape-opacity").val());
-  if (!shape) {
-    alert("Please select a shape");
-    return false;
-  }
-  switch (shape) {
+  switch (selectedShape) {
     case "circle":
       var circle = new _fabric.fabric.Circle({
         left: 50,
