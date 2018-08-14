@@ -1,8 +1,9 @@
+
 export const registration = (user) => {
 	debugger;
 	return (
 		$.ajax({
-			url: '/registration',
+			url: 'http://0.0.0.0:8999/registration',
 			method: 'POST',
 			data: user
 		})
@@ -11,7 +12,7 @@ export const registration = (user) => {
 
 export const login = (user) => (
 	$.ajax({
-		url: '/login',
+		url: 'http://0.0.0.0:8999/login',
 		method: 'POST',
 		data: user
 	})

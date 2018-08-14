@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {createUser, createSession} from '../../actions/session';
-import SessionFrom from './session_form';
+import SessionForm from './session_form';
 
 const mapStateToProps = (state, ownProps) => {
   let formType = ownProps.match.path === '/signup' ? 'signup' : 'login';
@@ -17,4 +17,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   });
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SessionFrom);
+export default connect(mapStateToProps, mapDispatchToProps)(SessionForm);

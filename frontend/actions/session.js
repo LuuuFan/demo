@@ -10,9 +10,6 @@ export const receiveCurrentUser = (currentUser) => ({
 
 export const createUser = (user) => dispatch => APIUtilSession.registration(user)
 	.then(
-	// () => {
-	// 	debugger
-	// });
 		user => dispatch(receiveCurrentUser(user))
 		// errors => dispatch(receiveErrors())
 	);

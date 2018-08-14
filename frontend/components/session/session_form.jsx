@@ -19,7 +19,11 @@ class SessionForm extends React.Component {
 
 	handleClick(e){
 		e.preventDefault();
-		this.props.action(this.state);
+		this.props.action(this.state).then((res) => {
+
+			localStorage.setItem('access_token', res.currentUser['access-token']);
+			this.props.history.push('/');
+		});
 		this.setState({
 			'username': '',
 			'email': ''
