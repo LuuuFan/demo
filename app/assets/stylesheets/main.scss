@@ -31,3 +31,14 @@
 		cursor: pointer;
 	}
 }
+
+.navbar{
+	font-size: 24px;
+	i{
+		margin-right: 10px;
+	}
+	a:hover{
+		text-decoration: none;
+		font-weight: bold;
+	}
+}

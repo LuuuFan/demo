@@ -90,4 +90,12 @@ input[type="submit"] {
   .alert span:last-of-type {
     cursor: pointer; }
 
+.navbar {
+  font-size: 24px; }
+  .navbar i {
+    margin-right: 10px; }
+  .navbar a:hover {
+    text-decoration: none;
+    font-weight: bold; }
+
 /*# sourceMappingURL=style.css.map */

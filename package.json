@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/LuuuFan/demo",
   "dependencies": {
+    "babel": "^6.23.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
@@ -34,6 +35,7 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "sass": "^1.1.1",
+    "the-fabric": "^1.0.1",
     "webpack": "^3.10.0"
   },
   "devDependencies": {
