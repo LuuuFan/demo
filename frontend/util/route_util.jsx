@@ -28,7 +28,7 @@ const Protected = ({component: Component, path, loggedIn, exact}) => (
 
 
 const mapStateToProps = state => ({
-  loggedIn: Boolean(state.session.currentUser)
+  loggedIn: Boolean(state.session.currentUser && state.session.currentUser['access-token'])
 });
 
 export const AuthRoute = withRouter(connect(mapStateToProps, null)(Auth));

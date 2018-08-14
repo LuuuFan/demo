@@ -19,21 +19,23 @@ class SessionForm extends React.Component {
 
 	handleClick(e){
 		e.preventDefault();
-		if (this.props.error.error) {
+		if (this.props.error || this.props.error) {
 			this.props.clearError();
 		}
 		if (this.state.username && this.state.password) {
 			const user = {username: this.state.username, password: this.state.password};
 			this.props.action(user).then((res) => {
 				if (this.props.formType === 'signup') {
-					this.props.history.push('/login');
+					if (!res.error) {
+						this.props.history.push('/login');
+					}
 				} else {
 					localStorage.setItem('access_token', res.currentUser['access-token']);
 					this.props.history.push('/');
 				}				
 			});
 		} else {
-			
+			// frontend form control
 		}
 	}
 
@@ -55,6 +57,11 @@ class SessionForm extends React.Component {
 					{error.error ? 
 						<div className='alert alert-danger'>
 							<span>{error.error}</span>
+							<span onClick={()=>this.clearError()}>&times;</span>
+						</div>
+					: error.message ?
+						<div className='alert alert-danger'>
+							<span>{error.message}</span>
 							<span onClick={()=>this.clearError()}>&times;</span>
 						</div>
 					: ""}

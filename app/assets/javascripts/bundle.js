@@ -27126,7 +27126,7 @@ var Protected = function Protected(_ref2) {
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    loggedIn: Boolean(state.session.currentUser)
+    loggedIn: Boolean(state.session.currentUser && state.session.currentUser['access-token'])
   };
 };
 
@@ -27312,20 +27312,24 @@ var SessionForm = function (_React$Component) {
 			var _this3 = this;
 
 			e.preventDefault();
-			if (this.props.error.error) {
+			if (this.props.error || this.props.error) {
 				this.props.clearError();
 			}
 			if (this.state.username && this.state.password) {
 				var user = { username: this.state.username, password: this.state.password };
 				this.props.action(user).then(function (res) {
 					if (_this3.props.formType === 'signup') {
-						_this3.props.history.push('/login');
+						if (!res.error) {
+							_this3.props.history.push('/login');
+						}
 					} else {
 						localStorage.setItem('access_token', res.currentUser['access-token']);
 						_this3.props.history.push('/');
 					}
 				});
-			} else {}
+			} else {
+				// frontend form control
+			}
 		}
 	}, {
 		key: 'clearError',
@@ -27371,6 +27375,21 @@ var SessionForm = function (_React$Component) {
 							'span',
 							null,
 							error.error
+						),
+						_react2.default.createElement(
+							'span',
+							{ onClick: function onClick() {
+									return _this4.clearError();
+								} },
+							'\xD7'
+						)
+					) : error.message ? _react2.default.createElement(
+						'div',
+						{ className: 'alert alert-danger' },
+						_react2.default.createElement(
+							'span',
+							null,
+							error.message
 						),
 						_react2.default.createElement(
 							'span',
