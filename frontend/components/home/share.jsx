@@ -5,6 +5,8 @@ class Share extends React.Component{
 		super();
 		this.state = {
 			modal: 'modal',
+			email: '',
+			emailError: '',
 		};
 	}
 
@@ -24,12 +26,32 @@ class Share extends React.Component{
 		this.setState({modal: 'modal'});
 	}
 
+	handleInput(e){
+		this.setState({email: e.target.value, emailError: ''});
+	}
+
+	checkEmail(){
+		const reg =  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		return reg.test(String(this.state.email).toLowerCase());
+	}
+
 	sendFile(){
-		const canvas = document.querySelector('#c');
-		const imgData = canvas.toDataURL('image/png', 1.0);
-		const pdf = new jsPDF();
-		pdf.addImage(imgData, 'PNG', 0, 0);
-		pdf.save('download.pdf');
+		if (this.checkEmail()) {
+			const imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
+			const selector = document.querySelector('.share-canvas select');
+			const type = selector.options[selector.selectedIndex].textContent;
+			if (type === 'PDF') {
+				const pdf = new jsPDF();
+				pdf.addImage(imgData, 'JPEG', 0, 0);
+				pdf.save('download.pdf');
+			} else {
+				const data = imgData.replace(/^data:image\/\w+;base64,/, "");
+				const buf = new Buffer(data, 'base64');
+				// cannot use native node module like fs
+			}
+		} else {
+			this.setState({emailError: 'Please input valid email address'});
+		}
 	}
 
 	render(){
@@ -41,8 +63,9 @@ class Share extends React.Component{
 						<form onSubmit={()=>this.sendFile()}>
 							<div>
 								<label>Email: </label>
-								<input type='email'/>
+								<input type='email' onChange={(e)=>this.handleInput(e)} value={this.state.email}/>
 							</div>
+							<span>{this.state.emailError}</span>
 							<div>
 								<label>Type: </label>
 								<select>

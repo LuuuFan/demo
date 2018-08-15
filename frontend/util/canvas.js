@@ -55,7 +55,7 @@ export const addText = (canvas) => {
 
 export const deleteItem = (canvas) => {
   let activeObject = canvas.getActiveObject();
-  if (activeObject.type === 'image') photoNum--;
+  if (activeObject && activeObject.type === 'image') photoNum--;
   canvas.remove(activeObject);
   activeObject = canvas.getActiveObject();
 };
