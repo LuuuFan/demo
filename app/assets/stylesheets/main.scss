@@ -187,3 +187,58 @@ li > .nav-link {
   border: solid 1px black;
 }
 
+
+.modal-screen {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.is_open{
+  display: block;
+}
+
+.modal, .hidden{
+  display: none;
+}
+
+.share-canvas{
+  z-index: 7;
+  position: fixed;
+  top: 0;
+  left: 25%;
+  width: 50%;
+  background-color: white;
+  border-radius: 5px;
+  transition: all 0.8s;
+  form{
+    div{
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    width: 60%;
+    font-size: 14px;
+    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    input{
+      border-radius: 3px;
+      flex: 1;
+      border: 1px solid lightgray;
+    }
+    label{
+      width: 50px;
+      margin: 0;
+    }
+    select{
+      background: none;
+      height: 33px;
+      flex: 1;
+    }
+  }
+}

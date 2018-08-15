@@ -28547,6 +28547,17 @@ var Share = function (_React$Component) {
 	}
 
 	_createClass(Share, [{
+		key: 'componentDidUpdate',
+		value: function componentDidUpdate() {
+			var _this2 = this;
+
+			$(document).keydown(function (e) {
+				if (e.keyCode === 27) {
+					_this2.closeModal();
+				}
+			});
+		}
+	}, {
 		key: 'openModal',
 		value: function openModal() {
 			this.setState({ modal: 'is-open' });
@@ -28557,9 +28568,19 @@ var Share = function (_React$Component) {
 			this.setState({ modal: 'modal' });
 		}
 	}, {
+		key: 'sendFile',
+		value: function sendFile() {
+			var canvas = document.querySelector('#c');
+			var imgData = canvas.toDataURL('image/png', 1.0);
+			var pdf = new jsPDF();
+			pdf.addImage(imgData, 'PNG', 0, 0);
+			pdf.save('download.pdf');
+			debugger;
+		}
+	}, {
 		key: 'render',
 		value: function render() {
-			var _this2 = this;
+			var _this3 = this;
 
 			return _react2.default.createElement(
 				'div',
@@ -28567,11 +28588,67 @@ var Share = function (_React$Component) {
 				_react2.default.createElement(
 					'button',
 					{ type: 'button', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
-							return _this2.openModal();
+							return _this3.openModal();
 						} },
 					'Share'
 				),
-				_react2.default.createElement('div', { className: this.state.modal })
+				_react2.default.createElement(
+					'div',
+					{ className: this.state.modal },
+					_react2.default.createElement(
+						'div',
+						{ className: 'share-canvas' },
+						_react2.default.createElement(
+							'form',
+							{ onSubmit: function onSubmit() {
+									return _this3.sendFile();
+								} },
+							_react2.default.createElement(
+								'div',
+								null,
+								_react2.default.createElement(
+									'label',
+									null,
+									'Email: '
+								),
+								_react2.default.createElement('input', { type: 'email' })
+							),
+							_react2.default.createElement(
+								'div',
+								null,
+								_react2.default.createElement(
+									'label',
+									null,
+									'Type: '
+								),
+								_react2.default.createElement(
+									'select',
+									null,
+									_react2.default.createElement(
+										'option',
+										{ value: 'pdf' },
+										'PDF'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'png' },
+										'PNG'
+									)
+								)
+							),
+							_react2.default.createElement(
+								'button',
+								{ type: 'submit', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
+										return _this3.sendFile();
+									} },
+								'Send'
+							)
+						)
+					),
+					_react2.default.createElement('div', { onClick: function onClick() {
+							return _this3.closeModal();
+						}, className: 'modal-screen' })
+				)
 			);
 		}
 	}]);
