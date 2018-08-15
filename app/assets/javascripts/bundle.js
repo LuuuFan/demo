@@ -27676,7 +27676,9 @@ var SessionForm = function (_React$Component) {
 
 		_this.state = {
 			username: '',
-			password: ''
+			password: '',
+			usernameError: '',
+			passwordError: ''
 		};
 		return _this;
 	}
@@ -27687,7 +27689,9 @@ var SessionForm = function (_React$Component) {
 			var _this2 = this;
 
 			return function (e) {
-				_this2.setState(_defineProperty({}, type, e.target.value));
+				var _this2$setState;
+
+				_this2.setState((_this2$setState = {}, _defineProperty(_this2$setState, type, e.target.value), _defineProperty(_this2$setState, type + 'Error', ''), _this2$setState));
 			};
 		}
 	}, {
@@ -27712,7 +27716,11 @@ var SessionForm = function (_React$Component) {
 					}
 				});
 			} else {
-				// frontend form control
+				if (!this.state.username && !this.state.password) {
+					this.setState({ usernameError: 'Please input username', passwordError: 'Please input password' });
+				} else {
+					!this.state.username ? this.setState({ usernameError: 'Please input usernmae' }) : this.setState({ passwordError: 'Please input password' });
+				}
 			}
 		}
 	}, {
@@ -27787,7 +27795,17 @@ var SessionForm = function (_React$Component) {
 						'form',
 						{ className: 'form-signin' },
 						_react2.default.createElement('input', { id: 'username', className: 'form-control', type: 'text', onChange: this.handleInput('username'), value: this.state.username, placeholder: 'username' }),
+						_react2.default.createElement(
+							'span',
+							null,
+							this.state.usernameError
+						),
 						_react2.default.createElement('input', { id: 'password', className: 'form-control', type: 'password', onChange: this.handleInput('password'), value: this.state.password, placeholder: 'password' }),
+						_react2.default.createElement(
+							'span',
+							null,
+							this.state.passwordError
+						),
 						_react2.default.createElement(
 							'button',
 							{ className: 'btn btn-primary', onClick: function onClick(e) {

@@ -187,6 +187,13 @@ li > .nav-link {
   border: solid 1px black;
 }
 
+.form-signin{
+  span{
+    font-size: 10px;
+    color: red;
+    padding: 10px 5px;
+  }
+}
 
 .modal-screen {
   position: fixed;
