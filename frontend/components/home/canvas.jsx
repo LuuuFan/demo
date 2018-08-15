@@ -1,6 +1,6 @@
 import React from 'react';
 // import {fabric} from 'react-fabricjs';
-import {fabric} from '../../util/fabric';
+// import {fabric} from '../../util/fabric';
 import * as canvasUtil from '../../util/canvas';
 
 class Canvas extends React.Component{
@@ -24,7 +24,7 @@ class Canvas extends React.Component{
 	}
 
 	componentDidMount(){
-		let canvas = new fabric.Canvas("c", {width: 320, height: 500});
+		let canvas = new fabric.Canvas("c", {width: 900, height: 600});
 		canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 		this.setState({canvas: canvas});
 		// this.props.receiveCanvas(canvas);
@@ -33,14 +33,6 @@ class Canvas extends React.Component{
 				canvasUtil.deleteItem(this.state.canvas);				
 			}
 		});
-	}
-
-	getMeta(url){
-		let w, h;
-		const img = new Image();
-		img.src = url;
-		img.onload = function(){w=this.width; h=this.height};
-		return {w:w, h:h};
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -70,7 +62,7 @@ class Canvas extends React.Component{
 
 	render(){
 		return (
-			<div className='canvas-container'>
+			<div className=''>
 				<ul className="nav nav-tabs" id="sidebar" role="tablist">
 			      <li className={`nav-item ${this.state.active === 'Shapes' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
 			        <a className="nav-link" id="shapes-button" data-toggle="tab" href="#shapes" aria-controls="shapes" aria-selected="false">
@@ -225,8 +217,13 @@ class Canvas extends React.Component{
 			        </div>
 			    </div>
 
-				<canvas ref='c' id='c'>
-				</canvas>
+			    <div className='buttons'>
+			    	<button type="button" className="btn btn-outline-primary btn-sm" onClick={()=>canvasUtil.resetCanvas(this.state.canvas)}>Reset Canvas</button>
+			    </div>
+			    <div className='container'>
+					<canvas ref='c' id='c'>
+					</canvas>
+			    </div>
 			</div>
 		);
 	}

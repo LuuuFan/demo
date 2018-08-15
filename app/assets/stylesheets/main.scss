@@ -33,14 +33,21 @@
 }
 
 .img-group{
-	position: absolute;
-	left: 8vw;
-	width: 92vw;
+	position: fixed;
+  bottom: 0px;
+  left: 10vw;  
+  margin: 0px auto;
 	.img-container{
 		float: left;
 		width: 90px;
 		margin-right: 10px;
 	}
+}
+
+.buttons{
+  position: fixed;
+  bottom: 150px;
+  left: 10vw
 }
 
 .navbar{
@@ -54,9 +61,10 @@
 	}
 }
 
-.canvas-container{
-	width: 100%;
-	margin: 50px auto;
+.container{
+  position: fixed;
+  left: 25vw;  
+	width: 75vw;
 	display: flex;
 	canvas{
 		box-shadow: 0 8px 6px -6px black;

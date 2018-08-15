@@ -1,4 +1,4 @@
-import {fabric} from './fabric';
+// import {fabric} from './fabric';
 
 export const addShape = (selectedShape, canvas) => {
   let color = $(`#shape-color`).val();
@@ -126,30 +126,37 @@ export const changeBackground = (color, canvas) => {
 };  
 
 export const addDialog = (selectedDialog, canvas) => {
-  let img = new fabric.Image.fromURL(`app/assets/images/${selectedDialog}.png`, (oImg)=>{
-    oImg.set({
-      heigit: 100,
+  fabric.Image.fromURL(`app/assets/images/${selectedDialog}.png`, (img)=>{
+    const dialog = img.set({
+      height: 100,
       width: 100,
     });
+
+    // let text = new fabric.Text('Comment Here', {
+    //   fontSize: 14,
+    //   originX: 'center',
+    //   originY: 'center',
+    // });
+
+    // let group = new fabric.Group([dialog, text], {
+    //   left: 100,
+    //   top: 100,
+    // });
+    
+    // canvas.add(group);
+    canvas.add(dialog);
   });
 
-  let text = new fabric.Text('Comment Here', {
-    fontSize: 14,
-    originX: 'center',
-    originY: 'center',
-  });
-
-  // text.set('top' (img.getBoundingRectHeight() / 2) - (text.height / 2));
-  // text.set('top' (img.getBoundingRectWidth() / 2) - (text.width / 2));
-
-  let group = new fabric.Group([img], {
-    left: 100,
-    top: 25,
-  });
-
-  canvas.add(group);
 };
 
+
+export const resetCanvas = (canvas) => {
+  canvas.clear();
+  canvas.setHeight(600);
+  canvas.setWidth(900);
+  canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
+
+};
 // export const changeColor = (event) => {
 //   let eventId = event.currentTarget.id;
 //   let color = $(`#${eventId}`).val();
