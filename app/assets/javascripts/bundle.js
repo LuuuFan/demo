@@ -3807,6 +3807,7 @@ var photoNum = 0;
 var addPhoto = exports.addPhoto = function addPhoto(url, canvas) {
   var img = new Image();
   img.src = url;
+  img.setAttribute('crossorigin', 'anonymous');
   img.onload = function () {
     var image = new fabric.Image(img);
     image.set({
@@ -28575,7 +28576,6 @@ var Share = function (_React$Component) {
 			var pdf = new jsPDF();
 			pdf.addImage(imgData, 'PNG', 0, 0);
 			pdf.save('download.pdf');
-			debugger;
 		}
 	}, {
 		key: 'render',
@@ -28636,13 +28636,7 @@ var Share = function (_React$Component) {
 									)
 								)
 							),
-							_react2.default.createElement(
-								'button',
-								{ type: 'submit', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
-										return _this3.sendFile();
-									} },
-								'Send'
-							)
+							_react2.default.createElement('input', { type: 'submit', className: 'btn btn-outline-primary btn-sm', value: 'Send' })
 						)
 					),
 					_react2.default.createElement('div', { onClick: function onClick() {

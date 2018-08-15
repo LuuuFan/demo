@@ -65,6 +65,7 @@ let photoNum = 0;
 export const addPhoto = (url, canvas) => {
     let img = new Image();
     img.src = url;
+    img.setAttribute('crossorigin', 'anonymous');
     img.onload = function() {
       let image = new fabric.Image(img);
       image.set({

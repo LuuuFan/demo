@@ -30,7 +30,6 @@ class Share extends React.Component{
 		const pdf = new jsPDF();
 		pdf.addImage(imgData, 'PNG', 0, 0);
 		pdf.save('download.pdf');
-		debugger
 	}
 
 	render(){
@@ -51,7 +50,7 @@ class Share extends React.Component{
 									<option value='png'>PNG</option>
 								</select>
 							</div>
-							<button type='submit' className="btn btn-outline-primary btn-sm" onClick={()=>this.sendFile()}>Send</button>
+							<input type='submit' className="btn btn-outline-primary btn-sm" value='Send' />
 						</form>
 					</div>
             		<div onClick={()=>this.closeModal()} className="modal-screen"></div>
