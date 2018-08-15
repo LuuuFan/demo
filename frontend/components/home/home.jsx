@@ -7,6 +7,8 @@ import Header from './header';
 import Canvas from './canvas';
 import {} from '../../util/canvas';
 
+var interval;
+
 class Home extends React.Component {
 	constructor(){
 		super();
@@ -16,8 +18,13 @@ class Home extends React.Component {
 	}
 
 	componentDidMount(){
+		interval = setInterval(()=>{this.fetchImg()}, 9000);
+	}
+
+	fetchImg(){
 		this.props.fetchAllImgs(this.props.currentUser['access-token'])
 			.catch((err)=>{
+				clearInterval(interval);
 				localStorage.removeItem('access_token');
 				this.props.history.push('/login');
 			});
