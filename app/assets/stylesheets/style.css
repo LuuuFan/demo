@@ -68,6 +68,9 @@ input[type="submit"] {
 .main {
   height: 100vh; }
 
+.navbar {
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2); }
+
 .session-main {
   height: 100%; }
 
@@ -106,7 +109,19 @@ input[type="submit"] {
   left: 10vw; }
 
 .navbar {
-  font-size: 24px; }
+  font-size: 24px;
+  height: 6vh;
+  display: flex;
+  align-items: center; }
+  .navbar .header-buttons {
+    flex: 1; }
+    .navbar .header-buttons .share {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center; }
+  .navbar .share {
+    display: flex;
+    align-items: center; }
   .navbar i {
     margin-right: 10px; }
   .navbar a:hover {
@@ -117,6 +132,8 @@ input[type="submit"] {
   position: fixed;
   left: 25vw;
   width: 75vw;
+  height: 66vh;
+  margin-top: 50px;
   display: flex; }
   .container canvas {
     box-shadow: 0 8px 6px -6px black; }
@@ -161,8 +178,11 @@ li > .nav-link {
   left: 7vw;
   width: 18vw;
   height: 66vh;
+  margin-top: 50px;
   border: solid 1px darkgrey;
-  overflow: auto; }
+  overflow: auto;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 5px; }
 
 .tab-pane > label, .tab-pane > #button-wrapper {
   width: 100%;

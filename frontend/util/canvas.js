@@ -55,9 +55,12 @@ export const addText = (canvas) => {
 
 export const deleteItem = (canvas) => {
   let activeObject = canvas.getActiveObject();
+  if (activeObject.type === 'image') photoNum--;
   canvas.remove(activeObject);
   activeObject = canvas.getActiveObject();
 };
+
+let photoNum = 0;
 
 export const addPhoto = (url, canvas) => {
     let img = new Image();
@@ -65,15 +68,12 @@ export const addPhoto = (url, canvas) => {
     img.onload = function() {
       let image = new fabric.Image(img);
       image.set({
-        left: 0,
-        top: 0
+        left: 0 + 50 * photoNum,
+        top: 0 + 50 * photoNum,
       }).scale(0.5);
-      canvas.setHeight(img.height / 2);
-      canvas.setWidth(img.width / 2);
       canvas.add(image);
+      photoNum++;
     };
-  // };
-  // reader.readAsDataURL(e.target.files[0]);
 };
 
 export const changeImage = (event) => {
@@ -126,6 +126,7 @@ export const changeBackground = (color, canvas) => {
 };  
 
 export const addDialog = (selectedDialog, canvas) => {
+  
   fabric.Image.fromURL(`app/assets/images/${selectedDialog}.png`, (img)=>{
     const dialog = img.set({
       height: 100,
@@ -152,6 +153,7 @@ export const addDialog = (selectedDialog, canvas) => {
 
 export const resetCanvas = (canvas) => {
   canvas.clear();
+  photoNum = 0;
   canvas.setHeight(600);
   canvas.setWidth(900);
   canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));

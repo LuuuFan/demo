@@ -1,6 +1,7 @@
 import React from 'react';
-
+import Share from './share';
 class Header extends React.Component{
+
 
 	render(){
 		return(
@@ -9,6 +10,9 @@ class Header extends React.Component{
 					<i className="fab fa-viadeo"></i>
 					Demo
 				</a>
+				<div className='header-buttons'>
+					<Share />
+				</div>
 			</header>
 
 		);

@@ -4,6 +4,10 @@
 	height: 100vh;
 }
 
+.navbar{
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+}
+
 .session-main{
 	height: 100%;
 }
@@ -52,6 +56,21 @@
 
 .navbar{
 	font-size: 24px;
+  height: 6vh;
+  display: flex;
+  align-items: center;
+  .header-buttons{
+    .share{
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+    flex:1;
+  }
+  .share{
+    display: flex;
+    align-items: center;
+  }
 	i{
 		margin-right: 10px;
 	}
@@ -65,6 +84,8 @@
   position: fixed;
   left: 25vw;  
 	width: 75vw;
+  height: 66vh;
+  margin-top: 50px;
 	display: flex;
 	canvas{
 		box-shadow: 0 8px 6px -6px black;
@@ -120,8 +141,11 @@ li > .nav-link {
   left: 7vw;
   width: 18vw;
   height: 66vh;
+  margin-top: 50px;
   border: solid 1px darkgrey;
   overflow: auto;
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+  border-radius: 5px;
 }
 
 .tab-pane > label, .tab-pane > #button-wrapper {

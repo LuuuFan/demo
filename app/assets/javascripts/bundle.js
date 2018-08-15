@@ -3797,9 +3797,12 @@ var addText = exports.addText = function addText(canvas) {
 
 var deleteItem = exports.deleteItem = function deleteItem(canvas) {
   var activeObject = canvas.getActiveObject();
+  if (activeObject.type === 'image') photoNum--;
   canvas.remove(activeObject);
   activeObject = canvas.getActiveObject();
 };
+
+var photoNum = 0;
 
 var addPhoto = exports.addPhoto = function addPhoto(url, canvas) {
   var img = new Image();
@@ -3807,15 +3810,12 @@ var addPhoto = exports.addPhoto = function addPhoto(url, canvas) {
   img.onload = function () {
     var image = new fabric.Image(img);
     image.set({
-      left: 0,
-      top: 0
+      left: 0 + 50 * photoNum,
+      top: 0 + 50 * photoNum
     }).scale(0.5);
-    canvas.setHeight(img.height / 2);
-    canvas.setWidth(img.width / 2);
     canvas.add(image);
+    photoNum++;
   };
-  // };
-  // reader.readAsDataURL(e.target.files[0]);
 };
 
 var changeImage = exports.changeImage = function changeImage(event) {
@@ -3868,6 +3868,7 @@ var changeBackground = exports.changeBackground = function changeBackground(colo
 };
 
 var addDialog = exports.addDialog = function addDialog(selectedDialog, canvas) {
+
   fabric.Image.fromURL("app/assets/images/" + selectedDialog + ".png", function (img) {
     var dialog = img.set({
       height: 100,
@@ -3892,6 +3893,7 @@ var addDialog = exports.addDialog = function addDialog(selectedDialog, canvas) {
 
 var resetCanvas = exports.resetCanvas = function resetCanvas(canvas) {
   canvas.clear();
+  photoNum = 0;
   canvas.setHeight(600);
   canvas.setWidth(900);
   canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
@@ -27578,8 +27580,9 @@ var Home = function (_React$Component) {
 		value: function componentDidMount() {
 			var _this2 = this;
 
+			this.fetchImg();
 			interval = setInterval(function () {
-				_this2.fetchImg();
+				return _this2.fetchImg();
 			}, 9000);
 		}
 	}, {
@@ -27838,6 +27841,10 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _share = __webpack_require__(130);
+
+var _share2 = _interopRequireDefault(_share);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27866,6 +27873,11 @@ var Header = function (_React$Component) {
 					{ href: '/' },
 					_react2.default.createElement('i', { className: 'fab fa-viadeo' }),
 					'Demo'
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'header-buttons' },
+					_react2.default.createElement(_share2.default, null)
 				)
 			);
 		}
@@ -27942,7 +27954,8 @@ var Canvas = function (_React$Component) {
 		value: function componentDidMount() {
 			var _this2 = this;
 
-			var canvas = new fabric.Canvas("c", { width: 900, height: 600 });
+			var container = document.querySelector('.container');
+			var canvas = new fabric.Canvas("c", { width: container.offsetWidth, height: container.offsetHeight });
 			canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 			this.setState({ canvas: canvas });
 			// this.props.receiveCanvas(canvas);
@@ -28493,6 +28506,80 @@ var Canvas = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Canvas;
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Share = function (_React$Component) {
+	_inherits(Share, _React$Component);
+
+	function Share() {
+		_classCallCheck(this, Share);
+
+		var _this = _possibleConstructorReturn(this, (Share.__proto__ || Object.getPrototypeOf(Share)).call(this));
+
+		_this.state = {
+			modal: 'modal'
+		};
+		return _this;
+	}
+
+	_createClass(Share, [{
+		key: 'openModal',
+		value: function openModal() {
+			this.setState({ modal: 'is-open' });
+		}
+	}, {
+		key: 'closeModal',
+		value: function closeModal() {
+			this.setState({ modal: 'modal' });
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var _this2 = this;
+
+			return _react2.default.createElement(
+				'div',
+				{ className: 'share' },
+				_react2.default.createElement(
+					'button',
+					{ type: 'button', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
+							return _this2.openModal();
+						} },
+					'Share'
+				),
+				_react2.default.createElement('div', { className: this.state.modal })
+			);
+		}
+	}]);
+
+	return Share;
+}(_react2.default.Component);
+
+exports.default = Share;
 
 /***/ })
 /******/ ]);
