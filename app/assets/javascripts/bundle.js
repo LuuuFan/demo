@@ -3865,17 +3865,15 @@ var changeBackground = exports.changeBackground = function changeBackground(colo
 var addDialog = exports.addDialog = function addDialog(selectedDialog, canvas) {
 
   fabric.Image.fromURL("app/assets/images/" + selectedDialog + ".png", function (img) {
-    var dialog = img.set({
-      // height: 100,
-      // width: 100,
-    }).scale(0.3);
+    var scale = 150 / img.height;
+    var dialog = img.set({}).scale(scale);
 
     var text = new fabric.IText('Comment Here', {
       fontSize: 14,
-      height: dialog.height * 0.3,
-      width: dialog.width * 0.3,
-      left: dialog.width * 0.3 / 2,
-      top: dialog.height * 0.3 / 2,
+      height: 150,
+      width: 150,
+      left: 75,
+      top: 75,
       originX: 'center',
       originY: 'center'
     });
@@ -30597,6 +30595,20 @@ var Canvas = function (_React$Component) {
 										return _this4.changeShape(e, 'selectedDialog');
 									} },
 								_react2.default.createElement('img', { src: 'app/assets/images/dialog_1.png' })
+							),
+							_react2.default.createElement(
+								'li',
+								{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_2' ? 'ui-selected' : ''), id: 'dialog_2', onClick: function onClick(e) {
+										return _this4.changeShape(e, 'selectedDialog');
+									} },
+								_react2.default.createElement('img', { src: 'app/assets/images/dialog_2.png' })
+							),
+							_react2.default.createElement(
+								'li',
+								{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_3' ? 'ui-selected' : ''), id: 'dialog_3', onClick: function onClick(e) {
+										return _this4.changeShape(e, 'selectedDialog');
+									} },
+								_react2.default.createElement('img', { src: 'app/assets/images/dialog_3.png' })
 							)
 						),
 						_react2.default.createElement('br', null),

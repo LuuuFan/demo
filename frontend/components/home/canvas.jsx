@@ -157,6 +157,12 @@ class Canvas extends React.Component{
 								<li className={`shapes-item ${this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''}`} id="dialog_1" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
 								  <img src="app/assets/images/dialog_1.png" />
 								</li>
+								<li className={`shapes-item ${this.state.selectedDialog === 'dialog_2' ? 'ui-selected' : ''}`} id="dialog_2" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
+								  <img src="app/assets/images/dialog_2.png" />
+								</li>
+								<li className={`shapes-item ${this.state.selectedDialog === 'dialog_3' ? 'ui-selected' : ''}`} id="dialog_3" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
+								  <img src="app/assets/images/dialog_3.png" />
+								</li>
 		        	</ol>
 		        	<br />
 		        	<div id="button-wrapper">

@@ -246,13 +246,17 @@ li > .nav-link {
 }
 
 #shapes-list .ui-selected {
-  border-radius: 2px;
-  background-color: lightgray;
+  border-radius: 5px;
+  border: 2px solid gray;
+}
+
+.shapes-item {
+  padding: 3px;
 }
 
 .shapes-item > img {
-  height: 6vh;
-  width: 3.25vw;
+  height: 50px;
+  width: 50px;
 }
 
 .selected-color {

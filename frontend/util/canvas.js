@@ -111,17 +111,16 @@ export const changeBackground = (color, canvas) => {
 export const addDialog = (selectedDialog, canvas) => {
   
   fabric.Image.fromURL(`app/assets/images/${selectedDialog}.png`, (img)=>{
+    const scale = 150 / img.height;
     const dialog = img.set({
-      // height: 100,
-      // width: 100,
-    }).scale(0.3);
+    }).scale(scale);
 
     let text = new fabric.IText('Comment Here', {
       fontSize: 14,
-      height: dialog.height * 0.3,
-      width: dialog.width * 0.3,
-      left: dialog.width * 0.3 / 2,
-      top: dialog.height * 0.3 / 2,
+      height: 150,
+      width: 150,
+      left: 75,
+      top: 75,
       originX: 'center',
       originY: 'center',
     });
