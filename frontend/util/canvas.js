@@ -116,9 +116,12 @@ export const addDialog = (selectedDialog, canvas) => {
       // width: 100,
     }).scale(0.3);
 
-
     let text = new fabric.IText('Comment Here', {
       fontSize: 14,
+      height: dialog.height * 0.3,
+      width: dialog.width * 0.3,
+      left: dialog.width * 0.3 / 2,
+      top: dialog.height * 0.3 / 2,
       originX: 'center',
       originY: 'center',
     });

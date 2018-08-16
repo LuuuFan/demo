@@ -9,7 +9,7 @@ class Canvas extends React.Component{
 		super();
 		this.state = {
 			active: 'Shapes',
-			textSize: '12',
+			textSize: '24',
 			canvas: {},
 			shapeColor: 'Black',
 			textColor: 'Black',
@@ -22,7 +22,6 @@ class Canvas extends React.Component{
 			},
 		};
 	}
-
 
 	componentDidMount(){
 		const container = document.querySelector('.container');
@@ -56,6 +55,10 @@ class Canvas extends React.Component{
 
 	selectColor(e, type){
 		this.setState({[type]: e.target.options[e.target.options.selectedIndex].textContent});
+		if (type === 'backgroundColor') {
+			canvasUtil.changeBackground(e.target.options[e.target.options.selectedIndex].textContent, this.state.canvas);
+			return;
+		}
 		const activeObject = this.state.canvas.getActiveObject();
 		if (activeObject) {
 			if (this.state.selectedShape === activeObject.type || (type === 'textColor' && activeObject.type === 'i-text')) {
@@ -66,6 +69,10 @@ class Canvas extends React.Component{
 
 	changeShape(e, type){
 		this.setState({[type]: e.currentTarget.id});
+	}
+
+	changeStyle(){
+
 	}
 
 	render(){
@@ -219,9 +226,11 @@ class Canvas extends React.Component{
 								</div>
 							</div>
 							<br/>
-							<div id="button-wrapper">
-								<button type="button" className="btn btn-outline-primary btn-sm" id="changeBackground" onClick={()=>canvasUtil.changeBackground(this.state.backgroundColor, this.state.canvas)}>Change Background Color</button>
-							</div>
+								{/*
+									<div id="button-wrapper">
+											<button type="button" className="btn btn-outline-primary btn-sm" id="changeBackground" onClick={()=>canvasUtil.changeBackground(this.state.backgroundColor, this.state.canvas)}>Change Background Color</button>
+									</div>
+								*/}
 		        </div>
 			    </div>
 			    <div className='buttons'>

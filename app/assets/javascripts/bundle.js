@@ -3872,6 +3872,10 @@ var addDialog = exports.addDialog = function addDialog(selectedDialog, canvas) {
 
     var text = new fabric.IText('Comment Here', {
       fontSize: 14,
+      height: dialog.height * 0.3,
+      width: dialog.width * 0.3,
+      left: dialog.width * 0.3 / 2,
+      top: dialog.height * 0.3 / 2,
       originX: 'center',
       originY: 'center'
     });
@@ -30279,7 +30283,7 @@ var Canvas = function (_React$Component) {
 
 		_this.state = {
 			active: 'Shapes',
-			textSize: '12',
+			textSize: '24',
 			canvas: {},
 			shapeColor: 'Black',
 			textColor: 'Black',
@@ -30336,6 +30340,10 @@ var Canvas = function (_React$Component) {
 		key: 'selectColor',
 		value: function selectColor(e, type) {
 			this.setState(_defineProperty({}, type, e.target.options[e.target.options.selectedIndex].textContent));
+			if (type === 'backgroundColor') {
+				canvasUtil.changeBackground(e.target.options[e.target.options.selectedIndex].textContent, this.state.canvas);
+				return;
+			}
 			var activeObject = this.state.canvas.getActiveObject();
 			if (activeObject) {
 				if (this.state.selectedShape === activeObject.type || type === 'textColor' && activeObject.type === 'i-text') {
@@ -30348,6 +30356,9 @@ var Canvas = function (_React$Component) {
 		value: function changeShape(e, type) {
 			this.setState(_defineProperty({}, type, e.currentTarget.id));
 		}
+	}, {
+		key: 'changeStyle',
+		value: function changeStyle() {}
 	}, {
 		key: 'render',
 		value: function render() {
@@ -30819,18 +30830,7 @@ var Canvas = function (_React$Component) {
 							),
 							_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.backgroundColor } })
 						),
-						_react2.default.createElement('br', null),
-						_react2.default.createElement(
-							'div',
-							{ id: 'button-wrapper' },
-							_react2.default.createElement(
-								'button',
-								{ type: 'button', className: 'btn btn-outline-primary btn-sm', id: 'changeBackground', onClick: function onClick() {
-										return canvasUtil.changeBackground(_this4.state.backgroundColor, _this4.state.canvas);
-									} },
-								'Change Background Color'
-							)
-						)
+						_react2.default.createElement('br', null)
 					)
 				),
 				_react2.default.createElement(
