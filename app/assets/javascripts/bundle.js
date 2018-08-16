@@ -24209,7 +24209,14 @@ var imgReducer = function imgReducer() {
 	var newState = void 0;
 	switch (action.type) {
 		case _images.RECEIVE_ALL_IMGS:
-			return action.imgs;
+			var dropbox = JSON.parse(localStorage.getItem('dropbox'));
+			newState = action.imgs;
+			if (dropbox && Object.keys(dropbox).length) {
+				Object.keys(dropbox).forEach(function (key) {
+					return newState.push(dropbox[key]);
+				});
+			}
+			return newState;
 		case _images.RECEIVE_IMG:
 			newState = Array.from(state);
 			newState.push(action.img);

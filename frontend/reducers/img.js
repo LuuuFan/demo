@@ -5,7 +5,12 @@ const imgReducer = (state=[], action) => {
 	let newState;
 	switch(action.type){
 		case RECEIVE_ALL_IMGS:
-			return action.imgs;
+			const dropbox = JSON.parse(localStorage.getItem('dropbox'));
+			newState = action.imgs;
+			if (dropbox && Object.keys(dropbox).length) {
+				Object.keys(dropbox).forEach(key => newState.push(dropbox[key]));
+			}			
+			return newState;
 		case RECEIVE_IMG:
 			newState = Array.from(state);
 			newState.push(action.img);
