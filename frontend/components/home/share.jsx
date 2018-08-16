@@ -1,24 +1,58 @@
 import React from 'react';
+// import {sendEmail} from '../../util/mail';
 
 class Share extends React.Component{
 	constructor(){
 		super();
 		this.state = {
 			modal: 'modal',
-			email: '',
+			email: 'lu.fan@n3n.io',
 			emailError: '',
 		};
+	}
+
+	download(url, name){
+		const a = document.createElement('a');
+		a.href = url;
+		// a.setAttribute('target', '_blank');
+		a.setAttribute("download", name);
+
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+
+	}
+
+	getSourceAsDOM(url){
+		const xmlhttp = new XMLHttpRequest();
+		xmlhttp.open('GET', url, false);
+		xmlhttp.send();
+		parser = new DOMParser();
+		return parser.parseFromString(xmlhttp.responseText, 'text/html');
 	}
 
 	componentDidMount(){
 		const button = Dropbox.createChooseButton({
 			success: (files)=>{
 				console.log(`Here is the file link: ${files[0].link}`)
+				files.forEach(img => {
+					const link = img.link.split('?')[0]
+					// const html = this.getSourceAsDOM(img.link);
+					// debugger
+					// const image = new Image();
+					// image.src = link;
+						// this.download(link, img.name)
+					const image = {
+						previewURL: link,
+						webformatURL: link,
+					}
+					this.props.receiveImg(image);
+				})
 			},
 			cancel: ()=>{
-				debugger
+				console.log('user cancel')
 			},
-			linkType: 'preview',
+			linkType: 'direct',
 			multiselect: true,
 			extensions: ['.jpg', '.jpeg', '.png', '.gif'],
 			folderselect: false,
@@ -60,7 +94,15 @@ class Share extends React.Component{
 			if (type === 'PDF') {
 				const pdf = new jsPDF();
 				pdf.addImage(imgData, 'JPEG', 0, 0);
-				pdf.save('download.pdf');
+				pdf.setProperties({
+			    title: "download",
+				});
+				const formData = new FormData();
+				formData.append('recipient', this.state.email);
+				formData.append('file', pdf.output(), 'download.pdf');
+				const token = localStorage.getItem('access_token'); 
+				this.props.sendEmail(token, formData);
+				// pdf.save('download.pdf');
 			} else {
 				const data = imgData.replace(/^data:image\/\w+;base64,/, "");
 				const buf = new Buffer(data, 'base64');

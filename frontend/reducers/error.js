@@ -5,7 +5,6 @@ const errorReducer = (state={}, action) => {
 	let newState;
 	switch(action.type){
 		case RECEIVE_ERROR:
-			debugger
 			return action.error;
 		case CLEAR_ERROR:
 			return {};

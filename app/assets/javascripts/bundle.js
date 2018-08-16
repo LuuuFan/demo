@@ -24259,7 +24259,6 @@ var errorReducer = function errorReducer() {
 	var newState = void 0;
 	switch (action.type) {
 		case _error.RECEIVE_ERROR:
-			debugger;
 			return action.error;
 		case _error.CLEAR_ERROR:
 			return {};
@@ -27506,6 +27505,8 @@ var _images = __webpack_require__(36);
 
 var _canvas = __webpack_require__(37);
 
+var _mail = __webpack_require__(136);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -27523,6 +27524,12 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		},
 		receiveCanvas: function receiveCanvas(canvas) {
 			return dispatch((0, _canvas.receiveCanvas)(canvas));
+		},
+		receiveImg: function receiveImg(img) {
+			return dispatch((0, _images.receiveImg)(img));
+		},
+		sendEmail: function sendEmail(token, formData) {
+			return dispatch((0, _mail.sendEmail)(token, formData));
 		}
 	};
 };
@@ -27620,12 +27627,14 @@ var Home = function (_React$Component) {
 
 			var _props = this.props,
 			    imgs = _props.imgs,
-			    receiveCanvas = _props.receiveCanvas;
+			    receiveCanvas = _props.receiveCanvas,
+			    receiveImg = _props.receiveImg,
+			    sendEmail = _props.sendEmail;
 
 			return _react2.default.createElement(
 				'div',
 				null,
-				_react2.default.createElement(_header2.default, null),
+				_react2.default.createElement(_header2.default, { receiveImg: receiveImg, sendEmail: sendEmail }),
 				_react2.default.createElement(_canvas2.default, { receiveCanvas: receiveCanvas, img: this.state.selectedImgURL }),
 				_react2.default.createElement(
 					'div',
@@ -27897,6 +27906,10 @@ var Header = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
+			var _props = this.props,
+			    receiveImg = _props.receiveImg,
+			    sendEmail = _props.sendEmail;
+
 			return _react2.default.createElement(
 				'header',
 				{ className: 'navbar navbar-expand navbar-light bg-light' },
@@ -27909,7 +27922,7 @@ var Header = function (_React$Component) {
 				_react2.default.createElement(
 					'div',
 					{ className: 'header-buttons' },
-					_react2.default.createElement(_share2.default, null)
+					_react2.default.createElement(_share2.default, { receiveImg: receiveImg, sendEmail: sendEmail })
 				)
 			);
 		}
@@ -27945,6 +27958,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// import {sendEmail} from '../../util/mail';
+
 var Share = function (_React$Component) {
 	_inherits(Share, _React$Component);
 
@@ -27955,23 +27970,59 @@ var Share = function (_React$Component) {
 
 		_this.state = {
 			modal: 'modal',
-			email: '',
+			email: 'lu.fan@n3n.io',
 			emailError: ''
 		};
 		return _this;
 	}
 
 	_createClass(Share, [{
+		key: 'download',
+		value: function download(url, name) {
+			var a = document.createElement('a');
+			a.href = url;
+			// a.setAttribute('target', '_blank');
+			a.setAttribute("download", name);
+
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+		}
+	}, {
+		key: 'getSourceAsDOM',
+		value: function getSourceAsDOM(url) {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open('GET', url, false);
+			xmlhttp.send();
+			parser = new DOMParser();
+			return parser.parseFromString(xmlhttp.responseText, 'text/html');
+		}
+	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
+			var _this2 = this;
+
 			var button = Dropbox.createChooseButton({
 				success: function success(files) {
 					console.log('Here is the file link: ' + files[0].link);
+					files.forEach(function (img) {
+						var link = img.link.split('?')[0];
+						// const html = this.getSourceAsDOM(img.link);
+						// debugger
+						// const image = new Image();
+						// image.src = link;
+						// this.download(link, img.name)
+						var image = {
+							previewURL: link,
+							webformatURL: link
+						};
+						_this2.props.receiveImg(image);
+					});
 				},
 				cancel: function cancel() {
-					debugger;
+					console.log('user cancel');
 				},
-				linkType: 'preview',
+				linkType: 'direct',
 				multiselect: true,
 				extensions: ['.jpg', '.jpeg', '.png', '.gif'],
 				folderselect: false
@@ -27982,11 +28033,11 @@ var Share = function (_React$Component) {
 	}, {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate() {
-			var _this2 = this;
+			var _this3 = this;
 
 			$(document).keydown(function (e) {
 				if (e.keyCode === 27) {
-					_this2.closeModal();
+					_this3.closeModal();
 				}
 			});
 		}
@@ -28021,7 +28072,15 @@ var Share = function (_React$Component) {
 				if (type === 'PDF') {
 					var pdf = new jsPDF();
 					pdf.addImage(imgData, 'JPEG', 0, 0);
-					pdf.save('download.pdf');
+					pdf.setProperties({
+						title: "download"
+					});
+					var formData = new FormData();
+					formData.append('recipient', this.state.email);
+					formData.append('file', pdf.output(), 'download.pdf');
+					var token = localStorage.getItem('access_token');
+					this.props.sendEmail(token, formData);
+					// pdf.save('download.pdf');
 				} else {
 					var data = imgData.replace(/^data:image\/\w+;base64,/, "");
 					var buf = new Buffer(data, 'base64');
@@ -28034,7 +28093,7 @@ var Share = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this3 = this;
+			var _this4 = this;
 
 			return _react2.default.createElement(
 				'div',
@@ -28042,7 +28101,7 @@ var Share = function (_React$Component) {
 				_react2.default.createElement(
 					'button',
 					{ type: 'button', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
-							return _this3.openModal();
+							return _this4.openModal();
 						} },
 					'Share'
 				),
@@ -28055,7 +28114,7 @@ var Share = function (_React$Component) {
 						_react2.default.createElement(
 							'form',
 							{ onSubmit: function onSubmit() {
-									return _this3.sendFile();
+									return _this4.sendFile();
 								} },
 							_react2.default.createElement(
 								'div',
@@ -28066,7 +28125,7 @@ var Share = function (_React$Component) {
 									'Email: '
 								),
 								_react2.default.createElement('input', { type: 'email', onChange: function onChange(e) {
-										return _this3.handleInput(e);
+										return _this4.handleInput(e);
 									}, value: this.state.email })
 							),
 							_react2.default.createElement(
@@ -28101,7 +28160,7 @@ var Share = function (_React$Component) {
 						)
 					),
 					_react2.default.createElement('div', { onClick: function onClick() {
-							return _this3.closeModal();
+							return _this4.closeModal();
 						}, className: 'modal-screen' })
 				)
 			);
@@ -30788,6 +30847,58 @@ var Canvas = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Canvas;
+
+/***/ }),
+/* 135 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var sendEmail = exports.sendEmail = function sendEmail(token, formData) {
+	return $.ajax({
+		url: 'http://localhost:8999/send_email',
+		method: 'POST',
+
+		data: formData,
+		processData: false,
+		contentType: false,
+		beforeSend: function beforeSend(xhr) {
+			xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+		}
+	});
+};
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.sendEmail = undefined;
+
+var _mail = __webpack_require__(135);
+
+var APIUtilMail = _interopRequireWildcard(_mail);
+
+var _error = __webpack_require__(19);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var sendEmail = exports.sendEmail = function sendEmail(token, formData) {
+	return function (dispatch) {
+		return APIUtilMail.sendEmail(token, formData).then(function (res) {
+			return dispatch((0, _error.receiveError)(JSON.parse(res)));
+		});
+	};
+};
 
 /***/ })
 /******/ ]);

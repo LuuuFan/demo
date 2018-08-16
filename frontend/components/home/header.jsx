@@ -7,6 +7,7 @@ class Header extends React.Component{
 	}
 
 	render(){
+		const {receiveImg, sendEmail} = this.props;
 		return(
 			<header className='navbar navbar-expand navbar-light bg-light'>
 				<a href='/'>
@@ -14,7 +15,7 @@ class Header extends React.Component{
 					Demo
 				</a>
 				<div className='header-buttons'>
-					<Share />
+					<Share receiveImg={receiveImg} sendEmail={sendEmail}/>
 				</div>
 			</header>
 
