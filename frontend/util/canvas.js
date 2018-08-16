@@ -120,7 +120,7 @@ export const addDialog = (selectedDialog, canvas) => {
     const fontSize = comment.length > 15 ? Math.floor(150 / comment.length) : 14;
 
     let text = new fabric.IText(comment, {
-      fontSize: 14,
+      fontSize: fontSize,
       height: 150,
       width: 150,
       left: 75,

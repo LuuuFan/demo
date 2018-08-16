@@ -79,6 +79,18 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      .message{
+        padding: 5px 15px; 
+        font-size: 12px;
+        position: fixed;
+        top: 70px;
+        left: 33%;
+        width: 33%;
+        border-radius: 5px;
+        background: rgba(10, 186, 181, 0.2);
+        transition: all .8s;
+        // background-color: #0abab5;
+      }
       button{
         margin-right: 10px;
       }

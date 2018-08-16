@@ -1713,7 +1713,7 @@ var addDialog = exports.addDialog = function addDialog(selectedDialog, canvas) {
     var fontSize = comment.length > 15 ? Math.floor(150 / comment.length) : 14;
 
     var text = new fabric.IText(comment, {
-      fontSize: 14,
+      fontSize: fontSize,
       height: 150,
       width: 150,
       left: 75,
@@ -24115,13 +24115,18 @@ var _canvas = __webpack_require__(86);
 
 var _canvas2 = _interopRequireDefault(_canvas);
 
+var _message = __webpack_require__(140);
+
+var _message2 = _interopRequireDefault(_message);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
   session: _session2.default,
   imgs: _img2.default,
   error: _error2.default,
-  canvas: _canvas2.default
+  canvas: _canvas2.default,
+  message: _message2.default
 });
 
 exports.default = rootReducer;
@@ -27523,13 +27528,18 @@ var _canvas = __webpack_require__(38);
 
 var _mail = __webpack_require__(135);
 
+var _message = __webpack_require__(139);
+
+var _service = __webpack_require__(141);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state) {
 	return {
 		imgs: state.imgs,
 		canvas: state.canvas,
-		currentUser: state.session.currentUser
+		currentUser: state.session.currentUser,
+		message: state.message
 	};
 };
 
@@ -27546,6 +27556,12 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		},
 		sendEmail: function sendEmail(token, formData) {
 			return dispatch((0, _mail.sendEmail)(token, formData));
+		},
+		clearMessage: function clearMessage() {
+			return dispatch((0, _message.clearMessage)());
+		},
+		sendService: function sendService(data) {
+			return dispatch((0, _service.sendService)(data));
 		}
 	};
 };
@@ -27645,12 +27661,15 @@ var Home = function (_React$Component) {
 			    imgs = _props.imgs,
 			    receiveCanvas = _props.receiveCanvas,
 			    receiveImg = _props.receiveImg,
-			    sendEmail = _props.sendEmail;
+			    sendEmail = _props.sendEmail,
+			    message = _props.message,
+			    clearMessage = _props.clearMessage,
+			    sendService = _props.sendService;
 
 			return _react2.default.createElement(
 				'div',
 				null,
-				_react2.default.createElement(_header2.default, { receiveImg: receiveImg, sendEmail: sendEmail }),
+				_react2.default.createElement(_header2.default, { receiveImg: receiveImg, sendEmail: sendEmail, message: message, clearMessage: clearMessage, sendService: sendService }),
 				_react2.default.createElement(_canvas2.default, { receiveCanvas: receiveCanvas, img: this.state.selectedImgURL }),
 				_react2.default.createElement(
 					'div',
@@ -27921,7 +27940,10 @@ var Header = function (_React$Component) {
 		value: function render() {
 			var _props = this.props,
 			    receiveImg = _props.receiveImg,
-			    sendEmail = _props.sendEmail;
+			    sendEmail = _props.sendEmail,
+			    message = _props.message,
+			    clearMessage = _props.clearMessage,
+			    sendService = _props.sendService;
 
 			return _react2.default.createElement(
 				'header',
@@ -27935,7 +27957,7 @@ var Header = function (_React$Component) {
 				_react2.default.createElement(
 					'div',
 					{ className: 'header-buttons' },
-					_react2.default.createElement(_share2.default, { receiveImg: receiveImg, sendEmail: sendEmail })
+					_react2.default.createElement(_share2.default, { receiveImg: receiveImg, sendEmail: sendEmail, message: message, clearMessage: clearMessage, sendService: sendService })
 				)
 			);
 		}
@@ -28072,6 +28094,16 @@ var Share = function (_React$Component) {
 			});
 		}
 	}, {
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(nextProps) {
+			if (nextProps.message.orderNum) {
+				this.setState({ service: false });
+				setTimeout(function () {
+					nextProps.clearMessage();
+				}, 10000);
+			}
+		}
+	}, {
 		key: 'openModal',
 		value: function openModal() {
 			this.setState({ modal: 'is-open' });
@@ -28141,9 +28173,19 @@ var Share = function (_React$Component) {
 			var _this4 = this;
 
 			var dropbox = JSON.parse(localStorage.getItem('dropbox'));
+			var _props = this.props,
+			    message = _props.message,
+			    sendService = _props.sendService;
+
 			return _react2.default.createElement(
 				'div',
 				{ className: 'share' },
+				message.orderNum ? _react2.default.createElement(
+					'div',
+					{ className: 'message' },
+					'Service sent successfully. Incident Number: ',
+					message.orderNum
+				) : "",
 				_react2.default.createElement(
 					'button',
 					{ type: 'button', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
@@ -28151,7 +28193,7 @@ var Share = function (_React$Component) {
 						} },
 					this.state.service ? 'Close Service' : 'Send to Service'
 				),
-				this.state.service ? _react2.default.createElement(_service2.default, null) : '',
+				this.state.service ? _react2.default.createElement(_service2.default, { sendService: sendService }) : '',
 				_react2.default.createElement(
 					'button',
 					{ type: 'button', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
@@ -30989,8 +31031,6 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _service = __webpack_require__(138);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -30998,6 +31038,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// import {sendService} from '../util/service';
 
 var Service = function (_React$Component) {
 	_inherits(Service, _React$Component);
@@ -31009,11 +31051,11 @@ var Service = function (_React$Component) {
 	}
 
 	_createClass(Service, [{
-		key: 'sendService',
+		key: "sendService",
 		value: function sendService() {
-			var imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
-			var data = imgData.replace(/^data:image\/\w+;base64,/, "");
-			console.log(data);
+			// const imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
+			// const data = imgData.replace(/^data:image\/\w+;base64,/, "");
+			// console.log(data);
 			var requestData = {
 				"sysparm_action": "insert",
 				"category": $("#cat-select").val(),
@@ -31027,299 +31069,299 @@ var Service = function (_React$Component) {
 				"assigned_to": $("#at-select").val()
 			};
 			console.log(requestData.caller_id);
-			(0, _service.sendService)(requestData).then(function (data) {
-				var obj = JSON.parse(data);
-				console.log(obj.records[0].number);
-				alert("Incident Number ====>" + obj.records[0].number);
+			this.props.sendService(requestData).then(function (data) {
+				// const obj = JSON.parse(data);
+				//  console.log(obj.records[0].number);
+				//  alert("Incident Number ====>"+obj.records[0].number);
 			});
 		}
 	}, {
-		key: 'render',
+		key: "render",
 		value: function render() {
 			var _this2 = this;
 
 			return _react2.default.createElement(
-				'div',
-				{ id: 'table_left' },
+				"div",
+				{ id: "table_left" },
 				_react2.default.createElement(
-					'table',
-					{ id: 'table-1', className: 'table table-hover dataTable no-footer', cellSpacing: '0' },
+					"table",
+					{ id: "table-1", className: "table table-hover dataTable no-footer", cellSpacing: "0" },
 					_react2.default.createElement(
-						'tbody',
-						{ id: 'targetForRows' },
+						"tbody",
+						{ id: "targetForRows" },
 						_react2.default.createElement(
-							'tr',
-							{ className: 'normal' },
+							"tr",
+							{ className: "normal" },
 							_react2.default.createElement(
-								'td',
-								{ colSpan: '2' },
+								"td",
+								{ colSpan: "2" },
 								_react2.default.createElement(
-									'div',
-									{ className: 'title-bar-2' },
+									"div",
+									{ className: "title-bar-2" },
 									_react2.default.createElement(
-										'span',
-										{ id: 'cityName' },
-										'Create Incident'
+										"span",
+										{ id: "cityName" },
+										"Create Incident"
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							'tr',
-							{ className: 'wv-pl' },
+							"tr",
+							{ className: "wv-pl" },
 							_react2.default.createElement(
-								'td',
+								"td",
 								null,
 								_react2.default.createElement(
-									'span',
+									"span",
 									null,
-									'Category'
+									"Category"
 								),
 								_react2.default.createElement(
-									'select',
-									{ id: 'cat-select', className: 'input' },
+									"select",
+									{ id: "cat-select", className: "input" },
 									_react2.default.createElement(
-										'option',
+										"option",
 										null,
-										'Select a Category'
+										"Select a Category"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: 'Inquiry/help' },
-										'Inquiry / Help'
+										"option",
+										{ value: "Inquiry/help" },
+										"Inquiry / Help"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: 'hardware' },
-										'Hardware'
+										"option",
+										{ value: "hardware" },
+										"Hardware"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: 'software' },
-										'Software'
+										"option",
+										{ value: "software" },
+										"Software"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: 'database' },
-										'Database'
+										"option",
+										{ value: "database" },
+										"Database"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: 'network' },
-										'Network'
+										"option",
+										{ value: "network" },
+										"Network"
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							'tr',
-							{ className: 'wv-pl' },
+							"tr",
+							{ className: "wv-pl" },
 							_react2.default.createElement(
-								'td',
+								"td",
 								null,
 								_react2.default.createElement(
-									'span',
+									"span",
 									null,
-									'State'
+									"State"
 								),
 								_react2.default.createElement(
-									'select',
-									{ id: 'state-select', className: 'input' },
+									"select",
+									{ id: "state-select", className: "input" },
 									_react2.default.createElement(
-										'option',
-										{ value: '1' },
-										'New'
+										"option",
+										{ value: "1" },
+										"New"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: '2' },
-										'In Progress'
+										"option",
+										{ value: "2" },
+										"In Progress"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: '3' },
-										'On Hold'
+										"option",
+										{ value: "3" },
+										"On Hold"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: '6' },
-										'Resolved'
+										"option",
+										{ value: "6" },
+										"Resolved"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: '7' },
-										'Closed'
+										"option",
+										{ value: "7" },
+										"Closed"
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							'tr',
-							{ className: 'wv-pl' },
+							"tr",
+							{ className: "wv-pl" },
 							_react2.default.createElement(
-								'td',
+								"td",
 								null,
 								_react2.default.createElement(
-									'span',
+									"span",
 									null,
-									'Impact'
+									"Impact"
 								),
 								_react2.default.createElement(
-									'select',
-									{ id: 'impact-select', className: 'input' },
+									"select",
+									{ id: "impact-select", className: "input" },
 									_react2.default.createElement(
-										'option',
-										{ value: '1' },
-										'High'
+										"option",
+										{ value: "1" },
+										"High"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: '2' },
-										'Medium'
+										"option",
+										{ value: "2" },
+										"Medium"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: '3' },
-										'Low'
+										"option",
+										{ value: "3" },
+										"Low"
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							'tr',
-							{ className: 'wv-pl' },
+							"tr",
+							{ className: "wv-pl" },
 							_react2.default.createElement(
-								'td',
+								"td",
 								null,
 								_react2.default.createElement(
-									'span',
+									"span",
 									null,
-									'Urgency'
+									"Urgency"
 								),
 								_react2.default.createElement(
-									'select',
-									{ id: 'urgency-select', className: 'input' },
+									"select",
+									{ id: "urgency-select", className: "input" },
 									_react2.default.createElement(
-										'option',
-										{ value: '1' },
-										'High'
+										"option",
+										{ value: "1" },
+										"High"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: '2' },
-										'Medium'
+										"option",
+										{ value: "2" },
+										"Medium"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: '3' },
-										'Low'
+										"option",
+										{ value: "3" },
+										"Low"
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							'tr',
-							{ className: 'wv-pl' },
+							"tr",
+							{ className: "wv-pl" },
 							_react2.default.createElement(
-								'td',
+								"td",
 								null,
 								_react2.default.createElement(
-									'span',
+									"span",
 									null,
-									'Short Description'
+									"Short Description"
 								),
-								_react2.default.createElement('input', { id: 'input-level', type: 'text', name: 'conc' })
+								_react2.default.createElement("input", { id: "input-level", type: "text", name: "conc" })
 							)
 						),
 						_react2.default.createElement(
-							'tr',
-							{ className: 'wv-pl' },
+							"tr",
+							{ className: "wv-pl" },
 							_react2.default.createElement(
-								'td',
+								"td",
 								null,
 								_react2.default.createElement(
-									'span',
+									"span",
 									null,
-									'Assignment Group'
+									"Assignment Group"
 								),
 								_react2.default.createElement(
-									'select',
-									{ id: 'ag-select', className: 'input' },
+									"select",
+									{ id: "ag-select", className: "input" },
 									_react2.default.createElement(
-										'option',
+										"option",
 										null,
-										'Select a AG'
+										"Select a AG"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: 'CAB Approval' },
-										'CAB Approval'
+										"option",
+										{ value: "CAB Approval" },
+										"CAB Approval"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: 'Database' },
-										'Database'
+										"option",
+										{ value: "Database" },
+										"Database"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: 'Network' },
-										'Network'
+										"option",
+										{ value: "Network" },
+										"Network"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: 'Hardware' },
-										'Hardware'
+										"option",
+										{ value: "Hardware" },
+										"Hardware"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: 'Software' },
-										'Software'
+										"option",
+										{ value: "Software" },
+										"Software"
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							'tr',
-							{ className: 'wv-pl' },
+							"tr",
+							{ className: "wv-pl" },
 							_react2.default.createElement(
-								'td',
+								"td",
 								null,
 								_react2.default.createElement(
-									'span',
+									"span",
 									null,
-									'Assigned To'
+									"Assigned To"
 								),
 								_react2.default.createElement(
-									'select',
-									{ id: 'at-select', className: 'input' },
+									"select",
+									{ id: "at-select", className: "input" },
 									_react2.default.createElement(
-										'option',
+										"option",
 										null,
-										'Select a AT'
+										"Select a AT"
 									),
 									_react2.default.createElement(
-										'option',
-										{ value: 'Pavan Karra' },
-										'Pavan Karra'
+										"option",
+										{ value: "Pavan Karra" },
+										"Pavan Karra"
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							'tr',
-							{ className: 'wv-pl' },
+							"tr",
+							{ className: "wv-pl" },
 							_react2.default.createElement(
-								'td',
+								"td",
 								null,
 								_react2.default.createElement(
-									'div',
-									{ className: 'send-service-button' },
+									"div",
+									{ className: "send-service-button" },
 									_react2.default.createElement(
-										'button',
+										"button",
 										{ onClick: function onClick() {
 												return _this2.sendService();
-											}, name: 'fname' },
-										'Create'
+											}, name: "fname" },
+										"Create"
 									)
 								)
 							)
@@ -31356,6 +31398,95 @@ var sendService = exports.sendService = function sendService(requestData) {
       //     console.log(obj.records[0].number);
       //     alert("Incident Number ====>"+obj.records[0].number);
    });
+};
+
+/***/ }),
+/* 139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var RECEIVE_MESSAGE = exports.RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';
+var CLEAR_MESSAGE = exports.CLEAR_MESSAGE = 'CLEAR_MESSAGE';
+
+var receiveMessage = exports.receiveMessage = function receiveMessage(message) {
+	return {
+		type: RECEIVE_MESSAGE,
+		message: message
+	};
+};
+
+var clearMessage = exports.clearMessage = function clearMessage() {
+	return {
+		type: CLEAR_MESSAGE
+	};
+};
+
+/***/ }),
+/* 140 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _message = __webpack_require__(139);
+
+var messageReducer = function messageReducer() {
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	var action = arguments[1];
+
+	Object.freeze(state);
+	var newState = void 0;
+	switch (action.type) {
+		case _message.RECEIVE_MESSAGE:
+			return { orderNum: action.message };
+		case _message.CLEAR_MESSAGE:
+			return {};
+		default:
+			return state;
+	}
+};
+
+exports.default = messageReducer;
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.sendService = undefined;
+
+var _service = __webpack_require__(138);
+
+var serviceUtil = _interopRequireWildcard(_service);
+
+var _message = __webpack_require__(139);
+
+var _error = __webpack_require__(12);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var sendService = exports.sendService = function sendService(requestData) {
+	return function (dispatch) {
+		return serviceUtil.sendService(requestData).then(function (data) {
+			return dispatch((0, _message.receiveMessage)(JSON.parse(data).records[0].number));
+		}, function (error) {
+			return dispatch((0, _error.receiveError)(JSON.parse(error)));
+		});
+	};
 };
 
 /***/ })

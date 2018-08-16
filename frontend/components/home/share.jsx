@@ -77,6 +77,15 @@ class Share extends React.Component{
 	    });
 	}
 
+	componentWillReceiveProps(nextProps){
+		if (nextProps.message.orderNum) {
+			this.setState({service: false});
+			setTimeout(()=>{
+					nextProps.clearMessage();
+			}, 10000)
+		}
+	}
+
 	openModal(){
 		this.setState({modal: 'is-open'});
 	}
@@ -136,11 +145,15 @@ class Share extends React.Component{
 
 	render(){
 		const dropbox = JSON.parse(localStorage.getItem('dropbox'));
+		const {message, sendService} = this.props;
 		return (
 			<div className='share'>
+				{message.orderNum ? 
+					<div className='message'>Service sent successfully. Incident Number: {message.orderNum}</div>
+					: ""}
 				<button type="button" className="btn btn-outline-primary btn-sm" onClick={()=>this.toggleService()}>{this.state.service ? 'Close Service' : 'Send to Service'}</button>
 				{this.state.service ? 
-					<Service />
+					<Service sendService={sendService}/>
 					: ''}
 				<button type="button" className="btn btn-outline-primary btn-sm" onClick={()=>this.openModal()}>Share</button>
 				{dropbox && Object.keys(dropbox) ? 

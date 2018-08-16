@@ -1,12 +1,12 @@
 import React from 'react';
-import {sendService} from '../util/service';
+// import {sendService} from '../util/service';
 
 class Service extends React.Component {
-	
+
 	sendService(){
-		const imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
-		const data = imgData.replace(/^data:image\/\w+;base64,/, "");
-		console.log(data);
+		// const imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
+		// const data = imgData.replace(/^data:image\/\w+;base64,/, "");
+		// console.log(data);
 		const requestData = {
 	          "sysparm_action": "insert",
 	          "category": $("#cat-select").val(),
@@ -20,10 +20,10 @@ class Service extends React.Component {
 	          "assigned_to":$("#at-select").val(),
 	        };
     console.log(requestData.caller_id);
-    sendService(requestData).then(data => {
-    	const obj = JSON.parse(data);
-      console.log(obj.records[0].number);
-      alert("Incident Number ====>"+obj.records[0].number);
+    this.props.sendService(requestData).then(data => {
+    	// const obj = JSON.parse(data);
+     //  console.log(obj.records[0].number);
+     //  alert("Incident Number ====>"+obj.records[0].number);
     });
 	}
 
