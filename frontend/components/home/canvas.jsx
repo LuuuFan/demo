@@ -110,13 +110,13 @@ class Canvas extends React.Component{
 							<label>Shapes: </label>
 							<ol id="shapes-list">
 								<li className={`shapes-item ${this.state.selectedShape === 'circle' ? 'ui-selected' : ''}`} id="circle" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
-								  <img src="https://raw.githubusercontent.com/Kelvin-K-Cho/edwrd.io/master/public/images/circle.png" />
+								  <img src="app/assets/images/circle.png" />
 								</li>
 								<li className={`shapes-item ${this.state.selectedShape === 'rect' ? 'ui-selected' : ''}`} id="rect" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
-								  <img src="https://github.com/Kelvin-K-Cho/edwrd.io/blob/master/public/images/square.png?raw=true" />
+								  <img src="app/assets/images/rect.png" />
 								</li>
-								<li className={`shapes-item ${this.state.selectedShape === 'line' ? 'ui-selected' : ''}`} id="line" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
-								  <img src="https://github.com/Kelvin-K-Cho/edwrd.io/blob/master/public/images/line.png?raw=true" />
+								<li className={`shapes-item ${this.state.selectedShape === 'linrect.pnge' ? 'ui-selected' : ''}`} id="line" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
+								  <img src="app/assets/images/line.png" />
 								</li>
 							</ol>
 							<div className="form-inline d-flex justify-content-around">
@@ -131,6 +131,7 @@ class Canvas extends React.Component{
 								<option value="brown">Brown</option>
 								<option value="purple">Purple</option>
 								<option value="white">White</option>
+								<option value="transparent">Transparent</option>
 								</select>
 								<div className="selected-color" style={{backgroundColor: `${this.state.shapeColor}`}}>
 								</div>
