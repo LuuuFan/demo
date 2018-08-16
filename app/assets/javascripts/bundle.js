@@ -27611,18 +27611,22 @@ var Home = function (_React$Component) {
 	_createClass(Home, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
+			var _this2 = this;
+
 			this.fetchImg();
-			// interval = setInterval(()=>this.fetchImg(), 9000);
+			interval = setInterval(function () {
+				return _this2.fetchImg();
+			}, 9000);
 		}
 	}, {
 		key: 'fetchImg',
 		value: function fetchImg() {
-			var _this2 = this;
+			var _this3 = this;
 
 			this.props.fetchAllImgs(this.props.currentUser['access-token']).catch(function (err) {
 				clearInterval(interval);
 				localStorage.removeItem('access_token');
-				_this2.props.history.push('/login');
+				_this3.props.history.push('/login');
 			});
 		}
 	}, {
@@ -27634,7 +27638,7 @@ var Home = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this3 = this;
+			var _this4 = this;
 
 			var _props = this.props,
 			    imgs = _props.imgs,
@@ -27654,7 +27658,7 @@ var Home = function (_React$Component) {
 						return _react2.default.createElement(
 							'div',
 							{ className: 'img-container', key: key, id: 'img-' + key, onClick: function onClick(e) {
-									return _this3.selectImg(e);
+									return _this4.selectImg(e);
 								} },
 							_react2.default.createElement('img', { src: img.previewURL })
 						);
@@ -28015,10 +28019,10 @@ var Share = function (_React$Component) {
 			var dropbox = JSON.parse(localStorage.getItem('dropbox'));
 			if (dropbox) {
 				var idx = Object.keys(dropbox).length;
-				var newDropbox = Object.assign({}, dropbox, _defineProperty({}, '' + idx, image));
+				var newDropbox = Object.assign({}, dropbox, _defineProperty({}, '' + image.name, image));
 				localStorage.setItem('dropbox', JSON.stringify(newDropbox));
 			} else {
-				localStorage.setItem('dropbox', JSON.stringify({ 0: image }));
+				localStorage.setItem('dropbox', JSON.stringify(_defineProperty({}, '' + image.name, image)));
 			}
 		}
 	}, {
@@ -28031,6 +28035,7 @@ var Share = function (_React$Component) {
 					files.forEach(function (img) {
 						var link = img.link.split('?')[0];
 						var image = {
+							name: img.name,
 							previewURL: link,
 							webformatURL: link
 						};
@@ -28111,10 +28116,20 @@ var Share = function (_React$Component) {
 			}
 		}
 	}, {
+		key: 'clearDropbox',
+		value: function clearDropbox() {
+			localStorage.removeItem('dropbox');
+			var button = document.querySelector('.dropbox-dropin-success');
+			if (button) {
+				button.setAttribute('class', 'btn btn-outline-primary btn-sm');
+			}
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var _this4 = this;
 
+			var dropbox = JSON.parse(localStorage.getItem('dropbox'));
 			return _react2.default.createElement(
 				'div',
 				{ className: 'share' },
@@ -28125,6 +28140,13 @@ var Share = function (_React$Component) {
 						} },
 					'Share'
 				),
+				dropbox && Object.keys(dropbox) ? _react2.default.createElement(
+					'button',
+					{ type: 'button', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
+							return _this4.clearDropbox();
+						} },
+					'Clear Dropbox'
+				) : "",
 				_react2.default.createElement(
 					'div',
 					{ className: this.state.modal },

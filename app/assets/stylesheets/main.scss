@@ -45,7 +45,12 @@
 	.img-container{
 		float: left;
 		width: 90px;
+    height: 135px;
 		margin-right: 10px;
+    img{
+      height: 100%;
+      object-fit: cover;
+    }
 	}
 }
 

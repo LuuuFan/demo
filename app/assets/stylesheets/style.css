@@ -119,7 +119,12 @@ input[type=submit] {
 .img-group .img-container {
   float: left;
   width: 90px;
+  height: 135px;
   margin-right: 10px;
+}
+.img-group .img-container img {
+  height: 100%;
+  object-fit: cover;
 }
 
 .buttons {

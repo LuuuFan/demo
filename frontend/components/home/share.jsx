@@ -34,10 +34,10 @@ class Share extends React.Component{
 		const dropbox = JSON.parse(localStorage.getItem('dropbox'));
 		if (dropbox) {
 			const idx = Object.keys(dropbox).length;
-			const newDropbox = Object.assign({}, dropbox, {[`${idx}`]: image});
+			const newDropbox = Object.assign({}, dropbox, {[`${image.name}`]: image});
 			localStorage.setItem('dropbox', JSON.stringify(newDropbox));
 		} else {
-			localStorage.setItem('dropbox', JSON.stringify({0: image}));
+			localStorage.setItem('dropbox', JSON.stringify({[`${image.name}`]: image}));
 		}
 	}
 
@@ -48,6 +48,7 @@ class Share extends React.Component{
 				files.forEach(img => {
 					const link = img.link.split('?')[0];
 					const image = {
+						name: img.name,
 						previewURL: link,
 						webformatURL: link,
 					};
@@ -120,10 +121,22 @@ class Share extends React.Component{
 		}
 	}
 
+	clearDropbox(){
+		localStorage.removeItem('dropbox');
+		const button = document.querySelector('.dropbox-dropin-success');
+		if (button) {
+			button.setAttribute('class', 'btn btn-outline-primary btn-sm')
+		}
+	}
+
 	render(){
+		const dropbox = JSON.parse(localStorage.getItem('dropbox'));
 		return (
 			<div className='share'>
 				<button type="button" className="btn btn-outline-primary btn-sm" onClick={()=>this.openModal()}>Share</button>
+				{dropbox && Object.keys(dropbox) ? 
+				<button type="button" className="btn btn-outline-primary btn-sm" onClick={()=>this.clearDropbox()}>Clear Dropbox</button>
+					: ""}
 				<div className={this.state.modal}>
 					<div className='share-canvas'>
 						<form onSubmit={()=>this.sendFile()}>

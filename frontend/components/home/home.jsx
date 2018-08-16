@@ -19,7 +19,7 @@ class Home extends React.Component {
 
 	componentDidMount(){
 		this.fetchImg();
-		// interval = setInterval(()=>this.fetchImg(), 9000);
+		interval = setInterval(()=>this.fetchImg(), 9000);
 	}
 
 	fetchImg(){
