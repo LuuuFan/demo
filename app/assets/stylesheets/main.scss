@@ -194,7 +194,8 @@ li > .nav-link {
 .selected-color {
   height: 30px;
   width: 30px;
-  border-radius: 2px;
+  margin-left: 10px;
+  border-radius: 5px;
   border: solid 1px black;
 }
 
@@ -266,5 +267,19 @@ li > .nav-link {
       height: 33px;
       flex: 1;
     }
+  }
+}
+
+
+.form-inline {
+  align-items: center;
+  label{
+    font-size: 14px;
+    width: 60px;
+  }
+  #text-size{
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    padding: 5px 10px;
   }
 }

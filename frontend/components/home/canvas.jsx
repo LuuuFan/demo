@@ -107,7 +107,7 @@ class Canvas extends React.Component{
 
 			    <div className="tab-content" id="side-content">
 		        <div className={`tab-pane fade ${this.state.active === 'Shapes' ? 'show active' : ""}`} id="shapes" role="tabpanel" aria-labelledby="shapes-button">
-							<label>Shapes: </label>
+							<label>Shapes</label>
 							<ol id="shapes-list">
 								<li className={`shapes-item ${this.state.selectedShape === 'circle' ? 'ui-selected' : ''}`} id="circle" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 								  <img src="app/assets/images/circle.png" />
@@ -119,8 +119,8 @@ class Canvas extends React.Component{
 								  <img src="app/assets/images/line.png" />
 								</li>
 							</ol>
-							<div className="form-inline d-flex justify-content-around">
-								<label htmlFor="shape-color">Color: </label>
+							<div className="form-inline d-flex">
+								<label htmlFor="shape-color">Color</label>
 								<select className="form-control" id="shape-color" onChange={(e)=>this.selectColor(e, 'shapeColor')}>
 								<option value="black">Black</option>
 								<option value="red">Red</option>
@@ -131,13 +131,15 @@ class Canvas extends React.Component{
 								<option value="brown">Brown</option>
 								<option value="purple">Purple</option>
 								<option value="white">White</option>
-								<option value="transparent">Transparent</option>
+								{/*
+									<option value="transparent">Transparent</option>
+								*/}
 								</select>
 								<div className="selected-color" style={{backgroundColor: `${this.state.shapeColor}`}}>
 								</div>
 							</div>
           		<br />
-		        	<div className="form-inline d-flex justify-content-around">
+		        	<div className="form-inline d-flex">
 					            <label htmlFor="shape-opacity">Opacity: </label>
 					            <select className="form-control" id="shape-opacity">
 					              <option value="1">100%</option>
@@ -152,7 +154,7 @@ class Canvas extends React.Component{
 		        	</div>
 		        </div>
 				    <div className={`tab-pane fade ${this.state.active === 'Dialog' ? 'show active' : ""}`} id="dialog" role="tabpanel" aria-labelledby='dialog-button'>
-							<label>Shapes: </label>
+							<label>Dialog</label>
 		        	<br />
 		        	<ol id="shapes-list">
 								<li className={`shapes-item ${this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''}`} id="dialog_1" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
@@ -171,7 +173,7 @@ class Canvas extends React.Component{
 		        	</div>
 		        </div>
 		        <div className={`tab-pane fade ${this.state.active === 'Text' ? 'show active' : ""}`} id="text" role="tabpanel" aria-labelledby="text-button">
-							<label>Text: </label>
+							<label>Text</label>
 							<br />
 							<div className="form-inline d-flex justify-content-around">
 								<label htmlFor="text-color">Color: </label>
@@ -190,7 +192,7 @@ class Canvas extends React.Component{
 								</div>
 	          	</div>
 	          	<br />
-							<div className="form-inline d-flex justify-content-around">
+							<div className="form-inline d-flex">
 								<label htmlFor="text-style">Style: </label>
 								<select className="form-control" id="text-style">
 								  <option value="Times">Times</option>
@@ -203,8 +205,8 @@ class Canvas extends React.Component{
 								</select>
 							</div>
 							<br />
-							<div className="form-inline d-flex justify-content-center">
-								<label htmlFor="text-size">Size(px): &nbsp; </label>
+							<div className="form-inline d-flex">
+								<label htmlFor="text-style">Size(px): &nbsp; </label>
 								<input id="text-size" type="number" step="1" min="1" max="50" value={this.state.textSize} onChange={this.handleInput()}/>
 							</div>
 							<br />
@@ -213,9 +215,9 @@ class Canvas extends React.Component{
 							</div>
 		        </div>
 		        <div className={`tab-pane fade ${this.state.active === 'Background' ? 'show active' : ""}`} id="background" role="tabpanel" aria-labelledby="background-button">
-							<label>Background-Color: </label>
+							<label>Background Color</label>
 							<br />
-							<div className="form-inline d-flex justify-content-around">
+							<div className="form-inline d-flex">
 								<label htmlFor="background-color">Color: </label>
 								<select className="form-control" id="background-color" onChange={(e)=>this.selectColor(e, 'backgroundColor')}>
 								  <option value="white">White</option>

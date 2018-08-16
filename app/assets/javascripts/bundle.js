@@ -27959,6 +27959,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -27981,26 +27983,36 @@ var Share = function (_React$Component) {
 		return _this;
 	}
 
-	_createClass(Share, [{
-		key: 'download',
-		value: function download(url, name) {
-			var a = document.createElement('a');
-			a.href = url;
-			// a.setAttribute('target', '_blank');
-			a.setAttribute("download", name);
+	// download(url, name){
+	// 	const a = document.createElement('a');
+	// 	a.href = url;
+	// 	// a.setAttribute('target', '_blank');
+	// 	a.setAttribute("download", name);
 
-			document.body.appendChild(a);
-			a.click();
-			document.body.removeChild(a);
-		}
-	}, {
-		key: 'getSourceAsDOM',
-		value: function getSourceAsDOM(url) {
-			var xmlhttp = new XMLHttpRequest();
-			xmlhttp.open('GET', url, false);
-			xmlhttp.send();
-			parser = new DOMParser();
-			return parser.parseFromString(xmlhttp.responseText, 'text/html');
+	// 	document.body.appendChild(a);
+	// 	a.click();
+	// 	document.body.removeChild(a);
+	// }
+
+	// getSourceAsDOM(url){
+	// 	const xmlhttp = new XMLHttpRequest();
+	// 	xmlhttp.open('GET', url, false);
+	// 	xmlhttp.send();
+	// 	parser = new DOMParser();
+	// 	return parser.parseFromString(xmlhttp.responseText, 'text/html');
+	// }
+
+	_createClass(Share, [{
+		key: 'pushToLocal',
+		value: function pushToLocal(image) {
+			var dropbox = JSON.parse(localStorage.getItem('dropbox'));
+			if (dropbox) {
+				var idx = Object.keys(dropbox).length;
+				var newDropbox = Object.assign({}, dropbox, _defineProperty({}, '' + idx, image));
+				localStorage.setItem('dropbox', JSON.stringify(newDropbox));
+			} else {
+				localStorage.setItem('dropbox', JSON.stringify({ 0: image }));
+			}
 		}
 	}, {
 		key: 'componentDidMount',
@@ -28009,18 +28021,13 @@ var Share = function (_React$Component) {
 
 			var button = Dropbox.createChooseButton({
 				success: function success(files) {
-					console.log('Here is the file link: ' + files[0].link);
 					files.forEach(function (img) {
 						var link = img.link.split('?')[0];
-						// const html = this.getSourceAsDOM(img.link);
-						// debugger
-						// const image = new Image();
-						// image.src = link;
-						// this.download(link, img.name)
 						var image = {
 							previewURL: link,
 							webformatURL: link
 						};
+						_this2.pushToLocal(image);
 						_this2.props.receiveImg(image);
 					});
 				},
@@ -30442,7 +30449,7 @@ var Canvas = function (_React$Component) {
 						_react2.default.createElement(
 							'label',
 							null,
-							'Shapes: '
+							'Shapes'
 						),
 						_react2.default.createElement(
 							'ol',
@@ -30471,11 +30478,11 @@ var Canvas = function (_React$Component) {
 						),
 						_react2.default.createElement(
 							'div',
-							{ className: 'form-inline d-flex justify-content-around' },
+							{ className: 'form-inline d-flex' },
 							_react2.default.createElement(
 								'label',
 								{ htmlFor: 'shape-color' },
-								'Color: '
+								'Color'
 							),
 							_react2.default.createElement(
 								'select',
@@ -30526,11 +30533,6 @@ var Canvas = function (_React$Component) {
 									'option',
 									{ value: 'white' },
 									'White'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'transparent' },
-									'Transparent'
 								)
 							),
 							_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.shapeColor } })
@@ -30538,7 +30540,7 @@ var Canvas = function (_React$Component) {
 						_react2.default.createElement('br', null),
 						_react2.default.createElement(
 							'div',
-							{ className: 'form-inline d-flex justify-content-around' },
+							{ className: 'form-inline d-flex' },
 							_react2.default.createElement(
 								'label',
 								{ htmlFor: 'shape-opacity' },
@@ -30588,7 +30590,7 @@ var Canvas = function (_React$Component) {
 						_react2.default.createElement(
 							'label',
 							null,
-							'Shapes: '
+							'Dialog'
 						),
 						_react2.default.createElement('br', null),
 						_react2.default.createElement(
@@ -30635,7 +30637,7 @@ var Canvas = function (_React$Component) {
 						_react2.default.createElement(
 							'label',
 							null,
-							'Text: '
+							'Text'
 						),
 						_react2.default.createElement('br', null),
 						_react2.default.createElement(
@@ -30702,7 +30704,7 @@ var Canvas = function (_React$Component) {
 						_react2.default.createElement('br', null),
 						_react2.default.createElement(
 							'div',
-							{ className: 'form-inline d-flex justify-content-around' },
+							{ className: 'form-inline d-flex' },
 							_react2.default.createElement(
 								'label',
 								{ htmlFor: 'text-style' },
@@ -30751,10 +30753,10 @@ var Canvas = function (_React$Component) {
 						_react2.default.createElement('br', null),
 						_react2.default.createElement(
 							'div',
-							{ className: 'form-inline d-flex justify-content-center' },
+							{ className: 'form-inline d-flex' },
 							_react2.default.createElement(
 								'label',
-								{ htmlFor: 'text-size' },
+								{ htmlFor: 'text-style' },
 								'Size(px): \xA0 '
 							),
 							_react2.default.createElement('input', { id: 'text-size', type: 'number', step: '1', min: '1', max: '50', value: this.state.textSize, onChange: this.handleInput() })
@@ -30778,12 +30780,12 @@ var Canvas = function (_React$Component) {
 						_react2.default.createElement(
 							'label',
 							null,
-							'Background-Color: '
+							'Background Color'
 						),
 						_react2.default.createElement('br', null),
 						_react2.default.createElement(
 							'div',
-							{ className: 'form-inline d-flex justify-content-around' },
+							{ className: 'form-inline d-flex' },
 							_react2.default.createElement(
 								'label',
 								{ htmlFor: 'background-color' },

@@ -11,41 +11,47 @@ class Share extends React.Component{
 		};
 	}
 
-	download(url, name){
-		const a = document.createElement('a');
-		a.href = url;
-		// a.setAttribute('target', '_blank');
-		a.setAttribute("download", name);
+	// download(url, name){
+	// 	const a = document.createElement('a');
+	// 	a.href = url;
+	// 	// a.setAttribute('target', '_blank');
+	// 	a.setAttribute("download", name);
 
-		document.body.appendChild(a);
-		a.click();
-		document.body.removeChild(a);
+	// 	document.body.appendChild(a);
+	// 	a.click();
+	// 	document.body.removeChild(a);
+	// }
 
+	// getSourceAsDOM(url){
+	// 	const xmlhttp = new XMLHttpRequest();
+	// 	xmlhttp.open('GET', url, false);
+	// 	xmlhttp.send();
+	// 	parser = new DOMParser();
+	// 	return parser.parseFromString(xmlhttp.responseText, 'text/html');
+	// }
+
+	pushToLocal(image){
+		const dropbox = JSON.parse(localStorage.getItem('dropbox'));
+		if (dropbox) {
+			const idx = Object.keys(dropbox).length;
+			const newDropbox = Object.assign({}, dropbox, {[`${idx}`]: image});
+			localStorage.setItem('dropbox', JSON.stringify(newDropbox));
+		} else {
+			localStorage.setItem('dropbox', JSON.stringify({0: image}));
+		}
 	}
 
-	getSourceAsDOM(url){
-		const xmlhttp = new XMLHttpRequest();
-		xmlhttp.open('GET', url, false);
-		xmlhttp.send();
-		parser = new DOMParser();
-		return parser.parseFromString(xmlhttp.responseText, 'text/html');
-	}
 
 	componentDidMount(){
 		const button = Dropbox.createChooseButton({
 			success: (files)=>{
-				console.log(`Here is the file link: ${files[0].link}`)
 				files.forEach(img => {
-					const link = img.link.split('?')[0]
-					// const html = this.getSourceAsDOM(img.link);
-					// debugger
-					// const image = new Image();
-					// image.src = link;
-						// this.download(link, img.name)
+					const link = img.link.split('?')[0];
 					const image = {
 						previewURL: link,
 						webformatURL: link,
-					}
+					};
+					this.pushToLocal(image);
 					this.props.receiveImg(image);
 				})
 			},
