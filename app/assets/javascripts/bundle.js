@@ -3768,7 +3768,7 @@ var addShape = exports.addShape = function addShape(selectedShape, canvas) {
       });
       canvas.add(circle);
       break;
-    case "square":
+    case "rect":
       var square = new fabric.Rect({
         left: 50,
         top: 50,
@@ -3895,6 +3895,17 @@ var resetCanvas = exports.resetCanvas = function resetCanvas(canvas) {
 };
 
 var changeText = exports.changeText = function changeText() {};
+
+var changeColor = exports.changeColor = function changeColor(canvas, activeObject, color) {
+  if (color) {
+    if (activeObject.type === 'i-text') {
+      activeObject.setColor(color);
+    } else {
+      activeObject.set('fill', color);
+    }
+    canvas.renderAll();
+  }
+};
 
 // export const changeColor = (event) => {
 //   let eventId = event.currentTarget.id;
@@ -30325,6 +30336,12 @@ var Canvas = function (_React$Component) {
 		key: 'selectColor',
 		value: function selectColor(e, type) {
 			this.setState(_defineProperty({}, type, e.target.options[e.target.options.selectedIndex].textContent));
+			var activeObject = this.state.canvas.getActiveObject();
+			if (activeObject) {
+				if (this.state.selectedShape === activeObject.type || type === 'textColor' && activeObject.type === 'i-text') {
+					canvasUtil.changeColor(this.state.canvas, activeObject, e.target.options[e.target.options.selectedIndex].textContent);
+				}
+			}
 		}
 	}, {
 		key: 'changeShape',
@@ -30430,7 +30447,7 @@ var Canvas = function (_React$Component) {
 							),
 							_react2.default.createElement(
 								'li',
-								{ className: 'shapes-item ' + (this.state.selectedShape === 'square' ? 'ui-selected' : ''), id: 'square', onClick: function onClick(e) {
+								{ className: 'shapes-item ' + (this.state.selectedShape === 'rect' ? 'ui-selected' : ''), id: 'rect', onClick: function onClick(e) {
 										return _this4.changeShape(e, 'selectedShape');
 									} },
 								_react2.default.createElement('img', { src: 'https://github.com/Kelvin-K-Cho/edwrd.io/blob/master/public/images/square.png?raw=true' })

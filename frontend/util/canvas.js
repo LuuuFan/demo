@@ -14,7 +14,7 @@ export const addShape = (selectedShape, canvas) => {
       });
       canvas.add(circle);
       break;
-    case "square":
+    case "rect":
       let square = new fabric.Rect({
         left: 50,
         top: 50,
@@ -145,6 +145,17 @@ export const resetCanvas = (canvas) => {
 
 export const changeText = () => {
 
+}
+
+export const changeColor = (canvas, activeObject, color) => {
+  if (color) {
+    if (activeObject.type==='i-text') {
+      activeObject.setColor(color);
+    } else {
+      activeObject.set('fill', color);
+    }
+    canvas.renderAll();
+  }
 }
 
 // export const changeColor = (event) => {

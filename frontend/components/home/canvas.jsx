@@ -56,6 +56,12 @@ class Canvas extends React.Component{
 
 	selectColor(e, type){
 		this.setState({[type]: e.target.options[e.target.options.selectedIndex].textContent});
+		const activeObject = this.state.canvas.getActiveObject();
+		if (activeObject) {
+			if (this.state.selectedShape === activeObject.type || (type === 'textColor' && activeObject.type === 'i-text')) {
+				canvasUtil.changeColor(this.state.canvas, activeObject, e.target.options[e.target.options.selectedIndex].textContent);
+			}
+		}
 	}
 
 	changeShape(e, type){
@@ -99,7 +105,7 @@ class Canvas extends React.Component{
 								<li className={`shapes-item ${this.state.selectedShape === 'circle' ? 'ui-selected' : ''}`} id="circle" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 								  <img src="https://raw.githubusercontent.com/Kelvin-K-Cho/edwrd.io/master/public/images/circle.png" />
 								</li>
-								<li className={`shapes-item ${this.state.selectedShape === 'square' ? 'ui-selected' : ''}`} id="square" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
+								<li className={`shapes-item ${this.state.selectedShape === 'rect' ? 'ui-selected' : ''}`} id="rect" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 								  <img src="https://github.com/Kelvin-K-Cho/edwrd.io/blob/master/public/images/square.png?raw=true" />
 								</li>
 								<li className={`shapes-item ${this.state.selectedShape === 'line' ? 'ui-selected' : ''}`} id="line" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
