@@ -63,43 +63,27 @@ export const deleteItem = (canvas) => {
 let photoNum = 0;
 
 export const addPhoto = (url, canvas) => {
-    let img = new Image();
-    img.src = url;
-    img.setAttribute('crossorigin', 'anonymous');
-    img.onload = function() {
-      let image = new fabric.Image(img);
-      image.set({
-        left: 0 + 50 * photoNum,
-        top: 0 + 50 * photoNum,
-      }).scale(0.5);
-      canvas.add(image);
-      photoNum++;
-    };
+    let activeObject = canvas.getActiveObject();
+    if (activeObject && activeObject.type === 'image') {
+      changeImage(url, canvas, activeObject);
+    } else {
+      let img = new Image();
+      img.src = url;
+      img.setAttribute('crossorigin', 'anonymous');
+      img.onload = function() {
+        let image = new fabric.Image(img);
+        image.set({
+          left: 0 + 50 * photoNum,
+          top: 0 + 50 * photoNum,
+        }).scale(0.5);
+        canvas.add(image);
+        photoNum++;
+      };
+    }
 };
 
-export const changeImage = (event) => {
-  event.preventDefault();
-
-  let parseUrl = (url) => {
-    let regex = /http:/gi;
-    let result;
-    let indicies = [];
-    while ( (result = regex.exec(url)) ) {
-      indicies.push(result.index);
-    }
-    let last = indicies[indicies.length - 1];
-    return url.slice(last);
-  };
-
-  let imageUrl = parseUrl(event.currentTarget.src);
-
-  let activeObject = canvas.getActiveObject();
-
-  if (!activeObject) {
-    alert("Please select an image you want to replace.");
-    return false;
-  }
-
+export const changeImage = (url, canvas, activeObject) => {
+  
   let left = activeObject.left;
   let top = activeObject.top;
   let tl = activeObject.aCoords.tl;
@@ -107,7 +91,7 @@ export const changeImage = (event) => {
   let width = Math.round(br.x - tl.x);
   let height = Math.round(br.y - tl.y);
 
-  fabric.Image.fromURL(imageUrl, function(img){
+  fabric.Image.fromURL(url, function(img){
     img.set({
       scaleX: width / img.width,
       scaleY: height / img.height,
@@ -118,8 +102,6 @@ export const changeImage = (event) => {
     canvas.add(img);
     canvas.renderAll();
   });
-
-  return false;
 };
 
 export const changeBackground = (color, canvas) => {
@@ -135,7 +117,7 @@ export const addDialog = (selectedDialog, canvas) => {
     }).scale(0.3);
 
 
-    let text = new fabric.Text('Comment Here', {
+    let text = new fabric.IText('Comment Here', {
       fontSize: 14,
       originX: 'center',
       originY: 'center',
@@ -145,7 +127,8 @@ export const addDialog = (selectedDialog, canvas) => {
       left: 100,
       top: 100,
     });
-    
+
+    canvas.add(group);
   });
 
 };
@@ -154,11 +137,16 @@ export const addDialog = (selectedDialog, canvas) => {
 export const resetCanvas = (canvas) => {
   canvas.clear();
   photoNum = 0;
-  canvas.setHeight(600);
-  canvas.setWidth(900);
+  const container = document.querySelector('.container')
+  canvas.setHeight(container.offsetHeight);
+  canvas.setWidth(container.offsetWidth - 50);
   canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
-
 };
+
+export const changeText = () => {
+
+}
+
 // export const changeColor = (event) => {
 //   let eventId = event.currentTarget.id;
 //   let color = $(`#${eventId}`).val();

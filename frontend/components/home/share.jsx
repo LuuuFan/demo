@@ -1,4 +1,5 @@
 import React from 'react';
+import * as canvasUtil from '../../util/canvas';
 
 class Share extends React.Component{
 	constructor(){
@@ -10,7 +11,6 @@ class Share extends React.Component{
 		};
 	}
 
-<<<<<<< HEAD
 	download(url, name){
 		const a = document.createElement('a');
 		a.href = url;
@@ -61,8 +61,6 @@ class Share extends React.Component{
 		document.querySelector('.share').appendChild(button);
 	}
 
-=======
->>>>>>> 2156d64b948755d2599e0f95cc9543836f2732fa
 	componentDidUpdate(){
 		$(document).keydown((e)=>{
 	      if (e.keyCode === 27) {
@@ -96,7 +94,6 @@ class Share extends React.Component{
 			if (type === 'PDF') {
 				const pdf = new jsPDF();
 				pdf.addImage(imgData, 'JPEG', 0, 0);
-<<<<<<< HEAD
 				pdf.setProperties({
 			    title: "download",
 				});
@@ -105,14 +102,12 @@ class Share extends React.Component{
 				formData.append('file', pdf.output(), 'download.pdf');
 				const token = localStorage.getItem('access_token'); 
 				this.props.sendEmail(token, formData);
+				// saving pdf to local
 				// pdf.save('download.pdf');
-=======
-				pdf.save('download.pdf');
->>>>>>> 2156d64b948755d2599e0f95cc9543836f2732fa
 			} else {
 				const data = imgData.replace(/^data:image\/\w+;base64,/, "");
 				const buf = new Buffer(data, 'base64');
-				// cannot use native node module like fs
+				// cannot use native node module like fs, can send binary to backend
 			}
 		} else {
 			this.setState({emailError: 'Please input valid email address'});
