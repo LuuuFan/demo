@@ -146,7 +146,6 @@ export const addDialog = (selectedDialog, canvas) => {
       top: 100,
     });
     
-    canvas.add(group);
   });
 
 };

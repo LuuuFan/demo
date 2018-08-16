@@ -2,9 +2,6 @@ import React from 'react';
 import Share from './share';
 class Header extends React.Component{
 
-	componentDidMount(){
-		
-	}
 
 	render(){
 		const {receiveImg, sendEmail} = this.props;

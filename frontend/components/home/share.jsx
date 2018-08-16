@@ -1,5 +1,4 @@
 import React from 'react';
-// import {sendEmail} from '../../util/mail';
 
 class Share extends React.Component{
 	constructor(){
@@ -11,6 +10,7 @@ class Share extends React.Component{
 		};
 	}
 
+<<<<<<< HEAD
 	download(url, name){
 		const a = document.createElement('a');
 		a.href = url;
@@ -61,6 +61,8 @@ class Share extends React.Component{
 		document.querySelector('.share').appendChild(button);
 	}
 
+=======
+>>>>>>> 2156d64b948755d2599e0f95cc9543836f2732fa
 	componentDidUpdate(){
 		$(document).keydown((e)=>{
 	      if (e.keyCode === 27) {
@@ -94,6 +96,7 @@ class Share extends React.Component{
 			if (type === 'PDF') {
 				const pdf = new jsPDF();
 				pdf.addImage(imgData, 'JPEG', 0, 0);
+<<<<<<< HEAD
 				pdf.setProperties({
 			    title: "download",
 				});
@@ -103,6 +106,9 @@ class Share extends React.Component{
 				const token = localStorage.getItem('access_token'); 
 				this.props.sendEmail(token, formData);
 				// pdf.save('download.pdf');
+=======
+				pdf.save('download.pdf');
+>>>>>>> 2156d64b948755d2599e0f95cc9543836f2732fa
 			} else {
 				const data = imgData.replace(/^data:image\/\w+;base64,/, "");
 				const buf = new Buffer(data, 'base64');

@@ -12,12 +12,14 @@ export const createUser = (user) => dispatch => APIUtilSession.registration(user
 	.then(
 		user => dispatch(receiveCurrentUser(user)),
 		errors => dispatch(receiveError(errors.responseJSON))
-	);
+	).catch((error)=>{
+		console.log('error!!', error)
+	});
 
 export const createSession = (user) => dispatch => APIUtilSession.login(user)
 	.then(
 		user => dispatch(receiveCurrentUser(user)),
 		errors => dispatch(receiveError(errors.responseJSON))
 	).catch((error)=>{
-		debugger
+		console.log('error!!', error)
 	});
