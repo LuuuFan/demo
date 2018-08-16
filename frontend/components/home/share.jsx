@@ -1,5 +1,6 @@
 import React from 'react';
 import * as canvasUtil from '../../util/canvas';
+import Service from '../service';
 
 class Share extends React.Component{
 	constructor(){
@@ -8,6 +9,7 @@ class Share extends React.Component{
 			modal: 'modal',
 			email: 'lu.fan@n3n.io',
 			emailError: '',
+			service: false,
 		};
 	}
 
@@ -40,7 +42,6 @@ class Share extends React.Component{
 			localStorage.setItem('dropbox', JSON.stringify({[`${image.name}`]: image}));
 		}
 	}
-
 
 	componentDidMount(){
 		const button = Dropbox.createChooseButton({
@@ -129,10 +130,18 @@ class Share extends React.Component{
 		}
 	}
 
+	toggleService(){
+		this.setState({service: !this.state.service});
+	}
+
 	render(){
 		const dropbox = JSON.parse(localStorage.getItem('dropbox'));
 		return (
 			<div className='share'>
+				<button type="button" className="btn btn-outline-primary btn-sm" onClick={()=>this.toggleService()}>{this.state.service ? 'Close Service' : 'Send to Service'}</button>
+				{this.state.service ? 
+					<Service />
+					: ''}
 				<button type="button" className="btn btn-outline-primary btn-sm" onClick={()=>this.openModal()}>Share</button>
 				{dropbox && Object.keys(dropbox) ? 
 				<button type="button" className="btn btn-outline-primary btn-sm" onClick={()=>this.clearDropbox()}>Clear Dropbox</button>

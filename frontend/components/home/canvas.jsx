@@ -20,6 +20,7 @@ class Canvas extends React.Component{
 				height: 0,
 				width: 0,
 			},
+			fillChecked: true,
 		};
 	}
 
@@ -75,33 +76,29 @@ class Canvas extends React.Component{
 
 	}
 
+	checkBox(){
+		this.setState({fillChecked: !this.state.fillChecked});
+	}
+
 	render(){
 		return (
 			<div className=''>
 				<ul className="nav nav-tabs" id="sidebar" role="tablist">
 		      <li className={`nav-item ${this.state.active === 'Shapes' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
-		        <a className="nav-link" id="shapes-button" data-toggle="tab" href="#shapes" aria-controls="shapes" aria-selected="false">
 		          <i className="fas fa-shapes"></i>
 		          <div className="nav-text">Shapes</div>
-		        </a>
 		      </li>
 		      <li className={`nav-item ${this.state.active === 'Dialog' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
-		        <a className="nav-link" id="shapes-button" data-toggle="tab" href="#dialog" aria-controls="dialog" aria-selected="false">
 		          <i className="fas fa-comment"></i>
 		          <div className="nav-text">Dialog</div>
-		        </a>
 		      </li>
 		      <li className={`nav-item ${this.state.active === 'Text' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
-		        <a className="nav-link" id="text-button" data-toggle="tab" href="#text" aria-controls="text" aria-selected="false">
 		          <i className="fas fa-font"></i>
 		          <div className="nav-text">Text</div>
-		        </a>
 		      </li>
 		      <li className={`nav-item ${this.state.active === 'Background' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
-		        <a className="nav-link" id="background-button" data-toggle="tab" href="#background" aria-controls="background" aria-selected="false">
 		          <i className="fas fa-layer-group"></i>
 		          <div className="nav-text">Background</div>
-		        </a>
 		      </li>
 		    </ul>
 
@@ -115,7 +112,7 @@ class Canvas extends React.Component{
 								<li className={`shapes-item ${this.state.selectedShape === 'rect' ? 'ui-selected' : ''}`} id="rect" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 								  <img src="app/assets/images/rect.png" />
 								</li>
-								<li className={`shapes-item ${this.state.selectedShape === 'linrect.pnge' ? 'ui-selected' : ''}`} id="line" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
+								<li className={`shapes-item ${this.state.selectedShape === 'line' ? 'ui-selected' : ''}`} id="line" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 								  <img src="app/assets/images/line.png" />
 								</li>
 							</ol>
@@ -139,6 +136,12 @@ class Canvas extends React.Component{
 								</div>
 							</div>
           		<br />
+          		{/*
+								<div className="form-inline d-flex" id="shape-fill">
+									<label htmlFor="shape-fill">Fill</label>
+									<input type='checkbox' checked={this.state.fillChecked} onChange={()=>this.checkBox()}/>
+	          		</div>
+          		*/}
 		        	<div className="form-inline d-flex">
 					            <label htmlFor="shape-opacity">Opacity: </label>
 					            <select className="form-control" id="shape-opacity">
@@ -167,6 +170,10 @@ class Canvas extends React.Component{
 								  <img src="app/assets/images/dialog_3.png" />
 								</li>
 		        	</ol>
+		        	<div className=''>
+		        		<textarea placeholder='Add Comment Here' >
+		        		</textarea>
+		        	</div>
 		        	<br />
 		        	<div id="button-wrapper">
 	            	<button type="button" className="btn btn-outline-primary btn-sm" id="addDialog" onClick={()=>canvasUtil.addDialog(this.state.selectedDialog, this.state.canvas)}>Add Dialog</button>
@@ -175,7 +182,7 @@ class Canvas extends React.Component{
 		        <div className={`tab-pane fade ${this.state.active === 'Text' ? 'show active' : ""}`} id="text" role="tabpanel" aria-labelledby="text-button">
 							<label>Text</label>
 							<br />
-							<div className="form-inline d-flex justify-content-around">
+							<div className="form-inline d-flex">
 								<label htmlFor="text-color">Color: </label>
 								<select className="form-control" id="text-color" onChange={(e)=>this.selectColor(e, 'textColor')}>
 								  <option value="black">Black</option>

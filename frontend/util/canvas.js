@@ -3,6 +3,7 @@
 export const addShape = (selectedShape, canvas) => {
   let color = $(`#shape-color`).val();
   let opacity = parseFloat($(`#shape-opacity`).val());
+  // let fill = $('#shape-fill input')
   switch (selectedShape) {
     case "circle":
       let circle = new fabric.Circle({
@@ -115,7 +116,10 @@ export const addDialog = (selectedDialog, canvas) => {
     const dialog = img.set({
     }).scale(scale);
 
-    let text = new fabric.IText('Comment Here', {
+    const comment = document.querySelector('#dialog textarea').value;
+    const fontSize = comment.length > 15 ? Math.floor(150 / comment.length) : 14;
+
+    let text = new fabric.IText(comment, {
       fontSize: 14,
       height: 150,
       width: 150,
@@ -123,6 +127,7 @@ export const addDialog = (selectedDialog, canvas) => {
       top: 75,
       originX: 'center',
       originY: 'center',
+      selectable: true,
     });
 
     let group = new fabric.Group([dialog, text], {

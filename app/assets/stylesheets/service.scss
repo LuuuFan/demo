@@ -1,0 +1,119 @@
+// body {
+//     margin: 0;
+// }
+@font-face {
+  font-family: "campton-bold";
+  src: url("/proxy/file/resource/campton-bolddemo-webfont.woff") format('woff');
+}
+@font-face {
+  font-family: "campton-light";
+  src: url("/proxy/file/resource/campton-bolddemo-webfont.woff") format('woff');
+}
+// body{
+//   font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+//   background-color: transparent;
+// }
+
+
+#table_left{
+  z-index: 100;
+  position: fixed;
+  right: 0;
+  top: 100px;
+  transition: all 0.8s;
+  font-size: 14px;
+  width: 300px;
+  .title-bar, .title-bar-2{
+    display:flex;
+    // position:relative;
+    background-color:#1C2A39;
+    height:60px;
+    align-items:center;
+    cursor: pointer;
+  }
+
+  .title-bar-2 > img{
+      margin:3px 0 0 40px;
+  }
+  .content {
+      width: 50px;
+      height: 50px;
+  }
+  .content img{
+      width: 100%;
+      height: auto;
+  }
+  input, .input{
+      border: none;
+      background: transparent;
+  }
+  input[type=text], .input {
+      border: 0;
+      outline: 0;
+      border-bottom: 1px solid #59687E;
+      height:35px;
+      color: #FFFFFF;
+      font-size:1.5em;
+      width: 450px;
+      margin-left:30px;
+  }
+  .wv-pl span {
+      line-height:45px;
+      font-size:1.5em;
+      padding-left:30px;
+      width:200px;
+  }
+  .wv-pl span > span{
+      font-size:1.2em !important;
+      padding-left:2px !important;
+  }
+  #btn {
+      background-color:#5F7BF0;
+      height:40px;
+      font-size:1.2em;
+      color:#FFFFFF;
+      width:150px;
+      border-radius:5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+  }
+  select option{
+        background-color: #2F425E;
+  }    
+  #btn:focus {
+    outline: none;
+  }
+  .foot {
+      position:fixed;
+      width: 260px;
+      z-index: 10000;
+      text-align:center;
+      height: 500px;
+      font-size:18px;
+      color: #000;
+      background-color: transparent;
+      display: flex;
+      justify-content: center; /* align horizontal */
+      border-top-left-radius:25px;
+      border-top-right-radius:25px;
+      right: 0;
+      left: 0;
+      bottom: -500px;
+  }
+
+  .slide-up {
+      bottom: 25% !important;
+      transition-duration: 1s;
+  }
+
+  .slide-down {
+      bottom: -500px !important;
+      transition-duration: 1s;
+  }
+
+  #btn {
+      border: 0;
+      margin: 20px 0;
+  }
+}

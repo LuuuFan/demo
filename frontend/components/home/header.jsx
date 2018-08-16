@@ -8,8 +8,11 @@ class Header extends React.Component{
 		return(
 			<header className='navbar navbar-expand navbar-light bg-light'>
 				<a href='/'>
-					<i className="fab fa-viadeo"></i>
-					Demo
+					<img src='app/assets/images/favicon.ico'/>
+					{/*
+						<i className="fab fa-viadeo"></i>
+					*/}
+					Expirements
 				</a>
 				<div className='header-buttons'>
 					<Share receiveImg={receiveImg} sendEmail={sendEmail}/>

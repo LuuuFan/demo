@@ -1597,6 +1597,7 @@ Object.defineProperty(exports, "__esModule", {
 var addShape = exports.addShape = function addShape(selectedShape, canvas) {
   var color = $("#shape-color").val();
   var opacity = parseFloat($("#shape-opacity").val());
+  // let fill = $('#shape-fill input')
   switch (selectedShape) {
     case "circle":
       var circle = new fabric.Circle({
@@ -1708,14 +1709,18 @@ var addDialog = exports.addDialog = function addDialog(selectedDialog, canvas) {
     var scale = 150 / img.height;
     var dialog = img.set({}).scale(scale);
 
-    var text = new fabric.IText('Comment Here', {
+    var comment = document.querySelector('#dialog textarea').value;
+    var fontSize = comment.length > 15 ? Math.floor(150 / comment.length) : 14;
+
+    var text = new fabric.IText(comment, {
       fontSize: 14,
       height: 150,
       width: 150,
       left: 75,
       top: 75,
       originX: 'center',
-      originY: 'center'
+      originY: 'center',
+      selectable: true
     });
 
     var group = new fabric.Group([dialog, text], {
@@ -27611,22 +27616,18 @@ var Home = function (_React$Component) {
 	_createClass(Home, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			var _this2 = this;
-
 			this.fetchImg();
-			interval = setInterval(function () {
-				return _this2.fetchImg();
-			}, 9000);
+			// interval = setInterval(()=>this.fetchImg(), 9000);
 		}
 	}, {
 		key: 'fetchImg',
 		value: function fetchImg() {
-			var _this3 = this;
+			var _this2 = this;
 
 			this.props.fetchAllImgs(this.props.currentUser['access-token']).catch(function (err) {
 				clearInterval(interval);
 				localStorage.removeItem('access_token');
-				_this3.props.history.push('/login');
+				_this2.props.history.push('/login');
 			});
 		}
 	}, {
@@ -27638,7 +27639,7 @@ var Home = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this4 = this;
+			var _this3 = this;
 
 			var _props = this.props,
 			    imgs = _props.imgs,
@@ -27658,9 +27659,9 @@ var Home = function (_React$Component) {
 						return _react2.default.createElement(
 							'div',
 							{ className: 'img-container', key: key, id: 'img-' + key, onClick: function onClick(e) {
-									return _this4.selectImg(e);
+									return _this3.selectImg(e);
 								} },
-							_react2.default.createElement('img', { src: img.previewURL })
+							_react2.default.createElement('img', { src: img.previewURL, crossOrigin: 'Anonymous' })
 						);
 					})
 				)
@@ -27928,8 +27929,8 @@ var Header = function (_React$Component) {
 				_react2.default.createElement(
 					'a',
 					{ href: '/' },
-					_react2.default.createElement('i', { className: 'fab fa-viadeo' }),
-					'Demo'
+					_react2.default.createElement('img', { src: 'app/assets/images/favicon.ico' }),
+					'Expirements'
 				),
 				_react2.default.createElement(
 					'div',
@@ -27966,6 +27967,10 @@ var _canvas = __webpack_require__(26);
 
 var canvasUtil = _interopRequireWildcard(_canvas);
 
+var _service = __webpack_require__(137);
+
+var _service2 = _interopRequireDefault(_service);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -27989,7 +27994,8 @@ var Share = function (_React$Component) {
 		_this.state = {
 			modal: 'modal',
 			email: 'lu.fan@n3n.io',
-			emailError: ''
+			emailError: '',
+			service: false
 		};
 		return _this;
 	}
@@ -28125,6 +28131,11 @@ var Share = function (_React$Component) {
 			}
 		}
 	}, {
+		key: 'toggleService',
+		value: function toggleService() {
+			this.setState({ service: !this.state.service });
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var _this4 = this;
@@ -28133,6 +28144,14 @@ var Share = function (_React$Component) {
 			return _react2.default.createElement(
 				'div',
 				{ className: 'share' },
+				_react2.default.createElement(
+					'button',
+					{ type: 'button', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
+							return _this4.toggleService();
+						} },
+					this.state.service ? 'Close Service' : 'Send to Service'
+				),
+				this.state.service ? _react2.default.createElement(_service2.default, null) : '',
 				_react2.default.createElement(
 					'button',
 					{ type: 'button', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
@@ -30327,7 +30346,8 @@ var Canvas = function (_React$Component) {
 			backgroundImg: {
 				height: 0,
 				width: 0
-			}
+			},
+			fillChecked: true
 		};
 		return _this;
 	}
@@ -30394,6 +30414,11 @@ var Canvas = function (_React$Component) {
 		key: 'changeStyle',
 		value: function changeStyle() {}
 	}, {
+		key: 'checkBox',
+		value: function checkBox() {
+			this.setState({ fillChecked: !this.state.fillChecked });
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var _this4 = this;
@@ -30409,15 +30434,11 @@ var Canvas = function (_React$Component) {
 						{ className: 'nav-item ' + (this.state.active === 'Shapes' ? 'selected' : ''), onClick: function onClick(e) {
 								return _this4.handleClick(e);
 							} },
+						_react2.default.createElement('i', { className: 'fas fa-shapes' }),
 						_react2.default.createElement(
-							'a',
-							{ className: 'nav-link', id: 'shapes-button', 'data-toggle': 'tab', href: '#shapes', 'aria-controls': 'shapes', 'aria-selected': 'false' },
-							_react2.default.createElement('i', { className: 'fas fa-shapes' }),
-							_react2.default.createElement(
-								'div',
-								{ className: 'nav-text' },
-								'Shapes'
-							)
+							'div',
+							{ className: 'nav-text' },
+							'Shapes'
 						)
 					),
 					_react2.default.createElement(
@@ -30425,15 +30446,11 @@ var Canvas = function (_React$Component) {
 						{ className: 'nav-item ' + (this.state.active === 'Dialog' ? 'selected' : ''), onClick: function onClick(e) {
 								return _this4.handleClick(e);
 							} },
+						_react2.default.createElement('i', { className: 'fas fa-comment' }),
 						_react2.default.createElement(
-							'a',
-							{ className: 'nav-link', id: 'shapes-button', 'data-toggle': 'tab', href: '#dialog', 'aria-controls': 'dialog', 'aria-selected': 'false' },
-							_react2.default.createElement('i', { className: 'fas fa-comment' }),
-							_react2.default.createElement(
-								'div',
-								{ className: 'nav-text' },
-								'Dialog'
-							)
+							'div',
+							{ className: 'nav-text' },
+							'Dialog'
 						)
 					),
 					_react2.default.createElement(
@@ -30441,15 +30458,11 @@ var Canvas = function (_React$Component) {
 						{ className: 'nav-item ' + (this.state.active === 'Text' ? 'selected' : ''), onClick: function onClick(e) {
 								return _this4.handleClick(e);
 							} },
+						_react2.default.createElement('i', { className: 'fas fa-font' }),
 						_react2.default.createElement(
-							'a',
-							{ className: 'nav-link', id: 'text-button', 'data-toggle': 'tab', href: '#text', 'aria-controls': 'text', 'aria-selected': 'false' },
-							_react2.default.createElement('i', { className: 'fas fa-font' }),
-							_react2.default.createElement(
-								'div',
-								{ className: 'nav-text' },
-								'Text'
-							)
+							'div',
+							{ className: 'nav-text' },
+							'Text'
 						)
 					),
 					_react2.default.createElement(
@@ -30457,15 +30470,11 @@ var Canvas = function (_React$Component) {
 						{ className: 'nav-item ' + (this.state.active === 'Background' ? 'selected' : ''), onClick: function onClick(e) {
 								return _this4.handleClick(e);
 							} },
+						_react2.default.createElement('i', { className: 'fas fa-layer-group' }),
 						_react2.default.createElement(
-							'a',
-							{ className: 'nav-link', id: 'background-button', 'data-toggle': 'tab', href: '#background', 'aria-controls': 'background', 'aria-selected': 'false' },
-							_react2.default.createElement('i', { className: 'fas fa-layer-group' }),
-							_react2.default.createElement(
-								'div',
-								{ className: 'nav-text' },
-								'Background'
-							)
+							'div',
+							{ className: 'nav-text' },
+							'Background'
 						)
 					)
 				),
@@ -30499,7 +30508,7 @@ var Canvas = function (_React$Component) {
 							),
 							_react2.default.createElement(
 								'li',
-								{ className: 'shapes-item ' + (this.state.selectedShape === 'linrect.pnge' ? 'ui-selected' : ''), id: 'line', onClick: function onClick(e) {
+								{ className: 'shapes-item ' + (this.state.selectedShape === 'line' ? 'ui-selected' : ''), id: 'line', onClick: function onClick(e) {
 										return _this4.changeShape(e, 'selectedShape');
 									} },
 								_react2.default.createElement('img', { src: 'app/assets/images/line.png' })
@@ -30647,6 +30656,11 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement('img', { src: 'app/assets/images/dialog_3.png' })
 							)
 						),
+						_react2.default.createElement(
+							'div',
+							{ className: '' },
+							_react2.default.createElement('textarea', { placeholder: 'Add Comment Here' })
+						),
 						_react2.default.createElement('br', null),
 						_react2.default.createElement(
 							'div',
@@ -30671,7 +30685,7 @@ var Canvas = function (_React$Component) {
 						_react2.default.createElement('br', null),
 						_react2.default.createElement(
 							'div',
-							{ className: 'form-inline d-flex justify-content-around' },
+							{ className: 'form-inline d-flex' },
 							_react2.default.createElement(
 								'label',
 								{ htmlFor: 'text-color' },
@@ -30956,6 +30970,392 @@ var sendEmail = exports.sendEmail = function sendEmail(token, formData) {
 			xhr.setRequestHeader('Authorization', 'Bearer ' + token);
 		}
 	});
+};
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _service = __webpack_require__(138);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Service = function (_React$Component) {
+	_inherits(Service, _React$Component);
+
+	function Service() {
+		_classCallCheck(this, Service);
+
+		return _possibleConstructorReturn(this, (Service.__proto__ || Object.getPrototypeOf(Service)).apply(this, arguments));
+	}
+
+	_createClass(Service, [{
+		key: 'sendService',
+		value: function sendService() {
+			var imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
+			var data = imgData.replace(/^data:image\/\w+;base64,/, "");
+			console.log(data);
+			var requestData = {
+				"sysparm_action": "insert",
+				"category": $("#cat-select").val(),
+				"state": $("#state-select").val(),
+				"impact": $("#impact-select").val(),
+				"urgency": $("#urgency-select").val(),
+				"short_description": $('#input-level').val(),
+				"cmdb_ci": "email",
+				"caller_id": "admin",
+				"assignment_group": $("#ag-select").val(),
+				"assigned_to": $("#at-select").val()
+			};
+			console.log(requestData.caller_id);
+			(0, _service.sendService)(requestData).then(function (data) {
+				var obj = JSON.parse(data);
+				console.log(obj.records[0].number);
+				alert("Incident Number ====>" + obj.records[0].number);
+			});
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var _this2 = this;
+
+			return _react2.default.createElement(
+				'div',
+				{ id: 'table_left' },
+				_react2.default.createElement(
+					'table',
+					{ id: 'table-1', className: 'table table-hover dataTable no-footer', cellSpacing: '0' },
+					_react2.default.createElement(
+						'tbody',
+						{ id: 'targetForRows' },
+						_react2.default.createElement(
+							'tr',
+							{ className: 'normal' },
+							_react2.default.createElement(
+								'td',
+								{ colSpan: '2' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'title-bar-2' },
+									_react2.default.createElement(
+										'span',
+										{ id: 'cityName' },
+										'Create Incident'
+									)
+								)
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'span',
+									null,
+									'Category'
+								),
+								_react2.default.createElement(
+									'select',
+									{ id: 'cat-select', className: 'input' },
+									_react2.default.createElement(
+										'option',
+										null,
+										'Select a Category'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Inquiry/help' },
+										'Inquiry / Help'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'hardware' },
+										'Hardware'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'software' },
+										'Software'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'database' },
+										'Database'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'network' },
+										'Network'
+									)
+								)
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'span',
+									null,
+									'State'
+								),
+								_react2.default.createElement(
+									'select',
+									{ id: 'state-select', className: 'input' },
+									_react2.default.createElement(
+										'option',
+										{ value: '1' },
+										'New'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '2' },
+										'In Progress'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '3' },
+										'On Hold'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '6' },
+										'Resolved'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '7' },
+										'Closed'
+									)
+								)
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'span',
+									null,
+									'Impact'
+								),
+								_react2.default.createElement(
+									'select',
+									{ id: 'impact-select', className: 'input' },
+									_react2.default.createElement(
+										'option',
+										{ value: '1' },
+										'High'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '2' },
+										'Medium'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '3' },
+										'Low'
+									)
+								)
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'span',
+									null,
+									'Urgency'
+								),
+								_react2.default.createElement(
+									'select',
+									{ id: 'urgency-select', className: 'input' },
+									_react2.default.createElement(
+										'option',
+										{ value: '1' },
+										'High'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '2' },
+										'Medium'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '3' },
+										'Low'
+									)
+								)
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'span',
+									null,
+									'Short Description'
+								),
+								_react2.default.createElement('input', { id: 'input-level', type: 'text', name: 'conc' })
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'span',
+									null,
+									'Assignment Group'
+								),
+								_react2.default.createElement(
+									'select',
+									{ id: 'ag-select', className: 'input' },
+									_react2.default.createElement(
+										'option',
+										null,
+										'Select a AG'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'CAB Approval' },
+										'CAB Approval'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Database' },
+										'Database'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Network' },
+										'Network'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Hardware' },
+										'Hardware'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Software' },
+										'Software'
+									)
+								)
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'span',
+									null,
+									'Assigned To'
+								),
+								_react2.default.createElement(
+									'select',
+									{ id: 'at-select', className: 'input' },
+									_react2.default.createElement(
+										'option',
+										null,
+										'Select a AT'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Pavan Karra' },
+										'Pavan Karra'
+									)
+								)
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'div',
+									{ className: 'send-service-button' },
+									_react2.default.createElement(
+										'button',
+										{ onClick: function onClick() {
+												return _this2.sendService();
+											}, name: 'fname' },
+										'Create'
+									)
+								)
+							)
+						)
+					)
+				)
+			);
+		}
+	}]);
+
+	return Service;
+}(_react2.default.Component);
+
+exports.default = Service;
+
+/***/ }),
+/* 138 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+   value: true
+});
+var sendService = exports.sendService = function sendService(requestData) {
+   return $.ajax({
+      type: "POST",
+      url: "http://ec2-54-214-224-99.us-west-2.compute.amazonaws.com:8888/n3n/snow/tasks",
+      data: JSON.stringify(requestData),
+      dataType: 'html'
+      // success: function (data){
+      //     var obj = JSON.parse(data);
+      //     console.log(obj.records[0].number);
+      //     alert("Incident Number ====>"+obj.records[0].number);
+   });
 };
 
 /***/ })

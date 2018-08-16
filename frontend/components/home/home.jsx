@@ -19,7 +19,7 @@ class Home extends React.Component {
 
 	componentDidMount(){
 		this.fetchImg();
-		interval = setInterval(()=>this.fetchImg(), 9000);
+		// interval = setInterval(()=>this.fetchImg(), 9000);
 	}
 
 	fetchImg(){
@@ -45,7 +45,7 @@ class Home extends React.Component {
 				<div className='img-group group'>
 					{imgs.map((img, key) => 
 						<div className='img-container' key={key} id={`img-${key}`} onClick={(e)=>this.selectImg(e)}>
-							<img src={img.previewURL} />
+							<img src={img.previewURL} crossOrigin="Anonymous"/>
 						</div>)}
 				</div>
 			</div>
