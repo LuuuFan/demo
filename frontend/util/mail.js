@@ -3,7 +3,6 @@ export const sendEmail = (token, formData) => {
 		$.ajax({
 			url: 'http://localhost:8999/send_email',
 			method: 'POST',
-			
 			data: formData,
 			processData: false,
       contentType: false,

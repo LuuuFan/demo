@@ -108,6 +108,7 @@ class Share extends React.Component{
 			const imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
 			const selector = document.querySelector('.share-canvas select');
 			const type = selector.options[selector.selectedIndex].textContent;
+			
 			if (type === 'PDF') {
 				const pdf = new jsPDF();
 				pdf.addImage(imgData, 'JPEG', 0, 0);
@@ -118,9 +119,9 @@ class Share extends React.Component{
 				formData.append('recipient', this.state.email);
 				formData.append('file', pdf.output(), 'download.pdf');
 				const token = localStorage.getItem('access_token'); 
-				this.props.sendEmail(token, formData);
+				// this.props.sendEmail(token, formData);
 				// saving pdf to local
-				// pdf.save('download.pdf');
+				pdf.save('download.pdf');
 			} else {
 				const data = imgData.replace(/^data:image\/\w+;base64,/, "");
 				const buf = new Buffer(data, 'base64');

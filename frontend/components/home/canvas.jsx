@@ -21,6 +21,7 @@ class Canvas extends React.Component{
 				width: 0,
 			},
 			fillChecked: true,
+			activeObj: "",
 		};
 	}
 
@@ -32,9 +33,15 @@ class Canvas extends React.Component{
 		// this.props.receiveCanvas(canvas);
 		canvas.on('mouse:down', (e)=>{
 			let activeObject = canvas.getActiveObject();
-			if (activeObject && activeObject.type === 'group') {
-				canvasUtil.ungroupObject(canvas, activeObject);
+			if (activeObject) {
+				canvas.bringToFront(activeObject);
+				if ( activeObject.type === 'group') {
+					canvasUtil.ungroupObject(canvas, activeObject);
+				}
 			}
+		})
+		canvas.on('dblclick', (e)=>{
+			alert('capture double click!!');
 		})
 		document.addEventListener('keydown', (e) => {
 			if (e.key === 'Backspace' || e.key === 'Delete') {
@@ -78,8 +85,8 @@ class Canvas extends React.Component{
 		this.setState({[type]: e.currentTarget.id});
 	}
 
-	changeStyle(){
-
+	changeStyle(e){
+		debugger
 	}
 
 	changeOpacity(e){
@@ -222,7 +229,7 @@ class Canvas extends React.Component{
 	          	<br />
 							<div className="form-inline d-flex">
 								<label htmlFor="text-style">Style: </label>
-								<select className="form-control" id="text-style">
+								<select className="form-control" id="text-style" onChange={(e)=>this.changeStyle(e)}>
 								  <option value="Times">Times</option>
 								  <option value="Georgia">Georgia</option>
 								  <option value="Arial">Arial</option>

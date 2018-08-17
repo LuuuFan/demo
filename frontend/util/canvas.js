@@ -55,7 +55,7 @@ export const addText = (canvas) => {
   let style = $(`#text-style`).val();
   let size = parseInt($(`#text-size`).val());
   let color = $(`#text-color`).val();
-  let text = new fabric.IText("Happy birthday", {
+  let text = new fabric.IText("Comment here", {
     left: 50,
     top: 50,
     fontFamily: style,
@@ -201,7 +201,6 @@ export const ungroupObject = (canvas, activeObject) => {
 }
 
 export const changeOpacity = (obj, canvas, opacity) => {
-  // stroke opacity cannot update;
   obj.set({opacity: opacity});
   canvas.renderAll();
 };

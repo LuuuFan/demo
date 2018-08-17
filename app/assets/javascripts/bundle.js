@@ -1677,7 +1677,7 @@ var addText = exports.addText = function addText(canvas) {
   var style = $('#text-style').val();
   var size = parseInt($('#text-size').val());
   var color = $('#text-color').val();
-  var text = new fabric.IText("Happy birthday", {
+  var text = new fabric.IText("Comment here", {
     left: 50,
     top: 50,
     fontFamily: style,
@@ -1822,7 +1822,6 @@ var ungroupObject = exports.ungroupObject = function ungroupObject(canvas, activ
 };
 
 var changeOpacity = exports.changeOpacity = function changeOpacity(obj, canvas, opacity) {
-  // stroke opacity cannot update;
   obj.set({ opacity: opacity });
   canvas.renderAll();
 };
@@ -27707,18 +27706,22 @@ var Home = function (_React$Component) {
 	_createClass(Home, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
+			var _this2 = this;
+
 			this.fetchImg();
-			// interval = setInterval(()=>this.fetchImg(), 9000);
+			interval = setInterval(function () {
+				return _this2.fetchImg();
+			}, 900);
 		}
 	}, {
 		key: 'fetchImg',
 		value: function fetchImg() {
-			var _this2 = this;
+			var _this3 = this;
 
 			this.props.fetchAllImgs(this.props.currentUser['access-token']).catch(function (err) {
 				clearInterval(interval);
 				localStorage.removeItem('access_token');
-				_this2.props.history.push('/login');
+				_this3.props.history.push('/login');
 			});
 		}
 	}, {
@@ -27730,7 +27733,7 @@ var Home = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this3 = this;
+			var _this4 = this;
 
 			var _props = this.props,
 			    imgs = _props.imgs,
@@ -27753,9 +27756,9 @@ var Home = function (_React$Component) {
 						return _react2.default.createElement(
 							'div',
 							{ className: 'img-container', key: key, id: 'img-' + key, onClick: function onClick(e) {
-									return _this3.selectImg(e);
+									return _this4.selectImg(e);
 								} },
-							_react2.default.createElement('img', { src: img.previewURL, crossOrigin: 'Anonymous' })
+							_react2.default.createElement('img', { src: img.previewURL })
 						);
 					})
 				)
@@ -28206,6 +28209,7 @@ var Share = function (_React$Component) {
 				var imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
 				var selector = document.querySelector('.share-canvas select');
 				var type = selector.options[selector.selectedIndex].textContent;
+
 				if (type === 'PDF') {
 					var pdf = new jsPDF();
 					pdf.addImage(imgData, 'JPEG', 0, 0);
@@ -28216,9 +28220,9 @@ var Share = function (_React$Component) {
 					formData.append('recipient', this.state.email);
 					formData.append('file', pdf.output(), 'download.pdf');
 					var token = localStorage.getItem('access_token');
-					this.props.sendEmail(token, formData);
+					// this.props.sendEmail(token, formData);
 					// saving pdf to local
-					// pdf.save('download.pdf');
+					pdf.save('download.pdf');
 				} else {
 					var data = imgData.replace(/^data:image\/\w+;base64,/, "");
 					var buf = new Buffer(data, 'base64');
@@ -30829,7 +30833,8 @@ var Canvas = function (_React$Component) {
 				height: 0,
 				width: 0
 			},
-			fillChecked: true
+			fillChecked: true,
+			activeObj: ""
 		};
 		return _this;
 	}
@@ -30846,9 +30851,15 @@ var Canvas = function (_React$Component) {
 			// this.props.receiveCanvas(canvas);
 			canvas.on('mouse:down', function (e) {
 				var activeObject = canvas.getActiveObject();
-				if (activeObject && activeObject.type === 'group') {
-					canvasUtil.ungroupObject(canvas, activeObject);
+				if (activeObject) {
+					canvas.bringToFront(activeObject);
+					if (activeObject.type === 'group') {
+						canvasUtil.ungroupObject(canvas, activeObject);
+					}
 				}
+			});
+			canvas.on('dblclick', function (e) {
+				alert('capture double click!!');
 			});
 			document.addEventListener('keydown', function (e) {
 				if (e.key === 'Backspace' || e.key === 'Delete') {
@@ -30900,7 +30911,9 @@ var Canvas = function (_React$Component) {
 		}
 	}, {
 		key: 'changeStyle',
-		value: function changeStyle() {}
+		value: function changeStyle(e) {
+			debugger;
+		}
 	}, {
 		key: 'changeOpacity',
 		value: function changeOpacity(e) {
@@ -31274,7 +31287,9 @@ var Canvas = function (_React$Component) {
 							),
 							_react2.default.createElement(
 								'select',
-								{ className: 'form-control', id: 'text-style' },
+								{ className: 'form-control', id: 'text-style', onChange: function onChange(e) {
+										return _this4.changeStyle(e);
+									} },
 								_react2.default.createElement(
 									'option',
 									{ value: 'Times' },
@@ -31481,7 +31496,6 @@ var sendEmail = exports.sendEmail = function sendEmail(token, formData) {
 	return $.ajax({
 		url: 'http://localhost:8999/send_email',
 		method: 'POST',
-
 		data: formData,
 		processData: false,
 		contentType: false,
