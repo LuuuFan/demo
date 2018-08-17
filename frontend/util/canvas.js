@@ -1,7 +1,7 @@
 // import {fabric} from './fabric';
 
 let photoNum = 0;
-let img, text, group
+// let img, text, group;
 
 export const addShape = (selectedShape, canvas) => {
   let color = $(`#shape-color`).val();
@@ -183,21 +183,22 @@ export const ungroupObject = (canvas, activeObject) => {
       text = obj;
     }
   })
-  canvas.setActiveObject(text);
-  canvas.on('mouse:down', (e)=>{
-    let activeObject = canvas.getActiveObject();
-    if (!activeObject || activeObject.type === 'image' ) {
-      if (img && text) {
-        group = new fabric.Group([img, text]);
-        canvas.remove(img);
-        canvas.remove(text);
-        canvas.add(group);
-      }
-      img = null;
-      text = null;
-      group = null;
-    }
-  });
+
+  // canvas.setActiveObject(text);
+  // canvas.on('mouse:down', (e)=>{
+  //   let activeObject = canvas.getActiveObject();
+  //   if (!activeObject || activeObject.type === 'image' ) {
+  //     if (img && text) {
+  //       group = new fabric.Group([img, text]);
+  //       canvas.remove(img);
+  //       canvas.remove(text);
+  //       canvas.add(group);
+  //     }
+  //     img = null;
+  //     text = null;
+  //     group = null;
+  //   }
+  // });
 }
 
 export const changeOpacity = (obj, canvas, opacity) => {
@@ -209,3 +210,30 @@ export const changeFill = (obj, canvas, fill) => {
   fill ? obj.set({fill: obj.stroke}) : obj.set({fill: 'transparent'});
   canvas.renderAll();
 }
+
+export const changeTextStyle = (obj, canvas, style, size) => {
+  if(style) obj.set({fontFamily: style});
+  if(size) obj.set({fontSize: size});
+  canvas.renderAll();
+};
+
+export const changeGroupText = (obj, canvas, content) => {
+  const left = obj.left, top = obj.top;
+  let img, text, group;
+  obj.toActiveSelection();
+  canvas.requestRenderAll();
+  let newActiveObjects = canvas.getActiveObject();
+  newActiveObjects._objects.forEach(obj => {
+    if (obj.type === 'image') {
+      img = obj;
+    } else {
+      text = obj;
+    }
+  })
+  text.text = content;
+  group = new fabric.Group([img, text], {
+    left: left,
+    top: top,
+  });
+  canvas.setActiveObject(group).renderAll();
+};

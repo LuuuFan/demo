@@ -21,7 +21,7 @@ class Canvas extends React.Component{
 				width: 0,
 			},
 			fillChecked: true,
-			activeObj: "",
+			changeDialog: false,
 		};
 	}
 
@@ -30,24 +30,34 @@ class Canvas extends React.Component{
 		let canvas = new fabric.Canvas("c", {width: container.offsetWidth - 50, height: container.offsetHeight});
 		canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 		this.setState({canvas: canvas});
+
+		// canvas not working in redux
 		// this.props.receiveCanvas(canvas);
+		
+		// set activeObject, 
 		canvas.on('mouse:down', (e)=>{
 			let activeObject = canvas.getActiveObject();
 			if (activeObject) {
 				canvas.bringToFront(activeObject);
-				if ( activeObject.type === 'group') {
-					canvasUtil.ungroupObject(canvas, activeObject);
-				}
+				// handle group, not perfect
+				// if ( activeObject.type === 'group') {
+				// 	canvasUtil.ungroupObject(canvas, activeObject);
+				// }
 			}
 		})
+
+		// testing
 		canvas.on('dblclick', (e)=>{
 			alert('capture double click!!');
 		})
+
+		// delete item on canvas
 		document.addEventListener('keydown', (e) => {
 			if (e.key === 'Backspace' || e.key === 'Delete') {
 				canvasUtil.deleteItem(this.state.canvas);				
 			}
 		});
+
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -59,6 +69,10 @@ class Canvas extends React.Component{
 	handleInput(){
 		return (e) => {
 			this.setState({textSize: e.target.value});
+			const activeObj = this.state.canvas.getActiveObject();
+			if (activeObj && activeObj.type === 'i-text') {
+				canvasUtil.changeTextStyle(activeObj, this.state.canvas, null, e.target.value);
+			}
 		};
 	}
 
@@ -86,7 +100,10 @@ class Canvas extends React.Component{
 	}
 
 	changeStyle(e){
-		debugger
+		const activeObj = this.state.canvas.getActiveObject();
+		if (activeObj && activeObj.type === 'i-text') {
+			canvasUtil.changeTextStyle(activeObj, this.state.canvas, e.target.value);
+		}
 	}
 
 	changeOpacity(e){
@@ -109,6 +126,18 @@ class Canvas extends React.Component{
 													activeObj.type === 'rect' || 
 													activeObj.type === 'line')
 	}
+
+	textareaInput(){
+		return (e) => {
+			const activeObj = this.state.canvas.getActiveObject();
+			if (activeObj && activeObj.type === 'group') {
+				this.setState({changeDialog: true});
+				canvasUtil.changeGroupText(activeObj, this.state.canvas, e.target.value);
+			}
+		}
+	}
+
+	stopChangeDialog(){this.setState({changeDialog: false})}
 
 	render(){
 		return (
@@ -199,12 +228,16 @@ class Canvas extends React.Component{
 								</li>
 		        	</ol>
 		        	<div className=''>
-		        		<textarea placeholder='Add Comment Here' >
+		        		<textarea placeholder='Add Comment Here' onChange={this.textareaInput()} onMouseLeave={()=>this.stopChangeDialog()}>
 		        		</textarea>
 		        	</div>
 		        	<br />
 		        	<div id="button-wrapper">
+		        		{this.state.changeDialog ? 
+	            	<button type="button" className="btn btn-outline-primary btn-sm" id="addDialog">Changing comment...</button>
+		        			: 
 	            	<button type="button" className="btn btn-outline-primary btn-sm" id="addDialog" onClick={()=>canvasUtil.addDialog(this.state.selectedDialog, this.state.canvas)}>Add Dialog</button>
+		        		}
 		        	</div>
 		        </div>
 		        <div className={`tab-pane fade ${this.state.active === 'Text' ? 'show active' : ""}`} id="text" role="tabpanel" aria-labelledby="text-button">
