@@ -6,6 +6,7 @@ class Service extends React.Component {
 	sendService(){
 		const imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
 		const data = imgData.replace(/^data:image\/\w+;base64,/, "");
+		// need to handle dropbox img CORS issue
 		console.log(data);
 		const requestData = {
 	          "sysparm_action": "insert",

@@ -1,19 +1,26 @@
 // import {fabric} from './fabric';
 
+let photoNum = 0;
+let img, text, group
+
 export const addShape = (selectedShape, canvas) => {
   let color = $(`#shape-color`).val();
   let opacity = parseFloat($(`#shape-opacity`).val());
-  // let fill = $('#shape-fill input')
+  let fill = $('#shape-fill input').prop('checked') ? color : 'transparent';
+  let hasBorder = $('#shape-fill input').prop('checked') ? false : true;
   switch (selectedShape) {
     case "circle":
       let circle = new fabric.Circle({
         left: 50,
         top: 50,
-        radius: 20,
-        fill: color,
+        radius: 50,
+        fill: fill,
+        stroke: color,
+        strokeWidth: 3,
         opacity
       });
       canvas.add(circle);
+      canvas.setActiveObject(circle);
       break;
     case "rect":
       let square = new fabric.Rect({
@@ -21,10 +28,13 @@ export const addShape = (selectedShape, canvas) => {
         top: 50,
         width: 25,
         height: 25,
-        fill: color,
+        fill: fill,
+        stroke: color,
+        strokeWidth: 3,
         opacity
       });
       canvas.add(square);
+      canvas.setActiveObject(square);
       break;
     case "line":
       let line = new fabric.Line([50, 50, 150, 50], {
@@ -34,9 +44,10 @@ export const addShape = (selectedShape, canvas) => {
         opacity
       });
       canvas.add(line);
+      canvas.setActiveObject(line);
       break;
     default:
-    return false;
+      return false;
   }
 };
 
@@ -52,6 +63,7 @@ export const addText = (canvas) => {
     fill: color
   });
   canvas.add(text);
+  canvas.setActiveObject(text);
 };
 
 export const deleteItem = (canvas) => {
@@ -60,8 +72,6 @@ export const deleteItem = (canvas) => {
   canvas.remove(activeObject);
   // activeObject = canvas.getActiveObject();
 };
-
-let photoNum = 0;
 
 export const addPhoto = (url, canvas) => {
     let activeObject = canvas.getActiveObject();
@@ -84,7 +94,6 @@ export const addPhoto = (url, canvas) => {
 };
 
 export const changeImage = (url, canvas, activeObject) => {
-  
   let left = activeObject.left;
   let top = activeObject.top;
   let tl = activeObject.aCoords.tl;
@@ -110,7 +119,6 @@ export const changeBackground = (color, canvas) => {
 };  
 
 export const addDialog = (selectedDialog, canvas) => {
-  
   fabric.Image.fromURL(`app/assets/images/${selectedDialog}.png`, (img)=>{
     const scale = 150 / img.height;
     const dialog = img.set({
@@ -136,8 +144,8 @@ export const addDialog = (selectedDialog, canvas) => {
     });
 
     canvas.add(group);
+    canvas.setActiveObject(group);
   });
-
 };
 
 
@@ -150,10 +158,6 @@ export const resetCanvas = (canvas) => {
   canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 };
 
-export const changeText = () => {
-
-}
-
 export const changeColor = (canvas, activeObject, color) => {
   if (color) {
     if (activeObject.type==='i-text') {
@@ -164,7 +168,9 @@ export const changeColor = (canvas, activeObject, color) => {
     canvas.renderAll();
   }
 }
-let img, text, group
+
+
+// need refactory
 export const ungroupObject = (canvas, activeObject) => {
   activeObject.toActiveSelection();
   canvas.requestRenderAll();
@@ -193,36 +199,4 @@ export const ungroupObject = (canvas, activeObject) => {
   });
 }
 
-// export const changeColor = (event) => {
-//   let eventId = event.currentTarget.id;
-//   let color = $(`#${eventId}`).val();
-//   $(`#${eventId}`).next(`.selected-color`).css(`background-color`, `${color}`);
-//   if (eventId === `background-color`) {
-//     changeBackground(color);
-//   }
-// };
 
-  // Events
-  // $("#addText").click(addText);
-  // $("#addShape").click(addShape);
-  // $("#changeBackground").click(changeBackground);
-  // $("#deleteItem").click(deleteItem);
-
-  // $("#downloadTemplate").click(downloadTemplate);
-  // $("#saveTemplate").click(saveTemplate);
-  // $(`#searchButton`).click(searchTemplates);
-  // $("#templates-list").on("click", ".template-image", setTemplate);
-  // $("#images-list").on("click", ".preview-image", changeImage);
-
-  // $("#addPhoto").change(addPhoto);
-  // $("#uploadTemplate").change(uploadTemplate);
-  // $(`#shape-color`).change(changeColor);
-  // $(`#text-color`).change(changeColor);
-  // $(`#background-color`).change(changeColor);
-
-  // $("#addButton").click(function(){
-  //   $("#addPhoto").click();
-  // });
-  // $("#uploadButton").click(function(){
-  //   $("#uploadTemplate").click();
-  // });
