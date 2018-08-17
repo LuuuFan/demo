@@ -82,18 +82,25 @@ class Canvas extends React.Component{
 
 	}
 
-	changeOpacity(){
+	changeOpacity(e){
 		const activeObj = this.state.canvas.getActiveObject();
-		if (activeObj && (
-				activeObj.type === 'circle' || 
-				activeObj.type === 'rect' || 
-				activeObj.type === 'line')) {
-			canvasUtil.changeOpacity(activeObj, canvas);
+		if (this.isShape(activeObj)) {
+			canvasUtil.changeOpacity(activeObj, this.state.canvas, e.target.value * 1);
 		}
 	}
 
-	checkBox(){
-		this.setState({fillChecked: !this.state.fillChecked});
+	checkBox(e){
+		const activeObj = this.state.canvas.getActiveObject();
+		this.setState({fillChecked: e.target.checked});
+		if (this.isShape(activeObj)) {
+			canvasUtil.changeFill(activeObj, this.state.canvas, e.target.checked);
+		}
+	}
+
+	isShape(activeObj){
+		return activeObj && (activeObj.type === 'circle' || 
+													activeObj.type === 'rect' || 
+													activeObj.type === 'line')
 	}
 
 	render(){
@@ -154,11 +161,11 @@ class Canvas extends React.Component{
           		<br />
 							<div className="form-inline d-flex" id="shape-fill">
 								<label htmlFor="shape-fill">Fill</label>
-								<input type='checkbox' checked={this.state.fillChecked} onChange={()=>this.checkBox()}/>
+								<input type='checkbox' checked={this.state.fillChecked} onChange={(e)=>this.checkBox(e)}/>
           		</div>
 		        	<div className="form-inline d-flex">
 		            <label htmlFor="shape-opacity">Opacity: </label>
-		            <select className="form-control" id="shape-opacity" onChange={()=>this.changeOpacity()}>
+		            <select className="form-control" id="shape-opacity" onChange={(e)=>this.changeOpacity(e)}>
 		              <option value="1">100%</option>
 		              <option value=".75">75%</option>
 		              <option value=".5">50%</option>

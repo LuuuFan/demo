@@ -1691,8 +1691,9 @@ var addText = exports.addText = function addText(canvas) {
 var deleteItem = exports.deleteItem = function deleteItem(canvas) {
   var activeObject = canvas.getActiveObject();
   if (activeObject && activeObject.type === 'image') photoNum--;
-  canvas.remove(activeObject);
-  // activeObject = canvas.getActiveObject();
+  activeObject._objects ? activeObject._objects.forEach(function (obj) {
+    return canvas.remove(obj);
+  }) : canvas.remove(activeObject);
 };
 
 var addPhoto = exports.addPhoto = function addPhoto(url, canvas) {
@@ -1779,14 +1780,16 @@ var resetCanvas = exports.resetCanvas = function resetCanvas(canvas) {
 };
 
 var changeColor = exports.changeColor = function changeColor(canvas, activeObject, color) {
-  if (color) {
-    if (activeObject.type === 'i-text') {
-      activeObject.setColor(color);
+  if (activeObject.type === 'i-text') {
+    activeObject.setColor(color);
+  } else {
+    if (activeObject.fill === 'transparent') {
+      activeObject.set('stroke', color);
     } else {
       activeObject.set('fill', color);
     }
-    canvas.renderAll();
   }
+  canvas.renderAll();
 };
 
 // need refactory
@@ -1816,6 +1819,17 @@ var ungroupObject = exports.ungroupObject = function ungroupObject(canvas, activ
       group = null;
     }
   });
+};
+
+var changeOpacity = exports.changeOpacity = function changeOpacity(obj, canvas, opacity) {
+  // stroke opacity cannot update;
+  obj.set({ opacity: opacity });
+  canvas.renderAll();
+};
+
+var changeFill = exports.changeFill = function changeFill(obj, canvas, fill) {
+  fill ? obj.set({ fill: obj.stroke }) : obj.set({ fill: 'transparent' });
+  canvas.renderAll();
 };
 
 /***/ }),
@@ -30889,16 +30903,25 @@ var Canvas = function (_React$Component) {
 		value: function changeStyle() {}
 	}, {
 		key: 'changeOpacity',
-		value: function changeOpacity() {
+		value: function changeOpacity(e) {
 			var activeObj = this.state.canvas.getActiveObject();
-			if (activeObj && (activeObj.type === 'circle' || activeObj.type === 'rect' || activeObj.type === 'line')) {
-				canvasUtil.changeOpacity(activeObj, canvas);
+			if (this.isShape(activeObj)) {
+				canvasUtil.changeOpacity(activeObj, this.state.canvas, e.target.value * 1);
 			}
 		}
 	}, {
 		key: 'checkBox',
-		value: function checkBox() {
-			this.setState({ fillChecked: !this.state.fillChecked });
+		value: function checkBox(e) {
+			var activeObj = this.state.canvas.getActiveObject();
+			this.setState({ fillChecked: e.target.checked });
+			if (this.isShape(activeObj)) {
+				canvasUtil.changeFill(activeObj, this.state.canvas, e.target.checked);
+			}
+		}
+	}, {
+		key: 'isShape',
+		value: function isShape(activeObj) {
+			return activeObj && (activeObj.type === 'circle' || activeObj.type === 'rect' || activeObj.type === 'line');
 		}
 	}, {
 		key: 'render',
@@ -31066,8 +31089,8 @@ var Canvas = function (_React$Component) {
 								{ htmlFor: 'shape-fill' },
 								'Fill'
 							),
-							_react2.default.createElement('input', { type: 'checkbox', checked: this.state.fillChecked, onChange: function onChange() {
-									return _this4.checkBox();
+							_react2.default.createElement('input', { type: 'checkbox', checked: this.state.fillChecked, onChange: function onChange(e) {
+									return _this4.checkBox(e);
 								} })
 						),
 						_react2.default.createElement(
@@ -31080,8 +31103,8 @@ var Canvas = function (_React$Component) {
 							),
 							_react2.default.createElement(
 								'select',
-								{ className: 'form-control', id: 'shape-opacity', onChange: function onChange() {
-										return _this4.changeOpacity();
+								{ className: 'form-control', id: 'shape-opacity', onChange: function onChange(e) {
+										return _this4.changeOpacity(e);
 									} },
 								_react2.default.createElement(
 									'option',

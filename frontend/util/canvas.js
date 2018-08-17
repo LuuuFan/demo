@@ -69,8 +69,7 @@ export const addText = (canvas) => {
 export const deleteItem = (canvas) => {
   let activeObject = canvas.getActiveObject();
   if (activeObject && activeObject.type === 'image') photoNum--;
-  canvas.remove(activeObject);
-  // activeObject = canvas.getActiveObject();
+  activeObject._objects ? activeObject._objects.forEach(obj => canvas.remove(obj)) : canvas.remove(activeObject);
 };
 
 export const addPhoto = (url, canvas) => {
@@ -159,14 +158,16 @@ export const resetCanvas = (canvas) => {
 };
 
 export const changeColor = (canvas, activeObject, color) => {
-  if (color) {
     if (activeObject.type==='i-text') {
       activeObject.setColor(color);
     } else {
-      activeObject.set('fill', color);
+      if (activeObject.fill === 'transparent') {
+        activeObject.set('stroke', color);
+      } else {
+        activeObject.set('fill', color);
+      }
     }
     canvas.renderAll();
-  }
 }
 
 
@@ -199,4 +200,13 @@ export const ungroupObject = (canvas, activeObject) => {
   });
 }
 
+export const changeOpacity = (obj, canvas, opacity) => {
+  // stroke opacity cannot update;
+  obj.set({opacity: opacity});
+  canvas.renderAll();
+};
 
+export const changeFill = (obj, canvas, fill) => {
+  fill ? obj.set({fill: obj.stroke}) : obj.set({fill: 'transparent'});
+  canvas.renderAll();
+}
