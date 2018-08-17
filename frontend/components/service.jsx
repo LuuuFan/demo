@@ -4,9 +4,9 @@ import React from 'react';
 class Service extends React.Component {
 
 	sendService(){
-		// const imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
-		// const data = imgData.replace(/^data:image\/\w+;base64,/, "");
-		// console.log(data);
+		const imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
+		const data = imgData.replace(/^data:image\/\w+;base64,/, "");
+		console.log(data);
 		const requestData = {
 	          "sysparm_action": "insert",
 	          "category": $("#cat-select").val(),
@@ -18,6 +18,7 @@ class Service extends React.Component {
 	          "caller_id":"admin",
 	          "assignment_group":$("#ag-select").val(),
 	          "assigned_to":$("#at-select").val(),
+	          
 	        };
     console.log(requestData.caller_id);
     this.props.sendService(requestData).then(data => {

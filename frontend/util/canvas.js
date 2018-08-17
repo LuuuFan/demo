@@ -58,7 +58,7 @@ export const deleteItem = (canvas) => {
   let activeObject = canvas.getActiveObject();
   if (activeObject && activeObject.type === 'image') photoNum--;
   canvas.remove(activeObject);
-  activeObject = canvas.getActiveObject();
+  // activeObject = canvas.getActiveObject();
 };
 
 let photoNum = 0;
@@ -163,6 +163,34 @@ export const changeColor = (canvas, activeObject, color) => {
     }
     canvas.renderAll();
   }
+}
+let img, text, group
+export const ungroupObject = (canvas, activeObject) => {
+  activeObject.toActiveSelection();
+  canvas.requestRenderAll();
+  let newActiveObjects = canvas.getActiveObject();
+  newActiveObjects._objects.forEach(obj => {
+    if (obj.type === 'image') {
+      img = obj;
+    } else {
+      text = obj;
+    }
+  })
+  canvas.setActiveObject(text);
+  canvas.on('mouse:down', (e)=>{
+    let activeObject = canvas.getActiveObject();
+    if (!activeObject || activeObject.type === 'image' ) {
+      if (img && text) {
+        group = new fabric.Group([img, text]);
+        canvas.remove(img);
+        canvas.remove(text);
+        canvas.add(group);
+      }
+      img = null;
+      text = null;
+      group = null;
+    }
+  });
 }
 
 // export const changeColor = (event) => {

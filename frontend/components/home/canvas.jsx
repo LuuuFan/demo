@@ -30,6 +30,12 @@ class Canvas extends React.Component{
 		canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 		this.setState({canvas: canvas});
 		// this.props.receiveCanvas(canvas);
+		canvas.on('mouse:down', (e)=>{
+			let activeObject = canvas.getActiveObject();
+			if (activeObject && activeObject.type === 'group') {
+				canvasUtil.ungroupObject(canvas, activeObject);
+			}
+		})
 		document.addEventListener('keydown', (e) => {
 			if (e.key === 'Backspace' || e.key === 'Delete') {
 				canvasUtil.deleteItem(this.state.canvas);				

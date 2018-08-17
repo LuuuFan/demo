@@ -1652,7 +1652,7 @@ var deleteItem = exports.deleteItem = function deleteItem(canvas) {
   var activeObject = canvas.getActiveObject();
   if (activeObject && activeObject.type === 'image') photoNum--;
   canvas.remove(activeObject);
-  activeObject = canvas.getActiveObject();
+  // activeObject = canvas.getActiveObject();
 };
 
 var photoNum = 0;
@@ -1662,11 +1662,11 @@ var addPhoto = exports.addPhoto = function addPhoto(url, canvas) {
   if (activeObject && activeObject.type === 'image') {
     changeImage(url, canvas, activeObject);
   } else {
-    var img = new Image();
-    img.src = url;
-    img.setAttribute('crossorigin', 'anonymous');
-    img.onload = function () {
-      var image = new fabric.Image(img);
+    var _img = new Image();
+    _img.src = url;
+    _img.setAttribute('crossorigin', 'anonymous');
+    _img.onload = function () {
+      var image = new fabric.Image(_img);
       image.set({
         left: 0 + 50 * photoNum,
         top: 0 + 50 * photoNum
@@ -1752,6 +1752,36 @@ var changeColor = exports.changeColor = function changeColor(canvas, activeObjec
     }
     canvas.renderAll();
   }
+};
+var img = void 0,
+    text = void 0,
+    group = void 0;
+var ungroupObject = exports.ungroupObject = function ungroupObject(canvas, activeObject) {
+  activeObject.toActiveSelection();
+  canvas.requestRenderAll();
+  var newActiveObjects = canvas.getActiveObject();
+  newActiveObjects._objects.forEach(function (obj) {
+    if (obj.type === 'image') {
+      img = obj;
+    } else {
+      text = obj;
+    }
+  });
+  canvas.setActiveObject(text);
+  canvas.on('mouse:down', function (e) {
+    var activeObject = canvas.getActiveObject();
+    if (!activeObject || activeObject.type === 'image') {
+      if (img && text) {
+        group = new fabric.Group([img, text]);
+        canvas.remove(img);
+        canvas.remove(text);
+        canvas.add(group);
+      }
+      img = null;
+      text = null;
+      group = null;
+    }
+  });
 };
 
 // export const changeColor = (event) => {
@@ -30404,6 +30434,12 @@ var Canvas = function (_React$Component) {
 			canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 			this.setState({ canvas: canvas });
 			// this.props.receiveCanvas(canvas);
+			canvas.on('mouse:down', function (e) {
+				var activeObject = canvas.getActiveObject();
+				if (activeObject && activeObject.type === 'group') {
+					canvasUtil.ungroupObject(canvas, activeObject);
+				}
+			});
 			document.addEventListener('keydown', function (e) {
 				if (e.key === 'Backspace' || e.key === 'Delete') {
 					canvasUtil.deleteItem(_this2.state.canvas);
@@ -31051,11 +31087,11 @@ var Service = function (_React$Component) {
 	}
 
 	_createClass(Service, [{
-		key: "sendService",
+		key: 'sendService',
 		value: function sendService() {
-			// const imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
-			// const data = imgData.replace(/^data:image\/\w+;base64,/, "");
-			// console.log(data);
+			var imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
+			var data = imgData.replace(/^data:image\/\w+;base64,/, "");
+			console.log(data);
 			var requestData = {
 				"sysparm_action": "insert",
 				"category": $("#cat-select").val(),
@@ -31067,6 +31103,7 @@ var Service = function (_React$Component) {
 				"caller_id": "admin",
 				"assignment_group": $("#ag-select").val(),
 				"assigned_to": $("#at-select").val()
+
 			};
 			console.log(requestData.caller_id);
 			this.props.sendService(requestData).then(function (data) {
@@ -31076,292 +31113,292 @@ var Service = function (_React$Component) {
 			});
 		}
 	}, {
-		key: "render",
+		key: 'render',
 		value: function render() {
 			var _this2 = this;
 
 			return _react2.default.createElement(
-				"div",
-				{ id: "table_left" },
+				'div',
+				{ id: 'table_left' },
 				_react2.default.createElement(
-					"table",
-					{ id: "table-1", className: "table table-hover dataTable no-footer", cellSpacing: "0" },
+					'table',
+					{ id: 'table-1', className: 'table table-hover dataTable no-footer', cellSpacing: '0' },
 					_react2.default.createElement(
-						"tbody",
-						{ id: "targetForRows" },
+						'tbody',
+						{ id: 'targetForRows' },
 						_react2.default.createElement(
-							"tr",
-							{ className: "normal" },
+							'tr',
+							{ className: 'normal' },
 							_react2.default.createElement(
-								"td",
-								{ colSpan: "2" },
+								'td',
+								{ colSpan: '2' },
 								_react2.default.createElement(
-									"div",
-									{ className: "title-bar-2" },
+									'div',
+									{ className: 'title-bar-2' },
 									_react2.default.createElement(
-										"span",
-										{ id: "cityName" },
-										"Create Incident"
+										'span',
+										{ id: 'cityName' },
+										'Create Incident'
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							"tr",
-							{ className: "wv-pl" },
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								"td",
+								'td',
 								null,
 								_react2.default.createElement(
-									"span",
+									'span',
 									null,
-									"Category"
+									'Category'
 								),
 								_react2.default.createElement(
-									"select",
-									{ id: "cat-select", className: "input" },
+									'select',
+									{ id: 'cat-select', className: 'input' },
 									_react2.default.createElement(
-										"option",
+										'option',
 										null,
-										"Select a Category"
+										'Select a Category'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "Inquiry/help" },
-										"Inquiry / Help"
+										'option',
+										{ value: 'Inquiry/help' },
+										'Inquiry / Help'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "hardware" },
-										"Hardware"
+										'option',
+										{ value: 'hardware' },
+										'Hardware'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "software" },
-										"Software"
+										'option',
+										{ value: 'software' },
+										'Software'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "database" },
-										"Database"
+										'option',
+										{ value: 'database' },
+										'Database'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "network" },
-										"Network"
+										'option',
+										{ value: 'network' },
+										'Network'
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							"tr",
-							{ className: "wv-pl" },
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								"td",
+								'td',
 								null,
 								_react2.default.createElement(
-									"span",
+									'span',
 									null,
-									"State"
+									'State'
 								),
 								_react2.default.createElement(
-									"select",
-									{ id: "state-select", className: "input" },
+									'select',
+									{ id: 'state-select', className: 'input' },
 									_react2.default.createElement(
-										"option",
-										{ value: "1" },
-										"New"
+										'option',
+										{ value: '1' },
+										'New'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "2" },
-										"In Progress"
+										'option',
+										{ value: '2' },
+										'In Progress'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "3" },
-										"On Hold"
+										'option',
+										{ value: '3' },
+										'On Hold'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "6" },
-										"Resolved"
+										'option',
+										{ value: '6' },
+										'Resolved'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "7" },
-										"Closed"
+										'option',
+										{ value: '7' },
+										'Closed'
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							"tr",
-							{ className: "wv-pl" },
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								"td",
+								'td',
 								null,
 								_react2.default.createElement(
-									"span",
+									'span',
 									null,
-									"Impact"
+									'Impact'
 								),
 								_react2.default.createElement(
-									"select",
-									{ id: "impact-select", className: "input" },
+									'select',
+									{ id: 'impact-select', className: 'input' },
 									_react2.default.createElement(
-										"option",
-										{ value: "1" },
-										"High"
+										'option',
+										{ value: '1' },
+										'High'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "2" },
-										"Medium"
+										'option',
+										{ value: '2' },
+										'Medium'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "3" },
-										"Low"
+										'option',
+										{ value: '3' },
+										'Low'
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							"tr",
-							{ className: "wv-pl" },
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								"td",
+								'td',
 								null,
 								_react2.default.createElement(
-									"span",
+									'span',
 									null,
-									"Urgency"
+									'Urgency'
 								),
 								_react2.default.createElement(
-									"select",
-									{ id: "urgency-select", className: "input" },
+									'select',
+									{ id: 'urgency-select', className: 'input' },
 									_react2.default.createElement(
-										"option",
-										{ value: "1" },
-										"High"
+										'option',
+										{ value: '1' },
+										'High'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "2" },
-										"Medium"
+										'option',
+										{ value: '2' },
+										'Medium'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "3" },
-										"Low"
+										'option',
+										{ value: '3' },
+										'Low'
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							"tr",
-							{ className: "wv-pl" },
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								"td",
+								'td',
 								null,
 								_react2.default.createElement(
-									"span",
+									'span',
 									null,
-									"Short Description"
+									'Short Description'
 								),
-								_react2.default.createElement("input", { id: "input-level", type: "text", name: "conc" })
+								_react2.default.createElement('input', { id: 'input-level', type: 'text', name: 'conc' })
 							)
 						),
 						_react2.default.createElement(
-							"tr",
-							{ className: "wv-pl" },
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								"td",
+								'td',
 								null,
 								_react2.default.createElement(
-									"span",
+									'span',
 									null,
-									"Assignment Group"
+									'Assignment Group'
 								),
 								_react2.default.createElement(
-									"select",
-									{ id: "ag-select", className: "input" },
+									'select',
+									{ id: 'ag-select', className: 'input' },
 									_react2.default.createElement(
-										"option",
+										'option',
 										null,
-										"Select a AG"
+										'Select a AG'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "CAB Approval" },
-										"CAB Approval"
+										'option',
+										{ value: 'CAB Approval' },
+										'CAB Approval'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "Database" },
-										"Database"
+										'option',
+										{ value: 'Database' },
+										'Database'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "Network" },
-										"Network"
+										'option',
+										{ value: 'Network' },
+										'Network'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "Hardware" },
-										"Hardware"
+										'option',
+										{ value: 'Hardware' },
+										'Hardware'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "Software" },
-										"Software"
+										'option',
+										{ value: 'Software' },
+										'Software'
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							"tr",
-							{ className: "wv-pl" },
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								"td",
+								'td',
 								null,
 								_react2.default.createElement(
-									"span",
+									'span',
 									null,
-									"Assigned To"
+									'Assigned To'
 								),
 								_react2.default.createElement(
-									"select",
-									{ id: "at-select", className: "input" },
+									'select',
+									{ id: 'at-select', className: 'input' },
 									_react2.default.createElement(
-										"option",
+										'option',
 										null,
-										"Select a AT"
+										'Select a AT'
 									),
 									_react2.default.createElement(
-										"option",
-										{ value: "Pavan Karra" },
-										"Pavan Karra"
+										'option',
+										{ value: 'Pavan Karra' },
+										'Pavan Karra'
 									)
 								)
 							)
 						),
 						_react2.default.createElement(
-							"tr",
-							{ className: "wv-pl" },
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								"td",
+								'td',
 								null,
 								_react2.default.createElement(
-									"div",
-									{ className: "send-service-button" },
+									'div',
+									{ className: 'send-service-button' },
 									_react2.default.createElement(
-										"button",
+										'button',
 										{ onClick: function onClick() {
 												return _this2.sendService();
-											}, name: "fname" },
-										"Create"
+											}, name: 'fname' },
+										'Create'
 									)
 								)
 							)
