@@ -4,8 +4,8 @@ export const sendEmail = (token, formData) => {
 			url: 'http://localhost:8999/send_email',
 			method: 'POST',
 			data: formData,
-			processData: false,
-      contentType: false,
+			// processData: false,
+      // contentType: false,
 			beforeSend: (xhr) => {
 				xhr.setRequestHeader('Authorization', `Bearer ${token}`);
 			}

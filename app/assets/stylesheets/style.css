@@ -74,12 +74,13 @@ input[type=submit] {
   clear: both;
 }
 
-.main {
-  height: 100vh;
-}
-
 .navbar {
+  font-size: 24px;
+  height: 6vh;
+  display: flex;
+  background-color: #2F425E;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+  align-items: center;
 }
 .navbar a {
   display: flex;
@@ -88,6 +89,100 @@ input[type=submit] {
   height: 30px;
   width: 30px;
   margin-right: 15px;
+}
+.navbar .header-buttons {
+  flex: 1;
+}
+.navbar .header-buttons .share {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.navbar .header-buttons .share .message {
+  padding: 5px 15px;
+  font-size: 12px;
+  position: fixed;
+  top: 70px;
+  left: 33%;
+  width: 33%;
+  border-radius: 5px;
+  background: rgba(10, 186, 181, 0.2);
+  transition: all 0.8s;
+}
+.navbar .header-buttons .share button {
+  margin-right: 10px;
+}
+.navbar .share {
+  display: flex;
+  align-items: center;
+}
+.navbar i {
+  margin-right: 10px;
+}
+.navbar a:hover {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#table_left {
+  border-radius: 7px;
+  overflow: hidden;
+  z-index: 15;
+  position: fixed;
+  left: 33%;
+  top: 100px;
+  width: 33%;
+  font-size: 14px;
+  color: #FFFFFF;
+  animation: slide 2s forwards;
+  -webkit-animation: slide 2s forwards;
+}
+#table_left .loading {
+  z-index: 17;
+}
+#table_left tr.normal {
+  cursor: pointer;
+  background-color: #1C2A39;
+}
+#table_left tr.wv-pl td {
+  display: flex;
+}
+#table_left tr.wv-pl td span {
+  width: 100px;
+}
+#table_left tr.wv-pl td #input-level {
+  border-bottom: 1px solid #59687E;
+}
+#table_left tr.wv-pl td .input {
+  border: none;
+  color: #FFFFFF;
+  background: transparent;
+}
+#table_left tr.wv-pl td .send-service-button {
+  width: 100px;
+  margin: 0 auto;
+}
+#table_left tr.wv-pl td .send-service-button > button {
+  background-color: #5F7BF0;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100px;
+  padding: 3px;
+  text-align: center;
+}
+#table_left tr.wv-pl td .send-service-button > button:hover {
+  font-weight: bold;
+  background-color: #3e5cd8;
+}
+#table_left tr.wv-pl td select {
+  flex: 1;
+}
+#table_left tr.wv-pl td select option {
+  background-color: #2F425E;
+}
+
+.main {
+  height: 100vh;
 }
 
 .session-main {
@@ -139,46 +234,6 @@ input[type=submit] {
   position: fixed;
   bottom: 150px;
   left: 10vw;
-}
-
-.navbar {
-  font-size: 24px;
-  height: 6vh;
-  display: flex;
-  align-items: center;
-}
-.navbar .header-buttons {
-  flex: 1;
-}
-.navbar .header-buttons .share {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-.navbar .header-buttons .share .message {
-  padding: 5px 15px;
-  font-size: 12px;
-  position: fixed;
-  top: 70px;
-  left: 33%;
-  width: 33%;
-  border-radius: 5px;
-  background: rgba(10, 186, 181, 0.2);
-  transition: all 0.8s;
-}
-.navbar .header-buttons .share button {
-  margin-right: 10px;
-}
-.navbar .share {
-  display: flex;
-  align-items: center;
-}
-.navbar i {
-  margin-right: 10px;
-}
-.navbar a:hover {
-  text-decoration: none;
-  font-weight: bold;
 }
 
 .container {
@@ -367,6 +422,9 @@ input[type=submit] {
 }
 .share-canvas form select {
   background: none;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid lightgray;
   height: 33px;
   flex: 1;
 }
@@ -393,60 +451,6 @@ input[type=submit] {
   100% {
     right: 0;
   }
-}
-#table_left {
-  border-radius: 7px 0 0 7px;
-  overflow: hidden;
-  z-index: 15;
-  position: fixed;
-  right: 0;
-  top: 100px;
-  width: 300px;
-  font-size: 14px;
-  background-color: #2F425E;
-  color: #FFFFFF;
-  animation: slide 2s forwards;
-  -webkit-animation: slide 2s forwards;
-}
-#table_left tr.normal {
-  cursor: pointer;
-  background-color: #1C2A39;
-}
-#table_left tr.wv-pl td {
-  display: flex;
-}
-#table_left tr.wv-pl td span {
-  width: 100px;
-}
-#table_left tr.wv-pl td #input-level {
-  border-bottom: 1px solid #59687E;
-}
-#table_left tr.wv-pl td .input {
-  border: none;
-  color: #FFFFFF;
-  background: transparent;
-}
-#table_left tr.wv-pl td .send-service-button {
-  width: 100px;
-  margin: 0 auto;
-}
-#table_left tr.wv-pl td .send-service-button > button {
-  background-color: #5F7BF0;
-  cursor: pointer;
-  border-radius: 5px;
-  width: 100px;
-  padding: 3px;
-  text-align: center;
-}
-#table_left tr.wv-pl td .send-service-button > button:hover {
-  font-weight: bold;
-  background-color: #3e5cd8;
-}
-#table_left tr.wv-pl td select {
-  flex: 1;
-}
-#table_left tr.wv-pl td select option {
-  background-color: #2F425E;
 }
 
 /*# sourceMappingURL=style.css.map */

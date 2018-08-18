@@ -10,27 +10,10 @@ class Share extends React.Component{
 			email: 'lu.fan@n3n.io',
 			emailError: '',
 			service: false,
+			filename: '',
+			type: 'pdf',
 		};
 	}
-
-	// download(url, name){
-	// 	const a = document.createElement('a');
-	// 	a.href = url;
-	// 	// a.setAttribute('target', '_blank');
-	// 	a.setAttribute("download", name);
-
-	// 	document.body.appendChild(a);
-	// 	a.click();
-	// 	document.body.removeChild(a);
-	// }
-
-	// getSourceAsDOM(url){
-	// 	const xmlhttp = new XMLHttpRequest();
-	// 	xmlhttp.open('GET', url, false);
-	// 	xmlhttp.send();
-	// 	parser = new DOMParser();
-	// 	return parser.parseFromString(xmlhttp.responseText, 'text/html');
-	// }
 
 	pushToLocal(image){
 		const dropbox = JSON.parse(localStorage.getItem('dropbox'));
@@ -94,8 +77,8 @@ class Share extends React.Component{
 		this.setState({modal: 'modal'});
 	}
 
-	handleInput(e){
-		this.setState({email: e.target.value, emailError: ''});
+	handleInput(e, type){
+		this.setState({[type]: e.target.value, emailError: ''});
 	}
 
 	checkEmail(){
@@ -112,16 +95,19 @@ class Share extends React.Component{
 			if (type === 'PDF') {
 				const pdf = new jsPDF();
 				pdf.addImage(imgData, 'JPEG', 0, 0);
-				pdf.setProperties({
-			    title: "download",
-				});
-				const formData = new FormData();
-				formData.append('recipient', this.state.email);
-				formData.append('file', pdf.output(), 'download.pdf');
-				const token = localStorage.getItem('access_token'); 
-				// this.props.sendEmail(token, formData);
+				// pdf.setProperties({
+			 //    title: "download",
+				// });
+				const formData = {};
+				formData['recipient'] = this.state.email;
+				formData['file'] = pdf.output('datauri');
+				formData['filename'] = `${this.state.filename || 'download'}.${this.state.type}`;
+				const token = localStorage.getItem('access_token');
+				// console.log(pdf.output('datauri'));
+				console.log(formData['filename']);
+				this.props.sendEmail(token, formData);
 				// saving pdf to local
-				pdf.save('download.pdf');
+				// pdf.save('download.pdf');
 			} else {
 				const data = imgData.replace(/^data:image\/\w+;base64,/, "");
 				const buf = new Buffer(data, 'base64');
@@ -165,14 +151,21 @@ class Share extends React.Component{
 						<form onSubmit={()=>this.sendFile()}>
 							<div>
 								<label>Email: </label>
-								<input type='email' onChange={(e)=>this.handleInput(e)} value={this.state.email}/>
+								<input type='email' onChange={(e)=>this.handleInput(e, 'email')} value={this.state.email}/>
 							</div>
 							<span>{this.state.emailError}</span>
 							<div>
+								<label>Filename: </label>
+								<input type='text' placeholder='Please input the file name' onChange={(e)=>this.handleInput(e, 'filename')} value={this.state.filename}/>
+								<p>.{this.state.type}</p>
+							</div>
+							<div>
 								<label>Type: </label>
-								<select>
+								<select onChange={(e)=>this.changeType(e)}>
 									<option value='pdf'>PDF</option>
-									<option value='png'>PNG</option>
+									{/*
+										<option value='png'>PNG</option>
+									*/}
 								</select>
 							</div>
 							<input type='submit' className="btn btn-outline-primary btn-sm" value='Send' />

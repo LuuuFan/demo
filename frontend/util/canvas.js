@@ -1,7 +1,6 @@
 // import {fabric} from './fabric';
 
 let photoNum = 0;
-// let img, text, group;
 
 export const addShape = (selectedShape, canvas) => {
   let color = $(`#shape-color`).val();
@@ -69,7 +68,7 @@ export const addText = (canvas) => {
 export const deleteItem = (canvas) => {
   let activeObject = canvas.getActiveObject();
   if (activeObject && activeObject.type === 'image') photoNum--;
-  activeObject._objects ? activeObject._objects.forEach(obj => canvas.remove(obj)) : canvas.remove(activeObject);
+  activeObject && activeObject._objects ? activeObject._objects.forEach(obj => canvas.remove(obj)) : canvas.remove(activeObject);
 };
 
 export const addPhoto = (url, canvas) => {
@@ -79,16 +78,29 @@ export const addPhoto = (url, canvas) => {
     } else {
       let img = new Image();
       img.src = url;
+      img.crossOrigin = "Anonymous";
       img.setAttribute('crossorigin', 'anonymous');
-      img.onload = function() {
-        let image = new fabric.Image(img);
-        image.set({
-          left: 0 + 50 * photoNum,
-          top: 0 + 50 * photoNum,
-        }).scale(0.5);
-        canvas.add(image);
-        photoNum++;
-      };
+      img.onload = () => {
+        fabric.Image.fromURL(url, (img) => {
+          img.set({
+            left: 0 + 50 * photoNum,
+            top: 0 + 50 * photoNum,
+          }).scale(0.5);
+          canvas.add(img);
+          canvas.renderAll();
+          photoNum++;
+        }, {crossOrigin: 'anonymous'})
+      }
+      
+      // img.onload = function() {
+      //   let image = new fabric.Image(img);
+      //   image.set({
+      //     left: 0 + 50 * photoNum,
+      //     top: 0 + 50 * photoNum,
+      //   }).scale(0.5);
+      //   canvas.add(image);
+      //   photoNum++;
+      // };
     }
 };
 
@@ -171,8 +183,9 @@ export const changeColor = (canvas, activeObject, color) => {
 }
 
 
-// need refactory
 export const ungroupObject = (canvas, activeObject) => {
+  let img, text, group;
+  
   activeObject.toActiveSelection();
   canvas.requestRenderAll();
   let newActiveObjects = canvas.getActiveObject();
@@ -184,21 +197,21 @@ export const ungroupObject = (canvas, activeObject) => {
     }
   })
 
-  // canvas.setActiveObject(text);
-  // canvas.on('mouse:down', (e)=>{
-  //   let activeObject = canvas.getActiveObject();
-  //   if (!activeObject || activeObject.type === 'image' ) {
-  //     if (img && text) {
-  //       group = new fabric.Group([img, text]);
-  //       canvas.remove(img);
-  //       canvas.remove(text);
-  //       canvas.add(group);
-  //     }
-  //     img = null;
-  //     text = null;
-  //     group = null;
-  //   }
-  // });
+  canvas.setActiveObject(text);
+  canvas.on('mouse:down', (e)=>{
+    let activeObject = canvas.getActiveObject();
+    if (!activeObject || activeObject.type === 'image' ) {
+      if (img && text) {
+        group = new fabric.Group([img, text]);
+        canvas.remove(img);
+        canvas.remove(text);
+        canvas.add(group);
+      }
+      img = null;
+      text = null;
+      group = null;
+    }
+  });
 }
 
 export const changeOpacity = (obj, canvas, opacity) => {
@@ -217,23 +230,3 @@ export const changeTextStyle = (obj, canvas, style, size) => {
   canvas.renderAll();
 };
 
-export const changeGroupText = (obj, canvas, content) => {
-  const left = obj.left, top = obj.top;
-  let img, text, group;
-  obj.toActiveSelection();
-  canvas.requestRenderAll();
-  let newActiveObjects = canvas.getActiveObject();
-  newActiveObjects._objects.forEach(obj => {
-    if (obj.type === 'image') {
-      img = obj;
-    } else {
-      text = obj;
-    }
-  })
-  text.text = content;
-  group = new fabric.Group([img, text], {
-    left: left,
-    top: top,
-  });
-  canvas.setActiveObject(group).renderAll();
-};

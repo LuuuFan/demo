@@ -21,7 +21,6 @@ class Canvas extends React.Component{
 				width: 0,
 			},
 			fillChecked: true,
-			changeDialog: false,
 		};
 	}
 
@@ -39,16 +38,7 @@ class Canvas extends React.Component{
 			let activeObject = canvas.getActiveObject();
 			if (activeObject) {
 				canvas.bringToFront(activeObject);
-				// handle group, not perfect
-				// if ( activeObject.type === 'group') {
-				// 	canvasUtil.ungroupObject(canvas, activeObject);
-				// }
 			}
-		})
-
-		// testing
-		canvas.on('dblclick', (e)=>{
-			alert('capture double click!!');
 		})
 
 		// delete item on canvas
@@ -65,6 +55,13 @@ class Canvas extends React.Component{
 			canvasUtil.addPhoto(nextProps.img, this.state.canvas);
 		}
 	}
+
+	doubleClick(){
+		const activeObj = this.state.canvas.getActiveObject();
+		if (activeObj && activeObj.type === 'group') {
+			canvasUtil.ungroupObject(this.state.canvas, activeObj);
+		}
+	}	
 
 	handleInput(){
 		return (e) => {
@@ -126,18 +123,6 @@ class Canvas extends React.Component{
 													activeObj.type === 'rect' || 
 													activeObj.type === 'line')
 	}
-
-	textareaInput(){
-		return (e) => {
-			const activeObj = this.state.canvas.getActiveObject();
-			if (activeObj && activeObj.type === 'group') {
-				this.setState({changeDialog: true});
-				canvasUtil.changeGroupText(activeObj, this.state.canvas, e.target.value);
-			}
-		}
-	}
-
-	stopChangeDialog(){this.setState({changeDialog: false})}
 
 	render(){
 		return (
@@ -228,16 +213,11 @@ class Canvas extends React.Component{
 								</li>
 		        	</ol>
 		        	<div className=''>
-		        		<textarea placeholder='Add Comment Here' onChange={this.textareaInput()} onMouseLeave={()=>this.stopChangeDialog()}>
-		        		</textarea>
+		        		<textarea placeholder='Add Comment Here'></textarea>
 		        	</div>
 		        	<br />
 		        	<div id="button-wrapper">
-		        		{this.state.changeDialog ? 
-	            	<button type="button" className="btn btn-outline-primary btn-sm" id="addDialog">Changing comment...</button>
-		        			: 
 	            	<button type="button" className="btn btn-outline-primary btn-sm" id="addDialog" onClick={()=>canvasUtil.addDialog(this.state.selectedDialog, this.state.canvas)}>Add Dialog</button>
-		        		}
 		        	</div>
 		        </div>
 		        <div className={`tab-pane fade ${this.state.active === 'Text' ? 'show active' : ""}`} id="text" role="tabpanel" aria-labelledby="text-button">
@@ -313,8 +293,8 @@ class Canvas extends React.Component{
 			    <div className='buttons'>
 			    	<button type="button" className="btn btn-outline-primary btn-sm" onClick={()=>canvasUtil.resetCanvas(this.state.canvas)}>Reset Canvas</button>
 			    </div>
-			    <div className='container'>
-						<canvas ref='c' id='c'>
+			    <div className='container' onDoubleClick={()=>this.doubleClick()}>
+						<canvas ref='c' id='c' >
 						</canvas>
 			    </div>
 			</div>

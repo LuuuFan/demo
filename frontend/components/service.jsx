@@ -2,12 +2,22 @@ import React from 'react';
 // import {sendService} from '../util/service';
 
 class Service extends React.Component {
+	constructor(){
+		super();
+		this.state = {
+			sending: false,
+		}
+	}
 
 	sendService(){
+		this.setState({sending: true});
 		const imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
-		const data = imgData.replace(/^data:image\/\w+;base64,/, "");
-		// need to handle dropbox img CORS issue
-		console.log(data);
+		// for img png file
+		// const data = imgData.replace(/^data:image\/\w+;base64,/, "");
+		// console.log(data);
+		const pdf = new jsPDF();
+		pdf.addImage(imgData, 'JPEG', 0, 0);
+
 		const requestData = {
 	          "sysparm_action": "insert",
 	          "category": $("#cat-select").val(),
@@ -19,20 +29,20 @@ class Service extends React.Component {
 	          "caller_id":"admin",
 	          "assignment_group":$("#ag-select").val(),
 	          "assigned_to":$("#at-select").val(),
-	          
+	          // "file": pdf.output('datauri'),
 	        };
-    console.log(requestData.caller_id);
-    this.props.sendService(requestData).then(data => {
-    	// const obj = JSON.parse(data);
-     //  console.log(obj.records[0].number);
-     //  alert("Incident Number ====>"+obj.records[0].number);
-    });
+    this.props.sendService(requestData);
 	}
 
 	render(){
 		return(
 		<div id="table_left" >
 			{/*style={{'position': 'fixed', 'right': '0', 'top': '100px'}}*/}
+			{this.state.sending ? 
+				<div className='loading'>
+					<img src='app/assets/images/sending_email.gif' />
+				</div>
+			:
 	    <table id="table-1" className="table table-hover dataTable no-footer" cellSpacing="0" >
 	      {/*style={{'borderRadius':'5px', 'backgroundColor':'#2F425E','color':'#FFFFFF'}}*/}
 	      <tbody id='targetForRows'>
@@ -131,8 +141,9 @@ class Service extends React.Component {
           </tr>
 	      </tbody>
 	    </table>
+	  	}
 	 </div>
-		)
+	)
 	}
 }
 

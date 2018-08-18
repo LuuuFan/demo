@@ -2,11 +2,14 @@ import React from 'react';
 import Share from './share';
 class Header extends React.Component{
 
+	// alert(){
+	// 	alert('dobule click');
+	// }
 
 	render(){
 		const {receiveImg, sendEmail, message, clearMessage, sendService} = this.props;
 		return(
-			<header className='navbar navbar-expand navbar-light bg-light'>
+			<header className='navbar'>
 				<a href='/'>
 					<img src='app/assets/images/favicon.ico'/>
 					{/*

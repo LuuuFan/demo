@@ -1621,7 +1621,6 @@ Object.defineProperty(exports, "__esModule", {
 // import {fabric} from './fabric';
 
 var photoNum = 0;
-// let img, text, group;
 
 var addShape = exports.addShape = function addShape(selectedShape, canvas) {
   var color = $('#shape-color').val();
@@ -1689,7 +1688,7 @@ var addText = exports.addText = function addText(canvas) {
 var deleteItem = exports.deleteItem = function deleteItem(canvas) {
   var activeObject = canvas.getActiveObject();
   if (activeObject && activeObject.type === 'image') photoNum--;
-  activeObject._objects ? activeObject._objects.forEach(function (obj) {
+  activeObject && activeObject._objects ? activeObject._objects.forEach(function (obj) {
     return canvas.remove(obj);
   }) : canvas.remove(activeObject);
 };
@@ -1699,18 +1698,31 @@ var addPhoto = exports.addPhoto = function addPhoto(url, canvas) {
   if (activeObject && activeObject.type === 'image') {
     changeImage(url, canvas, activeObject);
   } else {
-    var _img = new Image();
-    _img.src = url;
-    _img.setAttribute('crossorigin', 'anonymous');
-    _img.onload = function () {
-      var image = new fabric.Image(_img);
-      image.set({
-        left: 0 + 50 * photoNum,
-        top: 0 + 50 * photoNum
-      }).scale(0.5);
-      canvas.add(image);
-      photoNum++;
+    var img = new Image();
+    img.src = url;
+    img.crossOrigin = "Anonymous";
+    img.setAttribute('crossorigin', 'anonymous');
+    img.onload = function () {
+      fabric.Image.fromURL(url, function (img) {
+        img.set({
+          left: 0 + 50 * photoNum,
+          top: 0 + 50 * photoNum
+        }).scale(0.5);
+        canvas.add(img);
+        canvas.renderAll();
+        photoNum++;
+      }, { crossOrigin: 'anonymous' });
     };
+
+    // img.onload = function() {
+    //   let image = new fabric.Image(img);
+    //   image.set({
+    //     left: 0 + 50 * photoNum,
+    //     top: 0 + 50 * photoNum,
+    //   }).scale(0.5);
+    //   canvas.add(image);
+    //   photoNum++;
+    // };
   }
 };
 
@@ -1790,8 +1802,11 @@ var changeColor = exports.changeColor = function changeColor(canvas, activeObjec
   canvas.renderAll();
 };
 
-// need refactory
 var ungroupObject = exports.ungroupObject = function ungroupObject(canvas, activeObject) {
+  var img = void 0,
+      text = void 0,
+      group = void 0;
+
   activeObject.toActiveSelection();
   canvas.requestRenderAll();
   var newActiveObjects = canvas.getActiveObject();
@@ -1803,21 +1818,21 @@ var ungroupObject = exports.ungroupObject = function ungroupObject(canvas, activ
     }
   });
 
-  // canvas.setActiveObject(text);
-  // canvas.on('mouse:down', (e)=>{
-  //   let activeObject = canvas.getActiveObject();
-  //   if (!activeObject || activeObject.type === 'image' ) {
-  //     if (img && text) {
-  //       group = new fabric.Group([img, text]);
-  //       canvas.remove(img);
-  //       canvas.remove(text);
-  //       canvas.add(group);
-  //     }
-  //     img = null;
-  //     text = null;
-  //     group = null;
-  //   }
-  // });
+  canvas.setActiveObject(text);
+  canvas.on('mouse:down', function (e) {
+    var activeObject = canvas.getActiveObject();
+    if (!activeObject || activeObject.type === 'image') {
+      if (img && text) {
+        group = new fabric.Group([img, text]);
+        canvas.remove(img);
+        canvas.remove(text);
+        canvas.add(group);
+      }
+      img = null;
+      text = null;
+      group = null;
+    }
+  });
 };
 
 var changeOpacity = exports.changeOpacity = function changeOpacity(obj, canvas, opacity) {
@@ -1834,30 +1849,6 @@ var changeTextStyle = exports.changeTextStyle = function changeTextStyle(obj, ca
   if (style) obj.set({ fontFamily: style });
   if (size) obj.set({ fontSize: size });
   canvas.renderAll();
-};
-
-var changeGroupText = exports.changeGroupText = function changeGroupText(obj, canvas, content) {
-  var left = obj.left,
-      top = obj.top;
-  var img = void 0,
-      text = void 0,
-      group = void 0;
-  obj.toActiveSelection();
-  canvas.requestRenderAll();
-  var newActiveObjects = canvas.getActiveObject();
-  newActiveObjects._objects.forEach(function (obj) {
-    if (obj.type === 'image') {
-      img = obj;
-    } else {
-      text = obj;
-    }
-  });
-  text.text = content;
-  group = new fabric.Group([img, text], {
-    left: left,
-    top: top
-  });
-  canvas.setActiveObject(group).renderAll();
 };
 
 /***/ }),
@@ -28040,6 +28031,12 @@ var Header = function (_React$Component) {
 
 	_createClass(Header, [{
 		key: 'render',
+
+
+		// alert(){
+		// 	alert('dobule click');
+		// }
+
 		value: function render() {
 			var _props = this.props,
 			    receiveImg = _props.receiveImg,
@@ -28050,7 +28047,7 @@ var Header = function (_React$Component) {
 
 			return _react2.default.createElement(
 				'header',
-				{ className: 'navbar navbar-expand navbar-light bg-light' },
+				{ className: 'navbar' },
 				_react2.default.createElement(
 					'a',
 					{ href: '/' },
@@ -28120,29 +28117,12 @@ var Share = function (_React$Component) {
 			modal: 'modal',
 			email: 'lu.fan@n3n.io',
 			emailError: '',
-			service: false
+			service: false,
+			filename: '',
+			type: 'pdf'
 		};
 		return _this;
 	}
-
-	// download(url, name){
-	// 	const a = document.createElement('a');
-	// 	a.href = url;
-	// 	// a.setAttribute('target', '_blank');
-	// 	a.setAttribute("download", name);
-
-	// 	document.body.appendChild(a);
-	// 	a.click();
-	// 	document.body.removeChild(a);
-	// }
-
-	// getSourceAsDOM(url){
-	// 	const xmlhttp = new XMLHttpRequest();
-	// 	xmlhttp.open('GET', url, false);
-	// 	xmlhttp.send();
-	// 	parser = new DOMParser();
-	// 	return parser.parseFromString(xmlhttp.responseText, 'text/html');
-	// }
 
 	_createClass(Share, [{
 		key: 'pushToLocal',
@@ -28218,8 +28198,10 @@ var Share = function (_React$Component) {
 		}
 	}, {
 		key: 'handleInput',
-		value: function handleInput(e) {
-			this.setState({ email: e.target.value, emailError: '' });
+		value: function handleInput(e, type) {
+			var _setState;
+
+			this.setState((_setState = {}, _defineProperty(_setState, type, e.target.value), _defineProperty(_setState, 'emailError', ''), _setState));
 		}
 	}, {
 		key: 'checkEmail',
@@ -28238,16 +28220,19 @@ var Share = function (_React$Component) {
 				if (type === 'PDF') {
 					var pdf = new jsPDF();
 					pdf.addImage(imgData, 'JPEG', 0, 0);
-					pdf.setProperties({
-						title: "download"
-					});
-					var formData = new FormData();
-					formData.append('recipient', this.state.email);
-					formData.append('file', pdf.output(), 'download.pdf');
+					// pdf.setProperties({
+					//    title: "download",
+					// });
+					var formData = {};
+					formData['recipient'] = this.state.email;
+					formData['file'] = pdf.output('datauri');
+					formData['filename'] = (this.state.filename || 'download') + '.' + this.state.type;
 					var token = localStorage.getItem('access_token');
-					// this.props.sendEmail(token, formData);
+					// console.log(pdf.output('datauri'));
+					console.log(formData['filename']);
+					this.props.sendEmail(token, formData);
 					// saving pdf to local
-					pdf.save('download.pdf');
+					// pdf.save('download.pdf');
 				} else {
 					var data = imgData.replace(/^data:image\/\w+;base64,/, "");
 					var buf = new Buffer(data, 'base64');
@@ -28332,7 +28317,7 @@ var Share = function (_React$Component) {
 									'Email: '
 								),
 								_react2.default.createElement('input', { type: 'email', onChange: function onChange(e) {
-										return _this4.handleInput(e);
+										return _this4.handleInput(e, 'email');
 									}, value: this.state.email })
 							),
 							_react2.default.createElement(
@@ -28346,20 +28331,35 @@ var Share = function (_React$Component) {
 								_react2.default.createElement(
 									'label',
 									null,
+									'Filename: '
+								),
+								_react2.default.createElement('input', { type: 'text', placeholder: 'Please input the file name', onChange: function onChange(e) {
+										return _this4.handleInput(e, 'filename');
+									}, value: this.state.filename }),
+								_react2.default.createElement(
+									'p',
+									null,
+									'.',
+									this.state.type
+								)
+							),
+							_react2.default.createElement(
+								'div',
+								null,
+								_react2.default.createElement(
+									'label',
+									null,
 									'Type: '
 								),
 								_react2.default.createElement(
 									'select',
-									null,
+									{ onChange: function onChange(e) {
+											return _this4.changeType(e);
+										} },
 									_react2.default.createElement(
 										'option',
 										{ value: 'pdf' },
 										'PDF'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'png' },
-										'PNG'
 									)
 								)
 							),
@@ -30469,16 +30469,25 @@ var Service = function (_React$Component) {
 	function Service() {
 		_classCallCheck(this, Service);
 
-		return _possibleConstructorReturn(this, (Service.__proto__ || Object.getPrototypeOf(Service)).apply(this, arguments));
+		var _this = _possibleConstructorReturn(this, (Service.__proto__ || Object.getPrototypeOf(Service)).call(this));
+
+		_this.state = {
+			sending: false
+		};
+		return _this;
 	}
 
 	_createClass(Service, [{
 		key: 'sendService',
 		value: function sendService() {
+			this.setState({ sending: true });
 			var imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
-			var data = imgData.replace(/^data:image\/\w+;base64,/, "");
-			// need to handle dropbox img CORS issue
-			console.log(data);
+			// for img png file
+			// const data = imgData.replace(/^data:image\/\w+;base64,/, "");
+			// console.log(data);
+			var pdf = new jsPDF();
+			pdf.addImage(imgData, 'JPEG', 0, 0);
+
 			var requestData = {
 				"sysparm_action": "insert",
 				"category": $("#cat-select").val(),
@@ -30490,14 +30499,9 @@ var Service = function (_React$Component) {
 				"caller_id": "admin",
 				"assignment_group": $("#ag-select").val(),
 				"assigned_to": $("#at-select").val()
-
+				// "file": pdf.output('datauri'),
 			};
-			console.log(requestData.caller_id);
-			this.props.sendService(requestData).then(function (data) {
-				// const obj = JSON.parse(data);
-				//  console.log(obj.records[0].number);
-				//  alert("Incident Number ====>"+obj.records[0].number);
-			});
+			this.props.sendService(requestData);
 		}
 	}, {
 		key: 'render',
@@ -30507,7 +30511,11 @@ var Service = function (_React$Component) {
 			return _react2.default.createElement(
 				'div',
 				{ id: 'table_left' },
-				_react2.default.createElement(
+				this.state.sending ? _react2.default.createElement(
+					'div',
+					{ className: 'loading' },
+					_react2.default.createElement('img', { src: 'app/assets/images/sending_email.gif' })
+				) : _react2.default.createElement(
 					'table',
 					{ id: 'table-1', className: 'table table-hover dataTable no-footer', cellSpacing: '0' },
 					_react2.default.createElement(
@@ -30858,8 +30866,7 @@ var Canvas = function (_React$Component) {
 				height: 0,
 				width: 0
 			},
-			fillChecked: true,
-			changeDialog: false
+			fillChecked: true
 		};
 		return _this;
 	}
@@ -30882,16 +30889,7 @@ var Canvas = function (_React$Component) {
 				var activeObject = canvas.getActiveObject();
 				if (activeObject) {
 					canvas.bringToFront(activeObject);
-					// handle group, not perfect
-					// if ( activeObject.type === 'group') {
-					// 	canvasUtil.ungroupObject(canvas, activeObject);
-					// }
 				}
-			});
-
-			// testing
-			canvas.on('dblclick', function (e) {
-				alert('capture double click!!');
 			});
 
 			// delete item on canvas
@@ -30906,6 +30904,14 @@ var Canvas = function (_React$Component) {
 		value: function componentWillReceiveProps(nextProps) {
 			if (nextProps.img && nextProps.img !== this.props.img) {
 				canvasUtil.addPhoto(nextProps.img, this.state.canvas);
+			}
+		}
+	}, {
+		key: 'doubleClick',
+		value: function doubleClick() {
+			var activeObj = this.state.canvas.getActiveObject();
+			if (activeObj && activeObj.type === 'group') {
+				canvasUtil.ungroupObject(this.state.canvas, activeObj);
 			}
 		}
 	}, {
@@ -30978,27 +30984,9 @@ var Canvas = function (_React$Component) {
 			return activeObj && (activeObj.type === 'circle' || activeObj.type === 'rect' || activeObj.type === 'line');
 		}
 	}, {
-		key: 'textareaInput',
-		value: function textareaInput() {
-			var _this4 = this;
-
-			return function (e) {
-				var activeObj = _this4.state.canvas.getActiveObject();
-				if (activeObj && activeObj.type === 'group') {
-					_this4.setState({ changeDialog: true });
-					canvasUtil.changeGroupText(activeObj, _this4.state.canvas, e.target.value);
-				}
-			};
-		}
-	}, {
-		key: 'stopChangeDialog',
-		value: function stopChangeDialog() {
-			this.setState({ changeDialog: false });
-		}
-	}, {
 		key: 'render',
 		value: function render() {
-			var _this5 = this;
+			var _this4 = this;
 
 			return _react2.default.createElement(
 				'div',
@@ -31009,7 +30997,7 @@ var Canvas = function (_React$Component) {
 					_react2.default.createElement(
 						'li',
 						{ className: 'nav-item ' + (this.state.active === 'Shapes' ? 'selected' : ''), onClick: function onClick(e) {
-								return _this5.handleClick(e);
+								return _this4.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-shapes' }),
 						_react2.default.createElement(
@@ -31021,7 +31009,7 @@ var Canvas = function (_React$Component) {
 					_react2.default.createElement(
 						'li',
 						{ className: 'nav-item ' + (this.state.active === 'Dialog' ? 'selected' : ''), onClick: function onClick(e) {
-								return _this5.handleClick(e);
+								return _this4.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-comment' }),
 						_react2.default.createElement(
@@ -31033,7 +31021,7 @@ var Canvas = function (_React$Component) {
 					_react2.default.createElement(
 						'li',
 						{ className: 'nav-item ' + (this.state.active === 'Text' ? 'selected' : ''), onClick: function onClick(e) {
-								return _this5.handleClick(e);
+								return _this4.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-font' }),
 						_react2.default.createElement(
@@ -31045,7 +31033,7 @@ var Canvas = function (_React$Component) {
 					_react2.default.createElement(
 						'li',
 						{ className: 'nav-item ' + (this.state.active === 'Background' ? 'selected' : ''), onClick: function onClick(e) {
-								return _this5.handleClick(e);
+								return _this4.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-layer-group' }),
 						_react2.default.createElement(
@@ -31072,21 +31060,21 @@ var Canvas = function (_React$Component) {
 							_react2.default.createElement(
 								'li',
 								{ className: 'shapes-item ' + (this.state.selectedShape === 'circle' ? 'ui-selected' : ''), id: 'circle', onClick: function onClick(e) {
-										return _this5.changeShape(e, 'selectedShape');
+										return _this4.changeShape(e, 'selectedShape');
 									} },
 								_react2.default.createElement('img', { src: 'app/assets/images/circle.png' })
 							),
 							_react2.default.createElement(
 								'li',
 								{ className: 'shapes-item ' + (this.state.selectedShape === 'rect' ? 'ui-selected' : ''), id: 'rect', onClick: function onClick(e) {
-										return _this5.changeShape(e, 'selectedShape');
+										return _this4.changeShape(e, 'selectedShape');
 									} },
 								_react2.default.createElement('img', { src: 'app/assets/images/rect.png' })
 							),
 							_react2.default.createElement(
 								'li',
 								{ className: 'shapes-item ' + (this.state.selectedShape === 'line' ? 'ui-selected' : ''), id: 'line', onClick: function onClick(e) {
-										return _this5.changeShape(e, 'selectedShape');
+										return _this4.changeShape(e, 'selectedShape');
 									} },
 								_react2.default.createElement('img', { src: 'app/assets/images/line.png' })
 							)
@@ -31102,7 +31090,7 @@ var Canvas = function (_React$Component) {
 							_react2.default.createElement(
 								'select',
 								{ className: 'form-control', id: 'shape-color', onChange: function onChange(e) {
-										return _this5.selectColor(e, 'shapeColor');
+										return _this4.selectColor(e, 'shapeColor');
 									} },
 								_react2.default.createElement(
 									'option',
@@ -31162,7 +31150,7 @@ var Canvas = function (_React$Component) {
 								'Fill'
 							),
 							_react2.default.createElement('input', { type: 'checkbox', checked: this.state.fillChecked, onChange: function onChange(e) {
-									return _this5.checkBox(e);
+									return _this4.checkBox(e);
 								} })
 						),
 						_react2.default.createElement(
@@ -31176,7 +31164,7 @@ var Canvas = function (_React$Component) {
 							_react2.default.createElement(
 								'select',
 								{ className: 'form-control', id: 'shape-opacity', onChange: function onChange(e) {
-										return _this5.changeOpacity(e);
+										return _this4.changeOpacity(e);
 									} },
 								_react2.default.createElement(
 									'option',
@@ -31207,7 +31195,7 @@ var Canvas = function (_React$Component) {
 							_react2.default.createElement(
 								'button',
 								{ type: 'button', className: 'btn btn-outline-primary btn-sm', id: 'addShape', onClick: function onClick() {
-										return canvasUtil.addShape(_this5.state.selectedShape, _this5.state.canvas);
+										return canvasUtil.addShape(_this4.state.selectedShape, _this4.state.canvas);
 									} },
 								'Add Shape'
 							)
@@ -31228,21 +31216,21 @@ var Canvas = function (_React$Component) {
 							_react2.default.createElement(
 								'li',
 								{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''), id: 'dialog_1', onClick: function onClick(e) {
-										return _this5.changeShape(e, 'selectedDialog');
+										return _this4.changeShape(e, 'selectedDialog');
 									} },
 								_react2.default.createElement('img', { src: 'app/assets/images/dialog_1.png' })
 							),
 							_react2.default.createElement(
 								'li',
 								{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_2' ? 'ui-selected' : ''), id: 'dialog_2', onClick: function onClick(e) {
-										return _this5.changeShape(e, 'selectedDialog');
+										return _this4.changeShape(e, 'selectedDialog');
 									} },
 								_react2.default.createElement('img', { src: 'app/assets/images/dialog_2.png' })
 							),
 							_react2.default.createElement(
 								'li',
 								{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_3' ? 'ui-selected' : ''), id: 'dialog_3', onClick: function onClick(e) {
-										return _this5.changeShape(e, 'selectedDialog');
+										return _this4.changeShape(e, 'selectedDialog');
 									} },
 								_react2.default.createElement('img', { src: 'app/assets/images/dialog_3.png' })
 							)
@@ -31250,22 +31238,16 @@ var Canvas = function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: '' },
-							_react2.default.createElement('textarea', { placeholder: 'Add Comment Here', onChange: this.textareaInput(), onMouseLeave: function onMouseLeave() {
-									return _this5.stopChangeDialog();
-								} })
+							_react2.default.createElement('textarea', { placeholder: 'Add Comment Here' })
 						),
 						_react2.default.createElement('br', null),
 						_react2.default.createElement(
 							'div',
 							{ id: 'button-wrapper' },
-							this.state.changeDialog ? _react2.default.createElement(
-								'button',
-								{ type: 'button', className: 'btn btn-outline-primary btn-sm', id: 'addDialog' },
-								'Changing comment...'
-							) : _react2.default.createElement(
+							_react2.default.createElement(
 								'button',
 								{ type: 'button', className: 'btn btn-outline-primary btn-sm', id: 'addDialog', onClick: function onClick() {
-										return canvasUtil.addDialog(_this5.state.selectedDialog, _this5.state.canvas);
+										return canvasUtil.addDialog(_this4.state.selectedDialog, _this4.state.canvas);
 									} },
 								'Add Dialog'
 							)
@@ -31291,7 +31273,7 @@ var Canvas = function (_React$Component) {
 							_react2.default.createElement(
 								'select',
 								{ className: 'form-control', id: 'text-color', onChange: function onChange(e) {
-										return _this5.selectColor(e, 'textColor');
+										return _this4.selectColor(e, 'textColor');
 									} },
 								_react2.default.createElement(
 									'option',
@@ -31353,7 +31335,7 @@ var Canvas = function (_React$Component) {
 							_react2.default.createElement(
 								'select',
 								{ className: 'form-control', id: 'text-style', onChange: function onChange(e) {
-										return _this5.changeStyle(e);
+										return _this4.changeStyle(e);
 									} },
 								_react2.default.createElement(
 									'option',
@@ -31410,7 +31392,7 @@ var Canvas = function (_React$Component) {
 							_react2.default.createElement(
 								'button',
 								{ type: 'button', className: 'btn btn-outline-primary btn-sm', id: 'addText', onClick: function onClick() {
-										return canvasUtil.addText(_this5.state.canvas);
+										return canvasUtil.addText(_this4.state.canvas);
 									} },
 								'Add Text'
 							)
@@ -31436,7 +31418,7 @@ var Canvas = function (_React$Component) {
 							_react2.default.createElement(
 								'select',
 								{ className: 'form-control', id: 'background-color', onChange: function onChange(e) {
-										return _this5.selectColor(e, 'backgroundColor');
+										return _this4.selectColor(e, 'backgroundColor');
 									} },
 								_react2.default.createElement(
 									'option',
@@ -31500,14 +31482,16 @@ var Canvas = function (_React$Component) {
 					_react2.default.createElement(
 						'button',
 						{ type: 'button', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
-								return canvasUtil.resetCanvas(_this5.state.canvas);
+								return canvasUtil.resetCanvas(_this4.state.canvas);
 							} },
 						'Reset Canvas'
 					)
 				),
 				_react2.default.createElement(
 					'div',
-					{ className: 'container' },
+					{ className: 'container', onDoubleClick: function onDoubleClick() {
+							return _this4.doubleClick();
+						} },
 					_react2.default.createElement('canvas', { ref: 'c', id: 'c' })
 				)
 			);
@@ -31542,7 +31526,12 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 var sendEmail = exports.sendEmail = function sendEmail(token, formData) {
 	return function (dispatch) {
 		return APIUtilMail.sendEmail(token, formData).then(function (res) {
-			return dispatch((0, _error.receiveError)(JSON.parse(res)));
+			debugger;
+		}
+		// 	res => dispatch(receiveError(JSON.parse(res)))
+		// }
+		).catch(function (err) {
+			debugger;
 		});
 	};
 };
@@ -31562,8 +31551,8 @@ var sendEmail = exports.sendEmail = function sendEmail(token, formData) {
 		url: 'http://localhost:8999/send_email',
 		method: 'POST',
 		data: formData,
-		processData: false,
-		contentType: false,
+		// processData: false,
+		// contentType: false,
 		beforeSend: function beforeSend(xhr) {
 			xhr.setRequestHeader('Authorization', 'Bearer ' + token);
 		}
@@ -31610,20 +31599,22 @@ var sendService = exports.sendService = function sendService(requestData) {
 
 
 Object.defineProperty(exports, "__esModule", {
-   value: true
+  value: true
 });
 var sendService = exports.sendService = function sendService(requestData) {
-   return $.ajax({
-      type: "POST",
-      url: "http://ec2-54-214-224-99.us-west-2.compute.amazonaws.com:8888/n3n/snow/tasks",
-      data: JSON.stringify(requestData),
-      dataType: 'html'
-      // success: function (data){
-      //     var obj = JSON.parse(data);
-      //     console.log(obj.records[0].number);
-      //     alert("Incident Number ====>"+obj.records[0].number);
-   });
+  return $.ajax({
+    type: "POST",
+    url: "http://ec2-54-214-224-99.us-west-2.compute.amazonaws.com:8888/n3n/snow/tasks",
+    data: JSON.stringify(requestData),
+    dataType: 'html'
+
+  });
 };
+
+// success: function (data){
+//     var obj = JSON.parse(data);
+//     console.log(obj.records[0].number);
+//     alert("Incident Number ====>"+obj.records[0].number);
 
 /***/ })
 /******/ ]);
