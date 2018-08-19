@@ -3,9 +3,9 @@
   overflow: hidden;
   z-index: 15;
   position: fixed;
-  left: 33%;
+  left: 30%;
   top: 100px;
-  width: 33%;
+  width: 40%;
   font-size: 14px;
   background-color: #2F425E;
   color: #FFFFFF;
@@ -19,44 +19,56 @@
     width: 100px;
     // background-color: transparent;
   }
-  tr.normal{
-    cursor: pointer;
-    background-color: #1C2A39;
-  }
-  tr.wv-pl{
-    td{
-      display: flex;
-      span{
-        width: 100px;
+  table{
+    width: 100%;
+    tr.normal{
+      cursor: pointer;
+      background-color: #1C2A39;
+      td{
+        padding: 8px 15px;
       }
-      #input-level{
-        border-bottom: 1px solid #59687E;
-      }
-      .input{
-        border: none;
-        color: #FFFFFF;
-        background: transparent;
-      }
-      .send-service-button{
-        width: 100px;
-        margin: 0 auto;
-      }
-      .send-service-button>button{
-        background-color: #5F7BF0;
-        cursor: pointer;
-        border-radius: 5px;
-        width: 100px;
-        padding: 3px;
-        text-align: center;
-      }
-      .send-service-button>button:hover{
-        font-weight: bold;
-        background-color: #3e5cd8;
-      }
-      select{
-        flex: 1;
-        option{
-          background-color: #2F425E;
+    }
+    tr.wv-pl{
+      td{
+        padding: 8px 15px;
+        display: flex;
+        align-items: center;
+        span{
+          width: 100px;
+        }
+        #input-level{
+          border-bottom: 1px solid #59687E;
+        }
+        .input{
+          border: none;
+          color: #FFFFFF;
+          background: transparent;
+        }
+        .attached-files{
+          i{
+            font-size: 24px;
+          }
+        }
+        .send-service-button{
+          width: 100%;
+        }
+        .send-service-button>button{
+          background-color: #5F7BF0;
+          cursor: pointer;
+          margin: 10px auto;
+          border-radius: 5px;
+          padding: 5px 25px;
+          text-align: center;
+        }
+        .send-service-button>button:hover{
+          font-weight: bold;
+          background-color: #3e5cd8;
+        }
+        select, input{
+          flex: 1;
+          option{
+            background-color: #2F425E;
+          }
         }
       }
     }

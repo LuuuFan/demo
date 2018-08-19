@@ -9,7 +9,7 @@ class Share extends React.Component{
 			modal: 'modal',
 			email: 'lu.fan@n3n.io',
 			emailError: '',
-			service: false,
+			service: true,
 			filename: '',
 			type: 'pdf',
 		};
@@ -171,7 +171,7 @@ class Share extends React.Component{
 							<input type='submit' className="btn" value='Send'/>
 						</form>
 					</div>
-            		<div onClick={()=>this.closeModal()} className="modal-screen"></div>
+      		<div onClick={()=>this.closeModal()} className="modal-screen"></div>
 				</div>
 			</div>
 		);

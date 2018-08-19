@@ -140,9 +140,9 @@ input[type=submit] {
   overflow: hidden;
   z-index: 15;
   position: fixed;
-  left: 33%;
+  left: 30%;
   top: 100px;
-  width: 33%;
+  width: 40%;
   font-size: 14px;
   background-color: #2F425E;
   color: #FFFFFF;
@@ -154,11 +154,18 @@ input[type=submit] {
   height: 100px;
   width: 100px;
 }
+#table_left table {
+  width: 100%;
+}
 #table_left tr.normal {
   cursor: pointer;
   background-color: #1C2A39;
 }
+#table_left tr.normal td {
+  padding: 5px 10px;
+}
 #table_left tr.wv-pl td {
+  padding: 5px 10px;
   display: flex;
 }
 #table_left tr.wv-pl td span {
@@ -188,10 +195,10 @@ input[type=submit] {
   font-weight: bold;
   background-color: #3e5cd8;
 }
-#table_left tr.wv-pl td select {
+#table_left tr.wv-pl td select, #table_left tr.wv-pl td input {
   flex: 1;
 }
-#table_left tr.wv-pl td select option {
+#table_left tr.wv-pl td select option, #table_left tr.wv-pl td input option {
   background-color: #2F425E;
 }
 
