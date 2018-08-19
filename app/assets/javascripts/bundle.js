@@ -1807,7 +1807,7 @@ var changeColor = exports.changeColor = function changeColor(canvas, activeObjec
   if (activeObject.type === 'i-text') {
     activeObject.setColor(color);
   } else {
-    if (activeObject.fill === 'transparent') {
+    if (activeObject.fill === 'transparent' || activeObject.type === 'line') {
       activeObject.set('stroke', color);
     } else {
       activeObject.set('fill', color);
