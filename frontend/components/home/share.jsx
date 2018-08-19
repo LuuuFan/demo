@@ -48,7 +48,7 @@ class Share extends React.Component{
 			extensions: ['.jpg', '.jpeg', '.png', '.gif'],
 			folderselect: false,
 		});
-		button.setAttribute('class', 'btn btn-outline-primary btn-sm')
+		button.setAttribute('class', 'btn')
 		document.querySelector('.share').appendChild(button);
 	}
 
@@ -122,7 +122,7 @@ class Share extends React.Component{
 		localStorage.removeItem('dropbox');
 		const button = document.querySelector('.dropbox-dropin-success');
 		if (button) {
-			button.setAttribute('class', 'btn btn-outline-primary btn-sm')
+			button.setAttribute('class', 'btn')
 		}
 	}
 
@@ -138,13 +138,13 @@ class Share extends React.Component{
 				{message.orderNum ? 
 					<div className='message'>Service sent successfully. Incident Number: {message.orderNum}</div>
 					: ""}
-				<button type="button" className="btn btn-outline-primary btn-sm" onClick={()=>this.toggleService()}>{this.state.service ? 'Close Service' : 'Send to Service'}</button>
+				<button type="button" className="btn" onClick={()=>this.toggleService()}>{this.state.service ? 'Close Service' : 'Send to Service'}</button>
 				{this.state.service ? 
 					<Service sendService={sendService}/>
 					: ''}
-				<button type="button" className="btn btn-outline-primary btn-sm" onClick={()=>this.openModal()}>Share</button>
+				<button type="button" className="btn" onClick={()=>this.openModal()}>Share</button>
 				{dropbox && Object.keys(dropbox) ? 
-				<button type="button" className="btn btn-outline-primary btn-sm" onClick={()=>this.clearDropbox()}>Clear Dropbox</button>
+				<button type="button" className="btn" onClick={()=>this.clearDropbox()}>Clear Dropbox</button>
 					: ""}
 				<div className={this.state.modal}>
 					<div className='share-canvas'>
@@ -168,7 +168,7 @@ class Share extends React.Component{
 									*/}
 								</select>
 							</div>
-							<input type='submit' className="btn btn-outline-primary btn-sm" value='Send' />
+							<input type='submit' className="btn" value='Send' />
 						</form>
 					</div>
             		<div onClick={()=>this.closeModal()} className="modal-screen"></div>

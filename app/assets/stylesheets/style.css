@@ -78,6 +78,7 @@ input[type=submit] {
   font-size: 24px;
   height: 6vh;
   display: flex;
+  color: #FFFFFF;
   background-color: #2F425E;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
   align-items: center;
@@ -102,15 +103,17 @@ input[type=submit] {
   padding: 5px 15px;
   font-size: 12px;
   position: fixed;
-  top: 70px;
+  top: 80px;
   left: 33%;
   width: 33%;
   border-radius: 5px;
   background: rgba(10, 186, 181, 0.2);
   transition: all 0.8s;
 }
-.navbar .header-buttons .share button {
+.navbar .header-buttons .share button.btn {
+  font-size: 14px;
   margin-right: 10px;
+  border: 1px;
 }
 .navbar .share {
   display: flex;
@@ -133,12 +136,15 @@ input[type=submit] {
   top: 100px;
   width: 33%;
   font-size: 14px;
+  background-color: #2F425E;
   color: #FFFFFF;
   animation: slide 2s forwards;
   -webkit-animation: slide 2s forwards;
 }
 #table_left .loading {
   z-index: 17;
+  height: 100px;
+  width: 100px;
 }
 #table_left tr.normal {
   cursor: pointer;

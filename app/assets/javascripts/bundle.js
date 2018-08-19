@@ -28162,7 +28162,7 @@ var Share = function (_React$Component) {
 				extensions: ['.jpg', '.jpeg', '.png', '.gif'],
 				folderselect: false
 			});
-			button.setAttribute('class', 'btn btn-outline-primary btn-sm');
+			button.setAttribute('class', 'btn');
 			document.querySelector('.share').appendChild(button);
 		}
 	}, {
@@ -28248,7 +28248,7 @@ var Share = function (_React$Component) {
 			localStorage.removeItem('dropbox');
 			var button = document.querySelector('.dropbox-dropin-success');
 			if (button) {
-				button.setAttribute('class', 'btn btn-outline-primary btn-sm');
+				button.setAttribute('class', 'btn');
 			}
 		}
 	}, {
@@ -28277,7 +28277,7 @@ var Share = function (_React$Component) {
 				) : "",
 				_react2.default.createElement(
 					'button',
-					{ type: 'button', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
+					{ type: 'button', className: 'btn', onClick: function onClick() {
 							return _this4.toggleService();
 						} },
 					this.state.service ? 'Close Service' : 'Send to Service'
@@ -28285,14 +28285,14 @@ var Share = function (_React$Component) {
 				this.state.service ? _react2.default.createElement(_service2.default, { sendService: sendService }) : '',
 				_react2.default.createElement(
 					'button',
-					{ type: 'button', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
+					{ type: 'button', className: 'btn', onClick: function onClick() {
 							return _this4.openModal();
 						} },
 					'Share'
 				),
 				dropbox && Object.keys(dropbox) ? _react2.default.createElement(
 					'button',
-					{ type: 'button', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
+					{ type: 'button', className: 'btn', onClick: function onClick() {
 							return _this4.clearDropbox();
 						} },
 					'Clear Dropbox'
@@ -28363,7 +28363,7 @@ var Share = function (_React$Component) {
 									)
 								)
 							),
-							_react2.default.createElement('input', { type: 'submit', className: 'btn btn-outline-primary btn-sm', value: 'Send' })
+							_react2.default.createElement('input', { type: 'submit', className: 'btn', value: 'Send' })
 						)
 					),
 					_react2.default.createElement('div', { onClick: function onClick() {

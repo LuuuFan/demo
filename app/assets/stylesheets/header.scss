@@ -1,10 +1,11 @@
 $color-darkblue: #2F425E;
-$font-white: #ffffff;
+$font-white: #FFFFFF;
 
 .navbar{
 	font-size: 24px;
   height: 6vh;
   display: flex;
+  color: $font-white;
   background-color: $color-darkblue;
   box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
   align-items: center;
@@ -26,16 +27,17 @@ $font-white: #ffffff;
         padding: 5px 15px; 
         font-size: 12px;
         position: fixed;
-        top: 70px;
+        top: 80px;
         left: 33%;
         width: 33%;
         border-radius: 5px;
         background: rgba(10, 186, 181, 0.2);
         transition: all .8s;
-        // background-color: #0abab5;
       }
-      button{
+      button.btn{
+      	font-size: 14px;
         margin-right: 10px;
+        border: 1px solid $font-white;
       }
     }
   }
