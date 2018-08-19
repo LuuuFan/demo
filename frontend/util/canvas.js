@@ -68,7 +68,11 @@ export const addText = (canvas) => {
 export const deleteItem = (canvas) => {
   let activeObject = canvas.getActiveObject();
   if (activeObject && activeObject.type === 'image') photoNum--;
-  activeObject && activeObject._objects ? activeObject._objects.forEach(obj => canvas.remove(obj)) : canvas.remove(activeObject);
+  if (activeObject && (activeObject.type === 'group' || !activeObject._objects)) {
+    canvas.remove(activeObject);
+  } else if (activeObject && activeObject._objects && activeObject._objects.length){
+    activeObject._objects.forEach(obj => canvas.remove(obj));
+  }
 };
 
 export const addPhoto = (url, canvas) => {

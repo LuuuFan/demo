@@ -30,10 +30,12 @@ button:hover{
 .img-group{
 	position: fixed;
   bottom: 15px;
-  left: 11vw;  
+  left: 140px;
+  height: 140px;
   margin: 0px auto;
+  display: flex;
+  justify-content: flex-start;
 	.img-container{
-		float: left;
 		width: 90px;
     height: 135px;
 		margin-right: 10px;
@@ -53,7 +55,7 @@ button:hover{
 .buttons{
   position: fixed;
   bottom: 160px;
-  left: 11vw
+  left: 140px;
 }
 
 .canvas-main{
@@ -102,6 +104,9 @@ button:hover{
       min-width: 210px;
       margin: 15px;
       text-align: center;
+      button{
+        margin-top: 20px;
+      }
       h2{
         font-size: 24px;
         font-weight: bold;
@@ -145,8 +150,13 @@ button:hover{
           font-weight: bold;
           text-align: left;
           font-size:14px;
-          min-width: 40px;
+          min-width: 65px;
           margin-right: 10px;
+        }
+        input{
+          border: 1px solid lightgray;
+          padding: 8px;
+          border-radius: 5px;
         }
       }
     }
@@ -164,7 +174,7 @@ button:hover{
       width: 30px;
       margin-left: 10px;
       border-radius: 5px;
-      border: solid 1px black;
+      box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
     }
 
     .container{
@@ -173,15 +183,13 @@ button:hover{
       margin-top: 15px;
       display: flex;
       canvas{
-        box-shadow: 0 8px 6px -6px black;
+        overflow: hidden;
+        border-radius: 5px;
+        box-shadow: 0 8px 6px -6px rgba(0,0,0,0.2);
       }
     } 
-    
   }
-
-   
 }
-
 
 .modal-screen {
   position: fixed;

@@ -13,7 +13,7 @@ class Canvas extends React.Component{
 			canvas: {},
 			shapeColor: 'Black',
 			textColor: 'Black',
-			backgroundColor: 'white',
+			backgroundColor: 'lightgray',
 			selectedShape: 'circle',
 			selectedDialog: 'dialog_1',
 			backgroundImg: {
@@ -274,6 +274,7 @@ class Canvas extends React.Component{
 						<div className="form-inline d-flex">
 							<label htmlFor="background-color">Color: </label>
 							<select className="form-control" id="background-color" onChange={(e)=>this.selectColor(e, 'backgroundColor')}>
+							  <option value="lightgray">Lightgray</option>
 							  <option value="white">White</option>
 							  <option value="red">Red</option>
 							  <option value="orange">Orange</option>
@@ -283,7 +284,6 @@ class Canvas extends React.Component{
 							  <option value="brown">Brown</option>
 							  <option value="purple">Purple</option>
 							  <option value="black">Black</option>
-							  <option value="lightgray">Lightgray</option>
 							</select>
 							<div className="selected-color" style={{backgroundColor: `${this.state.backgroundColor}`}}>
 							</div>

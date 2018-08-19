@@ -1688,9 +1688,13 @@ var addText = exports.addText = function addText(canvas) {
 var deleteItem = exports.deleteItem = function deleteItem(canvas) {
   var activeObject = canvas.getActiveObject();
   if (activeObject && activeObject.type === 'image') photoNum--;
-  activeObject && activeObject._objects ? activeObject._objects.forEach(function (obj) {
-    return canvas.remove(obj);
-  }) : canvas.remove(activeObject);
+  if (activeObject && (activeObject.type === 'group' || !activeObject._objects)) {
+    canvas.remove(activeObject);
+  } else if (activeObject && activeObject._objects && activeObject._objects.length) {
+    activeObject._objects.forEach(function (obj) {
+      return canvas.remove(obj);
+    });
+  }
 };
 
 var addPhoto = exports.addPhoto = function addPhoto(url, canvas) {
@@ -30918,7 +30922,7 @@ var Canvas = function (_React$Component) {
 			canvas: {},
 			shapeColor: 'Black',
 			textColor: 'Black',
-			backgroundColor: 'white',
+			backgroundColor: 'lightgray',
 			selectedShape: 'circle',
 			selectedDialog: 'dialog_1',
 			backgroundImg: {
@@ -31487,6 +31491,11 @@ var Canvas = function (_React$Component) {
 										} },
 									_react2.default.createElement(
 										'option',
+										{ value: 'lightgray' },
+										'Lightgray'
+									),
+									_react2.default.createElement(
+										'option',
 										{ value: 'white' },
 										'White'
 									),
@@ -31529,11 +31538,6 @@ var Canvas = function (_React$Component) {
 										'option',
 										{ value: 'black' },
 										'Black'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'lightgray' },
-										'Lightgray'
 									)
 								),
 								_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.backgroundColor } })
