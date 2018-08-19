@@ -27843,8 +27843,8 @@ var SessionForm = function (_React$Component) {
 			};
 		}
 	}, {
-		key: 'handleClick',
-		value: function handleClick(e) {
+		key: 'handleSubmit',
+		value: function handleSubmit(e) {
 			var _this3 = this;
 
 			e.preventDefault();
@@ -27891,16 +27891,16 @@ var SessionForm = function (_React$Component) {
 				'div',
 				{ className: 'session-main' },
 				_react2.default.createElement(
+					'h2',
+					null,
+					text
+				),
+				_react2.default.createElement(
 					'div',
 					{ className: 'session-form' },
-					_react2.default.createElement(
-						'h2',
-						null,
-						text
-					),
 					currentUser && currentUser.message && currentUser.message.startsWith('User') ? _react2.default.createElement(
 						'div',
-						null,
+						{ className: 'notification' },
 						_react2.default.createElement(
 							'span',
 							null,
@@ -27941,7 +27941,9 @@ var SessionForm = function (_React$Component) {
 					) : "",
 					_react2.default.createElement(
 						'form',
-						{ className: 'form-signin' },
+						{ className: 'form-signin', onSubmit: function onSubmit(e) {
+								return _this4.handleSubmit(e);
+							} },
 						_react2.default.createElement('input', { id: 'username', className: 'form-control', type: 'text', onChange: this.handleInput('username'), value: this.state.username, placeholder: 'username' }),
 						_react2.default.createElement(
 							'span',
@@ -27954,13 +27956,7 @@ var SessionForm = function (_React$Component) {
 							null,
 							this.state.passwordError
 						),
-						_react2.default.createElement(
-							'button',
-							{ className: 'btn btn-primary', onClick: function onClick(e) {
-									return _this4.handleClick(e);
-								} },
-							text
-						)
+						_react2.default.createElement('input', { type: 'submit', value: text, align: 'middle' })
 					),
 					formType === 'signup' ? _react2.default.createElement(
 						'small',

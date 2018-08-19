@@ -19,7 +19,7 @@ class SessionForm extends React.Component {
 	}
 
 
-	handleClick(e){
+	handleSubmit(e){
 		e.preventDefault();
 		if (this.props.error || this.props.error) {
 			this.props.clearError();
@@ -55,9 +55,10 @@ class SessionForm extends React.Component {
 		const text = formType === 'signup' ? 'Sign Up' : 'Log In';
 		return (
 			<div className='session-main'>
+				<h2>{text}</h2>
 				<div className='session-form'>
-					<h2>{text}</h2>
-					{currentUser && currentUser.message && currentUser.message.startsWith('User') ? <div>
+					{currentUser && currentUser.message && currentUser.message.startsWith('User') ? 
+					<div className='notification'>
 						<span>{currentUser.message}, please login</span>
 					</div> : ""}
 					{error.error ? 
@@ -71,12 +72,12 @@ class SessionForm extends React.Component {
 							<span onClick={()=>this.clearError()}>&times;</span>
 						</div>
 					: ""}
-					<form className='form-signin'>
+					<form className='form-signin' onSubmit={(e)=>this.handleSubmit(e)}>
 						<input id='username' className='form-control' type='text' onChange={this.handleInput('username')}  value={this.state.username} placeholder='username'/>
 						<span>{this.state.usernameError}</span>
 						<input id='password' className='form-control' type='password' onChange={this.handleInput('password')} value={this.state.password} placeholder='password'/>
 						<span>{this.state.passwordError}</span>
-						<button className='btn btn-primary' onClick={(e)=>this.handleClick(e)}>{text}</button>
+						<input type='submit' value={text} align='middle'/>
 					</form>
 					{formType === 'signup' ?
 						<small className='text-muted'>Already have an account? <a href='/#/login'>Log In</a></small>
