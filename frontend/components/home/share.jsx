@@ -6,7 +6,7 @@ class Share extends React.Component{
 	constructor(){
 		super();
 		this.state = {
-			modalShare: 'is-open',
+			modalShare: 'modal',
 			modalList: 'modal',
 			servicenow: 'modal',
 			email: 'lu.fan@n3n.io',
@@ -176,7 +176,7 @@ class Share extends React.Component{
 							<div>
 								<label>Filename: </label>
 								<input type='text' placeholder='Please input the file name' onChange={(e)=>this.handleInput(e, 'filename')} value={this.state.filename}/>
-								<p>.{this.state.type}</p>
+								<p>   .{this.state.type}</p>
 							</div>
 							<div>
 								<label>Type: </label>

@@ -1,15 +1,18 @@
-$color-darkblue: #2F425E;
+
+$color-darkblue: #1C2A39;
+$color-blue: #2F425E;
 $font-white: #FFFFFF;
 $font-hover: #278efc;
-
 
 .navbar{
   height: 6vh;
   display: flex;
   color: $font-white;
   background-color: $color-darkblue;
+  border-bottom: 5px solid $color-blue;
   box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
   align-items: center;
+
   a{	
     display: flex;
     font-size: 24px;

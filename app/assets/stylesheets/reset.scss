@@ -1,7 +1,7 @@
 /* PHASE 0: Reset */
 
 html, body, header, nav, h1, a,
-ul, li, strong, main, button, i,
+ul, ol, li, strong, main, button, i,
 section, img, div, h2, p, form,
 fieldset, label, input, textarea,
 span, article, footer, time, small {
@@ -19,7 +19,7 @@ span, article, footer, time, small {
   font-family: 'Robot', sans-serif;
 }
 
-ul {
+ul, ol {
   list-style: none;
 }
 

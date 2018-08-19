@@ -28110,7 +28110,7 @@ var Share = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (Share.__proto__ || Object.getPrototypeOf(Share)).call(this));
 
 		_this.state = {
-			modalShare: 'is-open',
+			modalShare: 'modal',
 			modalList: 'modal',
 			servicenow: 'modal',
 			email: 'lu.fan@n3n.io',
@@ -28375,7 +28375,7 @@ var Share = function (_React$Component) {
 								_react2.default.createElement(
 									'p',
 									null,
-									'.',
+									'   .',
 									this.state.type
 								)
 							),
@@ -31049,10 +31049,10 @@ var Canvas = function (_React$Component) {
 
 			return _react2.default.createElement(
 				'div',
-				{ className: '' },
+				{ className: 'canvas-main' },
 				_react2.default.createElement(
 					'ul',
-					{ className: 'nav nav-tabs', id: 'sidebar', role: 'tablist' },
+					{ id: 'sidebar', role: 'tablist' },
 					_react2.default.createElement(
 						'li',
 						{ className: 'nav-item ' + (this.state.active === 'Shapes' ? 'selected' : ''), onClick: function onClick(e) {
@@ -31091,6 +31091,18 @@ var Canvas = function (_React$Component) {
 					),
 					_react2.default.createElement(
 						'li',
+						{ className: 'nav-item ' + (this.state.active === 'Image' ? 'selected' : ''), onClick: function onClick(e) {
+								return _this4.handleClick(e);
+							} },
+						_react2.default.createElement('i', { className: 'far fa-image' }),
+						_react2.default.createElement(
+							'div',
+							{ className: 'nav-text' },
+							'Image'
+						)
+					),
+					_react2.default.createElement(
+						'li',
 						{ className: 'nav-item ' + (this.state.active === 'Background' ? 'selected' : ''), onClick: function onClick(e) {
 								return _this4.handleClick(e);
 							} },
@@ -31104,435 +31116,446 @@ var Canvas = function (_React$Component) {
 				),
 				_react2.default.createElement(
 					'div',
-					{ className: 'tab-content', id: 'side-content' },
+					{ className: 'side-content-canvas' },
 					_react2.default.createElement(
 						'div',
-						{ className: 'tab-pane fade ' + (this.state.active === 'Shapes' ? 'show active' : ""), id: 'shapes', role: 'tabpanel', 'aria-labelledby': 'shapes-button' },
-						_react2.default.createElement(
-							'label',
-							null,
-							'Shapes'
-						),
-						_react2.default.createElement(
-							'ol',
-							{ id: 'shapes-list' },
-							_react2.default.createElement(
-								'li',
-								{ className: 'shapes-item ' + (this.state.selectedShape === 'circle' ? 'ui-selected' : ''), id: 'circle', onClick: function onClick(e) {
-										return _this4.changeShape(e, 'selectedShape');
-									} },
-								_react2.default.createElement('img', { src: 'app/assets/images/circle.png' })
-							),
-							_react2.default.createElement(
-								'li',
-								{ className: 'shapes-item ' + (this.state.selectedShape === 'rect' ? 'ui-selected' : ''), id: 'rect', onClick: function onClick(e) {
-										return _this4.changeShape(e, 'selectedShape');
-									} },
-								_react2.default.createElement('img', { src: 'app/assets/images/rect.png' })
-							),
-							_react2.default.createElement(
-								'li',
-								{ className: 'shapes-item ' + (this.state.selectedShape === 'line' ? 'ui-selected' : ''), id: 'line', onClick: function onClick(e) {
-										return _this4.changeShape(e, 'selectedShape');
-									} },
-								_react2.default.createElement('img', { src: 'app/assets/images/line.png' })
-							)
-						),
-						_react2.default.createElement(
+						{ className: 'tab-content', id: 'side-content' },
+						this.state.active === 'Shapes' ? _react2.default.createElement(
 							'div',
-							{ className: 'form-inline d-flex' },
+							{ id: 'shapes', role: 'tabpanel', 'aria-labelledby': 'shapes-button' },
 							_react2.default.createElement(
-								'label',
-								{ htmlFor: 'shape-color' },
-								'Color'
+								'h2',
+								null,
+								'Shapes'
 							),
 							_react2.default.createElement(
-								'select',
-								{ className: 'form-control', id: 'shape-color', onChange: function onChange(e) {
-										return _this4.selectColor(e, 'shapeColor');
-									} },
+								'ol',
+								{ id: 'shapes-list' },
 								_react2.default.createElement(
-									'option',
-									{ value: 'black' },
-									'Black'
+									'li',
+									{ className: 'shapes-item ' + (this.state.selectedShape === 'circle' ? 'ui-selected' : ''), id: 'circle', onClick: function onClick(e) {
+											return _this4.changeShape(e, 'selectedShape');
+										} },
+									_react2.default.createElement('img', { src: 'app/assets/images/circle.png' })
 								),
 								_react2.default.createElement(
-									'option',
-									{ value: 'red' },
-									'Red'
+									'li',
+									{ className: 'shapes-item ' + (this.state.selectedShape === 'rect' ? 'ui-selected' : ''), id: 'rect', onClick: function onClick(e) {
+											return _this4.changeShape(e, 'selectedShape');
+										} },
+									_react2.default.createElement('img', { src: 'app/assets/images/rect.png' })
 								),
 								_react2.default.createElement(
-									'option',
-									{ value: 'orange' },
-									'Orange'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'yellow' },
-									'Yellow'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'green' },
-									'Green'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'blue' },
-									'Blue'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'brown' },
-									'Brown'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'purple' },
-									'Purple'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'white' },
-									'White'
+									'li',
+									{ className: 'shapes-item ' + (this.state.selectedShape === 'line' ? 'ui-selected' : ''), id: 'line', onClick: function onClick(e) {
+											return _this4.changeShape(e, 'selectedShape');
+										} },
+									_react2.default.createElement('img', { src: 'app/assets/images/line.png' })
 								)
 							),
-							_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.shapeColor } })
-						),
-						_react2.default.createElement('br', null),
-						_react2.default.createElement(
-							'div',
-							{ className: 'form-inline d-flex', id: 'shape-fill' },
 							_react2.default.createElement(
-								'label',
-								{ htmlFor: 'shape-fill' },
-								'Fill'
+								'div',
+								{ className: 'form-inline' },
+								_react2.default.createElement(
+									'label',
+									{ htmlFor: 'shape-color' },
+									'Color'
+								),
+								_react2.default.createElement(
+									'select',
+									{ className: 'form-control', id: 'shape-color', onChange: function onChange(e) {
+											return _this4.selectColor(e, 'shapeColor');
+										} },
+									_react2.default.createElement(
+										'option',
+										{ value: 'black' },
+										'Black'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'red' },
+										'Red'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'orange' },
+										'Orange'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'yellow' },
+										'Yellow'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'green' },
+										'Green'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'blue' },
+										'Blue'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'brown' },
+										'Brown'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'purple' },
+										'Purple'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'white' },
+										'White'
+									)
+								),
+								_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.shapeColor } })
 							),
-							_react2.default.createElement('input', { type: 'checkbox', checked: this.state.fillChecked, onChange: function onChange(e) {
-									return _this4.checkBox(e);
-								} })
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: 'form-inline d-flex' },
 							_react2.default.createElement(
-								'label',
-								{ htmlFor: 'shape-opacity' },
-								'Opacity: '
+								'div',
+								{ className: 'form-inline d-flex', id: 'shape-fill' },
+								_react2.default.createElement(
+									'label',
+									{ htmlFor: 'shape-fill' },
+									'Fill'
+								),
+								_react2.default.createElement('input', { type: 'checkbox', checked: this.state.fillChecked, onChange: function onChange(e) {
+										return _this4.checkBox(e);
+									} })
 							),
 							_react2.default.createElement(
-								'select',
-								{ className: 'form-control', id: 'shape-opacity', onChange: function onChange(e) {
-										return _this4.changeOpacity(e);
-									} },
+								'div',
+								{ className: 'form-inline d-flex' },
 								_react2.default.createElement(
-									'option',
-									{ value: '1' },
-									'100%'
+									'label',
+									{ htmlFor: 'shape-opacity' },
+									'Opacity: '
 								),
 								_react2.default.createElement(
-									'option',
-									{ value: '.75' },
-									'75%'
-								),
+									'select',
+									{ className: 'form-control', id: 'shape-opacity', onChange: function onChange(e) {
+											return _this4.changeOpacity(e);
+										} },
+									_react2.default.createElement(
+										'option',
+										{ value: '1' },
+										'100%'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '.75' },
+										'75%'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '.5' },
+										'50%'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '.25' },
+										'25%'
+									)
+								)
+							),
+							_react2.default.createElement('br', null),
+							_react2.default.createElement(
+								'div',
+								{ id: 'button-wrapper' },
 								_react2.default.createElement(
-									'option',
-									{ value: '.5' },
-									'50%'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: '.25' },
-									'25%'
+									'button',
+									{ type: 'button', id: 'addShape', onClick: function onClick() {
+											return canvasUtil.addShape(_this4.state.selectedShape, _this4.state.canvas);
+										} },
+									'Add Shape'
 								)
 							)
-						),
-						_react2.default.createElement('br', null),
-						_react2.default.createElement(
+						) : "",
+						this.state.active === 'Dialog' ? _react2.default.createElement(
 							'div',
-							{ id: 'button-wrapper' },
+							{ id: 'dialog', role: 'tabpanel', 'aria-labelledby': 'dialog-button' },
 							_react2.default.createElement(
-								'button',
-								{ type: 'button', className: 'btn btn-outline-primary btn-sm', id: 'addShape', onClick: function onClick() {
-										return canvasUtil.addShape(_this4.state.selectedShape, _this4.state.canvas);
-									} },
-								'Add Shape'
+								'h2',
+								null,
+								'Dialog'
+							),
+							_react2.default.createElement(
+								'ol',
+								{ id: 'shapes-list' },
+								_react2.default.createElement(
+									'li',
+									{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''), id: 'dialog_1', onClick: function onClick(e) {
+											return _this4.changeShape(e, 'selectedDialog');
+										} },
+									_react2.default.createElement('img', { src: 'app/assets/images/dialog_1.png' })
+								),
+								_react2.default.createElement(
+									'li',
+									{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_2' ? 'ui-selected' : ''), id: 'dialog_2', onClick: function onClick(e) {
+											return _this4.changeShape(e, 'selectedDialog');
+										} },
+									_react2.default.createElement('img', { src: 'app/assets/images/dialog_2.png' })
+								),
+								_react2.default.createElement(
+									'li',
+									{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_3' ? 'ui-selected' : ''), id: 'dialog_3', onClick: function onClick(e) {
+											return _this4.changeShape(e, 'selectedDialog');
+										} },
+									_react2.default.createElement('img', { src: 'app/assets/images/dialog_3.png' })
+								)
+							),
+							_react2.default.createElement('textarea', { placeholder: 'Add Comment Here' }),
+							_react2.default.createElement(
+								'div',
+								{ id: 'button-wrapper' },
+								_react2.default.createElement(
+									'button',
+									{ type: 'button', id: 'addDialog', onClick: function onClick() {
+											return canvasUtil.addDialog(_this4.state.selectedDialog, _this4.state.canvas);
+										} },
+									'Add Dialog'
+								)
 							)
-						)
+						) : "",
+						this.state.active === 'Text' ? _react2.default.createElement(
+							'div',
+							{ id: 'text', role: 'tabpanel', 'aria-labelledby': 'text-button' },
+							_react2.default.createElement(
+								'h2',
+								null,
+								'Text'
+							),
+							_react2.default.createElement('br', null),
+							_react2.default.createElement(
+								'div',
+								{ className: 'form-inline d-flex' },
+								_react2.default.createElement(
+									'label',
+									{ htmlFor: 'text-color' },
+									'Color: '
+								),
+								_react2.default.createElement(
+									'select',
+									{ className: 'form-control', id: 'text-color', onChange: function onChange(e) {
+											return _this4.selectColor(e, 'textColor');
+										} },
+									_react2.default.createElement(
+										'option',
+										{ value: 'black' },
+										'Black'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'red' },
+										'Red'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'orange' },
+										'Orange'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'yellow' },
+										'Yellow'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'green' },
+										'Green'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'blue' },
+										'Blue'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'brown' },
+										'Brown'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'purple' },
+										'Purple'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'white' },
+										'White'
+									)
+								),
+								_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.textColor } })
+							),
+							_react2.default.createElement('br', null),
+							_react2.default.createElement(
+								'div',
+								{ className: 'form-inline d-flex' },
+								_react2.default.createElement(
+									'label',
+									{ htmlFor: 'text-style' },
+									'Style: '
+								),
+								_react2.default.createElement(
+									'select',
+									{ className: 'form-control', id: 'text-style', onChange: function onChange(e) {
+											return _this4.changeStyle(e);
+										} },
+									_react2.default.createElement(
+										'option',
+										{ value: 'Times' },
+										'Times'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Georgia' },
+										'Georgia'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Arial' },
+										'Arial'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Tahoma' },
+										'Tahoma'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Verdana' },
+										'Verdana'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Courier' },
+										'Courier'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Monaco' },
+										'Monaco'
+									)
+								)
+							),
+							_react2.default.createElement('br', null),
+							_react2.default.createElement(
+								'div',
+								{ className: 'form-inline d-flex' },
+								_react2.default.createElement(
+									'label',
+									{ htmlFor: 'text-style' },
+									'Size(px): \xA0 '
+								),
+								_react2.default.createElement('input', { id: 'text-size', type: 'number', step: '1', min: '1', max: '50', value: this.state.textSize, onChange: this.handleInput() })
+							),
+							_react2.default.createElement(
+								'div',
+								{ id: 'button-wrapper' },
+								_react2.default.createElement(
+									'button',
+									{ type: 'button', id: 'addText', onClick: function onClick() {
+											return canvasUtil.addText(_this4.state.canvas);
+										} },
+									'Add Text'
+								)
+							)
+						) : "",
+						this.state.active === 'Background' ? _react2.default.createElement(
+							'div',
+							{ id: 'background', role: 'tabpanel', 'aria-labelledby': 'background-button' },
+							_react2.default.createElement(
+								'h2',
+								null,
+								'Background Color'
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'form-inline d-flex' },
+								_react2.default.createElement(
+									'label',
+									{ htmlFor: 'background-color' },
+									'Color: '
+								),
+								_react2.default.createElement(
+									'select',
+									{ className: 'form-control', id: 'background-color', onChange: function onChange(e) {
+											return _this4.selectColor(e, 'backgroundColor');
+										} },
+									_react2.default.createElement(
+										'option',
+										{ value: 'white' },
+										'White'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'red' },
+										'Red'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'orange' },
+										'Orange'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'yellow' },
+										'Yellow'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'green' },
+										'Green'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'blue' },
+										'Blue'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'brown' },
+										'Brown'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'purple' },
+										'Purple'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'black' },
+										'Black'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'lightgray' },
+										'Lightgray'
+									)
+								),
+								_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.backgroundColor } })
+							),
+							_react2.default.createElement('br', null)
+						) : "",
+						this.state.active === 'Image' ? _react2.default.createElement(
+							'div',
+							{ id: 'side-content-image' },
+							_react2.default.createElement(
+								'h2',
+								null,
+								'Image'
+							)
+						) : ""
 					),
 					_react2.default.createElement(
 						'div',
-						{ className: 'tab-pane fade ' + (this.state.active === 'Dialog' ? 'show active' : ""), id: 'dialog', role: 'tabpanel', 'aria-labelledby': 'dialog-button' },
-						_react2.default.createElement(
-							'label',
-							null,
-							'Dialog'
-						),
-						_react2.default.createElement('br', null),
-						_react2.default.createElement(
-							'ol',
-							{ id: 'shapes-list' },
-							_react2.default.createElement(
-								'li',
-								{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''), id: 'dialog_1', onClick: function onClick(e) {
-										return _this4.changeShape(e, 'selectedDialog');
-									} },
-								_react2.default.createElement('img', { src: 'app/assets/images/dialog_1.png' })
-							),
-							_react2.default.createElement(
-								'li',
-								{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_2' ? 'ui-selected' : ''), id: 'dialog_2', onClick: function onClick(e) {
-										return _this4.changeShape(e, 'selectedDialog');
-									} },
-								_react2.default.createElement('img', { src: 'app/assets/images/dialog_2.png' })
-							),
-							_react2.default.createElement(
-								'li',
-								{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_3' ? 'ui-selected' : ''), id: 'dialog_3', onClick: function onClick(e) {
-										return _this4.changeShape(e, 'selectedDialog');
-									} },
-								_react2.default.createElement('img', { src: 'app/assets/images/dialog_3.png' })
-							)
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: '' },
-							_react2.default.createElement('textarea', { placeholder: 'Add Comment Here' })
-						),
-						_react2.default.createElement('br', null),
-						_react2.default.createElement(
-							'div',
-							{ id: 'button-wrapper' },
-							_react2.default.createElement(
-								'button',
-								{ type: 'button', className: 'btn btn-outline-primary btn-sm', id: 'addDialog', onClick: function onClick() {
-										return canvasUtil.addDialog(_this4.state.selectedDialog, _this4.state.canvas);
-									} },
-								'Add Dialog'
-							)
-						)
-					),
-					_react2.default.createElement(
-						'div',
-						{ className: 'tab-pane fade ' + (this.state.active === 'Text' ? 'show active' : ""), id: 'text', role: 'tabpanel', 'aria-labelledby': 'text-button' },
-						_react2.default.createElement(
-							'label',
-							null,
-							'Text'
-						),
-						_react2.default.createElement('br', null),
-						_react2.default.createElement(
-							'div',
-							{ className: 'form-inline d-flex' },
-							_react2.default.createElement(
-								'label',
-								{ htmlFor: 'text-color' },
-								'Color: '
-							),
-							_react2.default.createElement(
-								'select',
-								{ className: 'form-control', id: 'text-color', onChange: function onChange(e) {
-										return _this4.selectColor(e, 'textColor');
-									} },
-								_react2.default.createElement(
-									'option',
-									{ value: 'black' },
-									'Black'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'red' },
-									'Red'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'orange' },
-									'Orange'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'yellow' },
-									'Yellow'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'green' },
-									'Green'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'blue' },
-									'Blue'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'brown' },
-									'Brown'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'purple' },
-									'Purple'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'white' },
-									'White'
-								)
-							),
-							_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.textColor } })
-						),
-						_react2.default.createElement('br', null),
-						_react2.default.createElement(
-							'div',
-							{ className: 'form-inline d-flex' },
-							_react2.default.createElement(
-								'label',
-								{ htmlFor: 'text-style' },
-								'Style: '
-							),
-							_react2.default.createElement(
-								'select',
-								{ className: 'form-control', id: 'text-style', onChange: function onChange(e) {
-										return _this4.changeStyle(e);
-									} },
-								_react2.default.createElement(
-									'option',
-									{ value: 'Times' },
-									'Times'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'Georgia' },
-									'Georgia'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'Arial' },
-									'Arial'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'Tahoma' },
-									'Tahoma'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'Verdana' },
-									'Verdana'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'Courier' },
-									'Courier'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'Monaco' },
-									'Monaco'
-								)
-							)
-						),
-						_react2.default.createElement('br', null),
-						_react2.default.createElement(
-							'div',
-							{ className: 'form-inline d-flex' },
-							_react2.default.createElement(
-								'label',
-								{ htmlFor: 'text-style' },
-								'Size(px): \xA0 '
-							),
-							_react2.default.createElement('input', { id: 'text-size', type: 'number', step: '1', min: '1', max: '50', value: this.state.textSize, onChange: this.handleInput() })
-						),
-						_react2.default.createElement('br', null),
-						_react2.default.createElement(
-							'div',
-							{ id: 'button-wrapper' },
-							_react2.default.createElement(
-								'button',
-								{ type: 'button', className: 'btn btn-outline-primary btn-sm', id: 'addText', onClick: function onClick() {
-										return canvasUtil.addText(_this4.state.canvas);
-									} },
-								'Add Text'
-							)
-						)
-					),
-					_react2.default.createElement(
-						'div',
-						{ className: 'tab-pane fade ' + (this.state.active === 'Background' ? 'show active' : ""), id: 'background', role: 'tabpanel', 'aria-labelledby': 'background-button' },
-						_react2.default.createElement(
-							'label',
-							null,
-							'Background Color'
-						),
-						_react2.default.createElement('br', null),
-						_react2.default.createElement(
-							'div',
-							{ className: 'form-inline d-flex' },
-							_react2.default.createElement(
-								'label',
-								{ htmlFor: 'background-color' },
-								'Color: '
-							),
-							_react2.default.createElement(
-								'select',
-								{ className: 'form-control', id: 'background-color', onChange: function onChange(e) {
-										return _this4.selectColor(e, 'backgroundColor');
-									} },
-								_react2.default.createElement(
-									'option',
-									{ value: 'white' },
-									'White'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'red' },
-									'Red'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'orange' },
-									'Orange'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'yellow' },
-									'Yellow'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'green' },
-									'Green'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'blue' },
-									'Blue'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'brown' },
-									'Brown'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'purple' },
-									'Purple'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'black' },
-									'Black'
-								),
-								_react2.default.createElement(
-									'option',
-									{ value: 'lightgray' },
-									'Lightgray'
-								)
-							),
-							_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.backgroundColor } })
-						),
-						_react2.default.createElement('br', null)
+						{ className: 'container', onDoubleClick: function onDoubleClick() {
+								return _this4.doubleClick();
+							} },
+						_react2.default.createElement('canvas', { ref: 'c', id: 'c' })
 					)
 				),
 				_react2.default.createElement(
@@ -31540,18 +31563,11 @@ var Canvas = function (_React$Component) {
 					{ className: 'buttons' },
 					_react2.default.createElement(
 						'button',
-						{ type: 'button', className: 'btn btn-outline-primary btn-sm', onClick: function onClick() {
+						{ type: 'button', onClick: function onClick() {
 								return canvasUtil.resetCanvas(_this4.state.canvas);
 							} },
 						'Reset Canvas'
 					)
-				),
-				_react2.default.createElement(
-					'div',
-					{ className: 'container', onDoubleClick: function onDoubleClick() {
-							return _this4.doubleClick();
-						} },
-					_react2.default.createElement('canvas', { ref: 'c', id: 'c' })
 				)
 			);
 		}

@@ -1,6 +1,6 @@
 /* PHASE 0: Reset */
 html, body, header, nav, h1, a,
-ul, li, strong, main, button, i,
+ul, ol, li, strong, main, button, i,
 section, img, div, h2, p, form,
 fieldset, label, input, textarea,
 span, article, footer, time, small {
@@ -18,7 +18,7 @@ span, article, footer, time, small {
   font-family: "Robot", sans-serif;
 }
 
-ul {
+ul, ol {
   list-style: none;
 }
 
@@ -78,7 +78,8 @@ input[type=submit] {
   height: 6vh;
   display: flex;
   color: #FFFFFF;
-  background-color: #2F425E;
+  background-color: #1C2A39;
+  border-bottom: 5px solid #2F425E;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
   align-items: center;
 }
@@ -176,7 +177,7 @@ input[type=submit] {
   margin: 0 auto;
   width: 30%;
   padding: 8px;
-  background-color: #2F425E;
+  background-color: #1C2A39;
   color: #FFFFFF;
   text-align: center;
   border-radius: 5px;
@@ -313,7 +314,7 @@ input[type=submit] {
 .session-main .session-form form input[type=submit]:hover {
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
   color: #FFFFFF;
-  background: #2F425E;
+  background: #1C2A39;
 }
 .session-main .session-form small {
   font-size: 12px;
@@ -346,12 +347,26 @@ input[type=submit] {
 
 .main {
   height: 100vh;
+  font-size: 14px;
+}
+
+button {
+  padding: 7px 15px;
+  color: #FFFFFF;
+  background-color: #1C2A39;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+  background-color: #2F425E;
 }
 
 .img-group {
   position: fixed;
-  bottom: 0px;
-  left: 10vw;
+  bottom: 15px;
+  left: 11vw;
   margin: 0px auto;
 }
 .img-group .img-container {
@@ -367,138 +382,131 @@ input[type=submit] {
   height: 100%;
   object-fit: cover;
 }
+.img-group .img-container img:hover {
+  opacity: 0.5;
+}
 
 .buttons {
   position: fixed;
-  bottom: 150px;
-  left: 10vw;
+  bottom: 160px;
+  left: 11vw;
 }
 
-.container {
-  position: fixed;
-  left: 25vw;
-  width: 75vw;
-  height: 66vh;
-  margin-top: 50px;
+.canvas-main {
   display: flex;
 }
-.container canvas {
-  box-shadow: 0 8px 6px -6px black;
-}
-
-#sidebar {
-  position: fixed;
-  width: 6vw;
+.canvas-main #sidebar {
   display: flex;
   flex-direction: column;
   height: 93vh;
-  background-color: lightgray;
+  color: #FFFFFF;
+  background-color: #1C2A39;
 }
-
-#sidebar > li {
+.canvas-main #sidebar li {
   display: flex;
-  flex-direction: column;
   align-items: center;
   align-content: center;
-  justify-content: center;
-  padding: 4vh;
-}
-
-#sidebar > .selected {
-  background-color: white;
-}
-
-.nav-text {
-  margin-top: 10px;
-  font-size: 12px;
-}
-
-.nav-item {
+  justify-content: flex-start;
+  padding: 15px 10px;
   cursor: pointer;
-}
-.nav-item i {
-  font-size: 25px;
-}
-
-.nav-item:hover {
-  color: #007bff;
-}
-
-.nav-item > * {
-  display: block;
   text-align: center;
+  font-size: 14px;
 }
-
-#dialog textarea {
-  padding: 3px 10px;
-  border: 1px solid lightgray;
-  border-radius: 4px;
-  width: 90%;
-  margin: 10px auto;
+.canvas-main #sidebar li i {
+  margin-right: 10px;
 }
-
-#side-content {
-  position: absolute;
-  left: 7vw;
-  width: 18vw;
-  height: 66vh;
-  margin-top: 50px;
+.canvas-main #sidebar li:hover {
+  color: #278efc;
+}
+.canvas-main #sidebar .selected {
+  background-color: white;
+  color: #1C2A39;
+}
+.canvas-main .side-content-canvas {
+  display: flex;
+  flex: 1;
+}
+.canvas-main .side-content-canvas #side-content {
+  height: 70%;
+  margin: 15px;
   border: solid 1px darkgrey;
   overflow: auto;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
 }
-
-.tab-pane > label, .tab-pane > #button-wrapper {
-  width: 100%;
+.canvas-main .side-content-canvas #side-content > div {
+  height: 90%;
+  min-width: 210px;
+  margin: 15px;
   text-align: center;
 }
-
-.tab-pane > label {
-  margin-top: 1vh;
+.canvas-main .side-content-canvas #side-content > div h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
 }
-
-#layouts-list, #shapes-list, #templates-list {
-  margin-top: 1vh;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  padding-left: 0;
-}
-
-.layouts-item, .shapes-item, .templates-item {
-  list-style: none;
-}
-
-#shapes-list .ui-selected {
+.canvas-main .side-content-canvas #side-content > div select, .canvas-main .side-content-canvas #side-content > div input {
+  padding: 8px;
   border-radius: 5px;
-  border: 2px solid gray;
+  overflow: hidden;
+}
+.canvas-main .side-content-canvas #side-content > div #shapes-list {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+.canvas-main .side-content-canvas #side-content > div #shapes-list li {
+  cursor: pointer;
+}
+.canvas-main .side-content-canvas #side-content > div #shapes-list li.ui-selected {
+  border-radius: 5px;
   background-color: lightgray;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
 }
-
-.shapes-item {
-  padding: 3px;
+.canvas-main .side-content-canvas #side-content > div textarea {
+  padding: 8px;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+  width: 95%;
+  min-height: 200px;
+  margin: 10px auto;
+  resize: vertical;
+  text-align: left;
 }
-
-.shapes-item > img {
+.canvas-main .side-content-canvas #side-content > div .form-inline {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.canvas-main .side-content-canvas #side-content > div .form-inline label {
+  font-weight: bold;
+  text-align: left;
+  font-size: 14px;
+  min-width: 40px;
+  margin-right: 10px;
+}
+.canvas-main .side-content-canvas .shapes-item {
+  padding: 5px;
+}
+.canvas-main .side-content-canvas .shapes-item img {
   height: 50px;
   width: 50px;
 }
-
-.selected-color {
+.canvas-main .side-content-canvas .selected-color {
   height: 30px;
   width: 30px;
   margin-left: 10px;
   border-radius: 5px;
   border: solid 1px black;
 }
-
-.form-signin span {
-  font-size: 10px;
-  color: red;
-  padding: 10px 5px;
+.canvas-main .side-content-canvas .container {
+  flex: 1;
+  height: 70%;
+  margin-top: 15px;
+  display: flex;
+}
+.canvas-main .side-content-canvas .container canvas {
+  box-shadow: 0 8px 6px -6px black;
 }
 
 .modal-screen {
@@ -517,19 +525,6 @@ input[type=submit] {
 
 .modal, .hidden {
   display: none;
-}
-
-.form-inline {
-  align-items: center;
-}
-.form-inline label {
-  font-size: 14px;
-  width: 60px;
-}
-.form-inline #text-size {
-  border: 1px solid lightgray;
-  border-radius: 4px;
-  padding: 5px 10px;
 }
 
 @-webkit-keyframes slide {
