@@ -1,4 +1,5 @@
 // import {fabric} from './fabric';
+import Arrow from './arrow';
 
 let photoNum = 0;
 
@@ -44,6 +45,9 @@ export const addShape = (selectedShape, canvas) => {
       });
       canvas.add(line);
       canvas.setActiveObject(line);
+      break;
+    case "arrow":
+      const arrow = new Arrow(canvas, color);
       break;
     default:
       return false;
@@ -148,6 +152,7 @@ export const addDialog = (selectedDialog, canvas) => {
       width: 150,
       left: 75,
       top: 75,
+      fontFamily: 'Arial',
       originX: 'center',
       originY: 'center',
       selectable: true,
@@ -157,6 +162,7 @@ export const addDialog = (selectedDialog, canvas) => {
       left: 100,
       top: 100,
     });
+    $('#dialog textarea').val('');
 
     canvas.add(group);
     canvas.setActiveObject(group);
@@ -233,4 +239,5 @@ export const changeTextStyle = (obj, canvas, style, size) => {
   if(size) obj.set({fontSize: size});
   canvas.renderAll();
 };
+
 

@@ -166,6 +166,9 @@ class Canvas extends React.Component{
 							<li className={`shapes-item ${this.state.selectedShape === 'line' ? 'ui-selected' : ''}`} id="line" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 							  <img src="app/assets/images/line.png" />
 							</li>
+							<li className={`shapes-item ${this.state.selectedShape === 'arrow' ? 'ui-selected' : ''}`} id="arrow" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
+							  <img src="app/assets/images/arrow.png" />
+							</li>
 						</ol>
 						<div className="form-inline">
 							<label htmlFor="shape-color">Color</label>
@@ -187,8 +190,11 @@ class Canvas extends React.Component{
 							</div>
 						</div>
 						<div className="form-inline d-flex" id="shape-fill">
-							<label htmlFor="shape-fill">Fill</label>
-							<input type='checkbox' checked={this.state.fillChecked} onChange={(e)=>this.checkBox(e)}/>
+							<label>Fill</label>
+							<label className="container-checkbox">
+							  <input type="checkbox" checked={this.state.fillChecked} onChange={(e)=>this.checkBox(e)} />
+							  <span className="checkmark"></span>
+							</label>
         		</div>
 	        	<div className="form-inline d-flex">
 	            <label htmlFor="shape-opacity">Opacity: </label>
