@@ -1,5 +1,5 @@
 // import {fabric} from './fabric';
-import Arrow from './arrow';
+// import Arrow from './arrow';
 
 let photoNum = 0;
 
@@ -47,7 +47,7 @@ export const addShape = (selectedShape, canvas) => {
       canvas.setActiveObject(line);
       break;
     case "arrow":
-      const arrow = new Arrow(canvas, color);
+      // const arrow = new Arrow(canvas, color);
       break;
     default:
       return false;

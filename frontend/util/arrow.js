@@ -1,4 +1,4 @@
-import {fabric} from './fabric';
+// import {fabric} from './fabric';
 
 // Extended fabric line class
 fabric.LineArrow = fabric.util.createClass(fabric.Line, {
