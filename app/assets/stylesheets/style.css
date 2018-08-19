@@ -75,7 +75,6 @@ input[type=submit] {
 }
 
 .navbar {
-  font-size: 24px;
   height: 6vh;
   display: flex;
   color: #FFFFFF;
@@ -85,6 +84,8 @@ input[type=submit] {
 }
 .navbar a {
   display: flex;
+  font-size: 24px;
+  font-weight: bold;
 }
 .navbar a img {
   height: 30px;
@@ -110,10 +111,17 @@ input[type=submit] {
   background: rgba(10, 186, 181, 0.2);
   transition: all 0.8s;
 }
-.navbar .header-buttons .share button.btn {
-  font-size: 14px;
+.navbar .header-buttons .share button, .navbar .header-buttons .share a.btn, .navbar .header-buttons .share a.dropbox-dropin-btn {
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  border: 1px solid #FFFFFF;
   margin-right: 10px;
-  border: 1px;
+  text-align: center;
+}
+.navbar .header-buttons .share button:hover, .navbar .header-buttons .share a.btn:hover {
+  color: #278efc;
+  border: 1px solid #278efc;
 }
 .navbar .share {
   display: flex;
@@ -187,12 +195,14 @@ input[type=submit] {
   background-color: #2F425E;
 }
 
-.main {
-  height: 100vh;
-}
-
 .session-main {
-  height: 100%;
+  height: 300%;
+  margin: 100px auto;
+}
+.session-main h2 {
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-size: 48px;
 }
 
 .session-form {
@@ -207,7 +217,19 @@ input[type=submit] {
   height: 100%;
 }
 .session-form form input {
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 8px 10px;
   width: 94%;
+}
+.session-form small {
+  font-size: 10px;
+}
+.session-form small a {
+  color: #278efc;
+}
+.session-form small a:hover {
+  text-decoration: underline;
 }
 
 .alert {
@@ -217,6 +239,10 @@ input[type=submit] {
 }
 .alert span:last-of-type {
   cursor: pointer;
+}
+
+.main {
+  height: 100vh;
 }
 
 .img-group {

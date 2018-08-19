@@ -138,13 +138,13 @@ class Share extends React.Component{
 				{message.orderNum ? 
 					<div className='message'>Service sent successfully. Incident Number: {message.orderNum}</div>
 					: ""}
-				<button type="button" className="btn" onClick={()=>this.toggleService()}>{this.state.service ? 'Close Service' : 'Send to Service'}</button>
+				<button className="btn" onClick={()=>this.toggleService()}>{this.state.service ? 'Close Service' : 'Send to Service'}</button>
 				{this.state.service ? 
 					<Service sendService={sendService}/>
 					: ''}
-				<button type="button" className="btn" onClick={()=>this.openModal()}>Share</button>
+				<button className="btn" onClick={()=>this.openModal()}>Share</button>
 				{dropbox && Object.keys(dropbox) ? 
-				<button type="button" className="btn" onClick={()=>this.clearDropbox()}>Clear Dropbox</button>
+				<button className="btn" onClick={()=>this.clearDropbox()}>Clear Dropbox</button>
 					: ""}
 				<div className={this.state.modal}>
 					<div className='share-canvas'>
@@ -168,7 +168,7 @@ class Share extends React.Component{
 									*/}
 								</select>
 							</div>
-							<input type='submit' className="btn" value='Send' />
+							<input type='submit' className="btn" value='Send'/>
 						</form>
 					</div>
             		<div onClick={()=>this.closeModal()} className="modal-screen"></div>

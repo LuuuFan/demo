@@ -1,0 +1,50 @@
+$color-darkblue: #2F425E;
+$font-white: #FFFFFF;
+$font-hover: #278efc;
+
+
+.session-main{
+	height: 300%;
+	margin: 100px auto;
+	h2{
+		font-weight: bold;
+		margin-bottom: 15px;
+		font-size: 48px;
+	}
+}
+
+.session-form{
+	width: 30%;
+	margin: 200px auto;
+	height: 20%;
+	form{
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		height: 100%;
+		input{
+			border: 1px solid lightgray;
+			border-radius: 5px;
+			padding: 8px 10px;
+			width: 94%;
+		}
+	}
+	small{
+		font-size: 10px;
+		a{
+			color: $font-hover;
+		}
+		a:hover{
+			text-decoration: underline;
+		}
+	}
+}
+
+.alert{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	span:last-of-type{
+		cursor: pointer;
+	}
+}

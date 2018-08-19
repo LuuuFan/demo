@@ -1,8 +1,9 @@
 $color-darkblue: #2F425E;
 $font-white: #FFFFFF;
+$font-hover: #278efc;
+
 
 .navbar{
-	font-size: 24px;
   height: 6vh;
   display: flex;
   color: $font-white;
@@ -11,6 +12,8 @@ $font-white: #FFFFFF;
   align-items: center;
   a{	
     display: flex;
+    font-size: 24px;
+    font-weight: bold;
     img{
       height: 30px;
       width: 30px;  
@@ -34,10 +37,17 @@ $font-white: #FFFFFF;
         background: rgba(10, 186, 181, 0.2);
         transition: all .8s;
       }
-      button.btn{
-      	font-size: 14px;
-        margin-right: 10px;
+      button, a.btn, a.dropbox-dropin-btn{
+      	font-size: 12px;
+      	padding: 5px 8px;
+        border-radius: 5px;
         border: 1px solid $font-white;
+        margin-right: 10px;
+        text-align: center;
+      }
+      button:hover, a.btn:hover{
+      	color: $font-hover;
+      	border: 1px solid $font-hover;
       }
     }
   }

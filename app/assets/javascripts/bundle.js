@@ -28277,7 +28277,7 @@ var Share = function (_React$Component) {
 				) : "",
 				_react2.default.createElement(
 					'button',
-					{ type: 'button', className: 'btn', onClick: function onClick() {
+					{ className: 'btn', onClick: function onClick() {
 							return _this4.toggleService();
 						} },
 					this.state.service ? 'Close Service' : 'Send to Service'
@@ -28285,14 +28285,14 @@ var Share = function (_React$Component) {
 				this.state.service ? _react2.default.createElement(_service2.default, { sendService: sendService }) : '',
 				_react2.default.createElement(
 					'button',
-					{ type: 'button', className: 'btn', onClick: function onClick() {
+					{ className: 'btn', onClick: function onClick() {
 							return _this4.openModal();
 						} },
 					'Share'
 				),
 				dropbox && Object.keys(dropbox) ? _react2.default.createElement(
 					'button',
-					{ type: 'button', className: 'btn', onClick: function onClick() {
+					{ className: 'btn', onClick: function onClick() {
 							return _this4.clearDropbox();
 						} },
 					'Clear Dropbox'
