@@ -6,7 +6,6 @@ class Service extends React.Component {
 		super();
 		this.state = {
 			sending: false,
-			modal: 'is-open',
 		}
 	}
 
@@ -35,13 +34,12 @@ class Service extends React.Component {
     this.props.sendService(requestData);
 	}
 
-	closeModal(){
-		this.setState({modal: 'modal'});
-	}
+	// closeModal(){
+	// 	this.setState({modal: 'modal'});
+	// }
 
 	render(){
 		return(
-		<div className={this.state.modal}>
 			<div id="table_left" >
 				{/*style={{'position': 'fixed', 'right': '0', 'top': '100px'}}*/}
 				{this.state.sending ? 
@@ -157,9 +155,6 @@ class Service extends React.Component {
 		    </table>
 		  	}
 		 	</div>
-	 	  <div onClick={()=>this.closeModal()} className="modal-screen"></div>
-		</div>	
-
 	)
 	}
 }

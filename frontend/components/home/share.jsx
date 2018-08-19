@@ -6,10 +6,11 @@ class Share extends React.Component{
 	constructor(){
 		super();
 		this.state = {
-			modal: 'modal',
+			modalShare: 'is-open',
+			modalList: 'modal',
+			servicenow: 'modal',
 			email: 'lu.fan@n3n.io',
 			emailError: '',
-			service: true,
 			filename: '',
 			type: 'pdf',
 		};
@@ -55,26 +56,31 @@ class Share extends React.Component{
 	componentDidUpdate(){
 		$(document).keydown((e)=>{
 	      if (e.keyCode === 27) {
-	        this.closeModal();
+	        this.closeModal('servicenow');
+	        this.closeModal('modalList');
+	        this.closeModal('modalShare');
 	      }
 	    });
 	}
 
 	componentWillReceiveProps(nextProps){
 		if (nextProps.message.orderNum) {
-			this.setState({service: false});
+			this.setState({servicenow: 'modal'});
 			setTimeout(()=>{
 					nextProps.clearMessage();
 			}, 10000)
 		}
 	}
 
-	openModal(){
-		this.setState({modal: 'is-open'});
+	openModal(e, type){
+		console.log(e.target.className);
+		if (!e.target.className.includes('modal-screen')) {
+			this.setState({[type]: 'is-open'});
+		}
 	}
 
-	closeModal(){
-		this.setState({modal: 'modal'});
+	closeModal(type){
+		this.setState({[type]: 'modal'});
 	}
 
 	handleInput(e, type){
@@ -127,7 +133,10 @@ class Share extends React.Component{
 	}
 
 	toggleService(){
-		this.setState({service: !this.state.service});
+		this.setState({
+			modalList: 'modal',
+			servicenow: 'is-open',
+		});
 	}
 
 	render(){
@@ -138,15 +147,25 @@ class Share extends React.Component{
 				{message.orderNum ? 
 					<div className='message'>Service sent successfully. Incident Number: {message.orderNum}</div>
 					: ""}
-				<button className="btn" onClick={()=>this.toggleService()}>{this.state.service ? 'Close Service' : 'Send to Service'}</button>
-				{this.state.service ? 
+				<button className="btn services" onMouseEnter={(e)=>this.openModal(e, 'modalList')} onMouseLeave={()=>this.closeModal('modalList')}>Send to Service
+					<div className={this.state.modalList}>
+						<div className='service-list'>
+							<ul>
+								<li onClick={()=>this.toggleService()}>ServiceNow</li>
+							</ul>
+						</div>
+      			<div onClick={()=>this.closeModal('modalList')} className="modal-screen modal-screen-servicelist"></div>
+					</div>
+				</button>
+				<div className={this.state.servicenow}>
 					<Service sendService={sendService}/>
-					: ''}
-				<button className="btn" onClick={()=>this.openModal()}>Share</button>
+	 	  		<div onClick={()=>this.closeModal('servicenow')} className="modal-screen"></div>
+				</div>
+				<button className="btn" onClick={(e)=>this.openModal(e, 'modalShare')}>Share</button>
 				{dropbox && Object.keys(dropbox) ? 
 				<button className="btn" onClick={()=>this.clearDropbox()}>Clear Dropbox</button>
 					: ""}
-				<div className={this.state.modal}>
+				<div className={this.state.modalShare}>
 					<div className='share-canvas'>
 						<form onSubmit={()=>this.sendFile()}>
 							<div>
@@ -162,16 +181,16 @@ class Share extends React.Component{
 							<div>
 								<label>Type: </label>
 								<select onChange={(e)=>this.changeType(e)}>
-									<option value='pdf'>PDF</option>
+									<option value='pdf' align='middle'>PDF</option>
 									{/*
 										<option value='png'>PNG</option>
 									*/}
 								</select>
 							</div>
-							<input type='submit' className="btn" value='Send'/>
+							<input type='submit' className="btn" value='Send' align='middle'/>
 						</form>
 					</div>
-      		<div onClick={()=>this.closeModal()} className="modal-screen"></div>
+      		<div onClick={()=>this.closeModal('modalShare')} className="modal-screen"></div>
 				</div>
 			</div>
 		);

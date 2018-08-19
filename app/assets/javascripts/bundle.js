@@ -28110,10 +28110,11 @@ var Share = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (Share.__proto__ || Object.getPrototypeOf(Share)).call(this));
 
 		_this.state = {
-			modal: 'modal',
+			modalShare: 'is-open',
+			modalList: 'modal',
+			servicenow: 'modal',
 			email: 'lu.fan@n3n.io',
 			emailError: '',
-			service: true,
 			filename: '',
 			type: 'pdf'
 		};
@@ -28168,7 +28169,9 @@ var Share = function (_React$Component) {
 
 			$(document).keydown(function (e) {
 				if (e.keyCode === 27) {
-					_this3.closeModal();
+					_this3.closeModal('servicenow');
+					_this3.closeModal('modalList');
+					_this3.closeModal('modalShare');
 				}
 			});
 		}
@@ -28176,7 +28179,7 @@ var Share = function (_React$Component) {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
 			if (nextProps.message.orderNum) {
-				this.setState({ service: false });
+				this.setState({ servicenow: 'modal' });
 				setTimeout(function () {
 					nextProps.clearMessage();
 				}, 10000);
@@ -28184,20 +28187,23 @@ var Share = function (_React$Component) {
 		}
 	}, {
 		key: 'openModal',
-		value: function openModal() {
-			this.setState({ modal: 'is-open' });
+		value: function openModal(e, type) {
+			console.log(e.target.className);
+			if (!e.target.className.includes('modal-screen')) {
+				this.setState(_defineProperty({}, type, 'is-open'));
+			}
 		}
 	}, {
 		key: 'closeModal',
-		value: function closeModal() {
-			this.setState({ modal: 'modal' });
+		value: function closeModal(type) {
+			this.setState(_defineProperty({}, type, 'modal'));
 		}
 	}, {
 		key: 'handleInput',
 		value: function handleInput(e, type) {
-			var _setState;
+			var _setState3;
 
-			this.setState((_setState = {}, _defineProperty(_setState, type, e.target.value), _defineProperty(_setState, 'emailError', ''), _setState));
+			this.setState((_setState3 = {}, _defineProperty(_setState3, type, e.target.value), _defineProperty(_setState3, 'emailError', ''), _setState3));
 		}
 	}, {
 		key: 'checkEmail',
@@ -28250,7 +28256,10 @@ var Share = function (_React$Component) {
 	}, {
 		key: 'toggleService',
 		value: function toggleService() {
-			this.setState({ service: !this.state.service });
+			this.setState({
+				modalList: 'modal',
+				servicenow: 'is-open'
+			});
 		}
 	}, {
 		key: 'render',
@@ -28273,16 +28282,47 @@ var Share = function (_React$Component) {
 				) : "",
 				_react2.default.createElement(
 					'button',
-					{ className: 'btn', onClick: function onClick() {
-							return _this4.toggleService();
+					{ className: 'btn services', onMouseEnter: function onMouseEnter(e) {
+							return _this4.openModal(e, 'modalList');
+						}, onMouseLeave: function onMouseLeave() {
+							return _this4.closeModal('modalList');
 						} },
-					this.state.service ? 'Close Service' : 'Send to Service'
+					'Send to Service',
+					_react2.default.createElement(
+						'div',
+						{ className: this.state.modalList },
+						_react2.default.createElement(
+							'div',
+							{ className: 'service-list' },
+							_react2.default.createElement(
+								'ul',
+								null,
+								_react2.default.createElement(
+									'li',
+									{ onClick: function onClick() {
+											return _this4.toggleService();
+										} },
+									'ServiceNow'
+								)
+							)
+						),
+						_react2.default.createElement('div', { onClick: function onClick() {
+								return _this4.closeModal('modalList');
+							}, className: 'modal-screen modal-screen-servicelist' })
+					)
 				),
-				this.state.service ? _react2.default.createElement(_service2.default, { sendService: sendService }) : '',
+				_react2.default.createElement(
+					'div',
+					{ className: this.state.servicenow },
+					_react2.default.createElement(_service2.default, { sendService: sendService }),
+					_react2.default.createElement('div', { onClick: function onClick() {
+							return _this4.closeModal('servicenow');
+						}, className: 'modal-screen' })
+				),
 				_react2.default.createElement(
 					'button',
-					{ className: 'btn', onClick: function onClick() {
-							return _this4.openModal();
+					{ className: 'btn', onClick: function onClick(e) {
+							return _this4.openModal(e, 'modalShare');
 						} },
 					'Share'
 				),
@@ -28295,7 +28335,7 @@ var Share = function (_React$Component) {
 				) : "",
 				_react2.default.createElement(
 					'div',
-					{ className: this.state.modal },
+					{ className: this.state.modalShare },
 					_react2.default.createElement(
 						'div',
 						{ className: 'share-canvas' },
@@ -28354,16 +28394,16 @@ var Share = function (_React$Component) {
 										} },
 									_react2.default.createElement(
 										'option',
-										{ value: 'pdf' },
+										{ value: 'pdf', align: 'middle' },
 										'PDF'
 									)
 								)
 							),
-							_react2.default.createElement('input', { type: 'submit', className: 'btn', value: 'Send' })
+							_react2.default.createElement('input', { type: 'submit', className: 'btn', value: 'Send', align: 'middle' })
 						)
 					),
 					_react2.default.createElement('div', { onClick: function onClick() {
-							return _this4.closeModal();
+							return _this4.closeModal('modalShare');
 						}, className: 'modal-screen' })
 				)
 			);
@@ -30468,8 +30508,7 @@ var Service = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (Service.__proto__ || Object.getPrototypeOf(Service)).call(this));
 
 		_this.state = {
-			sending: false,
-			modal: 'is-open'
+			sending: false
 		};
 		return _this;
 	}
@@ -30500,11 +30539,11 @@ var Service = function (_React$Component) {
 			};
 			this.props.sendService(requestData);
 		}
-	}, {
-		key: 'closeModal',
-		value: function closeModal() {
-			this.setState({ modal: 'modal' });
-		}
+
+		// closeModal(){
+		// 	this.setState({modal: 'modal'});
+		// }
+
 	}, {
 		key: 'render',
 		value: function render() {
@@ -30512,321 +30551,314 @@ var Service = function (_React$Component) {
 
 			return _react2.default.createElement(
 				'div',
-				{ className: this.state.modal },
-				_react2.default.createElement(
+				{ id: 'table_left' },
+				this.state.sending ? _react2.default.createElement(
 					'div',
-					{ id: 'table_left' },
-					this.state.sending ? _react2.default.createElement(
-						'div',
-						{ className: 'loading' },
-						_react2.default.createElement('img', { src: 'app/assets/images/sending_email.gif' })
-					) : _react2.default.createElement(
-						'table',
-						{ id: 'table-1', className: 'table table-hover dataTable no-footer', cellSpacing: '0' },
+					{ className: 'loading' },
+					_react2.default.createElement('img', { src: 'app/assets/images/sending_email.gif' })
+				) : _react2.default.createElement(
+					'table',
+					{ id: 'table-1', className: 'table table-hover dataTable no-footer', cellSpacing: '0' },
+					_react2.default.createElement(
+						'tbody',
+						{ id: 'targetForRows' },
 						_react2.default.createElement(
-							'tbody',
-							{ id: 'targetForRows' },
+							'tr',
+							{ className: 'normal' },
 							_react2.default.createElement(
-								'tr',
-								{ className: 'normal' },
+								'td',
+								{ colSpan: '2' },
 								_react2.default.createElement(
-									'td',
-									{ colSpan: '2' },
-									_react2.default.createElement(
-										'div',
-										{ className: 'title-bar-2' },
-										_react2.default.createElement(
-											'span',
-											{ id: 'cityName' },
-											'Create Incident'
-										)
-									)
-								)
-							),
-							_react2.default.createElement(
-								'tr',
-								{ className: 'wv-pl' },
-								_react2.default.createElement(
-									'td',
-									null,
+									'div',
+									{ className: 'title-bar-2' },
 									_react2.default.createElement(
 										'span',
-										null,
-										'Category'
-									),
-									_react2.default.createElement(
-										'select',
-										{ id: 'cat-select', className: 'input' },
-										_react2.default.createElement(
-											'option',
-											null,
-											'Select a Category'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: 'Inquiry/help' },
-											'Inquiry / Help'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: 'hardware' },
-											'Hardware'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: 'software' },
-											'Software'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: 'database' },
-											'Database'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: 'network' },
-											'Network'
-										)
+										{ id: 'cityName' },
+										'Create Incident'
 									)
 								)
-							),
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								'tr',
-								{ className: 'wv-pl' },
+								'td',
+								null,
 								_react2.default.createElement(
-									'td',
+									'span',
 									null,
+									'Category'
+								),
+								_react2.default.createElement(
+									'select',
+									{ id: 'cat-select', className: 'input' },
 									_react2.default.createElement(
-										'span',
+										'option',
 										null,
-										'State'
+										'Select a Category'
 									),
 									_react2.default.createElement(
-										'select',
-										{ id: 'state-select', className: 'input' },
-										_react2.default.createElement(
-											'option',
-											{ value: '1' },
-											'New'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: '2' },
-											'In Progress'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: '3' },
-											'On Hold'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: '6' },
-											'Resolved'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: '7' },
-											'Closed'
-										)
+										'option',
+										{ value: 'Inquiry/help' },
+										'Inquiry / Help'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'hardware' },
+										'Hardware'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'software' },
+										'Software'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'database' },
+										'Database'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'network' },
+										'Network'
 									)
 								)
-							),
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								'tr',
-								{ className: 'wv-pl' },
+								'td',
+								null,
 								_react2.default.createElement(
-									'td',
+									'span',
 									null,
+									'State'
+								),
+								_react2.default.createElement(
+									'select',
+									{ id: 'state-select', className: 'input' },
 									_react2.default.createElement(
-										'span',
-										null,
-										'Impact'
+										'option',
+										{ value: '1' },
+										'New'
 									),
 									_react2.default.createElement(
-										'select',
-										{ id: 'impact-select', className: 'input' },
-										_react2.default.createElement(
-											'option',
-											{ value: '1' },
-											'High'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: '2' },
-											'Medium'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: '3' },
-											'Low'
-										)
+										'option',
+										{ value: '2' },
+										'In Progress'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '3' },
+										'On Hold'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '6' },
+										'Resolved'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '7' },
+										'Closed'
 									)
 								)
-							),
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								'tr',
-								{ className: 'wv-pl' },
+								'td',
+								null,
 								_react2.default.createElement(
-									'td',
+									'span',
 									null,
+									'Impact'
+								),
+								_react2.default.createElement(
+									'select',
+									{ id: 'impact-select', className: 'input' },
 									_react2.default.createElement(
-										'span',
-										null,
-										'Urgency'
+										'option',
+										{ value: '1' },
+										'High'
 									),
 									_react2.default.createElement(
-										'select',
-										{ id: 'urgency-select', className: 'input' },
-										_react2.default.createElement(
-											'option',
-											{ value: '1' },
-											'High'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: '2' },
-											'Medium'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: '3' },
-											'Low'
-										)
+										'option',
+										{ value: '2' },
+										'Medium'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '3' },
+										'Low'
 									)
 								)
-							),
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								'tr',
-								{ className: 'wv-pl' },
+								'td',
+								null,
 								_react2.default.createElement(
-									'td',
+									'span',
 									null,
-									_react2.default.createElement(
-										'span',
-										null,
-										'Short Description'
-									),
-									_react2.default.createElement('input', { id: 'input-level', type: 'text', name: 'conc' })
-								)
-							),
-							_react2.default.createElement(
-								'tr',
-								{ className: 'wv-pl' },
+									'Urgency'
+								),
 								_react2.default.createElement(
-									'td',
-									null,
+									'select',
+									{ id: 'urgency-select', className: 'input' },
 									_react2.default.createElement(
-										'span',
-										null,
-										'Assignment Group'
+										'option',
+										{ value: '1' },
+										'High'
 									),
 									_react2.default.createElement(
-										'select',
-										{ id: 'ag-select', className: 'input' },
-										_react2.default.createElement(
-											'option',
-											null,
-											'Select a AG'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: 'CAB Approval' },
-											'CAB Approval'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: 'Database' },
-											'Database'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: 'Network' },
-											'Network'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: 'Hardware' },
-											'Hardware'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: 'Software' },
-											'Software'
-										)
+										'option',
+										{ value: '2' },
+										'Medium'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: '3' },
+										'Low'
 									)
 								)
-							),
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								'tr',
-								{ className: 'wv-pl' },
+								'td',
+								null,
 								_react2.default.createElement(
-									'td',
+									'span',
 									null,
+									'Short Description'
+								),
+								_react2.default.createElement('input', { id: 'input-level', type: 'text', name: 'conc' })
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'span',
+									null,
+									'Assignment Group'
+								),
+								_react2.default.createElement(
+									'select',
+									{ id: 'ag-select', className: 'input' },
 									_react2.default.createElement(
-										'span',
+										'option',
 										null,
-										'Assigned To'
+										'Select a AG'
 									),
 									_react2.default.createElement(
-										'select',
-										{ id: 'at-select', className: 'input' },
-										_react2.default.createElement(
-											'option',
-											null,
-											'Select a AT'
-										),
-										_react2.default.createElement(
-											'option',
-											{ value: 'Pavan Karra' },
-											'Pavan Karra'
-										)
-									)
-								)
-							),
-							_react2.default.createElement(
-								'tr',
-								{ className: 'wv-pl' },
-								_react2.default.createElement(
-									'td',
-									null,
-									_react2.default.createElement(
-										'span',
-										null,
-										'Attached File'
+										'option',
+										{ value: 'CAB Approval' },
+										'CAB Approval'
 									),
 									_react2.default.createElement(
-										'div',
-										{ className: 'attached-files' },
-										_react2.default.createElement('i', { className: 'far fa-file-pdf' })
+										'option',
+										{ value: 'Database' },
+										'Database'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Network' },
+										'Network'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Hardware' },
+										'Hardware'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Software' },
+										'Software'
 									)
 								)
-							),
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
 							_react2.default.createElement(
-								'tr',
-								{ className: 'wv-pl' },
+								'td',
+								null,
 								_react2.default.createElement(
-									'td',
+									'span',
 									null,
+									'Assigned To'
+								),
+								_react2.default.createElement(
+									'select',
+									{ id: 'at-select', className: 'input' },
 									_react2.default.createElement(
-										'div',
-										{ className: 'send-service-button' },
-										_react2.default.createElement(
-											'button',
-											{ onClick: function onClick() {
-													return _this2.sendService();
-												}, name: 'fname' },
-											'Create'
-										)
+										'option',
+										null,
+										'Select a AT'
+									),
+									_react2.default.createElement(
+										'option',
+										{ value: 'Pavan Karra' },
+										'Pavan Karra'
+									)
+								)
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'span',
+									null,
+									'Attached File'
+								),
+								_react2.default.createElement(
+									'div',
+									{ className: 'attached-files' },
+									_react2.default.createElement('i', { className: 'far fa-file-pdf' })
+								)
+							)
+						),
+						_react2.default.createElement(
+							'tr',
+							{ className: 'wv-pl' },
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'div',
+									{ className: 'send-service-button' },
+									_react2.default.createElement(
+										'button',
+										{ onClick: function onClick() {
+												return _this2.sendService();
+											}, name: 'fname' },
+										'Create'
 									)
 								)
 							)
 						)
 					)
-				),
-				_react2.default.createElement('div', { onClick: function onClick() {
-						return _this2.closeModal();
-					}, className: 'modal-screen' })
+				)
 			);
 		}
 	}]);
