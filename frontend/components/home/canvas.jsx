@@ -20,7 +20,7 @@ class Canvas extends React.Component{
 				height: 0,
 				width: 0,
 			},
-			fillChecked: true,
+			fillChecked: false,
 			activeObj: null,
 		};
 	}
@@ -40,6 +40,8 @@ class Canvas extends React.Component{
 			if (activeObj) {
 				canvas.bringToFront(activeObj);
 				this.setState({activeObj});
+			} else {
+				this.setState({activeObj: null});
 			}
 		})
 
@@ -61,7 +63,7 @@ class Canvas extends React.Component{
 	doubleClick(){
 		const activeObj = this.state.canvas.getActiveObject();
 		if (activeObj && activeObj.type === 'group') {
-			canvasUtil.ungroupObject(this.state.canvas, activeObj);
+			canvasUtil.changeDialog(this.state.canvas, activeObj);
 		}
 	}	
 
@@ -124,6 +126,28 @@ class Canvas extends React.Component{
 		return activeObj && (activeObj.type === 'circle' || 
 													activeObj.type === 'rect' || 
 													activeObj.type === 'line')
+	}
+
+	groupItems(){
+		const objArr = Array.from(this.state.activeObj._objects);
+		let left = Number.MAX_SAFE_INTEGER, top = Number.MAX_SAFE_INTEGER;
+		objArr.forEach(obj => {
+			if (obj.left && obj.left < left) left = obj.left;
+			if (obj.top && obj.top < top) top = obj.top;
+		})
+		const group = new fabric.Group(objArr, {
+			left: left,
+			top: top,
+		});
+		objArr.forEach(obj => this.state.canvas.remove(obj));
+		this.state.canvas.add(group);
+		this.state.canvas.setActiveObject(group);
+		this.setState({activeObj: group});
+	}
+
+	unGroupItems(){
+		this.state.activeObj.toActiveSelection();
+		this.setState({activeObj: this.state.canvas.getActiveObject()});
 	}
 
 	render(){

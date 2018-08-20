@@ -149,7 +149,7 @@ export const addDialog = (selectedDialog, canvas) => {
 
     let text = new fabric.IText(comment, {
       fontSize: fontSize,
-      height: 150,
+      height: 150,      
       width: 150,
       left: 75,
       top: 75,
@@ -194,11 +194,11 @@ export const changeColor = (canvas, activeObject, color) => {
 }
 
 
-export const ungroupObject = (canvas, activeObject) => {
+export const changeDialog = (canvas, activeObject) => {
   let img, text, group;
   
   activeObject.toActiveSelection();
-  canvas.requestRenderAll();
+  // canvas.requestRenderAll();
   let newActiveObjects = canvas.getActiveObject();
   newActiveObjects._objects.forEach(obj => {
     if (obj.type === 'image') {
