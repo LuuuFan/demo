@@ -31072,7 +31072,7 @@ var Canvas = function (_React$Component) {
 				if (obj.left && obj.left < left) left = obj.left;
 				if (obj.top && obj.top < top) top = obj.top;
 			});
-			var group = new fabric.Group(objArr, {
+			var group = new fabric.Group(objArr.reverse(), {
 				left: left,
 				top: top
 			});

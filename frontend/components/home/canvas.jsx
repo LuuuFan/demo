@@ -135,7 +135,7 @@ class Canvas extends React.Component{
 			if (obj.left && obj.left < left) left = obj.left;
 			if (obj.top && obj.top < top) top = obj.top;
 		})
-		const group = new fabric.Group(objArr, {
+		const group = new fabric.Group(objArr.reverse(), {
 			left: left,
 			top: top,
 		});
