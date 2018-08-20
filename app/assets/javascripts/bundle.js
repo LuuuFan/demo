@@ -31691,16 +31691,16 @@ var sendService = exports.sendService = function sendService(requestData) {
 
 
 Object.defineProperty(exports, "__esModule", {
-   value: true
+  value: true
 });
 var sendService = exports.sendService = function sendService(requestData) {
-   return $.ajax({
-      type: "POST",
-      url: "http://ec2-54-214-224-99.us-west-2.compute.amazonaws.com:8888/n3n/snow/tasks",
-      data: JSON.stringify(requestData),
-      dataType: 'html'
+  return $.ajax({
+    type: "POST",
+    url: "http://ec2-54-214-224-99.us-west-2.compute.amazonaws.com:8888/n3n/snow/tasks",
+    data: JSON.stringify(requestData),
+    dataType: 'html'
 
-   });
+  });
 };
 
 // success: function (data){
