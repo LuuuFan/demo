@@ -4,27 +4,32 @@ $color-blue: #2F425E;
 $font-white: #FFFFFF;
 $font-hover: #278efc;
 
+
 #table_left{
   border-radius: 7px;
-  overflow: hidden;
-  z-index: 15;
   position: fixed;
   left: 30%;
-  top: 100px;
   width: 40%;
-  font-size: 14px;
-  background-color: #2F425E;
+  top: 100px;
+  overflow: hidden;
+  z-index: 15;
   color: #FFFFFF;
   animation: slide 2s forwards;
   -webkit-animation: slide 2s forwards;
   // transform: translate(-300px);
   // transition: transform 3s;
   .loading{
-    z-index: 17;
+    z-index: 10;
     height: 100px;
-    width: 100px;
-    // background-color: transparent;
+    width: 100%;
+    background-color: white;
+    img{
+      height: 100%;
+      object-fit: contain;
+      margin: 0 auto;
+    }
   }
+
   table{
     width: 100%;
     tr.normal{
@@ -36,6 +41,7 @@ $font-hover: #278efc;
     }
     tr.wv-pl{
       td{
+        background-color: #2F425E;
         padding: 8px 15px;
         display: flex;
         align-items: center;
@@ -59,16 +65,18 @@ $font-hover: #278efc;
           width: 100%;
         }
         .send-service-button>button{
-          background-color: #5F7BF0;
           cursor: pointer;
+          background-color: #5F7BF0;
+          border: none;
           margin: 10px auto;
           border-radius: 5px;
           padding: 5px 25px;
           text-align: center;
         }
         .send-service-button>button:hover{
-          font-weight: bold;
+          color: $font-white;
           background-color: #3e5cd8;
+          box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
         }
         select, input{
           flex: 1;

@@ -30,14 +30,16 @@ $font-hover: #278efc;
       justify-content: flex-end;
       align-items: center;
       .message{
+        color: #333;
         padding: 5px 15px; 
         font-size: 12px;
         position: fixed;
+        z-index: 10;
         top: 80px;
         left: 33%;
         width: 33%;
         border-radius: 5px;
-        background: rgba(10, 186, 181, 0.2);
+        background: rgba(10, 186, 181, 0.4);
         transition: all .8s;
       }
       button, a.btn, a.dropbox-dropin-btn{

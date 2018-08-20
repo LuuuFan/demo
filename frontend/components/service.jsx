@@ -34,19 +34,18 @@ class Service extends React.Component {
     this.props.sendService(requestData);
 	}
 
-	// closeModal(){
-	// 	this.setState({modal: 'modal'});
-	// }
 
 	render(){
 		return(
 			<div id="table_left" >
 				{/*style={{'position': 'fixed', 'right': '0', 'top': '100px'}}*/}
+				
 				{this.state.sending ? 
 					<div className='loading'>
 						<img src='app/assets/images/sending_email.gif' />
 					</div>
 				:
+				
 		    <table id="table-1" className="table table-hover dataTable no-footer" cellSpacing="0" >
 		      {/*style={{'borderRadius':'5px', 'backgroundColor':'#2F425E','color':'#FFFFFF'}}*/}
 		      <tbody id='targetForRows'>
@@ -155,7 +154,7 @@ class Service extends React.Component {
 		    </table>
 		  	}
 		 	</div>
-	)
+		)
 	}
 }
 

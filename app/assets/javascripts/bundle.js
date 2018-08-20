@@ -30553,11 +30553,6 @@ var Service = function (_React$Component) {
 			};
 			this.props.sendService(requestData);
 		}
-
-		// closeModal(){
-		// 	this.setState({modal: 'modal'});
-		// }
-
 	}, {
 		key: 'render',
 		value: function render() {

@@ -102,14 +102,16 @@ input[type=submit] {
   align-items: center;
 }
 .navbar .header-buttons .share .message {
+  color: #333;
   padding: 5px 15px;
   font-size: 12px;
   position: fixed;
+  z-index: 10;
   top: 80px;
   left: 33%;
   width: 33%;
   border-radius: 5px;
-  background: rgba(10, 186, 181, 0.2);
+  background: rgba(10, 186, 181, 0.4);
   transition: all 0.8s;
 }
 .navbar .header-buttons .share button, .navbar .header-buttons .share a.btn, .navbar .header-buttons .share a.dropbox-dropin-btn {
@@ -266,8 +268,9 @@ input[type=submit] {
   width: 100%;
 }
 #table_left table tr.wv-pl td .send-service-button > button {
-  background-color: #5F7BF0;
   cursor: pointer;
+  background-color: #5F7BF0;
+  border: none;
   margin: 10px auto;
   border-radius: 5px;
   padding: 5px 25px;
