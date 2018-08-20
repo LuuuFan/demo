@@ -73,10 +73,14 @@ class SessionForm extends React.Component {
 						</div>
 					: ""}
 					<form className='form-signin' onSubmit={(e)=>this.handleSubmit(e)}>
-						<input id='username' className='form-control' type='text' onChange={this.handleInput('username')}  value={this.state.username} placeholder='username'/>
-						<span>{this.state.usernameError}</span>
-						<input id='password' className='form-control' type='password' onChange={this.handleInput('password')} value={this.state.password} placeholder='password'/>
-						<span>{this.state.passwordError}</span>
+						<div>
+							<input id='username' className='form-control' type='text' onChange={this.handleInput('username')}  value={this.state.username} placeholder='username'/>
+							<span>{this.state.usernameError}</span>
+						</div>
+						<div>
+							<input id='password' className='form-control' type='password' onChange={this.handleInput('password')} value={this.state.password} placeholder='password'/>
+							<span>{this.state.passwordError}</span>
+						</div>
 						<input type='submit' value={text} align='middle'/>
 					</form>
 					{formType === 'signup' ?

@@ -21,6 +21,7 @@ class Canvas extends React.Component{
 				width: 0,
 			},
 			fillChecked: true,
+			activeObj: null,
 		};
 	}
 
@@ -35,9 +36,10 @@ class Canvas extends React.Component{
 		
 		// set activeObject, 
 		canvas.on('mouse:down', (e)=>{
-			let activeObject = canvas.getActiveObject();
-			if (activeObject) {
-				canvas.bringToFront(activeObject);
+			let activeObj = canvas.getActiveObject();
+			if (activeObj) {
+				canvas.bringToFront(activeObj);
+				this.setState({activeObj});
 			}
 		})
 
@@ -189,14 +191,14 @@ class Canvas extends React.Component{
 							<div className="selected-color" style={{backgroundColor: `${this.state.shapeColor}`}}>
 							</div>
 						</div>
-						<div className="form-inline d-flex" id="shape-fill">
+						<div className="form-inline" id="shape-fill">
 							<label>Fill</label>
 							<label className="container-checkbox">
 							  <input type="checkbox" checked={this.state.fillChecked} onChange={(e)=>this.checkBox(e)} />
 							  <span className="checkmark"></span>
 							</label>
         		</div>
-	        	<div className="form-inline d-flex">
+	        	<div className="form-inline">
 	            <label htmlFor="shape-opacity">Opacity: </label>
 	            <select className="form-control" id="shape-opacity" onChange={(e)=>this.changeOpacity(e)}>
 	              <option value="1">100%</option>
@@ -235,7 +237,7 @@ class Canvas extends React.Component{
 	        <div id="text" role="tabpanel" aria-labelledby="text-button">
 						<h2>Text</h2>
 						<br />
-						<div className="form-inline d-flex">
+						<div className="form-inline">
 							<label htmlFor="text-color">Color: </label>
 							<select className="form-control" id="text-color" onChange={(e)=>this.selectColor(e, 'textColor')}>
 							  <option value="black">Black</option>
@@ -252,7 +254,7 @@ class Canvas extends React.Component{
 							</div>
           	</div>
           	<br />
-						<div className="form-inline d-flex">
+						<div className="form-inline">
 							<label htmlFor="text-style">Style: </label>
 							<select className="form-control" id="text-style" onChange={(e)=>this.changeStyle(e)}>
 							  <option value="Times">Times</option>
@@ -265,7 +267,7 @@ class Canvas extends React.Component{
 							</select>
 						</div>
 						<br />
-						<div className="form-inline d-flex">
+						<div className="form-inline">
 							<label htmlFor="text-style">Size(px): &nbsp; </label>
 							<input id="text-size" type="number" step="1" min="1" max="50" value={this.state.textSize} onChange={this.handleInput()}/>
 						</div>
@@ -277,7 +279,7 @@ class Canvas extends React.Component{
 		    	{this.state.active === 'Background' ? 
 	        <div id="background" role="tabpanel" aria-labelledby="background-button">
 						<h2>Background Color</h2>
-						<div className="form-inline d-flex">
+						<div className="form-inline">
 							<label htmlFor="background-color">Color: </label>
 							<select className="form-control" id="background-color" onChange={(e)=>this.selectColor(e, 'backgroundColor')}>
 							  <option value="lightgray">Lightgray</option>
@@ -294,8 +296,8 @@ class Canvas extends React.Component{
 							<div className="selected-color" style={{backgroundColor: `${this.state.backgroundColor}`}}>
 							</div>
 						</div>
-						<br/>
 							{/*
+								<br/>
 								<div id="button-wrapper">
 										<button type="button" id="changeBackground" onClick={()=>canvasUtil.changeBackground(this.state.backgroundColor, this.state.canvas)}>Change Background Color</button>
 								</div>
@@ -310,14 +312,20 @@ class Canvas extends React.Component{
 
 		    </div>
 
-			    <div className='container' onDoubleClick={()=>this.doubleClick()}>
+		    	<div className='container' onDoubleClick={()=>this.doubleClick()}>
 						<canvas ref='c' id='c' >
 						</canvas>
 			    </div>
 		   	</div> 
 
 		    <div className='buttons'>
-		    	<button type="button" onClick={()=>canvasUtil.resetCanvas(this.state.canvas)}>Reset Canvas</button>
+		    	<button onClick={()=>canvasUtil.resetCanvas(this.state.canvas)}>Reset Canvas</button>
+	    		{this.state.activeObj &&  this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? 
+	    			<button onClick={()=>this.groupItems()}>Group Items</button>
+    			: ""}
+    			{this.state.activeObj && this.state.activeObj.type === 'group' ? 
+	    			<button onClick={()=>this.unGroupItems()}>Ungroup Item</button>
+    			: ""}
 		    </div>
 		    
 			</div>

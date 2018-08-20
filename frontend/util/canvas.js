@@ -47,6 +47,7 @@ export const addShape = (selectedShape, canvas) => {
       canvas.setActiveObject(line);
       break;
     case "arrow":
+      console.log('unperfect arrow function, need refactor');
       // const arrow = new Arrow(canvas, color);
       break;
     default:

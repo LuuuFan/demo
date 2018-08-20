@@ -56,6 +56,9 @@ button:hover{
   position: fixed;
   bottom: 160px;
   left: 140px;
+  button{
+    margin-right: 20px;
+  }
 }
 
 .canvas-main{
@@ -212,8 +215,8 @@ button:hover{
       .form-inline{
         display: flex;
         align-items:center;
-        margin-bottom: 10px;
-        min-height: 20px;
+        margin-bottom: 15px;
+        min-height: 35px;
         text-align: center;
         label{
           font-weight: bold;

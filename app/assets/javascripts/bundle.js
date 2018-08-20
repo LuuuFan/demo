@@ -1667,6 +1667,7 @@ var addShape = exports.addShape = function addShape(selectedShape, canvas) {
       canvas.setActiveObject(line);
       break;
     case "arrow":
+      console.log('unperfect arrow function, need refactor');
       // const arrow = new Arrow(canvas, color);
       break;
     default:
@@ -27954,17 +27955,25 @@ var SessionForm = function (_React$Component) {
 						{ className: 'form-signin', onSubmit: function onSubmit(e) {
 								return _this4.handleSubmit(e);
 							} },
-						_react2.default.createElement('input', { id: 'username', className: 'form-control', type: 'text', onChange: this.handleInput('username'), value: this.state.username, placeholder: 'username' }),
 						_react2.default.createElement(
-							'span',
+							'div',
 							null,
-							this.state.usernameError
+							_react2.default.createElement('input', { id: 'username', className: 'form-control', type: 'text', onChange: this.handleInput('username'), value: this.state.username, placeholder: 'username' }),
+							_react2.default.createElement(
+								'span',
+								null,
+								this.state.usernameError
+							)
 						),
-						_react2.default.createElement('input', { id: 'password', className: 'form-control', type: 'password', onChange: this.handleInput('password'), value: this.state.password, placeholder: 'password' }),
 						_react2.default.createElement(
-							'span',
+							'div',
 							null,
-							this.state.passwordError
+							_react2.default.createElement('input', { id: 'password', className: 'form-control', type: 'password', onChange: this.handleInput('password'), value: this.state.password, placeholder: 'password' }),
+							_react2.default.createElement(
+								'span',
+								null,
+								this.state.passwordError
+							)
 						),
 						_react2.default.createElement('input', { type: 'submit', value: text, align: 'middle' })
 					),
@@ -30930,7 +30939,8 @@ var Canvas = function (_React$Component) {
 				height: 0,
 				width: 0
 			},
-			fillChecked: true
+			fillChecked: true,
+			activeObj: null
 		};
 		return _this;
 	}
@@ -30950,9 +30960,10 @@ var Canvas = function (_React$Component) {
 
 			// set activeObject, 
 			canvas.on('mouse:down', function (e) {
-				var activeObject = canvas.getActiveObject();
-				if (activeObject) {
-					canvas.bringToFront(activeObject);
+				var activeObj = canvas.getActiveObject();
+				if (activeObj) {
+					canvas.bringToFront(activeObj);
+					_this2.setState({ activeObj: activeObj });
 				}
 			});
 
@@ -31228,7 +31239,7 @@ var Canvas = function (_React$Component) {
 							),
 							_react2.default.createElement(
 								'div',
-								{ className: 'form-inline d-flex', id: 'shape-fill' },
+								{ className: 'form-inline', id: 'shape-fill' },
 								_react2.default.createElement(
 									'label',
 									null,
@@ -31245,7 +31256,7 @@ var Canvas = function (_React$Component) {
 							),
 							_react2.default.createElement(
 								'div',
-								{ className: 'form-inline d-flex' },
+								{ className: 'form-inline' },
 								_react2.default.createElement(
 									'label',
 									{ htmlFor: 'shape-opacity' },
@@ -31348,7 +31359,7 @@ var Canvas = function (_React$Component) {
 							_react2.default.createElement('br', null),
 							_react2.default.createElement(
 								'div',
-								{ className: 'form-inline d-flex' },
+								{ className: 'form-inline' },
 								_react2.default.createElement(
 									'label',
 									{ htmlFor: 'text-color' },
@@ -31410,7 +31421,7 @@ var Canvas = function (_React$Component) {
 							_react2.default.createElement('br', null),
 							_react2.default.createElement(
 								'div',
-								{ className: 'form-inline d-flex' },
+								{ className: 'form-inline' },
 								_react2.default.createElement(
 									'label',
 									{ htmlFor: 'text-style' },
@@ -31461,7 +31472,7 @@ var Canvas = function (_React$Component) {
 							_react2.default.createElement('br', null),
 							_react2.default.createElement(
 								'div',
-								{ className: 'form-inline d-flex' },
+								{ className: 'form-inline' },
 								_react2.default.createElement(
 									'label',
 									{ htmlFor: 'text-style' },
@@ -31491,7 +31502,7 @@ var Canvas = function (_React$Component) {
 							),
 							_react2.default.createElement(
 								'div',
-								{ className: 'form-inline d-flex' },
+								{ className: 'form-inline' },
 								_react2.default.createElement(
 									'label',
 									{ htmlFor: 'background-color' },
@@ -31554,8 +31565,7 @@ var Canvas = function (_React$Component) {
 									)
 								),
 								_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.backgroundColor } })
-							),
-							_react2.default.createElement('br', null)
+							)
 						) : "",
 						this.state.active === 'Image' ? _react2.default.createElement(
 							'div',
@@ -31580,11 +31590,25 @@ var Canvas = function (_React$Component) {
 					{ className: 'buttons' },
 					_react2.default.createElement(
 						'button',
-						{ type: 'button', onClick: function onClick() {
+						{ onClick: function onClick() {
 								return canvasUtil.resetCanvas(_this4.state.canvas);
 							} },
 						'Reset Canvas'
-					)
+					),
+					this.state.activeObj && this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? _react2.default.createElement(
+						'button',
+						{ onClick: function onClick() {
+								return _this4.groupItems();
+							} },
+						'Group Items'
+					) : "",
+					this.state.activeObj && this.state.activeObj.type === 'group' ? _react2.default.createElement(
+						'button',
+						{ onClick: function onClick() {
+								return _this4.unGroupItems();
+							} },
+						'Ungroup Item'
+					) : ""
 				)
 			);
 		}
