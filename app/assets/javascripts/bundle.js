@@ -1830,7 +1830,7 @@ var addDialog = exports.addDialog = function addDialog(selectedDialog, canvas) {
     var dialog = img.set({}).scale(scale);
 
     var comment = document.querySelector('#dialog textarea').value;
-    var fontSize = comment.length > 15 ? Math.floor(150 / comment.length) : 14;
+    var fontSize = comment.length > 10 ? Math.floor(150 / comment.length) : 14;
 
     var text = new fabric.IText(comment, {
       fontSize: fontSize,
@@ -31165,6 +31165,7 @@ var Canvas = function (_React$Component) {
 			// delete item on canvas
 			document.addEventListener('keydown', function (e) {
 				if (e.key === 'Backspace' || e.key === 'Delete') {
+					_this2.setState({ activeObj: null });
 					canvasUtil.deleteItem(_this2.state.canvas);
 				}
 			});
@@ -31191,6 +31192,7 @@ var Canvas = function (_React$Component) {
 			if (activeObj) {
 				this.state.canvas.bringToFront(activeObj);
 			};
+			console.log(activeObj);
 			this.setState({ activeObj: activeObj });
 		}
 	}, {
@@ -31268,17 +31270,7 @@ var Canvas = function (_React$Component) {
 			var _this4 = this;
 
 			var objArr = Array.from(this.state.activeObj._objects);
-			var left = Number.MAX_SAFE_INTEGER,
-			    top = Number.MAX_SAFE_INTEGER;
-			objArr.forEach(function (obj) {
-				if (obj.left && obj.left < left) left = obj.left;
-				if (obj.top && obj.top < top) top = obj.top;
-			});
-			var container = document.getElementById('c').getBoundingClientRect();
-			var group = new fabric.Group(objArr.reverse(), {
-				left: container.left - left,
-				top: container.top - top
-			});
+			var group = new fabric.Group(this.state.activeObj._objects);
 			objArr.forEach(function (obj) {
 				return _this4.state.canvas.remove(obj);
 			});
@@ -31893,7 +31885,8 @@ var Canvas = function (_React$Component) {
 						{ onClick: function onClick() {
 								return canvasUtil.deleteItem(_this5.state.canvas);
 							} },
-						'Delete Item'
+						'Delete ',
+						this.state.activeObj._objects ? 'Items' : 'Item'
 					) : "",
 					this.state.activeObj && this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? _react2.default.createElement(
 						'button',

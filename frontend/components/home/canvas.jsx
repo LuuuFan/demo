@@ -50,6 +50,7 @@ class Canvas extends React.Component{
 		// delete item on canvas
 		document.addEventListener('keydown', (e) => {
 			if (e.key === 'Backspace' || e.key === 'Delete') {
+				this.setState({activeObj: null});
 				canvasUtil.deleteItem(this.state.canvas);				
 			}
 		});
@@ -71,6 +72,7 @@ class Canvas extends React.Component{
 	singleClick(){
 		const activeObj = this.state.canvas.getActiveObject();
 		if (activeObj) {this.state.canvas.bringToFront(activeObj)};
+		console.log(activeObj);
 		this.setState({activeObj});
 	}
 
@@ -138,16 +140,7 @@ class Canvas extends React.Component{
 
 	groupItems(){
 		const objArr = Array.from(this.state.activeObj._objects);
-		let left = Number.MAX_SAFE_INTEGER, top = Number.MAX_SAFE_INTEGER;
-		objArr.forEach(obj => {
-			if (obj.left && obj.left < left) left = obj.left;
-			if (obj.top && obj.top < top) top = obj.top;
-		});
-  	const container = document.getElementById('c').getBoundingClientRect();
-		const group = new fabric.Group(objArr.reverse(), {
-			left: container.left - left,
-			top: container.top - top,
-		});
+		const group = new fabric.Group(this.state.activeObj._objects);
 		objArr.forEach(obj => this.state.canvas.remove(obj));
 		this.state.canvas.add(group);
 		this.state.canvas.setActiveObject(group);
@@ -392,7 +385,7 @@ class Canvas extends React.Component{
 		    <div className='buttons'>
 		    	<button onClick={()=>canvasUtil.resetCanvas(this.state.canvas)}>Reset Canvas</button>
 		    	{this.state.activeObj ? 
-	    			<button onClick={()=>canvasUtil.deleteItem(this.state.canvas)}>Delete Item</button>
+	    			<button onClick={()=>canvasUtil.deleteItem(this.state.canvas)}>Delete {this.state.activeObj._objects ? 'Items' : 'Item'}</button>
 		    		: ""}
 	    		{this.state.activeObj &&  this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? 
 	    			<button onClick={()=>this.groupItems()}>Group Items</button>

@@ -218,7 +218,7 @@ export const addDialog = (selectedDialog, canvas) => {
     }).scale(scale);
 
     const comment = document.querySelector('#dialog textarea').value;
-    const fontSize = comment.length > 15 ? Math.floor(150 / comment.length) : 14;
+    const fontSize = comment.length > 10 ? Math.floor(150 / comment.length) : 14;
 
     let text = new fabric.IText(comment, {
       fontSize: fontSize,
