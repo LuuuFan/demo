@@ -139,8 +139,11 @@ class Share extends React.Component{
 	}
 
 	logout(){
-		debugger
 		localStorage.removeItem('access_token');
+		this.props.removeCurrentUser();
+		setTimeout(()=>{
+			this.props.history.push('/login');
+		}, 2000)
 	}
 
 	render(){

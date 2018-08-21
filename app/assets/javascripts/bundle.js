@@ -2475,7 +2475,7 @@ function compose() {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.createSession = exports.createUser = exports.receiveCurrentUser = exports.RECEIVE_CURRENT_USER = undefined;
+exports.createSession = exports.createUser = exports.removeCurrentUser = exports.receiveCurrentUser = exports.REMOVE_CURRENT_USER = exports.RECEIVE_CURRENT_USER = undefined;
 
 var _session = __webpack_require__(83);
 
@@ -2486,11 +2486,18 @@ var _error = __webpack_require__(8);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var RECEIVE_CURRENT_USER = exports.RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER';
+var REMOVE_CURRENT_USER = exports.REMOVE_CURRENT_USER = 'REMOVE_CURRENT_USER';
 
 var receiveCurrentUser = exports.receiveCurrentUser = function receiveCurrentUser(currentUser) {
 	return {
 		type: RECEIVE_CURRENT_USER,
 		currentUser: currentUser
+	};
+};
+
+var removeCurrentUser = exports.removeCurrentUser = function removeCurrentUser() {
+	return {
+		type: REMOVE_CURRENT_USER
 	};
 };
 
@@ -24230,6 +24237,8 @@ var sessionReducer = function sessionReducer() {
 		case _session.RECEIVE_CURRENT_USER:
 			newState = { currentUser: action.currentUser };
 			return newState;
+		case _session.REMOVE_CURRENT_USER:
+			return {};
 		default:
 			return state;
 	}
@@ -27623,6 +27632,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(13);
 
+var _reactRouter = __webpack_require__(142);
+
 var _home = __webpack_require__(128);
 
 var _home2 = _interopRequireDefault(_home);
@@ -27671,7 +27682,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	};
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_home2.default);
+exports.default = (0, _reactRouter.withRouter)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_home2.default));
 
 /***/ }),
 /* 128 */
@@ -28023,9 +28034,9 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _share = __webpack_require__(131);
+var _share_container = __webpack_require__(143);
 
-var _share2 = _interopRequireDefault(_share);
+var _share_container2 = _interopRequireDefault(_share_container);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28072,7 +28083,7 @@ var Header = function (_React$Component) {
 				_react2.default.createElement(
 					'div',
 					{ className: 'header-buttons' },
-					_react2.default.createElement(_share2.default, { receiveImg: receiveImg, sendEmail: sendEmail, message: message, clearMessage: clearMessage, sendService: sendService })
+					_react2.default.createElement(_share_container2.default, { receiveImg: receiveImg, sendEmail: sendEmail, message: message, clearMessage: clearMessage, sendService: sendService })
 				)
 			);
 		}
@@ -28282,13 +28293,18 @@ var Share = function (_React$Component) {
 	}, {
 		key: 'logout',
 		value: function logout() {
-			debugger;
+			var _this4 = this;
+
 			localStorage.removeItem('access_token');
+			this.props.removeCurrentUser();
+			setTimeout(function () {
+				_this4.props.history.push('/login');
+			}, 2000);
 		}
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this4 = this;
+			var _this5 = this;
 
 			var dropbox = JSON.parse(localStorage.getItem('dropbox'));
 			var _props = this.props,
@@ -28307,9 +28323,9 @@ var Share = function (_React$Component) {
 				_react2.default.createElement(
 					'button',
 					{ className: 'btn services', onMouseEnter: function onMouseEnter(e) {
-							return _this4.openModal(e, 'modalList');
+							return _this5.openModal(e, 'modalList');
 						}, onMouseLeave: function onMouseLeave() {
-							return _this4.closeModal('modalList');
+							return _this5.closeModal('modalList');
 						} },
 					'Send to Service',
 					_react2.default.createElement(
@@ -28324,14 +28340,14 @@ var Share = function (_React$Component) {
 								_react2.default.createElement(
 									'li',
 									{ onClick: function onClick() {
-											return _this4.toggleService();
+											return _this5.toggleService();
 										} },
 									'ServiceNow'
 								)
 							)
 						),
 						_react2.default.createElement('div', { onClick: function onClick() {
-								return _this4.closeModal('modalList');
+								return _this5.closeModal('modalList');
 							}, className: 'modal-screen modal-screen-servicelist' })
 					)
 				),
@@ -28340,27 +28356,27 @@ var Share = function (_React$Component) {
 					{ className: this.state.servicenow },
 					_react2.default.createElement(_service2.default, { sendService: sendService }),
 					_react2.default.createElement('div', { onClick: function onClick() {
-							return _this4.closeModal('servicenow');
+							return _this5.closeModal('servicenow');
 						}, className: 'modal-screen' })
 				),
 				_react2.default.createElement(
 					'button',
 					{ className: 'btn', onClick: function onClick(e) {
-							return _this4.openModal(e, 'modalShare');
+							return _this5.openModal(e, 'modalShare');
 						} },
 					'Share'
 				),
 				_react2.default.createElement(
 					'button',
 					{ className: 'btn', onClick: function onClick(e) {
-							return _this4.logout();
+							return _this5.logout();
 						} },
 					'Log Out'
 				),
 				dropbox && Object.keys(dropbox) ? _react2.default.createElement(
 					'button',
 					{ className: 'btn', onClick: function onClick() {
-							return _this4.clearDropbox();
+							return _this5.clearDropbox();
 						} },
 					'Clear Dropbox'
 				) : "",
@@ -28373,7 +28389,7 @@ var Share = function (_React$Component) {
 						_react2.default.createElement(
 							'form',
 							{ onSubmit: function onSubmit() {
-									return _this4.sendFile();
+									return _this5.sendFile();
 								} },
 							_react2.default.createElement(
 								'div',
@@ -28384,7 +28400,7 @@ var Share = function (_React$Component) {
 									'Email: '
 								),
 								_react2.default.createElement('input', { type: 'email', onChange: function onChange(e) {
-										return _this4.handleInput(e, 'email');
+										return _this5.handleInput(e, 'email');
 									}, value: this.state.email })
 							),
 							_react2.default.createElement(
@@ -28401,7 +28417,7 @@ var Share = function (_React$Component) {
 									'Filename: '
 								),
 								_react2.default.createElement('input', { type: 'text', placeholder: 'Please input the file name', onChange: function onChange(e) {
-										return _this4.handleInput(e, 'filename');
+										return _this5.handleInput(e, 'filename');
 									}, value: this.state.filename }),
 								_react2.default.createElement(
 									'p',
@@ -28421,7 +28437,7 @@ var Share = function (_React$Component) {
 								_react2.default.createElement(
 									'select',
 									{ onChange: function onChange(e) {
-											return _this4.changeType(e);
+											return _this5.changeType(e);
 										} },
 									_react2.default.createElement(
 										'option',
@@ -28434,7 +28450,7 @@ var Share = function (_React$Component) {
 						)
 					),
 					_react2.default.createElement('div', { onClick: function onClick() {
-							return _this4.closeModal('modalShare');
+							return _this5.closeModal('modalShare');
 						}, className: 'modal-screen' })
 				)
 			);
@@ -31774,6 +31790,90 @@ var sendService = exports.sendService = function sendService(requestData) {
 //     var obj = JSON.parse(data);
 //     console.log(obj.records[0].number);
 //     alert("Incident Number ====>"+obj.records[0].number);
+
+/***/ }),
+/* 142 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MemoryRouter__ = __webpack_require__(110);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MemoryRouter", function() { return __WEBPACK_IMPORTED_MODULE_0__MemoryRouter__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Prompt__ = __webpack_require__(114);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Prompt", function() { return __WEBPACK_IMPORTED_MODULE_1__Prompt__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Redirect__ = __webpack_require__(116);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Redirect", function() { return __WEBPACK_IMPORTED_MODULE_2__Redirect__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Route__ = __webpack_require__(49);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return __WEBPACK_IMPORTED_MODULE_3__Route__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Router__ = __webpack_require__(25);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return __WEBPACK_IMPORTED_MODULE_4__Router__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__StaticRouter__ = __webpack_require__(118);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "StaticRouter", function() { return __WEBPACK_IMPORTED_MODULE_5__StaticRouter__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Switch__ = __webpack_require__(120);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Switch", function() { return __WEBPACK_IMPORTED_MODULE_6__Switch__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__generatePath__ = __webpack_require__(51);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "generatePath", function() { return __WEBPACK_IMPORTED_MODULE_7__generatePath__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__matchPath__ = __webpack_require__(26);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "matchPath", function() { return __WEBPACK_IMPORTED_MODULE_8__matchPath__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__withRouter__ = __webpack_require__(124);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "withRouter", function() { return __WEBPACK_IMPORTED_MODULE_9__withRouter__["a"]; });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***/ }),
+/* 143 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(13);
+
+var _reactRouter = __webpack_require__(142);
+
+var _share = __webpack_require__(131);
+
+var _share2 = _interopRequireDefault(_share);
+
+var _session = __webpack_require__(37);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	return {
+		removeCurrentUser: function removeCurrentUser() {
+			return dispatch((0, _session.removeCurrentUser)());
+		}
+	};
+};
+
+exports.default = (0, _reactRouter.withRouter)((0, _reactRedux.connect)(null, mapDispatchToProps)(_share2.default));
 
 /***/ })
 /******/ ]);

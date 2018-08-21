@@ -1,5 +1,5 @@
 import React from 'react';
-import Share from './share';
+import ShareContainer from './share_container';
 class Header extends React.Component{
 
 	// alert(){
@@ -18,7 +18,7 @@ class Header extends React.Component{
 					Expirements
 				</a>
 				<div className='header-buttons'>
-					<Share receiveImg={receiveImg} sendEmail={sendEmail} message={message} clearMessage={clearMessage} sendService={sendService}/>
+					<ShareContainer receiveImg={receiveImg} sendEmail={sendEmail} message={message} clearMessage={clearMessage} sendService={sendService}/>
 				</div>
 			</header>
 

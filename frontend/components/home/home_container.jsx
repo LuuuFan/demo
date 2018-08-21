@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import {withRouter} from 'react-router';
 import Home from './home';
 import {fetchAllImgs, receiveImg} from '../../actions/images';
 import {receiveCanvas} from '../../actions/canvas';
@@ -23,4 +24,4 @@ const mapDispatchToProps = (dispatch) => ({
 	sendService: (data) => dispatch(sendService(data)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
