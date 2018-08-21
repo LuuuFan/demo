@@ -73,7 +73,6 @@ class Share extends React.Component{
 	}
 
 	openModal(e, type){
-		console.log(e.target.className);
 		if (!e.target.className.includes('modal-screen')) {
 			this.setState({[type]: 'is-open'});
 		}
@@ -139,6 +138,11 @@ class Share extends React.Component{
 		});
 	}
 
+	logout(){
+		debugger
+		localStorage.removeItem('access_token');
+	}
+
 	render(){
 		const dropbox = JSON.parse(localStorage.getItem('dropbox'));
 		const {message, sendService} = this.props;
@@ -162,6 +166,7 @@ class Share extends React.Component{
 	 	  		<div onClick={()=>this.closeModal('servicenow')} className="modal-screen"></div>
 				</div>
 				<button className="btn" onClick={(e)=>this.openModal(e, 'modalShare')}>Share</button>
+				<button className="btn" onClick={(e)=>this.logout()}>Log Out</button>
 				{dropbox && Object.keys(dropbox) ? 
 				<button className="btn" onClick={()=>this.clearDropbox()}>Clear Dropbox</button>
 					: ""}

@@ -28207,7 +28207,6 @@ var Share = function (_React$Component) {
 	}, {
 		key: 'openModal',
 		value: function openModal(e, type) {
-			console.log(e.target.className);
 			if (!e.target.className.includes('modal-screen')) {
 				this.setState(_defineProperty({}, type, 'is-open'));
 			}
@@ -28281,6 +28280,12 @@ var Share = function (_React$Component) {
 			});
 		}
 	}, {
+		key: 'logout',
+		value: function logout() {
+			debugger;
+			localStorage.removeItem('access_token');
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var _this4 = this;
@@ -28344,6 +28349,13 @@ var Share = function (_React$Component) {
 							return _this4.openModal(e, 'modalShare');
 						} },
 					'Share'
+				),
+				_react2.default.createElement(
+					'button',
+					{ className: 'btn', onClick: function onClick(e) {
+							return _this4.logout();
+						} },
+					'Log Out'
 				),
 				dropbox && Object.keys(dropbox) ? _react2.default.createElement(
 					'button',

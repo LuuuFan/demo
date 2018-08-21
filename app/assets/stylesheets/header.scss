@@ -69,6 +69,16 @@ $font-hover: #278efc;
   					}
   				}
         }
+        .service-list:after, .service-list:before{
+          bottom: 100%;
+          left: 40%;
+          border: 2px solid transparent;
+          content: " ";
+          height: 0;
+          width: 0;
+          position: absolute;
+          pointer-events: none;
+        }
         .modal-screen-servicelist{
   				background: rgba(255, 255, 255, 0.1);
         }
