@@ -142,10 +142,11 @@ class Canvas extends React.Component{
 		objArr.forEach(obj => {
 			if (obj.left && obj.left < left) left = obj.left;
 			if (obj.top && obj.top < top) top = obj.top;
-		})
+		});
+  	const container = document.getElementById('c').getBoundingClientRect();
 		const group = new fabric.Group(objArr.reverse(), {
-			left: left,
-			top: top,
+			left: container.left - left,
+			top: container.top - top,
 		});
 		objArr.forEach(obj => this.state.canvas.remove(obj));
 		this.state.canvas.add(group);
@@ -390,6 +391,9 @@ class Canvas extends React.Component{
 
 		    <div className='buttons'>
 		    	<button onClick={()=>canvasUtil.resetCanvas(this.state.canvas)}>Reset Canvas</button>
+		    	{this.state.activeObj ? 
+	    			<button onClick={()=>canvasUtil.deleteItem(this.state.canvas)}>Delete Item</button>
+		    		: ""}
 	    		{this.state.activeObj &&  this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? 
 	    			<button onClick={()=>this.groupItems()}>Group Items</button>
     			: ""}

@@ -31274,9 +31274,10 @@ var Canvas = function (_React$Component) {
 				if (obj.left && obj.left < left) left = obj.left;
 				if (obj.top && obj.top < top) top = obj.top;
 			});
+			var container = document.getElementById('c').getBoundingClientRect();
 			var group = new fabric.Group(objArr.reverse(), {
-				left: left,
-				top: top
+				left: container.left - left,
+				top: container.top - top
 			});
 			objArr.forEach(function (obj) {
 				return _this4.state.canvas.remove(obj);
@@ -31887,6 +31888,13 @@ var Canvas = function (_React$Component) {
 							} },
 						'Reset Canvas'
 					),
+					this.state.activeObj ? _react2.default.createElement(
+						'button',
+						{ onClick: function onClick() {
+								return canvasUtil.deleteItem(_this5.state.canvas);
+							} },
+						'Delete Item'
+					) : "",
 					this.state.activeObj && this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? _react2.default.createElement(
 						'button',
 						{ onClick: function onClick() {
