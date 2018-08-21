@@ -55,7 +55,7 @@ $font-hover: #278efc;
       	.service-list{
       		z-index: 7;
         	position: absolute;
-        	top: 110%;
+        	top: 140%;
         	border: 1px solid lightgray;
         	border-radius: 5px;
         	background-color: white;
@@ -70,14 +70,24 @@ $font-hover: #278efc;
   				}
         }
         .service-list:after, .service-list:before{
+          content: " ";
           bottom: 100%;
           left: 40%;
           border: 2px solid transparent;
-          content: " ";
           height: 0;
           width: 0;
           position: absolute;
           pointer-events: none;
+        }
+        .service-list:after {
+          border-bottom-color: white;
+          border-width: 10px;
+          margin-left: -10px;
+        }
+        .service-list:before {
+          border-bottom-color: #555;
+          border-width: 10px;
+          margin-left: -10px;
         }
         .modal-screen-servicelist{
   				background: rgba(255, 255, 255, 0.1);

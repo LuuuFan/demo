@@ -1872,6 +1872,7 @@ var changeColor = exports.changeColor = function changeColor(canvas, activeObjec
       activeObject.set('stroke', color);
     } else {
       activeObject.set('fill', color);
+      activeObject.set('stroke', color);
     }
   }
   canvas.renderAll();
@@ -1944,7 +1945,9 @@ var cropingImage = exports.cropingImage = function cropingImage(canvas, activeOb
     // strokeDashArray: [2, 2],
     left: activeObj.left,
     top: activeObj.top,
-    visible: false
+    visible: false,
+    height: 15,
+    width: 15
   });
 
   canvas.add(rectangle);
@@ -1958,8 +1961,8 @@ var cropingImage = exports.cropingImage = function cropingImage(canvas, activeOb
   var mouseDownHandler = function mouseDownHandler(event) {
     if (!disabled) {
       console.log('~~~~~~~Mouse Down~~~~~~~~~~~~');
-      rectangle.width = 2;
-      rectangle.height = 2;
+      rectangle.width = 10;
+      rectangle.height = 10;
       mouseX = event.e.pageX;
       mouseY = event.e.pageY;
       rectangle.left = mouseX - container.left;
@@ -31118,7 +31121,7 @@ var Canvas = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (Canvas.__proto__ || Object.getPrototypeOf(Canvas)).call(this));
 
 		_this.state = {
-			active: 'Image',
+			active: 'Shapes',
 			textSize: '24',
 			canvas: {},
 			shapeColor: 'Black',

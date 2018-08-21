@@ -260,6 +260,7 @@ export const changeColor = (canvas, activeObject, color) => {
         activeObject.set('stroke', color);
       } else {
         activeObject.set('fill', color);
+        activeObject.set('stroke', color);
       }
     }
     canvas.renderAll();
@@ -332,6 +333,8 @@ export const cropingImage = (canvas, activeObj) => {
     left: activeObj.left,
     top: activeObj.top,
     visible: false,
+    height: 15,
+    width: 15,
   });
 
   canvas.add(rectangle);
@@ -345,8 +348,8 @@ export const cropingImage = (canvas, activeObj) => {
   const mouseDownHandler = (event) =>{
     if (!disabled) {
       console.log('~~~~~~~Mouse Down~~~~~~~~~~~~')
-      rectangle.width = 2;
-      rectangle.height = 2;
+      rectangle.width = 10;
+      rectangle.height = 10;
       mouseX = event.e.pageX;
       mouseY = event.e.pageY;
       rectangle.left = mouseX - container.left;

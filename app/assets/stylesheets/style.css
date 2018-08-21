@@ -128,7 +128,7 @@ input[type=submit] {
 .navbar .header-buttons .share .services .service-list {
   z-index: 7;
   position: absolute;
-  top: 110%;
+  top: 140%;
   border: 1px solid lightgray;
   border-radius: 5px;
   background-color: white;
@@ -141,14 +141,24 @@ input[type=submit] {
   text-decoration: underline;
 }
 .navbar .header-buttons .share .services .service-list:after, .navbar .header-buttons .share .services .service-list:before {
+  content: " ";
   bottom: 100%;
   left: 40%;
   border: 2px solid transparent;
-  content: " ";
   height: 0;
   width: 0;
   position: absolute;
   pointer-events: none;
+}
+.navbar .header-buttons .share .services .service-list:after {
+  border-bottom-color: white;
+  border-width: 10px;
+  margin-left: -10px;
+}
+.navbar .header-buttons .share .services .service-list:before {
+  border-bottom-color: #555;
+  border-width: 10px;
+  margin-left: -10px;
 }
 .navbar .header-buttons .share .services .modal-screen-servicelist {
   background: rgba(255, 255, 255, 0.1);
