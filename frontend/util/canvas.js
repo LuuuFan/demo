@@ -241,4 +241,52 @@ export const changeTextStyle = (obj, canvas, style, size) => {
   canvas.renderAll();
 };
 
+export const cropImage = (canvas, activeObj) => {
+  activeObj.selectable = false;
+  let mouseDown;
+  let disabled = false;
+  const container = document.getElementById('c').getBoundingClientRect();
+  const rectangle = new fabric.Rect({
+    fill: 'transparent',
+    strokeWidth: 3,
+    storke: 'black',
+    strokeDashArray: [2, 2],
+    visible: false,
+    left: activeObj.left,
+    top: activeObj.top,
+  });
+  canvas.add(rectangle);
+  canvas.renderAll();
+  canvas.on('mouse:down', (event)=>{
+    if (!disabled) {
+      rectangle.width = 2;
+      rectangle.height = 2;
+      rectangle.left = event.e.pageX - container.left;
+      rectangle.top = event.e.pageY - container.top;
+      rectangle.visible = true;
+      mouseDown = event.e;
+      canvas.bringToFront(rectangle);
+    }
+  });
 
+  canvas.on('mouse:move', (event)=>{
+    if (mouseDown && !disabled) {
+      rectangle.width = event.e.pageX - mouseDown.pageX;
+      rectangle.height = event.e.pageY - mouseDown.pageY;
+      canvas.renderAll();
+    }
+  });
+
+  canvas.on('mouse:up', () => {mouseDown = null});
+
+  activeObj.clipTo = (ctx) => {
+    let x = rectangle.left - activeObj.width * activeObj.scaleX / 2;
+    let y = rectangle.top - activeObj.height  * activeObj.scaleY / 2;
+    canvas.rect(x, y, rectangle.width, rectangle.height);  
+  }
+
+  activeObj.selectable = true;
+  disabled = true;
+  rectangle.visible = false;
+  canvas.renderAll();
+};

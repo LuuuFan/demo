@@ -1862,6 +1862,58 @@ var changeTextStyle = exports.changeTextStyle = function changeTextStyle(obj, ca
   canvas.renderAll();
 };
 
+var cropImage = exports.cropImage = function cropImage(canvas, activeObj) {
+  activeObj.selectable = false;
+  var mouseDown = void 0;
+  var disabled = false;
+  var container = document.getElementById('c').getBoundingClientRect();
+  var rectangle = new fabric.Rect({
+    fill: 'transparent',
+    strokeWidth: 3,
+    storke: 'black',
+    strokeDashArray: [2, 2],
+    visible: false,
+    left: activeObj.left,
+    top: activeObj.top
+  });
+  canvas.add(rectangle);
+  canvas.renderAll();
+  canvas.on('mouse:down', function (event) {
+    if (!disabled) {
+      rectangle.width = 2;
+      rectangle.height = 2;
+      rectangle.left = event.e.pageX - container.left;
+      rectangle.top = event.e.pageY - container.top;
+      rectangle.visible = true;
+      mouseDown = event.e;
+      canvas.bringToFront(rectangle);
+    }
+  });
+
+  canvas.on('mouse:move', function (event) {
+    if (mouseDown && !disabled) {
+      rectangle.width = event.e.pageX - mouseDown.pageX;
+      rectangle.height = event.e.pageY - mouseDown.pageY;
+      canvas.renderAll();
+    }
+  });
+
+  canvas.on('mouse:up', function () {
+    mouseDown = null;
+  });
+
+  activeObj.clipTo = function (ctx) {
+    var x = rectangle.left - activeObj.width * activeObj.scaleX / 2;
+    var y = rectangle.top - activeObj.height * activeObj.scaleY / 2;
+    canvas.rect(x, y, rectangle.width, rectangle.height);
+  };
+
+  activeObj.selectable = true;
+  disabled = true;
+  rectangle.visible = false;
+  canvas.renderAll();
+};
+
 /***/ }),
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -31488,7 +31540,7 @@ var Canvas = function (_React$Component) {
 								),
 								_react2.default.createElement(
 									'select',
-									{ className: 'form-control', id: 'text-style', onChange: function onChange(e) {
+									{ className: 'form-control', id: 'text-style', defaultValue: 'Verdana', onChange: function onChange(e) {
 											return _this5.changeStyle(e);
 										} },
 									_react2.default.createElement(
@@ -31633,7 +31685,18 @@ var Canvas = function (_React$Component) {
 								'h2',
 								null,
 								'Image'
-							)
+							),
+							this.state.activeObj && this.state.activeObj.type === 'image' ? _react2.default.createElement(
+								'div',
+								{ id: 'button-wrapper' },
+								_react2.default.createElement(
+									'button',
+									{ type: 'button', id: 'cropImage', onClick: function onClick() {
+											return canvasUtil.cropImage(_this5.state.canvas, _this5.state.activeObj);
+										} },
+									'Crop Image'
+								)
+							) : ""
 						) : ""
 					),
 					_react2.default.createElement(

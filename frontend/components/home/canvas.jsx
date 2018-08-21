@@ -280,7 +280,7 @@ class Canvas extends React.Component{
           	<br />
 						<div className="form-inline">
 							<label htmlFor="text-style">Style: </label>
-							<select className="form-control" id="text-style" onChange={(e)=>this.changeStyle(e)}>
+							<select className="form-control" id="text-style" defaultValue='Verdana' onChange={(e)=>this.changeStyle(e)}>
 							  <option value="Times">Times</option>
 							  <option value="Georgia">Georgia</option>
 							  <option value="Arial">Arial</option>
@@ -331,6 +331,11 @@ class Canvas extends React.Component{
 		    	{this.state.active === 'Image' ? 
 	        <div id='side-content-image'>
 	        	<h2>Image</h2>
+	        	{this.state.activeObj && this.state.activeObj.type === 'image' ? 
+	        		<div id="button-wrapper">
+								<button type="button" id="cropImage" onClick={()=>canvasUtil.cropImage(this.state.canvas, this.state.activeObj)}>Crop Image</button>
+							</div>
+	        	: ""}
 	        </div>
 	        : ""}
 
