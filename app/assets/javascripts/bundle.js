@@ -1669,10 +1669,74 @@ var addShape = exports.addShape = function addShape(selectedShape, canvas) {
     case "arrow":
       console.log('unperfect arrow function, need refactor');
       // const arrow = new Arrow(canvas, color);
+      addArrow(canvas, color, fill, opacity);
       break;
     default:
       return false;
   }
+};
+
+var addArrow = exports.addArrow = function addArrow(canvas, color, fill, opacity) {
+  var fromx = 10,
+      fromy = 10,
+      tox = 50,
+      toy = 50;
+  var angle = Math.atan2(toy - fromy, tox - fromx);
+
+  var headlen = 15; // arrow head size
+
+  // bring the line end back some to account for arrow head.
+  tox = tox - headlen * Math.cos(angle);
+  toy = toy - headlen * Math.sin(angle);
+
+  // calculate the points.
+  var points = [{
+    x: fromx, // start point
+    y: fromy
+  }, {
+    x: fromx - headlen / 4 * Math.cos(angle - Math.PI / 2),
+    y: fromy - headlen / 4 * Math.sin(angle - Math.PI / 2)
+  }, {
+    x: tox - headlen / 4 * Math.cos(angle - Math.PI / 2),
+    y: toy - headlen / 4 * Math.sin(angle - Math.PI / 2)
+  }, {
+    x: tox - headlen * Math.cos(angle - Math.PI / 2),
+    y: toy - headlen * Math.sin(angle - Math.PI / 2)
+  }, {
+    x: tox + headlen * Math.cos(angle), // tip
+    y: toy + headlen * Math.sin(angle)
+  }, {
+    x: tox - headlen * Math.cos(angle + Math.PI / 2),
+    y: toy - headlen * Math.sin(angle + Math.PI / 2)
+  }, {
+    x: tox - headlen / 4 * Math.cos(angle + Math.PI / 2),
+    y: toy - headlen / 4 * Math.sin(angle + Math.PI / 2)
+  }, {
+    x: fromx - headlen / 4 * Math.cos(angle + Math.PI / 2),
+    y: fromy - headlen / 4 * Math.sin(angle + Math.PI / 2)
+  }, {
+    x: fromx,
+    y: fromy
+  }];
+
+  var pline = new fabric.Polyline(points, {
+    fill: fill,
+    stroke: color,
+    opacity: opacity,
+    strokeWidth: 2,
+    originX: 'left',
+    originY: 'top',
+    selectable: true,
+    name: 'arrow'
+    // borderColor: 'blue',
+    // cornerColor: 'blue'
+  });
+
+  canvas.add(pline);
+
+  canvas.renderAll();
+  canvas.setActiveObject(pline);
+  canvas.trigger('object:modified');
 };
 
 var addText = exports.addText = function addText(canvas) {
@@ -1871,8 +1935,8 @@ var cropImage = exports.cropImage = function cropImage(canvas, activeObj) {
     fill: 'transparent',
     strokeWidth: 3,
     storke: 'black',
-    strokeDashArray: [2, 2],
-    visible: false,
+    // strokeDashArray: [2, 2],
+    visible: true,
     left: activeObj.left,
     top: activeObj.top
   });
@@ -1902,7 +1966,7 @@ var cropImage = exports.cropImage = function cropImage(canvas, activeObj) {
     mouseDown = null;
   });
 
-  activeObj.clipTo = function (ctx) {
+  activeObj.clipTo = function (canvas) {
     var x = rectangle.left - activeObj.width * activeObj.scaleX / 2;
     var y = rectangle.top - activeObj.height * activeObj.scaleY / 2;
     canvas.rect(x, y, rectangle.width, rectangle.height);
@@ -31007,7 +31071,7 @@ var Canvas = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (Canvas.__proto__ || Object.getPrototypeOf(Canvas)).call(this));
 
 		_this.state = {
-			active: 'Shapes',
+			active: 'Image',
 			textSize: '24',
 			canvas: {},
 			shapeColor: 'Black',

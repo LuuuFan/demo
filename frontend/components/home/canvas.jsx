@@ -8,7 +8,7 @@ class Canvas extends React.Component{
 	constructor(){
 		super();
 		this.state = {
-			active: 'Shapes',
+			active: 'Image',
 			textSize: '24',
 			canvas: {},
 			shapeColor: 'Black',

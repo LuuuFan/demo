@@ -49,11 +49,84 @@ export const addShape = (selectedShape, canvas) => {
     case "arrow":
       console.log('unperfect arrow function, need refactor');
       // const arrow = new Arrow(canvas, color);
+      addArrow(canvas, color, fill, opacity);
       break;
     default:
       return false;
   }
 };
+
+export const addArrow = (canvas, color, fill, opacity) => {
+  let fromx = 10,
+    fromy = 10,
+    tox = 50,
+    toy = 50;
+  const angle = Math.atan2(toy - fromy, tox - fromx);
+
+  const headlen = 15; // arrow head size
+
+  // bring the line end back some to account for arrow head.
+  tox = tox - (headlen) * Math.cos(angle);
+  toy = toy - (headlen) * Math.sin(angle);
+
+  // calculate the points.
+  const points = [{
+      x: fromx, // start point
+      y: fromy
+    },
+    {
+      x: fromx - (headlen / 4) * Math.cos(angle - Math.PI / 2),
+      y: fromy - (headlen / 4) * Math.sin(angle - Math.PI / 2)
+    },
+    {
+      x: tox - (headlen / 4) * Math.cos(angle - Math.PI / 2),
+      y: toy - (headlen / 4) * Math.sin(angle - Math.PI / 2)
+    },
+    {
+      x: tox - (headlen) * Math.cos(angle - Math.PI / 2),
+      y: toy - (headlen) * Math.sin(angle - Math.PI / 2)
+    },
+    {
+      x: tox + (headlen) * Math.cos(angle), // tip
+      y: toy + (headlen) * Math.sin(angle)
+    },
+    {
+      x: tox - (headlen) * Math.cos(angle + Math.PI / 2),
+      y: toy - (headlen) * Math.sin(angle + Math.PI / 2)
+    },
+    {
+      x: tox - (headlen / 4) * Math.cos(angle + Math.PI / 2),
+      y: toy - (headlen / 4) * Math.sin(angle + Math.PI / 2)
+    },
+    {
+      x: fromx - (headlen / 4) * Math.cos(angle + Math.PI / 2),
+      y: fromy - (headlen / 4) * Math.sin(angle + Math.PI / 2)
+    },
+    {
+      x: fromx,
+      y: fromy
+    }
+  ];
+
+  const pline = new fabric.Polyline(points, {
+    fill: fill,
+    stroke: color,
+    opacity,
+    strokeWidth: 2,
+    originX: 'left',
+    originY: 'top',
+    selectable: true,
+    name: 'arrow',
+    // borderColor: 'blue',
+    // cornerColor: 'blue'
+  });
+
+  canvas.add(pline);
+
+  canvas.renderAll();
+  canvas.setActiveObject(pline);
+  canvas.trigger('object:modified');
+}
 
 export const addText = (canvas) => {
   let style = $(`#text-style`).val();
@@ -241,6 +314,8 @@ export const changeTextStyle = (obj, canvas, style, size) => {
   canvas.renderAll();
 };
 
+
+
 export const cropImage = (canvas, activeObj) => {
   activeObj.selectable = false;
   let mouseDown;
@@ -250,8 +325,8 @@ export const cropImage = (canvas, activeObj) => {
     fill: 'transparent',
     strokeWidth: 3,
     storke: 'black',
-    strokeDashArray: [2, 2],
-    visible: false,
+    // strokeDashArray: [2, 2],
+    visible: true,
     left: activeObj.left,
     top: activeObj.top,
   });
@@ -279,7 +354,8 @@ export const cropImage = (canvas, activeObj) => {
 
   canvas.on('mouse:up', () => {mouseDown = null});
 
-  activeObj.clipTo = (ctx) => {
+
+  activeObj.clipTo = (canvas) => {
     let x = rectangle.left - activeObj.width * activeObj.scaleX / 2;
     let y = rectangle.top - activeObj.height  * activeObj.scaleY / 2;
     canvas.rect(x, y, rectangle.width, rectangle.height);  
@@ -290,3 +366,4 @@ export const cropImage = (canvas, activeObj) => {
   rectangle.visible = false;
   canvas.renderAll();
 };
+
