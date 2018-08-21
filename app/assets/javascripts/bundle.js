@@ -31173,7 +31173,7 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
-			if (nextProps.img && nextProps.img !== this.props.img) {
+			if (nextProps.img) {
 				canvasUtil.addPhoto(nextProps.img, this.state.canvas);
 			}
 		}
