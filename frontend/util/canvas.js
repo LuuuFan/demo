@@ -46,8 +46,8 @@ export const addShape = (selectedShape, canvas) => {
       canvas.add(line);
       canvas.setActiveObject(line);
       break;
-    case "arrow":
-      console.log('unperfect arrow function, need refactor');
+    case "polyline":
+      // console.log('unperfect arrow function, need refactor');
       // const arrow = new Arrow(canvas, color);
       addArrow(canvas, color, fill, opacity);
       break;
@@ -243,7 +243,6 @@ export const addDialog = (selectedDialog, canvas) => {
   });
 };
 
-
 export const resetCanvas = (canvas) => {
   canvas.clear();
   photoNum = 0;
@@ -265,7 +264,6 @@ export const changeColor = (canvas, activeObject, color) => {
     }
     canvas.renderAll();
 }
-
 
 export const changeDialog = (canvas, activeObject) => {
   let img, text, group;
@@ -316,54 +314,103 @@ export const changeTextStyle = (obj, canvas, style, size) => {
 
 
 
-export const cropImage = (canvas, activeObj) => {
-  activeObj.selectable = false;
+let rectangle;
+let disabled = false;
+let mouseX, mouseY;
+export const cropingImage = (canvas, activeObj) => {
   let mouseDown;
-  let disabled = false;
+  activeObj.selectable = false;
   const container = document.getElementById('c').getBoundingClientRect();
-  const rectangle = new fabric.Rect({
+  console.log('~~~~~~~~~~~~~~~~~~~')
+  console.log(container.left)
+  console.log(container.top)
+  rectangle = new fabric.Rect({
     fill: 'transparent',
-    strokeWidth: 3,
     storke: 'black',
+    storkeWidth: 10,
     // strokeDashArray: [2, 2],
-    visible: true,
     left: activeObj.left,
     top: activeObj.top,
+    visible: false,
   });
+
   canvas.add(rectangle);
+  canvas.bringToFront(rectangle);
+  canvas.setActiveObject(rectangle);
+  activeObj.hasRotatingPoint = true;
+  console.log(activeObj.scaleX);
+  console.log(activeObj.scaleY);
   canvas.renderAll();
-  canvas.on('mouse:down', (event)=>{
+
+  const mouseDownHandler = (event) =>{
     if (!disabled) {
+      console.log('~~~~~~~Mouse Down~~~~~~~~~~~~')
       rectangle.width = 2;
       rectangle.height = 2;
-      rectangle.left = event.e.pageX - container.left;
-      rectangle.top = event.e.pageY - container.top;
+      mouseX = event.e.pageX;
+      mouseY = event.e.pageY;
+      rectangle.left = mouseX - container.left;
+      rectangle.top = mouseY - container.top;
       rectangle.visible = true;
-      mouseDown = event.e;
+      // mouseDown = event.e;
+      mouseDown = true;
       canvas.bringToFront(rectangle);
     }
-  });
+  };
+  canvas.on('mouse:down', mouseDownHandler);
 
-  canvas.on('mouse:move', (event)=>{
+  const mouseMove = (event)=>{
     if (mouseDown && !disabled) {
-      rectangle.width = event.e.pageX - mouseDown.pageX;
-      rectangle.height = event.e.pageY - mouseDown.pageY;
-      canvas.renderAll();
+      console.log('~~~~~~~Mouse Move~~~~~~~~~~~~')
+      if (event.e.pageX - mouseX > 0) {
+        rectangle.width = event.e.pageX - mouseX;
+      }
+      if (event.e.pageY - mouseY > 0) {
+        rectangle.height = event.e.pageY - mouseY;
+      }
+      // canvas.renderAll();
     }
-  });
+  };
+  canvas.on('mouse:move', mouseMove);
 
-  canvas.on('mouse:up', () => {mouseDown = null});
+  const mouseUp = () => {
+    console.log('~~~~~~~~~~Mouse Up~~~~~~~~~~~~~~')
+    mouseDown = null;
 
-
-  activeObj.clipTo = (canvas) => {
-    let x = rectangle.left - activeObj.width * activeObj.scaleX / 2;
-    let y = rectangle.top - activeObj.height  * activeObj.scaleY / 2;
-    canvas.rect(x, y, rectangle.width, rectangle.height);  
-  }
-
-  activeObj.selectable = true;
-  disabled = true;
-  rectangle.visible = false;
-  canvas.renderAll();
+  };
+  canvas.on('mouse:up', mouseUp);
 };
+
+const cancelHandler = (canvas) => {
+  console.log('~~~~~~~~~~~~');
+  canvas.off('mouse:down');
+  canvas.off('mouse:move');
+  canvas.off('mouse:up');
+}
+
+export const doneCrop = (canvas, activeObj) => {
+    activeObj.clipTo = (ctx) => {
+      console.log('**************************')
+      console.log(activeObj.scaleX)
+      console.log(activeObj.scaleY)
+      let x = (rectangle.left - activeObj.left) / activeObj.scaleX;
+      let y = (rectangle.top - activeObj.top) / activeObj.scaleY;
+      let width = rectangle.width * 1 / activeObj.scaleX;
+      let height = rectangle.height * 1 / activeObj.scaleY;
+      ctx.rect(x, y, width, height);  
+    }
+
+    activeObj.selectable = true;
+    disabled = true;
+    rectangle.visible = false;
+    canvas.renderAll();
+    cancelHandler(canvas);
+}
+
+export const cancelCrop = (canvas, activeObj) => {
+  canvas.remove(rectangle);
+  canvas.setActiveObject(activeObj);
+  cancelHandler(canvas);
+}
+
 

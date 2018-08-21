@@ -140,6 +140,16 @@ input[type=submit] {
 .navbar .header-buttons .share .services .service-list ul li:hover {
   text-decoration: underline;
 }
+.navbar .header-buttons .share .services .service-list:after, .navbar .header-buttons .share .services .service-list:before {
+  bottom: 100%;
+  left: 40%;
+  border: 2px solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
 .navbar .header-buttons .share .services .modal-screen-servicelist {
   background: rgba(255, 255, 255, 0.1);
 }
@@ -295,7 +305,7 @@ input[type=submit] {
 
 .session-main {
   width: 30vw;
-  margin: 100px auto;
+  margin: 150px auto;
 }
 .session-main h2 {
   font-weight: bold;
@@ -345,8 +355,8 @@ input[type=submit] {
 .session-main .alert, .session-main .notification {
   display: flex;
   align-items: center;
-  padding: 8px 10px;
-  margin-bottom: 10px;
+  padding: 15px;
+  margin-bottom: 25px;
   border-radius: 5px;
   font-size: 14px;
   justify-content: space-between;
@@ -373,6 +383,9 @@ button {
   cursor: pointer;
   border-radius: 5px;
 }
+button i {
+  margin-right: 7px;
+}
 
 button:hover {
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
@@ -383,10 +396,12 @@ button:hover {
   position: fixed;
   bottom: 15px;
   left: 140px;
-  height: 140px;
+  height: 150px;
+  width: 100%;
   margin: 0px auto;
   display: flex;
   justify-content: flex-start;
+  overflow: scroll;
 }
 .img-group .img-container {
   width: 90px;
@@ -406,8 +421,11 @@ button:hover {
 
 .buttons {
   position: fixed;
-  bottom: 160px;
+  bottom: 170px;
   left: 140px;
+}
+.buttons button {
+  margin-right: 20px;
 }
 
 .canvas-main {
@@ -555,8 +573,8 @@ button:hover {
 .canvas-main .side-content-canvas #side-content > div .form-inline {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
-  min-height: 20px;
+  margin-bottom: 15px;
+  min-height: 35px;
   text-align: center;
 }
 .canvas-main .side-content-canvas #side-content > div .form-inline label {

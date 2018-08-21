@@ -1666,8 +1666,8 @@ var addShape = exports.addShape = function addShape(selectedShape, canvas) {
       canvas.add(line);
       canvas.setActiveObject(line);
       break;
-    case "arrow":
-      console.log('unperfect arrow function, need refactor');
+    case "polyline":
+      // console.log('unperfect arrow function, need refactor');
       // const arrow = new Arrow(canvas, color);
       addArrow(canvas, color, fill, opacity);
       break;
@@ -1926,56 +1926,103 @@ var changeTextStyle = exports.changeTextStyle = function changeTextStyle(obj, ca
   canvas.renderAll();
 };
 
-var cropImage = exports.cropImage = function cropImage(canvas, activeObj) {
-  activeObj.selectable = false;
+var rectangle = void 0;
+var disabled = false;
+var mouseX = void 0,
+    mouseY = void 0;
+var cropingImage = exports.cropingImage = function cropingImage(canvas, activeObj) {
   var mouseDown = void 0;
-  var disabled = false;
+  activeObj.selectable = false;
   var container = document.getElementById('c').getBoundingClientRect();
-  var rectangle = new fabric.Rect({
+  console.log('~~~~~~~~~~~~~~~~~~~');
+  console.log(container.left);
+  console.log(container.top);
+  rectangle = new fabric.Rect({
     fill: 'transparent',
-    strokeWidth: 3,
     storke: 'black',
+    storkeWidth: 10,
     // strokeDashArray: [2, 2],
-    visible: true,
     left: activeObj.left,
-    top: activeObj.top
+    top: activeObj.top,
+    visible: false
   });
+
   canvas.add(rectangle);
+  canvas.bringToFront(rectangle);
+  canvas.setActiveObject(rectangle);
+  activeObj.hasRotatingPoint = true;
+  console.log(activeObj.scaleX);
+  console.log(activeObj.scaleY);
   canvas.renderAll();
-  canvas.on('mouse:down', function (event) {
+
+  var mouseDownHandler = function mouseDownHandler(event) {
     if (!disabled) {
+      console.log('~~~~~~~Mouse Down~~~~~~~~~~~~');
       rectangle.width = 2;
       rectangle.height = 2;
-      rectangle.left = event.e.pageX - container.left;
-      rectangle.top = event.e.pageY - container.top;
+      mouseX = event.e.pageX;
+      mouseY = event.e.pageY;
+      rectangle.left = mouseX - container.left;
+      rectangle.top = mouseY - container.top;
       rectangle.visible = true;
-      mouseDown = event.e;
+      // mouseDown = event.e;
+      mouseDown = true;
       canvas.bringToFront(rectangle);
     }
-  });
+  };
+  canvas.on('mouse:down', mouseDownHandler);
 
-  canvas.on('mouse:move', function (event) {
+  var mouseMove = function mouseMove(event) {
     if (mouseDown && !disabled) {
-      rectangle.width = event.e.pageX - mouseDown.pageX;
-      rectangle.height = event.e.pageY - mouseDown.pageY;
-      canvas.renderAll();
+      console.log('~~~~~~~Mouse Move~~~~~~~~~~~~');
+      if (event.e.pageX - mouseX > 0) {
+        rectangle.width = event.e.pageX - mouseX;
+      }
+      if (event.e.pageY - mouseY > 0) {
+        rectangle.height = event.e.pageY - mouseY;
+      }
+      // canvas.renderAll();
     }
-  });
+  };
+  canvas.on('mouse:move', mouseMove);
 
-  canvas.on('mouse:up', function () {
+  var mouseUp = function mouseUp() {
+    console.log('~~~~~~~~~~Mouse Up~~~~~~~~~~~~~~');
     mouseDown = null;
-  });
+  };
+  canvas.on('mouse:up', mouseUp);
+};
 
-  activeObj.clipTo = function (canvas) {
-    var x = rectangle.left - activeObj.width * activeObj.scaleX / 2;
-    var y = rectangle.top - activeObj.height * activeObj.scaleY / 2;
-    canvas.rect(x, y, rectangle.width, rectangle.height);
+var cancelHandler = function cancelHandler(canvas) {
+  console.log('~~~~~~~~~~~~');
+  canvas.off('mouse:down');
+  canvas.off('mouse:move');
+  canvas.off('mouse:up');
+};
+
+var doneCrop = exports.doneCrop = function doneCrop(canvas, activeObj) {
+  activeObj.clipTo = function (ctx) {
+    console.log('**************************');
+    console.log(activeObj.scaleX);
+    console.log(activeObj.scaleY);
+    var x = (rectangle.left - activeObj.left) / activeObj.scaleX;
+    var y = (rectangle.top - activeObj.top) / activeObj.scaleY;
+    var width = rectangle.width * 1 / activeObj.scaleX;
+    var height = rectangle.height * 1 / activeObj.scaleY;
+    ctx.rect(x, y, width, height);
   };
 
   activeObj.selectable = true;
   disabled = true;
   rectangle.visible = false;
   canvas.renderAll();
+  cancelHandler(canvas);
+};
+
+var cancelCrop = exports.cancelCrop = function cancelCrop(canvas, activeObj) {
+  canvas.remove(rectangle);
+  canvas.setActiveObject(activeObj);
+  cancelHandler(canvas);
 };
 
 /***/ }),
@@ -31084,7 +31131,9 @@ var Canvas = function (_React$Component) {
 				width: 0
 			},
 			fillChecked: false,
-			activeObj: null
+			activeObj: null,
+			croping: false,
+			cropingImg: null
 		};
 		return _this;
 	}
@@ -31103,15 +31152,15 @@ var Canvas = function (_React$Component) {
 			// this.props.receiveCanvas(canvas);
 
 			// set activeObject, 
-			canvas.on('mouse:down', function (e) {
-				var activeObj = canvas.getActiveObject();
-				if (activeObj) {
-					canvas.bringToFront(activeObj);
-					_this2.setState({ activeObj: activeObj });
-				} else {
-					_this2.setState({ activeObj: null });
-				}
-			});
+			// canvas.on('mouse:down', (e)=>{
+			// 	let activeObj = canvas.getActiveObject();
+			// 	if (activeObj) {
+			// 		canvas.bringToFront(activeObj);
+			// 		this.setState({activeObj});
+			// 	} else {
+			// 		this.setState({activeObj: null});
+			// 	}
+			// })
 
 			// delete item on canvas
 			document.addEventListener('keydown', function (e) {
@@ -31134,6 +31183,15 @@ var Canvas = function (_React$Component) {
 			if (activeObj && activeObj.type === 'group') {
 				canvasUtil.changeDialog(this.state.canvas, activeObj);
 			}
+		}
+	}, {
+		key: 'singleClick',
+		value: function singleClick() {
+			var activeObj = this.state.canvas.getActiveObject();
+			if (activeObj) {
+				this.state.canvas.bringToFront(activeObj);
+			};
+			this.setState({ activeObj: activeObj });
 		}
 	}, {
 		key: 'handleInput',
@@ -31202,7 +31260,7 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'isShape',
 		value: function isShape(activeObj) {
-			return activeObj && (activeObj.type === 'circle' || activeObj.type === 'rect' || activeObj.type === 'line');
+			return activeObj && (activeObj.type === 'circle' || activeObj.type === 'rect' || activeObj.type === 'polyline' || activeObj.type === 'line');
 		}
 	}, {
 		key: 'groupItems',
@@ -31232,6 +31290,24 @@ var Canvas = function (_React$Component) {
 		value: function unGroupItems() {
 			this.state.activeObj.toActiveSelection();
 			this.setState({ activeObj: this.state.canvas.getActiveObject() });
+		}
+	}, {
+		key: 'croping',
+		value: function croping() {
+			canvasUtil.cropingImage(this.state.canvas, this.state.activeObj);
+			this.setState({ croping: true, cropingImg: this.state.activeObj });
+		}
+	}, {
+		key: 'doneCrop',
+		value: function doneCrop() {
+			canvasUtil.doneCrop(this.state.canvas, this.state.cropingImg);
+			this.setState({ croping: false, cropingImg: null });
+		}
+	}, {
+		key: 'cancelCrop',
+		value: function cancelCrop() {
+			canvasUtil.cancelCrop(this.state.canvas, this.state.cropingImg);
+			this.setState({ croping: false, cropingImg: null });
 		}
 	}, {
 		key: 'render',
@@ -31345,7 +31421,7 @@ var Canvas = function (_React$Component) {
 								),
 								_react2.default.createElement(
 									'li',
-									{ className: 'shapes-item ' + (this.state.selectedShape === 'arrow' ? 'ui-selected' : ''), id: 'arrow', onClick: function onClick(e) {
+									{ className: 'shapes-item ' + (this.state.selectedShape === 'polyline' ? 'ui-selected' : ''), id: 'polyline', onClick: function onClick(e) {
 											return _this5.changeShape(e, 'selectedShape');
 										} },
 									_react2.default.createElement('img', { src: 'app/assets/images/arrow.png' })
@@ -31750,15 +31826,43 @@ var Canvas = function (_React$Component) {
 								null,
 								'Image'
 							),
-							this.state.activeObj && this.state.activeObj.type === 'image' ? _react2.default.createElement(
+							this.state.activeObj && this.state.activeObj.type === 'image' && !this.state.croping ? _react2.default.createElement(
 								'div',
 								{ id: 'button-wrapper' },
 								_react2.default.createElement(
 									'button',
 									{ type: 'button', id: 'cropImage', onClick: function onClick() {
-											return canvasUtil.cropImage(_this5.state.canvas, _this5.state.activeObj);
+											return _this5.croping();
 										} },
+									_react2.default.createElement('i', { className: 'fas fa-crop' }),
 									'Crop Image'
+								)
+							) : this.state.croping ? _react2.default.createElement(
+								'div',
+								null,
+								_react2.default.createElement(
+									'div',
+									{ id: 'button-wrapper', className: 'croping' },
+									_react2.default.createElement(
+										'button',
+										{ type: 'button', id: 'done-crop', onClick: function onClick() {
+												return _this5.doneCrop();
+											} },
+										_react2.default.createElement('i', { className: 'fas fa-check-circle' }),
+										'Done'
+									)
+								),
+								_react2.default.createElement(
+									'div',
+									{ id: 'button-wrapper' },
+									_react2.default.createElement(
+										'button',
+										{ type: 'button', id: 'cancel-crop', onClick: function onClick() {
+												return _this5.cancelCrop();
+											} },
+										_react2.default.createElement('i', { className: 'fas fa-ban' }),
+										'Cancel'
+									)
 								)
 							) : ""
 						) : ""
@@ -31767,6 +31871,8 @@ var Canvas = function (_React$Component) {
 						'div',
 						{ className: 'container', onDoubleClick: function onDoubleClick() {
 								return _this5.doubleClick();
+							}, onClick: function onClick() {
+								return _this5.singleClick();
 							} },
 						_react2.default.createElement('canvas', { ref: 'c', id: 'c' })
 					)

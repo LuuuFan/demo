@@ -22,6 +22,8 @@ class Canvas extends React.Component{
 			},
 			fillChecked: false,
 			activeObj: null,
+			croping: false,
+			cropingImg: null
 		};
 	}
 
@@ -35,15 +37,15 @@ class Canvas extends React.Component{
 		// this.props.receiveCanvas(canvas);
 		
 		// set activeObject, 
-		canvas.on('mouse:down', (e)=>{
-			let activeObj = canvas.getActiveObject();
-			if (activeObj) {
-				canvas.bringToFront(activeObj);
-				this.setState({activeObj});
-			} else {
-				this.setState({activeObj: null});
-			}
-		})
+		// canvas.on('mouse:down', (e)=>{
+		// 	let activeObj = canvas.getActiveObject();
+		// 	if (activeObj) {
+		// 		canvas.bringToFront(activeObj);
+		// 		this.setState({activeObj});
+		// 	} else {
+		// 		this.setState({activeObj: null});
+		// 	}
+		// })
 
 		// delete item on canvas
 		document.addEventListener('keydown', (e) => {
@@ -51,7 +53,6 @@ class Canvas extends React.Component{
 				canvasUtil.deleteItem(this.state.canvas);				
 			}
 		});
-
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -66,6 +67,12 @@ class Canvas extends React.Component{
 			canvasUtil.changeDialog(this.state.canvas, activeObj);
 		}
 	}	
+
+	singleClick(){
+		const activeObj = this.state.canvas.getActiveObject();
+		if (activeObj) {this.state.canvas.bringToFront(activeObj)};
+		this.setState({activeObj});
+	}
 
 	handleInput(){
 		return (e) => {
@@ -125,6 +132,7 @@ class Canvas extends React.Component{
 	isShape(activeObj){
 		return activeObj && (activeObj.type === 'circle' || 
 													activeObj.type === 'rect' || 
+													activeObj.type === 'polyline' ||
 													activeObj.type === 'line')
 	}
 
@@ -148,6 +156,21 @@ class Canvas extends React.Component{
 	unGroupItems(){
 		this.state.activeObj.toActiveSelection();
 		this.setState({activeObj: this.state.canvas.getActiveObject()});
+	}
+
+	croping(){
+		canvasUtil.cropingImage(this.state.canvas, this.state.activeObj);
+		this.setState({croping: true, cropingImg: this.state.activeObj});
+	}
+
+	doneCrop(){
+		canvasUtil.doneCrop(this.state.canvas, this.state.cropingImg);
+		this.setState({croping: false, cropingImg: null});
+	}
+
+	cancelCrop(){
+		canvasUtil.cancelCrop(this.state.canvas, this.state.cropingImg);
+		this.setState({croping: false, cropingImg: null});
 	}
 
 	render(){
@@ -192,7 +215,7 @@ class Canvas extends React.Component{
 							<li className={`shapes-item ${this.state.selectedShape === 'line' ? 'ui-selected' : ''}`} id="line" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 							  <img src="app/assets/images/line.png" />
 							</li>
-							<li className={`shapes-item ${this.state.selectedShape === 'arrow' ? 'ui-selected' : ''}`} id="arrow" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
+							<li className={`shapes-item ${this.state.selectedShape === 'polyline' ? 'ui-selected' : ''}`} id="polyline" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 							  <img src="app/assets/images/arrow.png" />
 							</li>
 						</ol>
@@ -331,17 +354,35 @@ class Canvas extends React.Component{
 		    	{this.state.active === 'Image' ? 
 	        <div id='side-content-image'>
 	        	<h2>Image</h2>
-	        	{this.state.activeObj && this.state.activeObj.type === 'image' ? 
+	        	{this.state.activeObj && this.state.activeObj.type === 'image' && !this.state.croping ? 
 	        		<div id="button-wrapper">
-								<button type="button" id="cropImage" onClick={()=>canvasUtil.cropImage(this.state.canvas, this.state.activeObj)}>Crop Image</button>
+								<button type="button" id="cropImage" onClick={()=>this.croping()}>
+									<i className="fas fa-crop"></i>
+									Crop Image
+								</button>
 							</div>
+	        	: this.state.croping ? 
+	        		<div>
+	        			<div id="button-wrapper" className='croping'>
+									<button type="button" id='done-crop' onClick={()=>this.doneCrop()}>
+										<i className="fas fa-check-circle"></i>
+										Done
+									</button>
+								</div>
+								<div id="button-wrapper">
+									<button type="button" id='cancel-crop' onClick={()=>this.cancelCrop()}>
+										<i className="fas fa-ban"></i>
+										Cancel
+									</button>
+								</div>
+	        		</div> 
 	        	: ""}
 	        </div>
 	        : ""}
 
 		    </div>
 
-		    	<div className='container' onDoubleClick={()=>this.doubleClick()}>
+		    	<div className='container' onDoubleClick={()=>this.doubleClick()} onClick={()=>this.singleClick()}>
 						<canvas ref='c' id='c' >
 						</canvas>
 			    </div>
