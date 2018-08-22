@@ -480,6 +480,13 @@ button:hover {
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
 }
+.canvas-main .side-content-canvas #side-content #side-content-image #button-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.canvas-main .side-content-canvas #side-content #side-content-image #button-wrapper button {
+  margin-bottom: 15px;
+}
 .canvas-main .side-content-canvas #side-content > div {
   height: 90%;
   min-width: 210px;

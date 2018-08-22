@@ -2028,6 +2028,25 @@ var cancelCrop = exports.cancelCrop = function cancelCrop(canvas, activeObj) {
   cancelHandler(canvas);
 };
 
+var rotateImg = exports.rotateImg = function rotateImg(canvas, activeObj) {
+  var resetOrigin = false;
+  var angle = activeObj.angle + 90;
+  if ((activeObj.originX !== 'center' || activeObj.originY !== 'center') && activeObj.centeredRotation) {
+    activeObj.setOriginToCenter && activeObj.setOriginToCenter();
+    resetOrigin = true;
+  }
+
+  angle = angle > 360 ? 90 : angle < 0 ? 270 : angle;
+
+  activeObj.set('angle', angle).setCoords();
+
+  if (resetOrigin) {
+    activeObj.setCenterToOrigin && activeObj.setCenterToOrigin();
+  }
+
+  canvas.renderAll();
+};
+
 /***/ }),
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -31832,6 +31851,14 @@ var Canvas = function (_React$Component) {
 										} },
 									_react2.default.createElement('i', { className: 'fas fa-crop' }),
 									'Crop Image'
+								),
+								_react2.default.createElement(
+									'button',
+									{ type: 'button', id: 'rotateImg', onClick: function onClick() {
+											return canvasUtil.rotateImg(_this5.state.canvas, _this5.state.activeObj);
+										} },
+									_react2.default.createElement('i', { className: 'fas fa-sync-alt' }),
+									'Rotate Image'
 								)
 							) : this.state.croping ? _react2.default.createElement(
 								'div',
