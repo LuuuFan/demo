@@ -2004,17 +2004,16 @@ var cancelHandler = function cancelHandler(canvas) {
 };
 
 var doneCrop = exports.doneCrop = function doneCrop(canvas, activeObj) {
+  console.log('**************************');
+  console.log(activeObj.scaleX);
+  console.log(activeObj.scaleY);
+  var x = (rectangle.left - activeObj.left) / activeObj.scaleX;
+  var y = (rectangle.top - activeObj.top) / activeObj.scaleY;
+  var width = rectangle.width * 1 / activeObj.scaleX;
+  var height = rectangle.height * 1 / activeObj.scaleY;
   activeObj.clipTo = function (ctx) {
-    console.log('**************************');
-    console.log(activeObj.scaleX);
-    console.log(activeObj.scaleY);
-    var x = (rectangle.left - activeObj.left) / activeObj.scaleX;
-    var y = (rectangle.top - activeObj.top) / activeObj.scaleY;
-    var width = rectangle.width * 1 / activeObj.scaleX;
-    var height = rectangle.height * 1 / activeObj.scaleY;
     ctx.rect(x, y, width, height);
   };
-
   activeObj.selectable = true;
   disabled = true;
   rectangle.visible = false;

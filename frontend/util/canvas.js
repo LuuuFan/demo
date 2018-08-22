@@ -392,17 +392,16 @@ const cancelHandler = (canvas) => {
 }
 
 export const doneCrop = (canvas, activeObj) => {
+    console.log('**************************')
+    console.log(activeObj.scaleX)
+    console.log(activeObj.scaleY)
+    let x = (rectangle.left - activeObj.left) / activeObj.scaleX;
+    let y = (rectangle.top - activeObj.top) / activeObj.scaleY;
+    let width = rectangle.width * 1 / activeObj.scaleX;
+    let height = rectangle.height * 1 / activeObj.scaleY;
     activeObj.clipTo = (ctx) => {
-      console.log('**************************')
-      console.log(activeObj.scaleX)
-      console.log(activeObj.scaleY)
-      let x = (rectangle.left - activeObj.left) / activeObj.scaleX;
-      let y = (rectangle.top - activeObj.top) / activeObj.scaleY;
-      let width = rectangle.width * 1 / activeObj.scaleX;
-      let height = rectangle.height * 1 / activeObj.scaleY;
       ctx.rect(x, y, width, height);  
     }
-
     activeObj.selectable = true;
     disabled = true;
     rectangle.visible = false;
@@ -415,7 +414,6 @@ export const cancelCrop = (canvas, activeObj) => {
   canvas.setActiveObject(activeObj);
   cancelHandler(canvas);
 }
-
 
 export const rotateImg = (canvas, activeObj) => {
   let resetOrigin = false;
