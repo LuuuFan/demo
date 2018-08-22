@@ -323,38 +323,35 @@ export const cropingImage = (canvas, activeObj) => {
   activeObj.selectable = false;
   const container = document.getElementById('c').getBoundingClientRect();
   console.log('~~~~~~~~~~~~~~~~~~~')
-  console.log(container.left)
-  console.log(container.top)
+  console.log(container.left, container.top)
   rectangle = new fabric.Rect({
-    fill: 'transparent',
-    storke: 'black',
-    storkeWidth: 10,
-    // strokeDashArray: [2, 2],
-    left: activeObj.left,
-    top: activeObj.top,
-    visible: false,
-    height: 15,
-    width: 15,
+    fill: 'rgba(0,0,0,0.3)',
+    storke: '#ccc',
+    // storkeWidth: 10,
+    strokeDashArray: [2, 2],
+    left: activeObj.left + 10,
+    top: activeObj.top + 10,
+    visible: true,
+    height: activeObj.height * activeObj.scaleY * 0.8,
+    width: activeObj.width * activeObj.scaleX * 0.8,
   });
 
   canvas.add(rectangle);
   canvas.bringToFront(rectangle);
   canvas.setActiveObject(rectangle);
-  activeObj.hasRotatingPoint = true;
-  console.log(activeObj.scaleX);
-  console.log(activeObj.scaleY);
+  // activeObj.hasRotatingPoint = true;
   canvas.renderAll();
 
   const mouseDownHandler = (event) =>{
     if (!disabled) {
       console.log('~~~~~~~Mouse Down~~~~~~~~~~~~')
-      rectangle.width = 10;
-      rectangle.height = 10;
+      // rectangle.width = 10;
+      // rectangle.height = 10;
+      rectangle.visible = true;
       mouseX = event.e.pageX;
       mouseY = event.e.pageY;
       rectangle.left = mouseX - container.left;
       rectangle.top = mouseY - container.top;
-      rectangle.visible = true;
       // mouseDown = event.e;
       mouseDown = true;
       canvas.bringToFront(rectangle);
@@ -393,12 +390,14 @@ const cancelHandler = (canvas) => {
 
 export const doneCrop = (canvas, activeObj) => {
     console.log('**************************')
-    console.log(activeObj.scaleX)
-    console.log(activeObj.scaleY)
-    let x = (rectangle.left - activeObj.left) / activeObj.scaleX;
-    let y = (rectangle.top - activeObj.top) / activeObj.scaleY;
+    console.log('rectangle', rectangle.left, rectangle.top)
+    console.log('activeObj: image', activeObj.left, activeObj.top)
+    let x = rectangle.left - activeObj.left // activeObj.scaleX;
+    let y = rectangle.top - activeObj.top // activeObj.scaleY;
     let width = rectangle.width * 1 / activeObj.scaleX;
     let height = rectangle.height * 1 / activeObj.scaleY;
+    console.log(x, y, width, height);
+    debugger
     activeObj.clipTo = (ctx) => {
       ctx.rect(x, y, width, height);  
     }

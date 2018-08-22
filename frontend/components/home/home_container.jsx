@@ -21,7 +21,7 @@ const mapDispatchToProps = (dispatch) => ({
 	receiveImg: img => dispatch(receiveImg(img)),
 	sendEmail: (token, formData) => dispatch(sendEmail(token, formData)),
 	clearMessage: () => dispatch(clearMessage()),
-	sendService: (data) => dispatch(sendService(data)),
+	sendService: (data, token) => dispatch(sendService(data, token)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));

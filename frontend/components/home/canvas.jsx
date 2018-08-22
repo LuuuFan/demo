@@ -356,7 +356,7 @@ class Canvas extends React.Component{
 									</button>
 									<button type="button" id="rotateImg" onClick={()=>canvasUtil.rotateImg(this.state.canvas, this.state.activeObj)}>
 										<i className="fas fa-sync-alt"></i>
-										Rotate Image
+										90&#176; Rotate Image
 									</button>
 								</div>
 		        	: this.state.croping ? 

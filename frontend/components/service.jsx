@@ -6,6 +6,8 @@ class Service extends React.Component {
 		super();
 		this.state = {
 			sending: false,
+			url: 'https://dev54889.service-now.com',
+			filename: '',
 		}
 	}
 
@@ -29,9 +31,21 @@ class Service extends React.Component {
 	          "caller_id":"admin",
 	          "assignment_group":$("#ag-select").val(),
 	          "assigned_to":$("#at-select").val(),
-	          // "file": pdf.output('datauri'),
 	        };
-    this.props.sendService(requestData);
+	  const data = {
+      "file": pdf.output('datauri'),
+			"details": requestData,
+			"filename": `${this.state.filename || 'download'}.pdf`,
+			"url": this.state.url,	  	
+	  }
+	  const token = localStorage.getItem('access_token');	
+    this.props.sendService(data, token);
+	}
+
+	handleInput(type){
+		return (e) => {
+			this.setState({[type]: e.target.value});
+		}
 	}
 
 
@@ -57,6 +71,12 @@ class Service extends React.Component {
 		            	style={{'color':'#FFFFFF','paddingLeft':'30px'}}>
 		            	*/}
 		           </div>
+		          </td>
+		        </tr>
+		        <tr className="wv-pl">
+		          <td>
+		            <span>Service URL</span>
+		            <input type='text' value={this.state.url} onChange={this.handleInput('url')} placeholder='Please input service url'/>
 		          </td>
 		        </tr>
 		        <tr className="wv-pl">
@@ -128,6 +148,7 @@ class Service extends React.Component {
 		            <span>Assigned To</span>
 		            <select id="at-select" className="input">
 		              <option>Select a AT</option>
+		              <option value="Admin">Admin</option>
 		              <option value="Pavan Karra">Pavan Karra</option>
 		            </select>
 		          </td>
@@ -137,6 +158,8 @@ class Service extends React.Component {
 		            <span>Attached File</span>
 		            <div className='attached-files'>
 		            	<i className="far fa-file-pdf"></i>
+		            	<input type='text' value={this.state.filename} onChange={this.handleInput('filename')} placeholder='filename'/>
+		            	<span>.pdf</span>
 		            </div>
 		          </td>
 		        </tr>

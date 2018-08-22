@@ -278,6 +278,9 @@ input[type=submit] {
 #table_left table tr.wv-pl td span {
   width: 100px;
 }
+#table_left table tr.wv-pl td input[type=text] {
+  border-bottom: 1px solid #59687E;
+}
 #table_left table tr.wv-pl td #input-level {
   border-bottom: 1px solid #59687E;
 }

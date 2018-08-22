@@ -5,7 +5,7 @@ const messageReducer = (state = {}, action) => {
 	let newState;
 	switch(action.type){
 		case RECEIVE_MESSAGE:
-			return {orderNum: action.message};
+			return action.message;
 		case CLEAR_MESSAGE:
 			return {};
 		default:

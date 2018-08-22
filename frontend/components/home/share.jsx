@@ -64,7 +64,7 @@ class Share extends React.Component{
 	}
 
 	componentWillReceiveProps(nextProps){
-		if (nextProps.message.orderNum) {
+		if (nextProps.message.message) {
 			this.setState({servicenow: 'modal'});
 			setTimeout(()=>{
 					nextProps.clearMessage();
@@ -109,7 +109,7 @@ class Share extends React.Component{
 				formData['filename'] = `${this.state.filename || 'download'}.${this.state.type}`;
 				const token = localStorage.getItem('access_token');
 				// console.log(pdf.output('datauri'));
-				console.log(formData['filename']);
+				// console.log(formData['filename']);
 				this.props.sendEmail(token, formData);
 				// saving pdf to local
 				// pdf.save('download.pdf');
@@ -151,8 +151,8 @@ class Share extends React.Component{
 		const {message, sendService} = this.props;
 		return (
 			<div className='share'>
-				{message.orderNum ? 
-					<div className='message'>Service sent successfully. Incident Number: {message.orderNum}</div>
+				{message.message && message.message.startsWith('Email') ? 
+					<div className='message'>{message.message}</div>
 					: ""}
 				<button className="btn services" onMouseEnter={(e)=>this.openModal(e, 'modalList')} onMouseLeave={()=>this.closeModal('modalList')}>Send to Service
 					<div className={this.state.modalList}>
