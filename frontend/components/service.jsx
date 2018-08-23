@@ -11,14 +11,27 @@ class Service extends React.Component {
 		}
 	}
 
+	extraPDF(){
+		const container = document.querySelectorAll('.container');
+		const ids = [];
+		container.forEach(c => ids.push(c.classList[1].split('-')[1]));
+		const imgDataArr = ids.map(id => document.getElementById(id).toDataURL('image/jpeg', 1.0));
+		return imgDataArr
+	}
+
 	sendService(){
 		this.setState({sending: true});
-		const imgData = document.querySelector('#0').toDataURL('image/jpeg', 1.0);
+		const imgDataArr = this.extraPDF();
 		// for img png file
 		// const data = imgData.replace(/^data:image\/\w+;base64,/, "");
 		// console.log(data);
 		const pdf = new jsPDF();
-		pdf.addImage(imgData, 'JPEG', 0, 0);
+		imgDataArr.forEach((imgData, idx) => {
+			pdf.addImage(imgData, 'JPEG', 0, 0);
+			if (idx !== imgDataArr.length - 1) {
+				pdf.addPage();
+			}
+		});
 
 		const requestData = {
 	          "sysparm_action": "insert",

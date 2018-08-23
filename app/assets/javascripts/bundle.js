@@ -30869,15 +30869,33 @@ var Service = function (_React$Component) {
 	}
 
 	_createClass(Service, [{
+		key: 'extraPDF',
+		value: function extraPDF() {
+			var container = document.querySelectorAll('.container');
+			var ids = [];
+			container.forEach(function (c) {
+				return ids.push(c.classList[1].split('-')[1]);
+			});
+			var imgDataArr = ids.map(function (id) {
+				return document.getElementById(id).toDataURL('image/jpeg', 1.0);
+			});
+			return imgDataArr;
+		}
+	}, {
 		key: 'sendService',
 		value: function sendService() {
 			this.setState({ sending: true });
-			var imgData = document.querySelector('#0').toDataURL('image/jpeg', 1.0);
+			var imgDataArr = this.extraPDF();
 			// for img png file
 			// const data = imgData.replace(/^data:image\/\w+;base64,/, "");
 			// console.log(data);
 			var pdf = new jsPDF();
-			pdf.addImage(imgData, 'JPEG', 0, 0);
+			imgDataArr.forEach(function (imgData, idx) {
+				pdf.addImage(imgData, 'JPEG', 0, 0);
+				if (idx !== imgDataArr.length - 1) {
+					pdf.addPage();
+				}
+			});
 
 			var requestData = {
 				"sysparm_action": "insert",
