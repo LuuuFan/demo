@@ -31237,9 +31237,9 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _canvas2 = __webpack_require__(30);
+var _canvas = __webpack_require__(30);
 
-var canvasUtil = _interopRequireWildcard(_canvas2);
+var canvasUtil = _interopRequireWildcard(_canvas);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -31331,7 +31331,7 @@ var Canvas = function (_React$Component) {
 			var canvas = new fabric.Canvas(id, { width: container.offsetWidth - 50, height: 650 });
 			canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 			this.setState({
-				canvas: _defineProperty({}, id, canvas),
+				canvas: Object.assign({}, this.state.canvas, _defineProperty({}, id, canvas)),
 				selectedCanvas: canvas
 			});
 		}
@@ -31352,13 +31352,18 @@ var Canvas = function (_React$Component) {
 		}
 	}, {
 		key: 'singleClick',
-		value: function singleClick() {
-			var activeObj = this.state.selectedCanvas.getActiveObject();
+		value: function singleClick(e) {
+			var id = e.currentTarget.classList[1].split('-')[1];
+			var selectedCanvas = this.state.canvas['' + id];
+			var activeObj = selectedCanvas.getActiveObject();
 			if (activeObj) {
-				this.state.selectedCanvas.bringToFront(activeObj);
+				selectedCanvas.bringToFront(activeObj);
 			};
 			console.log(activeObj);
-			this.setState({ activeObj: activeObj });
+			this.setState({
+				activeObj: activeObj,
+				selectedCanvas: selectedCanvas
+			});
 		}
 	}, {
 		key: 'handleInput',
@@ -32042,8 +32047,8 @@ var Canvas = function (_React$Component) {
 							'div',
 							{ className: 'container container-0', onDoubleClick: function onDoubleClick() {
 									return _this5.doubleClick();
-								}, onClick: function onClick() {
-									return _this5.singleClick();
+								}, onClick: function onClick(e) {
+									return _this5.singleClick(e);
 								} },
 							_react2.default.createElement('canvas', { ref: '0', id: '0' })
 						),
@@ -32052,8 +32057,8 @@ var Canvas = function (_React$Component) {
 								'div',
 								{ key: idx, className: 'container container-' + id, onDoubleClick: function onDoubleClick() {
 										return _this5.doubleClick();
-									}, onClick: function onClick() {
-										return _this5.singleClick();
+									}, onClick: function onClick(e) {
+										return _this5.singleClick(e);
 									} },
 								_react2.default.createElement('canvas', { ref: id, id: id })
 							);

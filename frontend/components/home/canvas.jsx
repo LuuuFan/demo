@@ -67,7 +67,7 @@ class Canvas extends React.Component{
 		let canvas = new fabric.Canvas(id, {width: container.offsetWidth - 50, height: 650});
 		canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 		this.setState({
-			canvas: {[id]: canvas},
+			canvas: Object.assign({}, this.state.canvas, {[id]: canvas}),
 			selectedCanvas: canvas,
 		});
 	}
@@ -86,11 +86,16 @@ class Canvas extends React.Component{
 		}
 	}	
 
-	singleClick(){
-		const activeObj = this.state.selectedCanvas.getActiveObject();
-		if (activeObj) {this.state.selectedCanvas.bringToFront(activeObj)};
+	singleClick(e){
+		const id = e.currentTarget.classList[1].split('-')[1];
+		const selectedCanvas = this.state.canvas[`${id}`]
+		const activeObj = selectedCanvas.getActiveObject();
+		if (activeObj) {selectedCanvas.bringToFront(activeObj)};
 		console.log(activeObj);
-		this.setState({activeObj});
+		this.setState({
+			activeObj, 
+			selectedCanvas,
+			});
 	}
 
 	handleInput(){
@@ -395,11 +400,11 @@ class Canvas extends React.Component{
 			    </div>
 
 			    <div className='canvas-area'>
-			    	<div className='container container-0' onDoubleClick={()=>this.doubleClick()} onClick={()=>this.singleClick()}>
+			    	<div className='container container-0' onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
 						<canvas ref='0' id='0'></canvas>
 				    </div>
 				    {this.state.extraCanvas.map((id, idx) => 
-				    	<div key={idx} className={`container container-${id}`} onDoubleClick={()=>this.doubleClick()} onClick={()=>this.singleClick()}>
+				    	<div key={idx} className={`container container-${id}`} onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
 				    		<canvas ref={id} id={id}></canvas>
 				    	</div>)}
 				  </div>
