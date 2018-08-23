@@ -56,6 +56,9 @@ class Canvas extends React.Component{
 	}
 
 	componentWillReceiveProps(nextProps){
+		if (nextProps.img) {
+			canvasUtil.addPhoto(nextProps.img, this.state.selectedCanvas);
+		}
 		if (nextProps.message.message && nextProps.message.message.startsWith('Email')) {
 			this.resetCanvas();
 		}
@@ -100,13 +103,6 @@ class Canvas extends React.Component{
 		$('.canvas-area').animate({
 			scrollTop: $(`.container-${id}`).offset().top
 		}, 800);
-	}
-
-	componentWillReceiveProps(nextProps){
-		if (nextProps.img) {
-			canvasUtil.addPhoto(nextProps.img, this.state.selectedCanvas);
-		}
-
 	}
 
 	doubleClick(){

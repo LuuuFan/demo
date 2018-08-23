@@ -105,6 +105,9 @@ input[type=submit] {
   position: fixed;
   top: 45%;
   left: 48%;
+  z-index: 15;
+  height: 100px;
+  width: 100px;
 }
 .navbar .header-buttons .share .message {
   color: #333;
@@ -241,6 +244,19 @@ input[type=submit] {
   font-weight: bold;
 }
 
+.loading {
+  z-index: 15;
+  height: 100px;
+  width: 100px;
+  position: fixed;
+  top: 45%;
+  left: 45%;
+}
+.loading img {
+  height: 100%;
+  object-fit: contain;
+}
+
 #table_left {
   border-radius: 7px;
   position: fixed;
@@ -252,17 +268,6 @@ input[type=submit] {
   color: #FFFFFF;
   animation: slide 2s forwards;
   -webkit-animation: slide 2s forwards;
-}
-#table_left .loading {
-  z-index: 10;
-  height: 100px;
-  width: 100%;
-  background-color: white;
-}
-#table_left .loading img {
-  height: 100%;
-  object-fit: contain;
-  margin: 0 auto;
 }
 #table_left table {
   width: 100%;
