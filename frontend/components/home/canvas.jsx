@@ -55,22 +55,41 @@ class Canvas extends React.Component{
 		});
 	}
 
+	componentWillReceiveProps(nextProps){
+		if (nextProps.message.message && nextProps.message.message.startsWith('Email')) {
+			this.resetCanvas();
+		}
+	}
+
 	componentDidUpdate(prevProps, prevState){
 		if (prevState.extraCanvas.length !== this.state.extraCanvas.length) {
 			const id = this.state.extraCanvas[this.state.extraCanvas.length - 1];
-			this.initializeCanvas(`${id}`);
-			this.scroll(id);
+			if (id) {
+				this.initializeCanvas(`${id}`);
+				this.scroll(id);
+			}
 		}
+	}
+
+	resetCanvas(){
+		const defaultCanvas = this.state.canvas['0'];
+		this.setState({
+			extraCanvas: [],
+			canvas: {'0': defaultCanvas},
+		});
+		canvasUtil.resetCanvas(defaultCanvas);
 	}
 
 	initializeCanvas(id){
 		const container = document.querySelector(`.container-${id}`);
-		let canvas = new fabric.Canvas(id, {width: container.offsetWidth - 50, height: 650});
-		canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
-		this.setState({
-			canvas: Object.assign({}, this.state.canvas, {[id]: canvas}),
-			selectedCanvas: canvas,
-		});
+		if (container) {
+			let canvas = new fabric.Canvas(id, {width: container.offsetWidth - 50, height: 650});
+			canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
+			this.setState({
+				canvas: Object.assign({}, this.state.canvas, {[id]: canvas}),
+				selectedCanvas: canvas,
+			});
+		}
 	}
 
 	scroll(id){
@@ -423,7 +442,7 @@ class Canvas extends React.Component{
 
 		    <div className='buttons'>
 		    	<button onClick={()=>this.addCanvas()}>Add Canvas</button>
-		    	<button onClick={()=>canvasUtil.resetCanvas(this.state.selectedCanvas)}>Reset Canvas</button>
+		    	<button onClick={()=>this.resetCanvas()}>Reset Canvas</button>
 		    	{this.state.activeObj ? 
 	    			<button onClick={()=>canvasUtil.deleteItem(this.state.selectedCanvas)}>Delete {this.state.activeObj._objects ? 'Items' : 'Item'}</button>
 		    		: ""}

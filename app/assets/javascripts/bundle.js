@@ -31373,24 +31373,45 @@ var Canvas = function (_React$Component) {
 			});
 		}
 	}, {
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(nextProps) {
+			if (nextProps.message.message && nextProps.message.message.startsWith('Email')) {
+				this.resetCanvas();
+			}
+		}
+	}, {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate(prevProps, prevState) {
 			if (prevState.extraCanvas.length !== this.state.extraCanvas.length) {
 				var id = this.state.extraCanvas[this.state.extraCanvas.length - 1];
-				this.initializeCanvas('' + id);
-				this.scroll(id);
+				if (id) {
+					this.initializeCanvas('' + id);
+					this.scroll(id);
+				}
 			}
+		}
+	}, {
+		key: 'resetCanvas',
+		value: function resetCanvas() {
+			var defaultCanvas = this.state.canvas['0'];
+			this.setState({
+				extraCanvas: [],
+				canvas: { '0': defaultCanvas }
+			});
+			canvasUtil.resetCanvas(defaultCanvas);
 		}
 	}, {
 		key: 'initializeCanvas',
 		value: function initializeCanvas(id) {
 			var container = document.querySelector('.container-' + id);
-			var canvas = new fabric.Canvas(id, { width: container.offsetWidth - 50, height: 650 });
-			canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
-			this.setState({
-				canvas: Object.assign({}, this.state.canvas, _defineProperty({}, id, canvas)),
-				selectedCanvas: canvas
-			});
+			if (container) {
+				var canvas = new fabric.Canvas(id, { width: container.offsetWidth - 50, height: 650 });
+				canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
+				this.setState({
+					canvas: Object.assign({}, this.state.canvas, _defineProperty({}, id, canvas)),
+					selectedCanvas: canvas
+				});
+			}
 		}
 	}, {
 		key: 'scroll',
@@ -32146,7 +32167,7 @@ var Canvas = function (_React$Component) {
 					_react2.default.createElement(
 						'button',
 						{ onClick: function onClick() {
-								return canvasUtil.resetCanvas(_this5.state.selectedCanvas);
+								return _this5.resetCanvas();
 							} },
 						'Reset Canvas'
 					),
