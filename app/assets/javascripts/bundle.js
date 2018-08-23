@@ -31704,7 +31704,6 @@ var Canvas = function (_React$Component) {
 									)
 								)
 							),
-							_react2.default.createElement('br', null),
 							_react2.default.createElement(
 								'div',
 								{ id: 'button-wrapper' },
@@ -31771,7 +31770,6 @@ var Canvas = function (_React$Component) {
 								null,
 								'Text'
 							),
-							_react2.default.createElement('br', null),
 							_react2.default.createElement(
 								'div',
 								{ className: 'form-inline' },
@@ -31833,7 +31831,6 @@ var Canvas = function (_React$Component) {
 								),
 								_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.textColor } })
 							),
-							_react2.default.createElement('br', null),
 							_react2.default.createElement(
 								'div',
 								{ className: 'form-inline' },
@@ -31884,7 +31881,6 @@ var Canvas = function (_React$Component) {
 									)
 								)
 							),
-							_react2.default.createElement('br', null),
 							_react2.default.createElement(
 								'div',
 								{ className: 'form-inline' },
