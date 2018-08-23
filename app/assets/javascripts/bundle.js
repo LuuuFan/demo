@@ -28016,7 +28016,7 @@ var Home = function (_React$Component) {
 				'div',
 				null,
 				_react2.default.createElement(_header2.default, { receiveImg: receiveImg, sendEmail: sendEmail, message: message, clearMessage: clearMessage, sendService: sendService }),
-				_react2.default.createElement(_canvas2.default, { receiveCanvas: receiveCanvas, img: this.state.selectedImgURL }),
+				_react2.default.createElement(_canvas2.default, { receiveCanvas: receiveCanvas, img: this.state.selectedImgURL, message: message }),
 				_react2.default.createElement(
 					'div',
 					{ className: 'img-group group' },
@@ -28413,7 +28413,8 @@ var Share = function (_React$Component) {
 			email: 'lu.fan@n3n.io',
 			emailError: '',
 			filename: '',
-			type: 'pdf'
+			type: 'pdf',
+			sending: false
 		};
 		return _this;
 	}
@@ -28476,7 +28477,11 @@ var Share = function (_React$Component) {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
 			if (nextProps.message.message) {
-				this.setState({ servicenow: 'modal' });
+				this.setState({
+					servicenow: 'modal',
+					modalShare: 'modal',
+					sending: false
+				});
 				setTimeout(function () {
 					nextProps.clearMessage();
 				}, 10000);
@@ -28508,16 +28513,38 @@ var Share = function (_React$Component) {
 			return reg.test(String(this.state.email).toLowerCase());
 		}
 	}, {
+		key: 'extraPDF',
+		value: function extraPDF() {
+			var container = document.querySelectorAll('.container');
+			var ids = [];
+			container.forEach(function (c) {
+				return ids.push(c.classList[1].split('-')[1]);
+			});
+			var imgDataArr = ids.map(function (id) {
+				return document.getElementById(id).toDataURL('image/jpeg', 1.0);
+			});
+			return imgDataArr;
+		}
+	}, {
 		key: 'sendFile',
 		value: function sendFile() {
+			var _this4 = this;
+
 			if (this.checkEmail()) {
-				var imgData = document.querySelector('#0').toDataURL('image/jpeg', 1.0);
+				var imgDataArr = this.extraPDF();
+				// const imgData = document.getElementById('0').toDataURL('image/jpeg', 1.0);
 				var selector = document.querySelector('.share-canvas select');
 				var type = selector.options[selector.selectedIndex].textContent;
 
 				if (type === 'PDF') {
+					this.setState({ sending: true, modalShare: 'modal' });
 					var pdf = new jsPDF();
-					pdf.addImage(imgData, 'JPEG', 0, 0);
+					imgDataArr.forEach(function (imgData, idx) {
+						pdf.addImage(imgData, 'JPEG', 0, 0);
+						if (idx !== imgDataArr.length - 1) {
+							pdf.addPage();
+						}
+					});
 					// pdf.setProperties({
 					//    title: "download",
 					// });
@@ -28528,7 +28555,13 @@ var Share = function (_React$Component) {
 					var token = localStorage.getItem('access_token');
 					// console.log(pdf.output('datauri'));
 					// console.log(formData['filename']);
-					this.props.sendEmail(token, formData);
+
+					this.props.sendEmail(token, formData).then(function (res) {
+						_this4.setState({ sending: false });
+					}).catch(function (err) {
+						console.log(err);
+					});
+
 					// saving pdf to local
 					// pdf.save('download.pdf');
 				} else {
@@ -28560,18 +28593,18 @@ var Share = function (_React$Component) {
 	}, {
 		key: 'logout',
 		value: function logout() {
-			var _this4 = this;
+			var _this5 = this;
 
 			localStorage.removeItem('access_token');
 			this.props.removeCurrentUser();
 			setTimeout(function () {
-				_this4.props.history.push('/login');
+				_this5.props.history.push('/login');
 			}, 2000);
 		}
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this5 = this;
+			var _this6 = this;
 
 			var dropbox = JSON.parse(localStorage.getItem('dropbox'));
 			var _props = this.props,
@@ -28581,17 +28614,22 @@ var Share = function (_React$Component) {
 			return _react2.default.createElement(
 				'div',
 				{ className: 'share' },
-				message.message && message.message.startsWith('Email') ? _react2.default.createElement(
+				message.message ? _react2.default.createElement(
 					'div',
 					{ className: 'message' },
 					message.message
 				) : "",
+				this.state.sending ? _react2.default.createElement(
+					'div',
+					{ className: 'loading' },
+					_react2.default.createElement('img', { src: 'app/assets/images/sending_email.gif' })
+				) : "",
 				_react2.default.createElement(
 					'button',
 					{ className: 'btn services', onMouseEnter: function onMouseEnter(e) {
-							return _this5.openModal(e, 'modalList');
+							return _this6.openModal(e, 'modalList');
 						}, onMouseLeave: function onMouseLeave() {
-							return _this5.closeModal('modalList');
+							return _this6.closeModal('modalList');
 						} },
 					'Send to Service',
 					_react2.default.createElement(
@@ -28606,14 +28644,14 @@ var Share = function (_React$Component) {
 								_react2.default.createElement(
 									'li',
 									{ onClick: function onClick() {
-											return _this5.toggleService();
+											return _this6.toggleService();
 										} },
 									'ServiceNow'
 								)
 							)
 						),
 						_react2.default.createElement('div', { onClick: function onClick() {
-								return _this5.closeModal('modalList');
+								return _this6.closeModal('modalList');
 							}, className: 'modal-screen modal-screen-servicelist' })
 					)
 				),
@@ -28622,27 +28660,27 @@ var Share = function (_React$Component) {
 					{ className: this.state.servicenow },
 					_react2.default.createElement(_service2.default, { sendService: sendService }),
 					_react2.default.createElement('div', { onClick: function onClick() {
-							return _this5.closeModal('servicenow');
+							return _this6.closeModal('servicenow');
 						}, className: 'modal-screen' })
 				),
 				_react2.default.createElement(
 					'button',
 					{ className: 'btn', onClick: function onClick(e) {
-							return _this5.openModal(e, 'modalShare');
+							return _this6.openModal(e, 'modalShare');
 						} },
 					'Share'
 				),
 				_react2.default.createElement(
 					'button',
 					{ className: 'btn', onClick: function onClick(e) {
-							return _this5.logout();
+							return _this6.logout();
 						} },
 					'Log Out'
 				),
 				dropbox && Object.keys(dropbox) ? _react2.default.createElement(
 					'button',
 					{ className: 'btn', onClick: function onClick() {
-							return _this5.clearDropbox();
+							return _this6.clearDropbox();
 						} },
 					'Clear Dropbox'
 				) : "",
@@ -28655,7 +28693,7 @@ var Share = function (_React$Component) {
 						_react2.default.createElement(
 							'form',
 							{ onSubmit: function onSubmit() {
-									return _this5.sendFile();
+									return _this6.sendFile();
 								} },
 							_react2.default.createElement(
 								'div',
@@ -28666,7 +28704,7 @@ var Share = function (_React$Component) {
 									'Email: '
 								),
 								_react2.default.createElement('input', { type: 'email', onChange: function onChange(e) {
-										return _this5.handleInput(e, 'email');
+										return _this6.handleInput(e, 'email');
 									}, value: this.state.email })
 							),
 							_react2.default.createElement(
@@ -28683,7 +28721,7 @@ var Share = function (_React$Component) {
 									'Filename: '
 								),
 								_react2.default.createElement('input', { type: 'text', placeholder: 'Please input the file name', onChange: function onChange(e) {
-										return _this5.handleInput(e, 'filename');
+										return _this6.handleInput(e, 'filename');
 									}, value: this.state.filename }),
 								_react2.default.createElement(
 									'p',
@@ -28703,7 +28741,7 @@ var Share = function (_React$Component) {
 								_react2.default.createElement(
 									'select',
 									{ onChange: function onChange(e) {
-											return _this5.changeType(e);
+											return _this6.changeType(e);
 										} },
 									_react2.default.createElement(
 										'option',
@@ -28716,7 +28754,7 @@ var Share = function (_React$Component) {
 						)
 					),
 					_react2.default.createElement('div', { onClick: function onClick() {
-							return _this5.closeModal('modalShare');
+							return _this6.closeModal('modalShare');
 						}, className: 'modal-screen' })
 				)
 			);
@@ -32144,16 +32182,17 @@ var APIUtilMail = _interopRequireWildcard(_mail);
 
 var _error = __webpack_require__(8);
 
+var _message = __webpack_require__(23);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var sendEmail = exports.sendEmail = function sendEmail(token, formData) {
 	return function (dispatch) {
-		return APIUtilMail.sendEmail(token, formData).then(function (res) {
-			debugger;
-		}
-		// 	res => dispatch(receiveError(JSON.parse(res)))
-		// }
-		).catch(function (err) {
+		return APIUtilMail.sendEmail(token, formData).then(function (message) {
+			return dispatch((0, _message.receiveMessage)(message));
+		}, function (errors) {
+			return dispatch((0, _error.receiveError)(errors.responseJSON));
+		}).catch(function (err) {
 			debugger;
 		});
 	};

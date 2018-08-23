@@ -11,7 +11,7 @@ export const sendService = (data, token) => {
         }
       })
     );
-}
+};
     // success: function (data){
     //     var obj = JSON.parse(data);
     //     console.log(obj.records[0].number);

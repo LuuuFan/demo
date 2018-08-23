@@ -40,7 +40,7 @@ class Home extends React.Component {
 		return(
 			<div>
 				<Header receiveImg={receiveImg} sendEmail={sendEmail} message={message} clearMessage={clearMessage} sendService={sendService}/>
-				<Canvas receiveCanvas={receiveCanvas} img={this.state.selectedImgURL}/>
+				<Canvas receiveCanvas={receiveCanvas} img={this.state.selectedImgURL} message={message}/>
 				<div className='img-group group'>
 					{imgs.map((img, key) => 
 						<div className='img-container' key={key} id={`img-${key}`} onClick={(e)=>this.selectImg(e)}>

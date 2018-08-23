@@ -29,6 +29,14 @@ $font-hover: #278efc;
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      .loading{
+        position: fixed;
+        top: 45%;
+        left: 48%;
+        height: 100px;
+        width: 100px;
+        z-index: 100;
+      }
       .message{
         color: #333;
         padding: 5px 15px; 

@@ -13,6 +13,7 @@ class Share extends React.Component{
 			emailError: '',
 			filename: '',
 			type: 'pdf',
+			sending: false,
 		};
 	}
 
@@ -65,7 +66,11 @@ class Share extends React.Component{
 
 	componentWillReceiveProps(nextProps){
 		if (nextProps.message.message) {
-			this.setState({servicenow: 'modal'});
+			this.setState({
+				servicenow: 'modal',
+				modalShare: 'modal',
+				sending: false,
+			});
 			setTimeout(()=>{
 					nextProps.clearMessage();
 			}, 10000)
@@ -91,15 +96,30 @@ class Share extends React.Component{
 		return reg.test(String(this.state.email).toLowerCase());
 	}
 
+	extraPDF(){
+		const container = document.querySelectorAll('.container');
+		const ids = [];
+		container.forEach(c => ids.push(c.classList[1].split('-')[1]));
+		const imgDataArr = ids.map(id => document.getElementById(id).toDataURL('image/jpeg', 1.0));
+		return imgDataArr
+	}
+
 	sendFile(){
 		if (this.checkEmail()) {
-			const imgData = document.querySelector('#0').toDataURL('image/jpeg', 1.0);
+			const imgDataArr = this.extraPDF();
+			// const imgData = document.getElementById('0').toDataURL('image/jpeg', 1.0);
 			const selector = document.querySelector('.share-canvas select');
 			const type = selector.options[selector.selectedIndex].textContent;
 			
 			if (type === 'PDF') {
+				this.setState({sending: true, modalShare: 'modal'});
 				const pdf = new jsPDF();
-				pdf.addImage(imgData, 'JPEG', 0, 0);
+				imgDataArr.forEach((imgData, idx) => {
+					pdf.addImage(imgData, 'JPEG', 0, 0);
+					if (idx !== imgDataArr.length - 1) {
+						pdf.addPage();
+					}
+				});
 				// pdf.setProperties({
 			 //    title: "download",
 				// });
@@ -110,7 +130,13 @@ class Share extends React.Component{
 				const token = localStorage.getItem('access_token');
 				// console.log(pdf.output('datauri'));
 				// console.log(formData['filename']);
-				this.props.sendEmail(token, formData);
+
+				this.props.sendEmail(token, formData).then(res => {
+					this.setState({sending: false});
+				}).catch(err => {
+					console.log(err);
+				});
+
 				// saving pdf to local
 				// pdf.save('download.pdf');
 			} else {
@@ -151,9 +177,12 @@ class Share extends React.Component{
 		const {message, sendService} = this.props;
 		return (
 			<div className='share'>
-				{message.message && message.message.startsWith('Email') ? 
+				{message.message ? 
 					<div className='message'>{message.message}</div>
 					: ""}
+				{this.state.sending ? <div className='loading'>
+					<img src='app/assets/images/sending_email.gif' />
+				</div> : ""}
 				<button className="btn services" onMouseEnter={(e)=>this.openModal(e, 'modalList')} onMouseLeave={()=>this.closeModal('modalList')}>Send to Service
 					<div className={this.state.modalList}>
 						<div className='service-list'>
