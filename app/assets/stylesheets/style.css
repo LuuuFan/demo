@@ -625,7 +625,7 @@ button:hover {
 }
 .canvas-main .side-content-canvas .canvas-area {
   flex: 1;
-  height: 800px;
+  height: 740px;
   margin-top: 15px;
   overflow: auto;
   display: flex;

@@ -59,6 +59,7 @@ class Canvas extends React.Component{
 		if (prevState.extraCanvas.length !== this.state.extraCanvas.length) {
 			const id = this.state.extraCanvas[this.state.extraCanvas.length - 1];
 			this.initializeCanvas(`${id}`);
+			this.scroll(id);
 		}
 	}
 
@@ -70,6 +71,16 @@ class Canvas extends React.Component{
 			canvas: Object.assign({}, this.state.canvas, {[id]: canvas}),
 			selectedCanvas: canvas,
 		});
+	}
+
+	scroll(id){
+		// console.log('~~~~~~~~~~~~~~~~~')
+		// console.log(`.container-${id}`);
+		// console.log($(`.container-${id}`).offset().top);
+		// console.log($('.canvas-area').offset().top)
+		$('.canvas-area').animate({
+			scrollTop: $(`.container-${id}`).offset().top + 740
+		}, 800);
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -89,6 +100,7 @@ class Canvas extends React.Component{
 	singleClick(e){
 		const id = e.currentTarget.classList[1].split('-')[1];
 		const selectedCanvas = this.state.canvas[`${id}`]
+		this.scroll(id);
 		const activeObj = selectedCanvas.getActiveObject();
 		if (activeObj) {selectedCanvas.bringToFront(activeObj)};
 		console.log(activeObj);

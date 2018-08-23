@@ -31322,6 +31322,7 @@ var Canvas = function (_React$Component) {
 			if (prevState.extraCanvas.length !== this.state.extraCanvas.length) {
 				var id = this.state.extraCanvas[this.state.extraCanvas.length - 1];
 				this.initializeCanvas('' + id);
+				this.scroll(id);
 			}
 		}
 	}, {
@@ -31334,6 +31335,17 @@ var Canvas = function (_React$Component) {
 				canvas: Object.assign({}, this.state.canvas, _defineProperty({}, id, canvas)),
 				selectedCanvas: canvas
 			});
+		}
+	}, {
+		key: 'scroll',
+		value: function scroll(id) {
+			// console.log('~~~~~~~~~~~~~~~~~')
+			// console.log(`.container-${id}`);
+			// console.log($(`.container-${id}`).offset().top);
+			// console.log($('.canvas-area').offset().top)
+			$('.canvas-area').animate({
+				scrollTop: $('.container-' + id).offset().top + 740
+			}, 800);
 		}
 	}, {
 		key: 'componentWillReceiveProps',
@@ -31355,6 +31367,7 @@ var Canvas = function (_React$Component) {
 		value: function singleClick(e) {
 			var id = e.currentTarget.classList[1].split('-')[1];
 			var selectedCanvas = this.state.canvas['' + id];
+			this.scroll(id);
 			var activeObj = selectedCanvas.getActiveObject();
 			if (activeObj) {
 				selectedCanvas.bringToFront(activeObj);
