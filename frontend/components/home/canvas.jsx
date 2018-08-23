@@ -79,7 +79,7 @@ class Canvas extends React.Component{
 		// console.log($(`.container-${id}`).offset().top);
 		// console.log($('.canvas-area').offset().top)
 		$('.canvas-area').animate({
-			scrollTop: $(`.container-${id}`).offset().top + 740
+			scrollTop: $(`.container-${id}`).offset().top
 		}, 800);
 	}
 
@@ -99,8 +99,7 @@ class Canvas extends React.Component{
 
 	singleClick(e){
 		const id = e.currentTarget.classList[1].split('-')[1];
-		const selectedCanvas = this.state.canvas[`${id}`]
-		this.scroll(id);
+		const selectedCanvas = this.state.canvas[`${id}`];
 		const activeObj = selectedCanvas.getActiveObject();
 		if (activeObj) {selectedCanvas.bringToFront(activeObj)};
 		console.log(activeObj);

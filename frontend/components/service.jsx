@@ -13,7 +13,7 @@ class Service extends React.Component {
 
 	sendService(){
 		this.setState({sending: true});
-		const imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
+		const imgData = document.querySelector('#0').toDataURL('image/jpeg', 1.0);
 		// for img png file
 		// const data = imgData.replace(/^data:image\/\w+;base64,/, "");
 		// console.log(data);

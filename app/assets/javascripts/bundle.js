@@ -28511,7 +28511,7 @@ var Share = function (_React$Component) {
 		key: 'sendFile',
 		value: function sendFile() {
 			if (this.checkEmail()) {
-				var imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
+				var imgData = document.querySelector('#0').toDataURL('image/jpeg', 1.0);
 				var selector = document.querySelector('.share-canvas select');
 				var type = selector.options[selector.selectedIndex].textContent;
 
@@ -30834,7 +30834,7 @@ var Service = function (_React$Component) {
 		key: 'sendService',
 		value: function sendService() {
 			this.setState({ sending: true });
-			var imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
+			var imgData = document.querySelector('#0').toDataURL('image/jpeg', 1.0);
 			// for img png file
 			// const data = imgData.replace(/^data:image\/\w+;base64,/, "");
 			// console.log(data);
@@ -31344,7 +31344,7 @@ var Canvas = function (_React$Component) {
 			// console.log($(`.container-${id}`).offset().top);
 			// console.log($('.canvas-area').offset().top)
 			$('.canvas-area').animate({
-				scrollTop: $('.container-' + id).offset().top + 740
+				scrollTop: $('.container-' + id).offset().top
 			}, 800);
 		}
 	}, {
@@ -31367,7 +31367,6 @@ var Canvas = function (_React$Component) {
 		value: function singleClick(e) {
 			var id = e.currentTarget.classList[1].split('-')[1];
 			var selectedCanvas = this.state.canvas['' + id];
-			this.scroll(id);
 			var activeObj = selectedCanvas.getActiveObject();
 			if (activeObj) {
 				selectedCanvas.bringToFront(activeObj);

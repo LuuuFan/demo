@@ -93,7 +93,7 @@ class Share extends React.Component{
 
 	sendFile(){
 		if (this.checkEmail()) {
-			const imgData = document.querySelector('#c').toDataURL('image/jpeg', 1.0);
+			const imgData = document.querySelector('#0').toDataURL('image/jpeg', 1.0);
 			const selector = document.querySelector('.share-canvas select');
 			const type = selector.options[selector.selectedIndex].textContent;
 			
