@@ -58,7 +58,7 @@ class Canvas extends React.Component{
 	componentDidUpdate(prevProps, prevState){
 		if (prevState.extraCanvas.length !== this.state.extraCanvas.length) {
 			const id = this.state.extraCanvas[this.state.extraCanvas.length - 1];
-			this.initializeCanvas(id);
+			this.initializeCanvas(`${id}`);
 		}
 	}
 

@@ -31321,7 +31321,7 @@ var Canvas = function (_React$Component) {
 		value: function componentDidUpdate(prevProps, prevState) {
 			if (prevState.extraCanvas.length !== this.state.extraCanvas.length) {
 				var id = this.state.extraCanvas[this.state.extraCanvas.length - 1];
-				this.initializeCanvas(id);
+				this.initializeCanvas('' + id);
 			}
 		}
 	}, {
