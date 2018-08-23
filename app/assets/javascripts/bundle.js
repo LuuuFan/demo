@@ -31237,9 +31237,9 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _canvas = __webpack_require__(30);
+var _canvas2 = __webpack_require__(30);
 
-var canvasUtil = _interopRequireWildcard(_canvas);
+var canvasUtil = _interopRequireWildcard(_canvas2);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -31280,7 +31280,9 @@ var Canvas = function (_React$Component) {
 			fillChecked: false,
 			activeObj: null,
 			croping: false,
-			cropingImg: null
+			cropingImg: null,
+			selectedCanvas: null,
+			extraCanvas: []
 		};
 		return _this;
 	}
@@ -31290,10 +31292,7 @@ var Canvas = function (_React$Component) {
 		value: function componentDidMount() {
 			var _this2 = this;
 
-			var container = document.querySelector('.container');
-			var canvas = new fabric.Canvas("c", { width: container.offsetWidth - 50, height: container.offsetHeight });
-			canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
-			this.setState({ canvas: canvas });
+			this.initializeCanvas('0');
 
 			// canvas not working in redux
 			// this.props.receiveCanvas(canvas);
@@ -31313,31 +31312,50 @@ var Canvas = function (_React$Component) {
 			document.addEventListener('keydown', function (e) {
 				if (e.key === 'Backspace' || e.key === 'Delete') {
 					_this2.setState({ activeObj: null });
-					canvasUtil.deleteItem(_this2.state.canvas);
+					canvasUtil.deleteItem(_this2.state.selectedCanvas);
 				}
+			});
+		}
+	}, {
+		key: 'componentDidUpdate',
+		value: function componentDidUpdate(prevProps, prevState) {
+			if (prevState.extraCanvas.length !== this.state.extraCanvas.length) {
+				var id = this.state.extraCanvas[this.state.extraCanvas.length - 1];
+				this.initializeCanvas(id);
+			}
+		}
+	}, {
+		key: 'initializeCanvas',
+		value: function initializeCanvas(id) {
+			var container = document.querySelector('.container-' + id);
+			var canvas = new fabric.Canvas(id, { width: container.offsetWidth - 50, height: 650 });
+			canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
+			this.setState({
+				canvas: _defineProperty({}, id, canvas),
+				selectedCanvas: canvas
 			});
 		}
 	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
 			if (nextProps.img) {
-				canvasUtil.addPhoto(nextProps.img, this.state.canvas);
+				canvasUtil.addPhoto(nextProps.img, this.state.selectedCanvas);
 			}
 		}
 	}, {
 		key: 'doubleClick',
 		value: function doubleClick() {
-			var activeObj = this.state.canvas.getActiveObject();
+			var activeObj = this.state.selectedCanvas.getActiveObject();
 			if (activeObj && activeObj.type === 'group') {
-				canvasUtil.changeDialog(this.state.canvas, activeObj);
+				canvasUtil.changeDialog(this.state.selectedCanvas, activeObj);
 			}
 		}
 	}, {
 		key: 'singleClick',
 		value: function singleClick() {
-			var activeObj = this.state.canvas.getActiveObject();
+			var activeObj = this.state.selectedCanvas.getActiveObject();
 			if (activeObj) {
-				this.state.canvas.bringToFront(activeObj);
+				this.state.selectedCanvas.bringToFront(activeObj);
 			};
 			console.log(activeObj);
 			this.setState({ activeObj: activeObj });
@@ -31349,9 +31367,9 @@ var Canvas = function (_React$Component) {
 
 			return function (e) {
 				_this3.setState({ textSize: e.target.value });
-				var activeObj = _this3.state.canvas.getActiveObject();
+				var activeObj = _this3.state.selectedCanvas.getActiveObject();
 				if (activeObj && activeObj.type === 'i-text') {
-					canvasUtil.changeTextStyle(activeObj, _this3.state.canvas, null, e.target.value);
+					canvasUtil.changeTextStyle(activeObj, _this3.state.selectedCanvas, null, e.target.value);
 				}
 			};
 		}
@@ -31366,13 +31384,13 @@ var Canvas = function (_React$Component) {
 		value: function selectColor(e, type) {
 			this.setState(_defineProperty({}, type, e.target.options[e.target.options.selectedIndex].textContent));
 			if (type === 'backgroundColor') {
-				canvasUtil.changeBackground(e.target.options[e.target.options.selectedIndex].textContent, this.state.canvas);
+				canvasUtil.changeBackground(e.target.options[e.target.options.selectedIndex].textContent, this.state.selectedCanvas);
 				return;
 			}
-			var activeObject = this.state.canvas.getActiveObject();
+			var activeObject = this.state.selectedCanvas.getActiveObject();
 			if (activeObject) {
 				if (this.state.selectedShape === activeObject.type || type === 'textColor' && activeObject.type === 'i-text') {
-					canvasUtil.changeColor(this.state.canvas, activeObject, e.target.options[e.target.options.selectedIndex].textContent);
+					canvasUtil.changeColor(this.state.selectedCanvas, activeObject, e.target.options[e.target.options.selectedIndex].textContent);
 				}
 			}
 		}
@@ -31384,26 +31402,26 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'changeStyle',
 		value: function changeStyle(e) {
-			var activeObj = this.state.canvas.getActiveObject();
+			var activeObj = this.state.selectedCanvas.getActiveObject();
 			if (activeObj && activeObj.type === 'i-text') {
-				canvasUtil.changeTextStyle(activeObj, this.state.canvas, e.target.value);
+				canvasUtil.changeTextStyle(activeObj, this.state.selectedCanvas, e.target.value);
 			}
 		}
 	}, {
 		key: 'changeOpacity',
 		value: function changeOpacity(e) {
-			var activeObj = this.state.canvas.getActiveObject();
+			var activeObj = this.state.selectedCanvas.getActiveObject();
 			if (this.isShape(activeObj)) {
-				canvasUtil.changeOpacity(activeObj, this.state.canvas, e.target.value * 1);
+				canvasUtil.changeOpacity(activeObj, this.state.selectedCanvas, e.target.value * 1);
 			}
 		}
 	}, {
 		key: 'checkBox',
 		value: function checkBox(e) {
-			var activeObj = this.state.canvas.getActiveObject();
+			var activeObj = this.state.selectedCanvas.getActiveObject();
 			this.setState({ fillChecked: e.target.checked });
 			if (this.isShape(activeObj)) {
-				canvasUtil.changeFill(activeObj, this.state.canvas, e.target.checked);
+				canvasUtil.changeFill(activeObj, this.state.selectedCanvas, e.target.checked);
 			}
 		}
 	}, {
@@ -31419,35 +31437,41 @@ var Canvas = function (_React$Component) {
 			var objArr = Array.from(this.state.activeObj._objects);
 			var group = new fabric.Group(this.state.activeObj._objects);
 			objArr.forEach(function (obj) {
-				return _this4.state.canvas.remove(obj);
+				return _this4.state.selectedCanvas.remove(obj);
 			});
-			this.state.canvas.add(group);
-			this.state.canvas.setActiveObject(group);
+			this.state.selectedCanvas.add(group);
+			this.state.selectedCanvas.setActiveObject(group);
 			this.setState({ activeObj: group });
 		}
 	}, {
 		key: 'unGroupItems',
 		value: function unGroupItems() {
 			this.state.activeObj.toActiveSelection();
-			this.setState({ activeObj: this.state.canvas.getActiveObject() });
+			this.setState({ activeObj: this.state.selectedCanvas.getActiveObject() });
 		}
 	}, {
 		key: 'croping',
 		value: function croping() {
-			canvasUtil.cropingImage(this.state.canvas, this.state.activeObj);
+			canvasUtil.cropingImage(this.state.selectedCanvas, this.state.activeObj);
 			this.setState({ croping: true, cropingImg: this.state.activeObj });
 		}
 	}, {
 		key: 'doneCrop',
 		value: function doneCrop() {
-			canvasUtil.doneCrop(this.state.canvas, this.state.cropingImg);
+			canvasUtil.doneCrop(this.state.selectedCanvas, this.state.cropingImg);
 			this.setState({ croping: false, cropingImg: null });
 		}
 	}, {
 		key: 'cancelCrop',
 		value: function cancelCrop() {
-			canvasUtil.cancelCrop(this.state.canvas, this.state.cropingImg);
+			canvasUtil.cancelCrop(this.state.selectedCanvas, this.state.cropingImg);
 			this.setState({ croping: false, cropingImg: null });
+		}
+	}, {
+		key: 'addCanvas',
+		value: function addCanvas() {
+			var last_el = this.state.extraCanvas.length ? this.state.extraCanvas[this.state.extraCanvas.length - 1] : 0;
+			this.setState({ extraCanvas: this.state.extraCanvas.concat([last_el + 1]) });
 		}
 	}, {
 		key: 'render',
@@ -31687,7 +31711,7 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'button',
 									{ type: 'button', id: 'addShape', onClick: function onClick() {
-											return canvasUtil.addShape(_this5.state.selectedShape, _this5.state.canvas);
+											return canvasUtil.addShape(_this5.state.selectedShape, _this5.state.selectedCanvas);
 										} },
 									'Add Shape'
 								)
@@ -31733,7 +31757,7 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'button',
 									{ type: 'button', id: 'addDialog', onClick: function onClick() {
-											return canvasUtil.addDialog(_this5.state.selectedDialog, _this5.state.canvas);
+											return canvasUtil.addDialog(_this5.state.selectedDialog, _this5.state.selectedCanvas);
 										} },
 									'Add Dialog'
 								)
@@ -31877,7 +31901,7 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'button',
 									{ type: 'button', id: 'addText', onClick: function onClick() {
-											return canvasUtil.addText(_this5.state.canvas);
+											return canvasUtil.addText(_this5.state.selectedCanvas);
 										} },
 									'Add Text'
 								)
@@ -31980,7 +32004,7 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'button',
 									{ type: 'button', id: 'rotateImg', onClick: function onClick() {
-											return canvasUtil.rotateImg(_this5.state.canvas, _this5.state.activeObj);
+											return canvasUtil.rotateImg(_this5.state.selectedCanvas, _this5.state.activeObj);
 										} },
 									_react2.default.createElement('i', { className: 'fas fa-sync-alt' }),
 									'90\xB0 Rotate Image'
@@ -32017,12 +32041,27 @@ var Canvas = function (_React$Component) {
 					),
 					_react2.default.createElement(
 						'div',
-						{ className: 'container', onDoubleClick: function onDoubleClick() {
-								return _this5.doubleClick();
-							}, onClick: function onClick() {
-								return _this5.singleClick();
-							} },
-						_react2.default.createElement('canvas', { ref: 'c', id: 'c' })
+						{ className: 'canvas-area' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'container container-0', onDoubleClick: function onDoubleClick() {
+									return _this5.doubleClick();
+								}, onClick: function onClick() {
+									return _this5.singleClick();
+								} },
+							_react2.default.createElement('canvas', { ref: '0', id: '0' })
+						),
+						this.state.extraCanvas.map(function (id, idx) {
+							return _react2.default.createElement(
+								'div',
+								{ key: idx, className: 'container container-' + id, onDoubleClick: function onDoubleClick() {
+										return _this5.doubleClick();
+									}, onClick: function onClick() {
+										return _this5.singleClick();
+									} },
+								_react2.default.createElement('canvas', { ref: id, id: id })
+							);
+						})
 					)
 				),
 				_react2.default.createElement(
@@ -32031,14 +32070,21 @@ var Canvas = function (_React$Component) {
 					_react2.default.createElement(
 						'button',
 						{ onClick: function onClick() {
-								return canvasUtil.resetCanvas(_this5.state.canvas);
+								return _this5.addCanvas();
+							} },
+						'Add Canvas'
+					),
+					_react2.default.createElement(
+						'button',
+						{ onClick: function onClick() {
+								return canvasUtil.resetCanvas(_this5.state.selectedCanvas);
 							} },
 						'Reset Canvas'
 					),
 					this.state.activeObj ? _react2.default.createElement(
 						'button',
 						{ onClick: function onClick() {
-								return canvasUtil.deleteItem(_this5.state.canvas);
+								return canvasUtil.deleteItem(_this5.state.selectedCanvas);
 							} },
 						'Delete ',
 						this.state.activeObj._objects ? 'Items' : 'Item'

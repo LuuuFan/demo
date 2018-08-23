@@ -23,15 +23,14 @@ class Canvas extends React.Component{
 			fillChecked: false,
 			activeObj: null,
 			croping: false,
-			cropingImg: null
+			cropingImg: null,
+			selectedCanvas: null,
+			extraCanvas: [],
 		};
 	}
 
 	componentDidMount(){
-		const container = document.querySelector('.container');
-		let canvas = new fabric.Canvas("c", {width: container.offsetWidth - 50, height: container.offsetHeight});
-		canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
-		this.setState({canvas: canvas});
+		this.initializeCanvas('0');
 
 		// canvas not working in redux
 		// this.props.receiveCanvas(canvas);
@@ -51,27 +50,45 @@ class Canvas extends React.Component{
 		document.addEventListener('keydown', (e) => {
 			if (e.key === 'Backspace' || e.key === 'Delete') {
 				this.setState({activeObj: null});
-				canvasUtil.deleteItem(this.state.canvas);				
+				canvasUtil.deleteItem(this.state.selectedCanvas);				
 			}
+		});
+	}
+
+	componentDidUpdate(prevProps, prevState){
+		if (prevState.extraCanvas.length !== this.state.extraCanvas.length) {
+			const id = this.state.extraCanvas[this.state.extraCanvas.length - 1];
+			this.initializeCanvas(id);
+		}
+	}
+
+	initializeCanvas(id){
+		const container = document.querySelector(`.container-${id}`);
+		let canvas = new fabric.Canvas(id, {width: container.offsetWidth - 50, height: 650});
+		canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
+		this.setState({
+			canvas: {[id]: canvas},
+			selectedCanvas: canvas,
 		});
 	}
 
 	componentWillReceiveProps(nextProps){
 		if (nextProps.img) {
-			canvasUtil.addPhoto(nextProps.img, this.state.canvas);
+			canvasUtil.addPhoto(nextProps.img, this.state.selectedCanvas);
 		}
+
 	}
 
 	doubleClick(){
-		const activeObj = this.state.canvas.getActiveObject();
+		const activeObj = this.state.selectedCanvas.getActiveObject();
 		if (activeObj && activeObj.type === 'group') {
-			canvasUtil.changeDialog(this.state.canvas, activeObj);
+			canvasUtil.changeDialog(this.state.selectedCanvas, activeObj);
 		}
 	}	
 
 	singleClick(){
-		const activeObj = this.state.canvas.getActiveObject();
-		if (activeObj) {this.state.canvas.bringToFront(activeObj)};
+		const activeObj = this.state.selectedCanvas.getActiveObject();
+		if (activeObj) {this.state.selectedCanvas.bringToFront(activeObj)};
 		console.log(activeObj);
 		this.setState({activeObj});
 	}
@@ -79,9 +96,9 @@ class Canvas extends React.Component{
 	handleInput(){
 		return (e) => {
 			this.setState({textSize: e.target.value});
-			const activeObj = this.state.canvas.getActiveObject();
+			const activeObj = this.state.selectedCanvas.getActiveObject();
 			if (activeObj && activeObj.type === 'i-text') {
-				canvasUtil.changeTextStyle(activeObj, this.state.canvas, null, e.target.value);
+				canvasUtil.changeTextStyle(activeObj, this.state.selectedCanvas, null, e.target.value);
 			}
 		};
 	}
@@ -94,13 +111,13 @@ class Canvas extends React.Component{
 	selectColor(e, type){
 		this.setState({[type]: e.target.options[e.target.options.selectedIndex].textContent});
 		if (type === 'backgroundColor') {
-			canvasUtil.changeBackground(e.target.options[e.target.options.selectedIndex].textContent, this.state.canvas);
+			canvasUtil.changeBackground(e.target.options[e.target.options.selectedIndex].textContent, this.state.selectedCanvas);
 			return;
 		}
-		const activeObject = this.state.canvas.getActiveObject();
+		const activeObject = this.state.selectedCanvas.getActiveObject();
 		if (activeObject) {
 			if (this.state.selectedShape === activeObject.type || (type === 'textColor' && activeObject.type === 'i-text')) {
-				canvasUtil.changeColor(this.state.canvas, activeObject, e.target.options[e.target.options.selectedIndex].textContent);
+				canvasUtil.changeColor(this.state.selectedCanvas, activeObject, e.target.options[e.target.options.selectedIndex].textContent);
 			}
 		}
 	}
@@ -110,24 +127,24 @@ class Canvas extends React.Component{
 	}
 
 	changeStyle(e){
-		const activeObj = this.state.canvas.getActiveObject();
+		const activeObj = this.state.selectedCanvas.getActiveObject();
 		if (activeObj && activeObj.type === 'i-text') {
-			canvasUtil.changeTextStyle(activeObj, this.state.canvas, e.target.value);
+			canvasUtil.changeTextStyle(activeObj, this.state.selectedCanvas, e.target.value);
 		}
 	}
 
 	changeOpacity(e){
-		const activeObj = this.state.canvas.getActiveObject();
+		const activeObj = this.state.selectedCanvas.getActiveObject();
 		if (this.isShape(activeObj)) {
-			canvasUtil.changeOpacity(activeObj, this.state.canvas, e.target.value * 1);
+			canvasUtil.changeOpacity(activeObj, this.state.selectedCanvas, e.target.value * 1);
 		}
 	}
 
 	checkBox(e){
-		const activeObj = this.state.canvas.getActiveObject();
+		const activeObj = this.state.selectedCanvas.getActiveObject();
 		this.setState({fillChecked: e.target.checked});
 		if (this.isShape(activeObj)) {
-			canvasUtil.changeFill(activeObj, this.state.canvas, e.target.checked);
+			canvasUtil.changeFill(activeObj, this.state.selectedCanvas, e.target.checked);
 		}
 	}
 
@@ -141,30 +158,35 @@ class Canvas extends React.Component{
 	groupItems(){
 		const objArr = Array.from(this.state.activeObj._objects);
 		const group = new fabric.Group(this.state.activeObj._objects);
-		objArr.forEach(obj => this.state.canvas.remove(obj));
-		this.state.canvas.add(group);
-		this.state.canvas.setActiveObject(group);
+		objArr.forEach(obj => this.state.selectedCanvas.remove(obj));
+		this.state.selectedCanvas.add(group);
+		this.state.selectedCanvas.setActiveObject(group);
 		this.setState({activeObj: group});
 	}
 
 	unGroupItems(){
 		this.state.activeObj.toActiveSelection();
-		this.setState({activeObj: this.state.canvas.getActiveObject()});
+		this.setState({activeObj: this.state.selectedCanvas.getActiveObject()});
 	}
 
 	croping(){
-		canvasUtil.cropingImage(this.state.canvas, this.state.activeObj);
+		canvasUtil.cropingImage(this.state.selectedCanvas, this.state.activeObj);
 		this.setState({croping: true, cropingImg: this.state.activeObj});
 	}
 
 	doneCrop(){
-		canvasUtil.doneCrop(this.state.canvas, this.state.cropingImg);
+		canvasUtil.doneCrop(this.state.selectedCanvas, this.state.cropingImg);
 		this.setState({croping: false, cropingImg: null});
 	}
 
 	cancelCrop(){
-		canvasUtil.cancelCrop(this.state.canvas, this.state.cropingImg);
+		canvasUtil.cancelCrop(this.state.selectedCanvas, this.state.cropingImg);
 		this.setState({croping: false, cropingImg: null});
+	}
+
+	addCanvas(){
+		const last_el = this.state.extraCanvas.length ? this.state.extraCanvas[this.state.extraCanvas.length - 1] : 0;
+		this.setState({extraCanvas: this.state.extraCanvas.concat([last_el + 1])});
 	}
 
 	render(){
@@ -250,7 +272,7 @@ class Canvas extends React.Component{
 	          	</div>
 	        		<br />
 		        	<div id="button-wrapper">
-	            	<button type="button" id="addShape" onClick={()=>canvasUtil.addShape(this.state.selectedShape, this.state.canvas)}>Add Shape</button>
+	            	<button type="button" id="addShape" onClick={()=>canvasUtil.addShape(this.state.selectedShape, this.state.selectedCanvas)}>Add Shape</button>
 		        	</div>
 		        </div>
 		        : ""}
@@ -270,7 +292,7 @@ class Canvas extends React.Component{
 		        	</ol>
 	        		<textarea placeholder='Add Comment Here'></textarea>
 		        	<div id="button-wrapper">
-	            	<button type="button" id="addDialog" onClick={()=>canvasUtil.addDialog(this.state.selectedDialog, this.state.canvas)}>Add Dialog</button>
+	            	<button type="button" id="addDialog" onClick={()=>canvasUtil.addDialog(this.state.selectedDialog, this.state.selectedCanvas)}>Add Dialog</button>
 		        	</div>
 		        </div>
 		        : ""}
@@ -313,7 +335,7 @@ class Canvas extends React.Component{
 								<input id="text-size" type="number" step="1" min="1" max="50" value={this.state.textSize} onChange={this.handleInput()}/>
 							</div>
 							<div id="button-wrapper">
-								<button type="button" id="addText" onClick={()=>canvasUtil.addText(this.state.canvas)}>Add Text</button>
+								<button type="button" id="addText" onClick={()=>canvasUtil.addText(this.state.selectedCanvas)}>Add Text</button>
 							</div>
 		        </div>
 		        : ""}
@@ -340,7 +362,7 @@ class Canvas extends React.Component{
 								{/*
 									<br/>
 									<div id="button-wrapper">
-											<button type="button" id="changeBackground" onClick={()=>canvasUtil.changeBackground(this.state.backgroundColor, this.state.canvas)}>Change Background Color</button>
+											<button type="button" id="changeBackground" onClick={()=>canvasUtil.changeBackground(this.state.backgroundColor, this.state.selectedCanvas)}>Change Background Color</button>
 									</div>
 								*/}
 		        </div>
@@ -354,7 +376,7 @@ class Canvas extends React.Component{
 										<i className="fas fa-crop"></i>
 										Crop Image
 									</button>
-									<button type="button" id="rotateImg" onClick={()=>canvasUtil.rotateImg(this.state.canvas, this.state.activeObj)}>
+									<button type="button" id="rotateImg" onClick={()=>canvasUtil.rotateImg(this.state.selectedCanvas, this.state.activeObj)}>
 										<i className="fas fa-sync-alt"></i>
 										90&#176; Rotate Image
 									</button>
@@ -379,16 +401,23 @@ class Canvas extends React.Component{
 		        : ""}
 			    </div>
 
-		    	<div className='container' onDoubleClick={()=>this.doubleClick()} onClick={()=>this.singleClick()}>
-						<canvas ref='c' id='c' >
-						</canvas>
-			    </div>
+			    <div className='canvas-area'>
+			    	<div className='container container-0' onDoubleClick={()=>this.doubleClick()} onClick={()=>this.singleClick()}>
+							<canvas ref='0' id='0' >
+							</canvas>
+				    </div>
+				    {this.state.extraCanvas.map((id, idx) => 
+				    	<div key={idx} className={`container container-${id}`} onDoubleClick={()=>this.doubleClick()} onClick={()=>this.singleClick()}>
+				    		<canvas ref={id} id={id}></canvas>
+				    	</div>)}
+				  </div>
 		   	</div> 
 
 		    <div className='buttons'>
-		    	<button onClick={()=>canvasUtil.resetCanvas(this.state.canvas)}>Reset Canvas</button>
+		    	<button onClick={()=>this.addCanvas()}>Add Canvas</button>
+		    	<button onClick={()=>canvasUtil.resetCanvas(this.state.selectedCanvas)}>Reset Canvas</button>
 		    	{this.state.activeObj ? 
-	    			<button onClick={()=>canvasUtil.deleteItem(this.state.canvas)}>Delete {this.state.activeObj._objects ? 'Items' : 'Item'}</button>
+	    			<button onClick={()=>canvasUtil.deleteItem(this.state.selectedCanvas)}>Delete {this.state.activeObj._objects ? 'Items' : 'Item'}</button>
 		    		: ""}
 	    		{this.state.activeObj &&  this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? 
 	    			<button onClick={()=>this.groupItems()}>Group Items</button>

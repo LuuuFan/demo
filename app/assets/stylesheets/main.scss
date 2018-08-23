@@ -100,7 +100,7 @@ button:hover{
     display: flex;
     flex: 1;
     #side-content {
-      height: 70%;
+      height: 75%;
       margin: 15px;
       border: solid 1px darkgrey;
       overflow: auto;
@@ -263,17 +263,23 @@ button:hover{
       box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
     }
 
-    .container{
+    .canvas-area{
       flex: 1;
-      height: 70%;
+      height: 800px;
       margin-top: 15px;
+      overflow: auto;
       display: flex;
-      canvas{
-        overflow: hidden;
-        border-radius: 5px;
-        box-shadow: 0 8px 6px -6px rgba(0,0,0,0.2);
-      }
-    } 
+      flex-direction: column;
+      .container{
+        height: 650px;
+        margin-bottom: 10px;
+        canvas{
+          overflow: hidden;
+          border-radius: 5px;
+          box-shadow: 0 8px 6px -6px rgba(0,0,0,0.2);
+        }
+      } 
+    }
   }
 }
 

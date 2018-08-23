@@ -476,7 +476,7 @@ button:hover {
   flex: 1;
 }
 .canvas-main .side-content-canvas #side-content {
-  height: 70%;
+  height: 75%;
   margin: 15px;
   border: solid 1px darkgrey;
   overflow: auto;
@@ -623,13 +623,19 @@ button:hover {
   border-radius: 5px;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
 }
-.canvas-main .side-content-canvas .container {
+.canvas-main .side-content-canvas .canvas-area {
   flex: 1;
-  height: 70%;
+  height: 800px;
   margin-top: 15px;
+  overflow: auto;
   display: flex;
+  flex-direction: column;
 }
-.canvas-main .side-content-canvas .container canvas {
+.canvas-main .side-content-canvas .canvas-area .container {
+  height: 650px;
+  margin-bottom: 10px;
+}
+.canvas-main .side-content-canvas .canvas-area .container canvas {
   overflow: hidden;
   border-radius: 5px;
   box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.2);
