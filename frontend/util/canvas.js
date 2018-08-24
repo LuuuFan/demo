@@ -168,7 +168,12 @@ export const addPhoto = (url, canvas) => {
             left: 0 + 50 * photoNum,
             top: 0 + 50 * photoNum,
           }).scale(0.5);
-          canvas.add(img);
+          try {
+            canvas.add(img);
+          } catch(err) {
+            alert('Drobox img link expired.')
+            debugger;
+          }  
           canvas.renderAll();
           photoNum++;
         }, {crossOrigin: 'anonymous'})

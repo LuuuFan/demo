@@ -7,7 +7,7 @@ class Chat extends React.Component {
 	constructor(){
 		super();
 		this.state = {
-			active: true,
+			active: false,
 			input: '',
 			userList: userList,
 		};

@@ -471,6 +471,10 @@ input[type=submit] {
   margin-bottom: 5px;
   text-align: center;
 }
+.chat .userlist .user .avatar:hover {
+  background-color: #1C2A39;
+  color: white;
+}
 .chat .userlist .user:hover span {
   font-weight: bold;
 }

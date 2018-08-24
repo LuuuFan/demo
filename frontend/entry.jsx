@@ -6,13 +6,15 @@ import Root from './components/root';
 document.addEventListener('DOMContentLoaded', () => {
 	let preloadedState;
 	let token = localStorage.getItem('access_token');
+	const channel = JSON.parse(localStorage.getItem('channel'));
 	if (token) {
 		preloadedState = {
 			session: {
 				currentUser: {
 					'access-token': token
 				}
-			}
+			},
+			channel: channel,
 		};
 	}
 	const store = configureStore(preloadedState);

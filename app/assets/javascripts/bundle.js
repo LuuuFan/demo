@@ -4588,7 +4588,12 @@ var addPhoto = exports.addPhoto = function addPhoto(url, canvas) {
           left: 0 + 50 * photoNum,
           top: 0 + 50 * photoNum
         }).scale(0.5);
-        canvas.add(img);
+        try {
+          canvas.add(img);
+        } catch (err) {
+          alert('Drobox img link expired.');
+          debugger;
+        }
         canvas.renderAll();
         photoNum++;
       }, { crossOrigin: 'anonymous' });
@@ -4880,13 +4885,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 document.addEventListener('DOMContentLoaded', function () {
 	var preloadedState = void 0;
 	var token = localStorage.getItem('access_token');
+	var channel = JSON.parse(localStorage.getItem('channel'));
 	if (token) {
 		preloadedState = {
 			session: {
 				currentUser: {
 					'access-token': token
 				}
-			}
+			},
+			channel: channel
 		};
 	}
 	var store = (0, _configureStore2.default)(preloadedState);
@@ -32259,7 +32266,7 @@ var Chat = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).call(this));
 
 		_this.state = {
-			active: true,
+			active: false,
 			input: '',
 			userList: userList
 		};
@@ -33832,7 +33839,7 @@ Object.defineProperty(exports, "__esModule", {
 var _channel = __webpack_require__(148);
 
 var channelReducer = function channelReducer() {
-	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	var action = arguments[1];
 
 	Object.freeze(state);
@@ -33841,10 +33848,12 @@ var channelReducer = function channelReducer() {
 		case _channel.REMOVE_CHANNEL:
 			newState = Object.assign({}, state);
 			delete newState[action.channel];
+			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		case _channel.RECEIVE_CHANNEL:
 			newState = Object.assign({}, state);
 			newState[action.channel] = {};
+			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		default:
 			return state;

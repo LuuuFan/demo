@@ -77,6 +77,10 @@ $font-hover: #278efc;
   			margin-bottom: 5px;
   			text-align: center;
   		}
+  		.avatar:hover{
+  			background-color: $color-darkblue;
+  			color: white;
+  		}
   	}
   	.user:hover span{
   		font-weight: bold;
