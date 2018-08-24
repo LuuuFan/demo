@@ -10,7 +10,7 @@ class Channel extends React.Component{
 
 	render(){
 		return(
-			<div></div>
+			<div className='channel' id={this.props.url}></div>
 		);
 	}
 }

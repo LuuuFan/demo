@@ -33590,7 +33590,7 @@ var Chat = function (_React$Component) {
 		key: 'handleSubmit',
 		value: function handleSubmit() {
 			var channel = this.state.channel.concat([this.state.input]);
-			this.setState({ channel: channel });
+			this.setState({ channel: channel, input: '' });
 		}
 	}, {
 		key: 'toggle',
@@ -33604,25 +33604,29 @@ var Chat = function (_React$Component) {
 
 			return _react2.default.createElement(
 				'div',
-				{ className: 'chat ' + (this.state.active ? 'chat-active' : "") },
+				{ className: 'chat-area' },
 				this.state.channel.map(function (c) {
 					return _react2.default.createElement(_channel2.default, { url: c });
 				}),
 				_react2.default.createElement(
 					'div',
-					{ className: 'chat-header', onClick: function onClick() {
-							return _this3.toggle();
-						} },
-					_react2.default.createElement('i', { className: 'fas fa-circle', style: { 'color': '' + (this.state.active ? 'green' : 'red') } })
-				),
-				_react2.default.createElement('div', { className: 'userlist' }),
-				_react2.default.createElement(
-					'form',
-					{ onSubmit: function onSubmit() {
-							return _this3.handleSubmit();
-						} },
-					_react2.default.createElement('i', { className: 'fas fa-search' }),
-					_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input })
+					{ className: 'chat ' + (this.state.active ? 'chat-active' : "") },
+					_react2.default.createElement(
+						'div',
+						{ className: 'chat-header', onClick: function onClick() {
+								return _this3.toggle();
+							} },
+						_react2.default.createElement('i', { className: 'fas fa-circle', style: { 'color': '' + (this.state.active ? 'green' : 'red') } })
+					),
+					_react2.default.createElement('div', { className: 'userlist' }),
+					_react2.default.createElement(
+						'form',
+						{ onSubmit: function onSubmit() {
+								return _this3.handleSubmit();
+							} },
+						_react2.default.createElement('i', { className: 'fas fa-search' }),
+						_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input })
+					)
 				)
 			);
 		}
@@ -33673,7 +33677,7 @@ var Channel = function (_React$Component) {
 	_createClass(Channel, [{
 		key: 'render',
 		value: function render() {
-			return _react2.default.createElement('div', null);
+			return _react2.default.createElement('div', { className: 'channel', id: this.props.url });
 		}
 	}]);
 

@@ -430,9 +430,11 @@ input[type=submit] {
   height: 40px;
   display: flex;
   flex-direction: row;
+  align-items: center;
   border-top: 1px solid lightgray;
 }
 .chat form i {
+  color: lightgray;
   margin: 0 7px;
 }
 .chat form input {

@@ -20,7 +20,7 @@ class Chat extends React.Component {
 
 	handleSubmit(){
 			const channel = this.state.channel.concat([this.state.input]);
-			this.setState({channel});
+			this.setState({channel, input: ''});
 	}
 
 	toggle(){
@@ -29,16 +29,18 @@ class Chat extends React.Component {
 
 	render(){
 		return (
-			<div className={`chat ${this.state.active ? 'chat-active' : ""}`}>
+			<div className='chat-area'>
 				{this.state.channel.map(c => <Channel url={c}/>)}
-				<div className='chat-header' onClick={()=>this.toggle()}>
-					<i className="fas fa-circle" style={{'color': `${this.state.active ? 'green' : 'red'}`}}></i>
+				<div className={`chat ${this.state.active ? 'chat-active' : ""}`}>
+					<div className='chat-header' onClick={()=>this.toggle()}>
+						<i className="fas fa-circle" style={{'color': `${this.state.active ? 'green' : 'red'}`}}></i>
+					</div>
+					<div className='userlist'></div>
+					<form onSubmit={()=>this.handleSubmit()}>
+						<i className="fas fa-search"></i>
+						<input onChange={this.handleInput()} value={this.state.input}/>
+					</form>
 				</div>
-				<div className='userlist'></div>
-				<form onSubmit={()=>this.handleSubmit()}>
-					<i className="fas fa-search"></i>
-					<input onChange={this.handleInput()} value={this.state.input}/>
-				</form>
 			</div>
 		);
 	}
