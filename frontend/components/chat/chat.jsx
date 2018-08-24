@@ -25,13 +25,24 @@ class Chat extends React.Component {
 		}
 	}
 
+	capitalizeStr(str){
+		return str[0].toUpperCase() + str.slice(1).toLowerCase;
+	}
+
 	handleSubmit(){
-			const channel = this.state.channel.concat([this.state.input]);
+			const channel = this.state.channel.concat(this.capitalizeStr([this.state.input]));
 			this.setState({channel, input: ''});
 	}
 
 	toggle(){
 		this.setState({active: !this.state.active})
+	}
+
+	openChannel(e){
+		const user = e.currentTarget.textContent.slice(1);
+		if (!this.state.channel.includes(user)) {
+			this.setState({channel: this.state.channel.concat([user])});
+		}
 	}
 
 	render(){
@@ -43,7 +54,8 @@ class Chat extends React.Component {
 						<i className="fas fa-circle" style={{'color': `${this.state.active ? 'green' : 'gray'}`}}></i>
 					</div>
 					<div className='userlist'>
-						{this.state.userList.map((user, idx) => <div key={idx} className='user'>
+						{this.state.userList.map((user, idx) => 
+						<div key={idx} className='user' onClick={(e)=>this.openChannel(e)}>
 							<div className='avatar'>{user[0]}</div>
 							<span>{user}</span>
 						</div>)}

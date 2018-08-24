@@ -449,19 +449,28 @@ input[type=submit] {
   right: 5px;
 }
 .chat .userlist {
-  flex: 1;
+  height: 220px;
   padding: 10px;
+  overflow: auto;
 }
 .chat .userlist .user {
+  width: 100%;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  cursor: pointer;
 }
 .chat .userlist .user .avatar {
-  font-size: 36px;
+  font-size: 20px;
   background-color: lightgray;
   border-radius: 50%;
-  padding: 10px;
-  margin-right: 10px;
+  padding: 5px 9px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+.chat .userlist .user:hover span {
+  font-weight: bold;
 }
 .chat .header {
   border: 1px solid #2F425E;
