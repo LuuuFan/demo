@@ -19,7 +19,7 @@ class Chat extends React.Component {
 			if (!e.target.value) {
 				this.setState({input: e.target.value, userList: userList});
 			} else {
-				const filterList = this.state.userList.filter(el => el.toLowerCase().includes(e.target.value.toLowerCase()));
+				const filterList = userList.filter(el => el.toLowerCase().includes(e.target.value.toLowerCase()));
 				this.setState({input: e.target.value, userList: filterList});
 			}
 		}

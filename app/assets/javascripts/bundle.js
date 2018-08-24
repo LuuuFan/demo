@@ -33589,7 +33589,7 @@ var Chat = function (_React$Component) {
 				if (!e.target.value) {
 					_this2.setState({ input: e.target.value, userList: userList });
 				} else {
-					var filterList = _this2.state.userList.filter(function (el) {
+					var filterList = userList.filter(function (el) {
 						return el.toLowerCase().includes(e.target.value.toLowerCase());
 					});
 					_this2.setState({ input: e.target.value, userList: filterList });

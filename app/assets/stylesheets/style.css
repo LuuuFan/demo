@@ -450,10 +450,18 @@ input[type=submit] {
 }
 .chat .userlist {
   flex: 1;
+  padding: 10px;
 }
 .chat .userlist .user {
   display: flex;
   flex-direction: row;
+}
+.chat .userlist .user .avatar {
+  font-size: 36px;
+  background-color: lightgray;
+  border-radius: 50%;
+  padding: 10px;
+  margin-right: 10px;
 }
 .chat .header {
   border: 1px solid #2F425E;
