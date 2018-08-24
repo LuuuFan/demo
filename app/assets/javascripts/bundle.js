@@ -4509,7 +4509,7 @@ function compose() {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.fetchAllImgs = exports.receiveImg = exports.receiveAllImgs = exports.RECEIVE_ALL_IMGS = exports.RECEIVE_IMG = undefined;
+exports.fetchAllImgs = exports.receiveSelectedImg = exports.receiveImg = exports.receiveAllImgs = exports.RECEIVE_SELECTED_IMG = exports.RECEIVE_ALL_IMGS = exports.RECEIVE_IMG = undefined;
 
 var _img = __webpack_require__(116);
 
@@ -4519,6 +4519,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 var RECEIVE_IMG = exports.RECEIVE_IMG = 'RECEIVE_IMG';
 var RECEIVE_ALL_IMGS = exports.RECEIVE_ALL_IMGS = 'RECEIVE_ALL_IMGS';
+var RECEIVE_SELECTED_IMG = exports.RECEIVE_SELECTED_IMG = 'RECEIVE_SELECTED_IMG';
 
 var receiveAllImgs = exports.receiveAllImgs = function receiveAllImgs(imgs) {
 	return {
@@ -4530,6 +4531,13 @@ var receiveAllImgs = exports.receiveAllImgs = function receiveAllImgs(imgs) {
 var receiveImg = exports.receiveImg = function receiveImg(img) {
 	return {
 		type: RECEIVE_IMG,
+		img: img
+	};
+};
+
+var receiveSelectedImg = exports.receiveSelectedImg = function receiveSelectedImg(img) {
+	return {
+		type: RECEIVE_SELECTED_IMG,
 		img: img
 	};
 };
