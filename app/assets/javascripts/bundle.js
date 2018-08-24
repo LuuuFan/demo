@@ -33555,18 +33555,22 @@ var Home = function (_React$Component) {
 	_createClass(Home, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
+			var _this2 = this;
+
 			this.fetchImg();
-			// interval = setInterval(()=>this.fetchImg(), 900);
+			interval = setInterval(function () {
+				return _this2.fetchImg();
+			}, 900);
 		}
 	}, {
 		key: 'fetchImg',
 		value: function fetchImg() {
-			var _this2 = this;
+			var _this3 = this;
 
 			this.props.fetchAllImgs(this.props.currentUser['access-token']).catch(function (err) {
 				clearInterval(interval);
 				localStorage.removeItem('access_token');
-				_this2.props.history.push('/login');
+				_this3.props.history.push('/login');
 			});
 		}
 	}, {
@@ -33578,7 +33582,7 @@ var Home = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this3 = this;
+			var _this4 = this;
 
 			var _props = this.props,
 			    imgs = _props.imgs,
@@ -33602,7 +33606,7 @@ var Home = function (_React$Component) {
 						return _react2.default.createElement(
 							'div',
 							{ className: 'img-container', key: key, id: 'img-' + key, onClick: function onClick(e) {
-									return _this3.selectImg(e);
+									return _this4.selectImg(e);
 								} },
 							_react2.default.createElement('img', { src: img.previewURL })
 						);
@@ -33986,6 +33990,7 @@ var Share = function (_React$Component) {
 
 		var _this = _possibleConstructorReturn(this, (Share.__proto__ || Object.getPrototypeOf(Share)).call(this));
 
+		var dropbox = localStorage.getItem('dropbox');
 		_this.state = {
 			modalShare: 'modal',
 			modalList: 'modal',
@@ -33994,7 +33999,8 @@ var Share = function (_React$Component) {
 			emailError: '',
 			filename: '',
 			type: 'pdf',
-			sending: false
+			sending: false,
+			dropbox: dropbox
 		};
 		return _this;
 	}
@@ -34010,6 +34016,7 @@ var Share = function (_React$Component) {
 			} else {
 				localStorage.setItem('dropbox', JSON.stringify(_defineProperty({}, '' + image.name, image)));
 			}
+			this.setState({ dropbox: dropbox });
 		}
 	}, {
 		key: 'componentDidMount',
@@ -34123,7 +34130,7 @@ var Share = function (_React$Component) {
 
 				if (type === 'PDF') {
 					this.setState({ sending: true, modalShare: 'modal' });
-					var pdf = new jsPDF();
+					var pdf = new jsPDF('l', 'mm', [172, 172]);
 					imgDataArr.forEach(function (imgData, idx) {
 						pdf.addImage(imgData, 'JPEG', 0, 0);
 						if (idx !== imgDataArr.length - 1) {
@@ -34162,6 +34169,7 @@ var Share = function (_React$Component) {
 		key: 'clearDropbox',
 		value: function clearDropbox() {
 			localStorage.removeItem('dropbox');
+			this.setState({ dropbox: '' });
 			var button = document.querySelector('.dropbox-dropin-success');
 			if (button) {
 				button.setAttribute('class', 'btn');
@@ -34192,7 +34200,7 @@ var Share = function (_React$Component) {
 		value: function render() {
 			var _this7 = this;
 
-			var dropbox = JSON.parse(localStorage.getItem('dropbox'));
+			// const dropbox = JSON.parse(localStorage.getItem('dropbox'));
 			var _props = this.props,
 			    message = _props.message,
 			    sendService = _props.sendService;
@@ -34263,7 +34271,7 @@ var Share = function (_React$Component) {
 						} },
 					'Log Out'
 				),
-				dropbox && Object.keys(dropbox) ? _react2.default.createElement(
+				this.state.dropbox && Object.keys(this.state.dropbox) ? _react2.default.createElement(
 					'button',
 					{ className: 'btn', onClick: function onClick() {
 							return _this7.clearDropbox();
@@ -35172,7 +35180,7 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
-			if (nextProps.img) {
+			if (nextProps.img && nextProps.img !== this.props.img) {
 				canvasUtil.addPhoto(nextProps.img, this.state.selectedCanvas);
 			}
 			if (nextProps.message.message && nextProps.message.message.startsWith('Email')) {
@@ -36081,7 +36089,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 // const userList = ['Pavan', 'Tirth', 'Sam', 'Edward', 'Tim', 'Kelvin', 'Julia', 'Lu'];
-var userList = ['Shasha', 'Tirth'];
+var userList = ['Pavan', 'Tirth', 'Shasha'];
 
 var Chat = function (_React$Component) {
 	_inherits(Chat, _React$Component);
@@ -36347,7 +36355,7 @@ var Channel = function (_React$Component) {
 						_react2.default.createElement(
 							'span',
 							null,
-							user
+							user[0].toUpperCase() + user.slice(1).toLowerCase()
 						)
 					),
 					_react2.default.createElement(
@@ -40063,8 +40071,6 @@ var sendEmail = exports.sendEmail = function sendEmail(token, formData) {
 			return dispatch((0, _message.receiveMessage)(message));
 		}, function (errors) {
 			return dispatch((0, _error.receiveError)(errors.responseJSON));
-		}).catch(function (err) {
-			debugger;
 		});
 	};
 };

@@ -4,7 +4,7 @@ import Channel from './channel';
 import socketIOClient from "socket.io-client";
 
 // const userList = ['Pavan', 'Tirth', 'Sam', 'Edward', 'Tim', 'Kelvin', 'Julia', 'Lu'];
-const userList = ['Shasha', 'Tirth'];
+const userList = ['Pavan', 'Tirth', 'Shasha', ];
 class Chat extends React.Component {
 	constructor(){
 		super();

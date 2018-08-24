@@ -58,7 +58,7 @@ class Channel extends React.Component{
 				<div className='header channel-header' onClick={(e)=>this.toggle(e)}>
 					<div>
 						<i className="far fa-user"></i>
-						<span>{user}</span>
+						<span>{user[0].toUpperCase() + user.slice(1).toLowerCase()}</span>
 					</div>
 					<span className='close-channel' onClick={()=>this.closeChannel()}>&times;</span>
 				</div>

@@ -56,7 +56,7 @@ class Canvas extends React.Component{
 	}
 
 	componentWillReceiveProps(nextProps){
-		if (nextProps.img) {
+		if (nextProps.img && nextProps.img !== this.props.img) {
 			canvasUtil.addPhoto(nextProps.img, this.state.selectedCanvas);
 		}
 		if (nextProps.message.message && nextProps.message.message.startsWith('Email')) {

@@ -6,6 +6,4 @@ export const sendEmail = (token, formData) => dispatch => APIUtilMail.sendEmail(
 	.then(
 		message => dispatch(receiveMessage(message)),
 		errors => dispatch(receiveError(errors.responseJSON))	
-	)	.catch((err)=>{
-		debugger
-	});
+	);

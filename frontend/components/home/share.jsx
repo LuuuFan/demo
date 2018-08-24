@@ -5,6 +5,7 @@ import Service from '../service';
 class Share extends React.Component{
 	constructor(){
 		super();
+		const dropbox = localStorage.getItem('dropbox');
 		this.state = {
 			modalShare: 'modal',
 			modalList: 'modal',
@@ -14,6 +15,7 @@ class Share extends React.Component{
 			filename: '',
 			type: 'pdf',
 			sending: false,
+			dropbox: dropbox,
 		};
 	}
 
@@ -26,6 +28,7 @@ class Share extends React.Component{
 		} else {
 			localStorage.setItem('dropbox', JSON.stringify({[`${image.name}`]: image}));
 		}
+		this.setState({dropbox});
 	}
 
 	componentDidMount(){
@@ -116,7 +119,7 @@ class Share extends React.Component{
 
 			if (type === 'PDF') {
 				this.setState({sending: true, modalShare: 'modal'});
-				const pdf = new jsPDF();
+				const pdf = new jsPDF('l', 'mm', [172, 172]);
 				imgDataArr.forEach((imgData, idx) => {
 					pdf.addImage(imgData, 'JPEG', 0, 0);
 					if (idx !== imgDataArr.length - 1) {
@@ -154,6 +157,7 @@ class Share extends React.Component{
 
 	clearDropbox(){
 		localStorage.removeItem('dropbox');
+		this.setState({dropbox: ''});
 		const button = document.querySelector('.dropbox-dropin-success');
 		if (button) {
 			button.setAttribute('class', 'btn')
@@ -177,7 +181,7 @@ class Share extends React.Component{
 	}
 
 	render(){
-		const dropbox = JSON.parse(localStorage.getItem('dropbox'));
+		// const dropbox = JSON.parse(localStorage.getItem('dropbox'));
 		const {message, sendService} = this.props;
 		return (
 			<div className='share'>
@@ -203,7 +207,7 @@ class Share extends React.Component{
 				</div>
 				<button className="btn" onClick={(e)=>this.openModal(e, 'modalShare')}>Share</button>
 				<button className="btn" onClick={(e)=>this.logout()}>Log Out</button>
-				{dropbox && Object.keys(dropbox) ? 
+				{this.state.dropbox && Object.keys(this.state.dropbox) ? 
 				<button className="btn" onClick={()=>this.clearDropbox()}>Clear Dropbox</button>
 					: ""}
 				<div className={this.state.modalShare}>
