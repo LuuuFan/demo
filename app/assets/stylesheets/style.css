@@ -413,12 +413,12 @@ input[type=submit] {
 .chat .header, .channel .header {
   height: 40px;
   width: 100%;
-  border: 1px solid #2F425E;
   background-color: #2F425E;
   text-align: center;
   display: flex;
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
 }
 .chat .header i, .channel .header i {
   margin: auto 10px;
@@ -451,17 +451,41 @@ input[type=submit] {
 .chat .userlist {
   flex: 1;
 }
+.chat .userlist .user {
+  display: flex;
+  flex-direction: row;
+}
+.chat .header {
+  border: 1px solid #2F425E;
+}
 
 .channel .channel-header {
   background-color: lightgray;
+  border: 1px solid lightgray;
 }
 .channel .message {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  overflow: auto;
+  padding: 10px;
+}
+.channel .message span {
+  background-color: lightgray;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
 }
 
 .chat-active, .channel-active {
   bottom: 0;
 }
+.chat-active .channel-header, .channel-active .channel-header {
+  background-color: gray;
+  border: 1px solid gray;
+}
+
 .main {
   height: 100vh;
   font-size: 14px;

@@ -33561,6 +33561,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var userList = ['Pavan', 'Tirth', 'Sam', 'Edward', 'Tim', 'Kelvin', 'Julia', 'Lu'];
+
 var Chat = function (_React$Component) {
 	_inherits(Chat, _React$Component);
 
@@ -33572,7 +33574,8 @@ var Chat = function (_React$Component) {
 		_this.state = {
 			active: true,
 			input: '',
-			channel: []
+			channel: [],
+			userList: userList
 		};
 		return _this;
 	}
@@ -33583,7 +33586,14 @@ var Chat = function (_React$Component) {
 			var _this2 = this;
 
 			return function (e) {
-				_this2.setState({ input: e.target.value });
+				if (!e.target.value) {
+					_this2.setState({ input: e.target.value, userList: userList });
+				} else {
+					var filterList = _this2.state.userList.filter(function (el) {
+						return el.toLowerCase().includes(e.target.value.toLowerCase());
+					});
+					_this2.setState({ input: e.target.value, userList: filterList });
+				}
 			};
 		}
 	}, {
@@ -33618,7 +33628,26 @@ var Chat = function (_React$Component) {
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-circle', style: { 'color': '' + (this.state.active ? 'green' : 'gray') } })
 					),
-					_react2.default.createElement('div', { className: 'userlist' }),
+					_react2.default.createElement(
+						'div',
+						{ className: 'userlist' },
+						this.state.userList.map(function (user, idx) {
+							return _react2.default.createElement(
+								'div',
+								{ key: idx, className: 'user' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'avatar' },
+									user[0]
+								),
+								_react2.default.createElement(
+									'span',
+									null,
+									user
+								)
+							);
+						})
+					),
 					_react2.default.createElement(
 						'form',
 						{ onSubmit: function onSubmit() {

@@ -58,6 +58,17 @@ $font-hover: #278efc;
 	right: 5px;
   .userlist{
   	flex: 1;
+  	.user{
+  		display: flex;
+  		flex-direction: row;
+  		.avatar{
+  			font-size: 36px;
+  			background-color: lightgray;
+  			border-radius: 50%;
+  			padding: 10px;
+  			margin-right: 10px;
+  		}
+  	}
   }
   .header{
   	border: 1px solid #2F425E;
@@ -74,10 +85,14 @@ $font-hover: #278efc;
 		display: flex;
 		flex-direction: column;
 		text-align: right;
-		background-color: lightgray;
-		border-radius: 5px;
-		margin-bottom: 5px;
 		overflow: auto;
+		padding: 10px;
+		span{
+			background-color: lightgray;
+			border-radius: 5px;
+			margin-bottom: 5px;
+			padding: 5px;
+		}
 	}
 }
 
@@ -85,6 +100,7 @@ $font-hover: #278efc;
 	bottom: 0;
 	.channel-header{
 		background-color: gray;
+		border: 1px solid gray;
 	}
 }
 
