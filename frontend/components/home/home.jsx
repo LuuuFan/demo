@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Header from './header';
 import Canvas from './canvas';
 import ChatContainer from '../chat/chat_container';
+import ImageGroup from './image_group'
 
 var interval;
 
@@ -47,6 +48,9 @@ class Home extends React.Component {
 							<img src={img.previewURL}/>
 						</div>)}
 				</div>
+				{/*
+					<ImageGroup imgs={imgs}/>
+				*/}
 				<ChatContainer />
 			</div>
 		);
