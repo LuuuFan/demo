@@ -3,6 +3,7 @@
 @import './servicenow';
 @import './session';
 @import './canvas';
+@import './chat';
 
 $color-darkblue: #1C2A39;
 $color-blue: #2F425E;
@@ -271,6 +272,8 @@ button:hover{
       display: flex;
       flex-direction: column;
       .container{
+        width: 50%;
+        margin: 0 auto;
         height: 650px;
         margin-bottom: 10px;
         canvas{

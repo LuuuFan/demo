@@ -1,0 +1,28 @@
+$color-darkblue: #1C2A39;
+$color-blue: #2F425E;
+$font-white: #FFFFFF;
+$font-hover: #278efc;
+
+.chat{
+	z-index: 20;
+	position: fixed;
+	bottom: -280px; 
+	right: 120px;
+	width: 150px;
+	height: 300px;
+	border-radius: 5px;
+	border: 1px solid lightgray;
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+  background-color: white;
+  overflow: hidden;
+  transition: all .5s;
+  .chat-header{
+  	height: 20px;
+  	width: 100%;
+  	background-color: $color-blue
+  }
+}
+
+.chat-active{
+	bottom: 0;
+}

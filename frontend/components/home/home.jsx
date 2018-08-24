@@ -4,7 +4,7 @@ import SessionFormContainer from '../session/session_form_container';
 import PropTypes from 'prop-types';
 import Header from './header';
 import Canvas from './canvas';
-import {} from '../../util/canvas';
+import Chat from './chat';
 
 var interval;
 
@@ -47,6 +47,7 @@ class Home extends React.Component {
 							<img src={img.previewURL}/>
 						</div>)}
 				</div>
+				<Chat />
 			</div>
 		);
 	}
