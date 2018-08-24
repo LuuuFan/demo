@@ -441,6 +441,7 @@ input[type=submit] {
   width: 100%;
   padding: 5px 10px;
   font-size: 12px;
+  overflow-wrap: break-word;
 }
 .chat form input:focus ~ i, .channel form input:focus ~ i {
   color: gray;
@@ -491,7 +492,7 @@ input[type=submit] {
 }
 .channel .channel-header .close-channel:hover {
   font-weight: bold;
-  background-color: white;
+  color: white;
 }
 .channel .message {
   flex: 1;
@@ -500,9 +501,13 @@ input[type=submit] {
   text-align: right;
   overflow: auto;
   padding: 10px;
+  padding: 5px;
 }
 .channel .message span {
   background-color: lightgray;
+  width: 95%;
+  height: auto;
+  overflow-wrap: break-word;
   border-radius: 5px;
   margin-bottom: 5px;
   padding: 5px;

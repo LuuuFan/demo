@@ -48,6 +48,7 @@ $font-hover: #278efc;
   		width: 100%;
   		padding: 5px 10px;
   		font-size: 12px;
+			overflow-wrap: break-word;
   	}
   	input:focus ~ i{
   		color: gray;
@@ -100,7 +101,8 @@ $font-hover: #278efc;
 		}
 		.close-channel:hover{
 			font-weight: bold;
-			background-color: white;
+			color: white;
+			// background-color: white;
 		}
 	}
 	.message{
@@ -110,8 +112,12 @@ $font-hover: #278efc;
 		text-align: right;
 		overflow: auto;
 		padding: 10px;
+		padding: 5px;
 		span{
 			background-color: lightgray;
+			width: 95%;
+			height: auto;
+			overflow-wrap: break-word;
 			border-radius: 5px;
 			margin-bottom: 5px;
 			padding: 5px;
