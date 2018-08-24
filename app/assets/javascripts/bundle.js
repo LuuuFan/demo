@@ -33602,21 +33602,22 @@ var Chat = function (_React$Component) {
 		value: function render() {
 			var _this3 = this;
 
+			console.log(this.state.channel);
 			return _react2.default.createElement(
 				'div',
 				{ className: 'chat-area' },
-				this.state.channel.map(function (c) {
-					return _react2.default.createElement(_channel2.default, { url: c });
+				this.state.channel.map(function (c, idx) {
+					return _react2.default.createElement(_channel2.default, { key: idx, idx: idx, user: c });
 				}),
 				_react2.default.createElement(
 					'div',
 					{ className: 'chat ' + (this.state.active ? 'chat-active' : "") },
 					_react2.default.createElement(
 						'div',
-						{ className: 'chat-header', onClick: function onClick() {
+						{ className: 'header chat-header', onClick: function onClick() {
 								return _this3.toggle();
 							} },
-						_react2.default.createElement('i', { className: 'fas fa-circle', style: { 'color': '' + (this.state.active ? 'green' : 'red') } })
+						_react2.default.createElement('i', { className: 'fas fa-circle', style: { 'color': '' + (this.state.active ? 'green' : 'gray') } })
 					),
 					_react2.default.createElement('div', { className: 'userlist' }),
 					_react2.default.createElement(
@@ -33670,14 +33671,65 @@ var Channel = function (_React$Component) {
 
 		var _this = _possibleConstructorReturn(this, (Channel.__proto__ || Object.getPrototypeOf(Channel)).call(this));
 
-		_this.state = {};
+		_this.state = {
+			active: true,
+			input: ''
+		};
 		return _this;
 	}
 
 	_createClass(Channel, [{
+		key: 'toggle',
+		value: function toggle() {
+			this.setState({ active: !this.state.active });
+		}
+	}, {
+		key: 'handleInput',
+		value: function handleInput() {
+			var _this2 = this;
+
+			return function (e) {
+				_this2.setState({ input: e.target.value });
+			};
+		}
+	}, {
+		key: 'handleSubmit',
+		value: function handleSubmit(e) {
+			e.preventDefault();
+		}
+	}, {
 		key: 'render',
 		value: function render() {
-			return _react2.default.createElement('div', { className: 'channel', id: this.props.url });
+			var _this3 = this;
+
+			var _props = this.props,
+			    user = _props.user,
+			    idx = _props.idx;
+
+			return _react2.default.createElement(
+				'div',
+				{ className: 'channel ' + (this.state.active ? 'channel-active' : ''), id: this.props.url, style: { 'right': 260 * (idx + 1) + 'px' } },
+				_react2.default.createElement(
+					'div',
+					{ className: 'header channel-header', onClick: function onClick() {
+							return _this3.toggle();
+						} },
+					_react2.default.createElement('i', { className: 'far fa-user' }),
+					_react2.default.createElement(
+						'span',
+						null,
+						user
+					)
+				),
+				_react2.default.createElement('div', { className: 'message' }),
+				_react2.default.createElement(
+					'form',
+					{ onSubmit: function onSubmit(e) {
+							return _this3.handleSubmit(e);
+						} },
+					_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input })
+				)
+			);
 		}
 	}]);
 

@@ -28,12 +28,13 @@ class Chat extends React.Component {
 	}
 
 	render(){
+		console.log(this.state.channel);
 		return (
 			<div className='chat-area'>
-				{this.state.channel.map(c => <Channel url={c}/>)}
+				{this.state.channel.map((c, idx) => <Channel key={idx} idx={idx} user={c}/>)}
 				<div className={`chat ${this.state.active ? 'chat-active' : ""}`}>
-					<div className='chat-header' onClick={()=>this.toggle()}>
-						<i className="fas fa-circle" style={{'color': `${this.state.active ? 'green' : 'red'}`}}></i>
+					<div className='header chat-header' onClick={()=>this.toggle()}>
+						<i className="fas fa-circle" style={{'color': `${this.state.active ? 'green' : 'gray'}`}}></i>
 					</div>
 					<div className='userlist'></div>
 					<form onSubmit={()=>this.handleSubmit()}>
