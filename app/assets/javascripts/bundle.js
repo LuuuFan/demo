@@ -27952,9 +27952,9 @@ var _canvas = __webpack_require__(139);
 
 var _canvas2 = _interopRequireDefault(_canvas);
 
-var _chat = __webpack_require__(140);
+var _chat_container = __webpack_require__(149);
 
-var _chat2 = _interopRequireDefault(_chat);
+var _chat_container2 = _interopRequireDefault(_chat_container);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28037,7 +28037,7 @@ var Home = function (_React$Component) {
 						);
 					})
 				),
-				_react2.default.createElement(_chat2.default, null)
+				_react2.default.createElement(_chat_container2.default, null)
 			);
 		}
 	}]);
@@ -32261,7 +32261,6 @@ var Chat = function (_React$Component) {
 		_this.state = {
 			active: true,
 			input: '',
-			channel: [],
 			userList: userList
 		};
 		return _this;
@@ -32291,8 +32290,8 @@ var Chat = function (_React$Component) {
 	}, {
 		key: 'handleSubmit',
 		value: function handleSubmit() {
-			var channel = this.state.channel.concat(this.capitalizeStr([this.state.input]));
-			this.setState({ channel: channel, input: '' });
+			this.props.receiveChannel(this.capitalizeStr([this.state.input]));
+			this.setState({ input: '' });
 		}
 	}, {
 		key: 'toggle',
@@ -32303,20 +32302,22 @@ var Chat = function (_React$Component) {
 		key: 'openChannel',
 		value: function openChannel(e) {
 			var user = e.currentTarget.textContent.slice(1);
-			if (!this.state.channel.includes(user)) {
-				this.setState({ channel: this.state.channel.concat([user]) });
-			}
+			this.props.receiveChannel(user);
 		}
 	}, {
 		key: 'render',
 		value: function render() {
 			var _this3 = this;
 
+			var _props = this.props,
+			    channel = _props.channel,
+			    removeChannel = _props.removeChannel;
+
 			return _react2.default.createElement(
 				'div',
 				{ className: 'chat-area' },
-				this.state.channel.map(function (c, idx) {
-					return _react2.default.createElement(_channel2.default, { key: idx, idx: idx, user: c });
+				Object.keys(channel).map(function (c, idx) {
+					return _react2.default.createElement(_channel2.default, { key: idx, idx: idx, user: c, removeChannel: removeChannel });
 				}),
 				_react2.default.createElement(
 					'div',
@@ -33649,7 +33650,8 @@ var Channel = function (_React$Component) {
 						'span',
 						null,
 						user
-					)
+					),
+					_react2.default.createElement('span', { className: 'close-channel' })
 				),
 				_react2.default.createElement(
 					'div',
@@ -33800,9 +33802,109 @@ var sendService = exports.sendService = function sendService(data, token) {
 
 /***/ }),
 /* 147 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-throw new Error("Module build failed: SyntaxError: C:/Users/N3N/Luuu/expirements/demo/frontend/reducers/channel.js: Unexpected token, expected , (12:46)\n\n  10 | \t\t\treturn newState;\n  11 | \t\tcase RECEIVE_CHANNEL:\n> 12 | \t\t\tnewState = Object.assign({}, state, {action.channel: {}})\n     | \t\t\t                                           ^\n  13 | \t\t\treturn newState;\n  14 | \t\tdefault: \n  15 | \t\t\treturn state;\n");
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _channel = __webpack_require__(148);
+
+var channelReducer = function channelReducer() {
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	var action = arguments[1];
+
+	Object.freeze(state);
+	var newState = void 0;
+	switch (action.type) {
+		case _channel.REMOVE_CHANNEL:
+			newState = Object.assign({}, state);
+			delete newState[action.channel];
+			return newState;
+		case _channel.RECEIVE_CHANNEL:
+			newState = Object.assign({}, state);
+			newState[action.channel] = {};
+			return newState;
+		default:
+			return state;
+	}
+};
+
+exports.default = channelReducer;
+
+/***/ }),
+/* 148 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var RECEIVE_CHANNEL = exports.RECEIVE_CHANNEL = 'RECEIVE_CHANNEL';
+var REMOVE_CHANNEL = exports.REMOVE_CHANNEL = 'REMOVE-CHANNEL';
+
+var receiveChannel = exports.receiveChannel = function receiveChannel(channel) {
+	return {
+		type: RECEIVE_CHANNEL,
+		channel: channel
+	};
+};
+
+var removeChannel = exports.removeChannel = function removeChannel(channel) {
+	return {
+		type: REMOVE_CHANNEL,
+		channel: channel
+	};
+};
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(9);
+
+var _chat = __webpack_require__(140);
+
+var _chat2 = _interopRequireDefault(_chat);
+
+var _channel = __webpack_require__(148);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(state) {
+	return {
+		channel: state.channel
+	};
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	return {
+		receiveChannel: function receiveChannel(channel) {
+			return dispatch((0, _channel.receiveChannel)(channel));
+		},
+		removeChannel: function removeChannel(channel) {
+			return dispatch((0, _channel.removeChannel)(channel));
+		}
+	};
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_chat2.default);
 
 /***/ })
 /******/ ]);

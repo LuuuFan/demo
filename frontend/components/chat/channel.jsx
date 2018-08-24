@@ -34,6 +34,7 @@ class Channel extends React.Component{
 				<div className='header channel-header' onClick={()=>this.toggle()}>
 					<i className="far fa-user"></i>
 					<span>{user}</span>
+					<span className='close-channel'></span>
 				</div>
 				<div className='message'>
 					{this.state.message.map((msg, idx) => <span key={idx}>{msg}</span>)}

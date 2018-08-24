@@ -7,6 +7,6 @@ export const receiveChannel = (channel) => ({
 })
 
 export const removeChannel = (channel) => ({
-	type: REMOVE_CHANNEL
+	type: REMOVE_CHANNEL,
 	channel
 })

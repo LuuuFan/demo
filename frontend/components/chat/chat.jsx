@@ -9,7 +9,6 @@ class Chat extends React.Component {
 		this.state = {
 			active: true,
 			input: '',
-			channel: [],
 			userList: userList,
 		};
 	}
@@ -30,8 +29,8 @@ class Chat extends React.Component {
 	}
 
 	handleSubmit(){
-			const channel = this.state.channel.concat(this.capitalizeStr([this.state.input]));
-			this.setState({channel, input: ''});
+			this.props.receiveChannel(this.capitalizeStr([this.state.input]))
+			this.setState({input: ''});
 	}
 
 	toggle(){
@@ -40,15 +39,14 @@ class Chat extends React.Component {
 
 	openChannel(e){
 		const user = e.currentTarget.textContent.slice(1);
-		if (!this.state.channel.includes(user)) {
-			this.setState({channel: this.state.channel.concat([user])});
-		}
+		this.props.receiveChannel(user);
 	}
 
 	render(){
+		const {channel, removeChannel} = this.props;
 		return (
 			<div className='chat-area'>
-				{this.state.channel.map((c, idx) => <Channel key={idx} idx={idx} user={c}/>)}
+				{Object.keys(channel).map((c, idx) => <Channel key={idx} idx={idx} user={c} removeChannel={removeChannel}/>)}
 				<div className={`chat ${this.state.active ? 'chat-active' : ""}`}>
 					<div className='header chat-header' onClick={()=>this.toggle()}>
 						<i className="fas fa-circle" style={{'color': `${this.state.active ? 'green' : 'gray'}`}}></i>
