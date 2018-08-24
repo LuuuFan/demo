@@ -32285,13 +32285,13 @@ var Chat = function (_React$Component) {
 	}, {
 		key: 'capitalizeStr',
 		value: function capitalizeStr(str) {
-			return str[0].toUpperCase() + str.slice(1).toLowerCase;
+			return str[0].toUpperCase() + str.slice(1).toLowerCase();
 		}
 	}, {
 		key: 'handleSubmit',
 		value: function handleSubmit() {
-			this.props.receiveChannel(this.capitalizeStr([this.state.input]));
-			this.setState({ input: '' });
+			this.props.receiveChannel(this.capitalizeStr(this.state.input));
+			this.setState({ input: '', userList: userList });
 		}
 	}, {
 		key: 'toggle',
@@ -32303,6 +32303,7 @@ var Chat = function (_React$Component) {
 		value: function openChannel(e) {
 			var user = e.currentTarget.textContent.slice(1);
 			this.props.receiveChannel(user);
+			this.setState({ input: '', userList: userList });
 		}
 	}, {
 		key: 'render',
@@ -33609,8 +33610,15 @@ var Channel = function (_React$Component) {
 
 	_createClass(Channel, [{
 		key: 'toggle',
-		value: function toggle() {
-			this.setState({ active: !this.state.active });
+		value: function toggle(e) {
+			if (e.target.className !== 'close-channel') {
+				this.setState({ active: !this.state.active });
+			}
+		}
+	}, {
+		key: 'closeChannel',
+		value: function closeChannel() {
+			this.props.removeChannel(this.props.user);
 		}
 	}, {
 		key: 'handleInput',
@@ -33642,16 +33650,26 @@ var Channel = function (_React$Component) {
 				{ className: 'channel ' + (this.state.active ? 'channel-active' : ''), id: 'channel-' + user, style: { 'right': 260 * (idx + 1) + 'px' } },
 				_react2.default.createElement(
 					'div',
-					{ className: 'header channel-header', onClick: function onClick() {
-							return _this3.toggle();
+					{ className: 'header channel-header', onClick: function onClick(e) {
+							return _this3.toggle(e);
 						} },
-					_react2.default.createElement('i', { className: 'far fa-user' }),
+					_react2.default.createElement(
+						'div',
+						null,
+						_react2.default.createElement('i', { className: 'far fa-user' }),
+						_react2.default.createElement(
+							'span',
+							null,
+							user
+						)
+					),
 					_react2.default.createElement(
 						'span',
-						null,
-						user
-					),
-					_react2.default.createElement('span', { className: 'close-channel' })
+						{ className: 'close-channel', onClick: function onClick() {
+								return _this3.closeChannel();
+							} },
+						'\xD7'
+					)
 				),
 				_react2.default.createElement(
 					'div',

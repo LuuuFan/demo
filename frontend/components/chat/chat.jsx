@@ -25,12 +25,12 @@ class Chat extends React.Component {
 	}
 
 	capitalizeStr(str){
-		return str[0].toUpperCase() + str.slice(1).toLowerCase;
+		return str[0].toUpperCase() + str.slice(1).toLowerCase();
 	}
 
 	handleSubmit(){
-			this.props.receiveChannel(this.capitalizeStr([this.state.input]))
-			this.setState({input: ''});
+			this.props.receiveChannel(this.capitalizeStr(this.state.input))
+			this.setState({input: '', userList: userList});
 	}
 
 	toggle(){
@@ -40,6 +40,7 @@ class Chat extends React.Component {
 	openChannel(e){
 		const user = e.currentTarget.textContent.slice(1);
 		this.props.receiveChannel(user);
+		this.setState({input: '', userList: userList});
 	}
 
 	render(){

@@ -27,6 +27,7 @@ $font-hover: #278efc;
   	flex-direction: row;
   	align-items: center;
   	cursor: pointer;
+  	justify-content: space-between;
   	i{
   		margin: auto 10px;
   	}
@@ -89,6 +90,18 @@ $font-hover: #278efc;
 	.channel-header{
 		background-color: lightgray;
   	border: 1px solid lightgray;
+  	.close-channel{
+			text-align: right;
+			margin-right: 10px;
+			padding: 1px 5px;
+			border-radius: 50%;
+			font-size: 18px;
+			transition: all .5s;
+		}
+		.close-channel:hover{
+			font-weight: bold;
+			background-color: white;
+		}
 	}
 	.message{
 		flex: 1;

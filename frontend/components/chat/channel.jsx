@@ -10,8 +10,14 @@ class Channel extends React.Component{
 		};
 	}
 
-	toggle(){
-		this.setState({active: !this.state.active});
+	toggle(e){
+		if (e.target.className !== 'close-channel') {
+			this.setState({active: !this.state.active});
+		}
+	}
+
+	closeChannel(){
+		this.props.removeChannel(this.props.user);
 	}
 
 	handleInput(){
@@ -31,10 +37,12 @@ class Channel extends React.Component{
 		const {user, idx} = this.props;
 		return(
 			<div className={`channel ${this.state.active ? 'channel-active' : ''}`} id={`channel-${user}`} style={{'right': `${260 * (idx + 1)}px`}}>
-				<div className='header channel-header' onClick={()=>this.toggle()}>
-					<i className="far fa-user"></i>
-					<span>{user}</span>
-					<span className='close-channel'></span>
+				<div className='header channel-header' onClick={(e)=>this.toggle(e)}>
+					<div>
+						<i className="far fa-user"></i>
+						<span>{user}</span>
+					</div>
+					<span className='close-channel' onClick={()=>this.closeChannel()}>&times;</span>
 				</div>
 				<div className='message'>
 					{this.state.message.map((msg, idx) => <span key={idx}>{msg}</span>)}

@@ -419,6 +419,7 @@ input[type=submit] {
   flex-direction: row;
   align-items: center;
   cursor: pointer;
+  justify-content: space-between;
 }
 .chat .header i, .channel .header i {
   margin: auto 10px;
@@ -479,6 +480,18 @@ input[type=submit] {
 .channel .channel-header {
   background-color: lightgray;
   border: 1px solid lightgray;
+}
+.channel .channel-header .close-channel {
+  text-align: right;
+  margin-right: 10px;
+  padding: 1px 5px;
+  border-radius: 50%;
+  font-size: 18px;
+  transition: all 0.5s;
+}
+.channel .channel-header .close-channel:hover {
+  font-weight: bold;
+  background-color: white;
 }
 .channel .message {
   flex: 1;
