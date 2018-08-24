@@ -5,14 +5,12 @@ import Root from './components/root';
 
 document.addEventListener('DOMContentLoaded', () => {
 	let preloadedState;
-	let token = localStorage.getItem('access_token');
+	let currentUser = JSON.parse(localStorage.getItem('currentUser'));
 	const channel = JSON.parse(localStorage.getItem('channel'));
-	if (token) {
+	if (currentUser) {
 		preloadedState = {
 			session: {
-				currentUser: {
-					'access-token': token
-				}
+				currentUser: currentUser,
 			},
 			channel: channel,
 		};

@@ -7,7 +7,7 @@ class Header extends React.Component{
 	// }
 
 	render(){
-		const {receiveImg, sendEmail, message, clearMessage, sendService} = this.props;
+		const {receiveImg, sendEmail, message, clearMessage, sendService, canvas} = this.props;
 		return(
 			<header className='navbar'>
 				<a href='/'>
@@ -18,7 +18,7 @@ class Header extends React.Component{
 					Expirements
 				</a>
 				<div className='header-buttons'>
-					<ShareContainer receiveImg={receiveImg} sendEmail={sendEmail} message={message} clearMessage={clearMessage} sendService={sendService}/>
+					<ShareContainer receiveImg={receiveImg} sendEmail={sendEmail} message={message} clearMessage={clearMessage} sendService={sendService} canvas={canvas}/>
 				</div>
 			</header>
 

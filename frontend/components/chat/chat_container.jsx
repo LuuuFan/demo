@@ -5,6 +5,7 @@ import { receiveChannel, removeChannel } from '../../actions/channel';
 
 const mapStateToProps = (state) => ({
 	channel: state.channel,
+	currentUser: state.session.currentUser,
 })
 
 const mapDispatchToProps = (dispatch) => ({

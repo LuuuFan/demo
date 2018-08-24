@@ -8,7 +8,14 @@ const sessionReducer = (state=_nullSession, action) => {
 	let newState;
 	switch(action.type){
 		case RECEIVE_CURRENT_USER:
-			newState = {currentUser: action.currentUser};
+			const message = action.currentUser.message.split(' ');
+			const currentUser = {
+				'access-token': action.currentUser['access-token'],
+				username: message[message.length - 1],
+			}
+			localStorage.setItem('currentUser', JSON.stringify(currentUser));
+			localStorage.setItem('access_token', JSON.stringify(currentUser['access-token']));
+			newState = {currentUser: currentUser};
 			return newState;
 		case REMOVE_CURRENT_USER:
 			return {};

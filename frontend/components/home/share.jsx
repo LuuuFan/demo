@@ -80,6 +80,9 @@ class Share extends React.Component{
 	openModal(e, type){
 		if (!e.target.className.includes('modal-screen')) {
 			this.setState({[type]: 'is-open'});
+			Object.keys(this.props.canvas).forEach(key => {
+				this.props.canvas[key]
+			})
 		}
 	}
 
@@ -110,7 +113,7 @@ class Share extends React.Component{
 			// const imgData = document.getElementById('0').toDataURL('image/jpeg', 1.0);
 			const selector = document.querySelector('.share-canvas select');
 			const type = selector.options[selector.selectedIndex].textContent;
-			
+
 			if (type === 'PDF') {
 				this.setState({sending: true, modalShare: 'modal'});
 				const pdf = new jsPDF();

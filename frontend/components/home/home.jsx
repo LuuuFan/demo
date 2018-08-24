@@ -36,10 +36,10 @@ class Home extends React.Component {
 	}
 
 	render(){
-		const {imgs, receiveCanvas, receiveImg, sendEmail, message, clearMessage, sendService} = this.props;
+		const {imgs, receiveCanvas, receiveImg, sendEmail, message, clearMessage, sendService, canvas} = this.props;
 		return(
 			<div>
-				<Header receiveImg={receiveImg} sendEmail={sendEmail} message={message} clearMessage={clearMessage} sendService={sendService}/>
+				<Header receiveImg={receiveImg} sendEmail={sendEmail} message={message} clearMessage={clearMessage} sendService={sendService} canvas={canvas}/>
 				<Canvas receiveCanvas={receiveCanvas} img={this.state.selectedImgURL} message={message}/>
 				<div className='img-group group'>
 					{imgs.map((img, key) => 

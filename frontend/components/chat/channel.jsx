@@ -1,13 +1,23 @@
 import React from 'react';
 
+
 class Channel extends React.Component{
-	constructor(){
-		super();
+	constructor(props){
+		super(props);
 		this.state = {
 			active: true,
 			input: '',
 			message: [],
 		};
+		this.socket = this.props.socket;
+	}
+
+	componentDidMount(){
+		if (this.socket) {
+			this.socket.on('receive', (data) => {
+				debugger
+			})
+		}
 	}
 
 	toggle(e){
@@ -29,6 +39,11 @@ class Channel extends React.Component{
 	handleSubmit(e){
 		e.preventDefault();
 		const message = this.state.message.concat([this.state.input]);
+		this.socket.emit('send_message', {
+			username: this.props.currentUser.username,
+			receiver: this.props.user.toLowerCase(),
+			message: {text: this.state.input},
+		});
 		this.setState({message, input: ''})
 	}
 

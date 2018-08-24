@@ -1,16 +1,31 @@
 import React from 'react';
-import Websocket from 'react-websocket';
+// import Websocket from 'react-websocket';
 import Channel from './channel';
+import socketIOClient from "socket.io-client";
 
 const userList = ['Pavan', 'Tirth', 'Sam', 'Edward', 'Tim', 'Kelvin', 'Julia', 'Lu'];
 class Chat extends React.Component {
 	constructor(){
 		super();
 		this.state = {
+			connected: false,
 			active: false,
 			input: '',
 			userList: userList,
 		};
+		this.socket = null;
+	}
+
+	componentDidMount(){
+		this.socket = socketIOClient("http://localhost:10000");
+		this.socket.emit('message', {username: this.props.currentUser.username});
+		this.socket.on('my response', (res) => {
+			if (res.data === 'Connected') {
+				this.setState({connected: true})
+			} else {
+				this.setState({connected: false})
+			}
+		})
 	}
 
 	handleInput(){
@@ -44,13 +59,13 @@ class Chat extends React.Component {
 	}
 
 	render(){
-		const {channel, removeChannel} = this.props;
+		const {channel, removeChannel, currentUser} = this.props;
 		return (
 			<div className='chat-area'>
-				{Object.keys(channel).map((c, idx) => <Channel key={idx} idx={idx} user={c} removeChannel={removeChannel}/>)}
+				{Object.keys(channel).map((c, idx) => <Channel key={idx} idx={idx} user={c} removeChannel={removeChannel} socket={this.socket} currentUser={currentUser}/>)}
 				<div className={`chat ${this.state.active ? 'chat-active' : ""}`}>
 					<div className='header chat-header' onClick={()=>this.toggle()}>
-						<i className="fas fa-circle" style={{'color': `${this.state.active ? 'green' : 'gray'}`}}></i>
+						<i className="fas fa-circle" style={{'color': `${this.state.connected ? 'green' : 'gray'}`}}></i>
 					</div>
 					<div className='userlist'>
 						{this.state.userList.map((user, idx) => 
