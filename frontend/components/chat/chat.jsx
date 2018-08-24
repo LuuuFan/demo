@@ -28,7 +28,6 @@ class Chat extends React.Component {
 	}
 
 	render(){
-		console.log(this.state.channel);
 		return (
 			<div className='chat-area'>
 				{this.state.channel.map((c, idx) => <Channel key={idx} idx={idx} user={c}/>)}
@@ -39,7 +38,7 @@ class Chat extends React.Component {
 					<div className='userlist'></div>
 					<form onSubmit={()=>this.handleSubmit()}>
 						<i className="fas fa-search"></i>
-						<input onChange={this.handleInput()} value={this.state.input}/>
+						<input onChange={this.handleInput()} value={this.state.input} placeholder='Search user'/>
 					</form>
 				</div>
 			</div>

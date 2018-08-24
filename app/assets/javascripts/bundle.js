@@ -33602,7 +33602,6 @@ var Chat = function (_React$Component) {
 		value: function render() {
 			var _this3 = this;
 
-			console.log(this.state.channel);
 			return _react2.default.createElement(
 				'div',
 				{ className: 'chat-area' },
@@ -33626,7 +33625,7 @@ var Chat = function (_React$Component) {
 								return _this3.handleSubmit();
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-search' }),
-						_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input })
+						_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input, placeholder: 'Search user' })
 					)
 				)
 			);
@@ -33673,7 +33672,8 @@ var Channel = function (_React$Component) {
 
 		_this.state = {
 			active: true,
-			input: ''
+			input: '',
+			message: []
 		};
 		return _this;
 	}
@@ -33696,6 +33696,8 @@ var Channel = function (_React$Component) {
 		key: 'handleSubmit',
 		value: function handleSubmit(e) {
 			e.preventDefault();
+			var message = this.state.message.concat([this.state.input]);
+			this.setState({ message: message, input: '' });
 		}
 	}, {
 		key: 'render',
@@ -33708,7 +33710,7 @@ var Channel = function (_React$Component) {
 
 			return _react2.default.createElement(
 				'div',
-				{ className: 'channel ' + (this.state.active ? 'channel-active' : ''), id: this.props.url, style: { 'right': 260 * (idx + 1) + 'px' } },
+				{ className: 'channel ' + (this.state.active ? 'channel-active' : ''), id: 'channel-' + user, style: { 'right': 260 * (idx + 1) + 'px' } },
 				_react2.default.createElement(
 					'div',
 					{ className: 'header channel-header', onClick: function onClick() {
@@ -33721,13 +33723,23 @@ var Channel = function (_React$Component) {
 						user
 					)
 				),
-				_react2.default.createElement('div', { className: 'message' }),
+				_react2.default.createElement(
+					'div',
+					{ className: 'message' },
+					this.state.message.map(function (msg, idx) {
+						return _react2.default.createElement(
+							'span',
+							{ key: idx },
+							msg
+						);
+					})
+				),
 				_react2.default.createElement(
 					'form',
 					{ onSubmit: function onSubmit(e) {
 							return _this3.handleSubmit(e);
 						} },
-					_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input })
+					_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input, placeholder: 'Type a message' })
 				)
 			);
 		}
