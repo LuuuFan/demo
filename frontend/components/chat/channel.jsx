@@ -13,10 +13,12 @@ class Channel extends React.Component{
 	}
 
 	componentDidMount(){
-		if (this.socket) {
-			this.socket.on('receive', (data) => {
-				debugger
-			})
+
+	}
+
+	componentWillReceiveProps(nextProps){
+		if (nextProps.socket) {
+			this.socket = nextProps.socket;
 		}
 	}
 
@@ -44,12 +46,13 @@ class Channel extends React.Component{
 			receiver: this.props.user.toLowerCase(),
 			message: {text: this.state.input},
 		});
-		this.setState({message, input: ''})
+		this.props.receiveChatMessage(this.props.user, this.state.input, 1);
+		this.setState({input: ''})
 	}
 
 
 	render(){
-		const {user, idx} = this.props;
+		const {user, idx, message} = this.props;
 		return(
 			<div className={`channel ${this.state.active ? 'channel-active' : ''}`} id={`channel-${user}`} style={{'right': `${260 * (idx + 1)}px`}}>
 				<div className='header channel-header' onClick={(e)=>this.toggle(e)}>
@@ -59,9 +62,11 @@ class Channel extends React.Component{
 					</div>
 					<span className='close-channel' onClick={()=>this.closeChannel()}>&times;</span>
 				</div>
+				{ message && Object.keys(message).length ? 
 				<div className='message'>
-					{this.state.message.map((msg, idx) => <span key={idx}>{msg}</span>)}
+					{Object.keys(message).map(t => <span key={t} className={message[t].type ? '' : 'from'}>{message[t].text}</span>)}
 				</div>
+				: ""}
 				<form onSubmit={(e)=>this.handleSubmit(e)}>
 					<input onChange={this.handleInput()} value={this.state.input} placeholder='Type a message'/>
 				</form>

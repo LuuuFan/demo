@@ -86,7 +86,7 @@ class Canvas extends React.Component{
 	initializeCanvas(id){
 		const container = document.querySelector(`.container-${id}`);
 		if (container) {
-			let canvas = new fabric.Canvas(id, {width: container.offsetWidth, height: 650});
+			let canvas = new fabric.Canvas(id, {width: 650, height: 650});
 			canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 			this.props.receiveCanvas(Object.assign({}, this.state.canvas, {[id]: canvas}));
 			this.setState({

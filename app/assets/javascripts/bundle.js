@@ -4573,6 +4573,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var RECEIVE_CHANNEL = exports.RECEIVE_CHANNEL = 'RECEIVE_CHANNEL';
 var REMOVE_CHANNEL = exports.REMOVE_CHANNEL = 'REMOVE-CHANNEL';
+var RECEIVE_CHAT_MESSAGE = exports.RECEIVE_CHAT_MESSAGE = 'RECEIVE_CHAT_MESSAGE';
 
 var receiveChannel = exports.receiveChannel = function receiveChannel(channel) {
 	return {
@@ -4585,6 +4586,15 @@ var removeChannel = exports.removeChannel = function removeChannel(channel) {
 	return {
 		type: REMOVE_CHANNEL,
 		channel: channel
+	};
+};
+
+var receiveChatMessage = exports.receiveChatMessage = function receiveChatMessage(channel, message, t) {
+	return {
+		type: RECEIVE_CHAT_MESSAGE,
+		channel: channel,
+		message: message,
+		t: t
 	};
 };
 
@@ -8524,8 +8534,10 @@ var resetCanvas = exports.resetCanvas = function resetCanvas(canvas) {
   canvas.clear();
   photoNum = 0;
   var container = document.querySelector('.container');
-  canvas.setHeight(container.offsetHeight);
-  canvas.setWidth(container.offsetWidth - 50);
+  // canvas.setHeight(container.offsetHeight);
+  canvas.setHeight(650);
+  // canvas.setWidth(container.offsetWidth - 50);
+  canvas.setWidth(650);
   canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 };
 
@@ -30789,13 +30801,28 @@ var channelReducer = function channelReducer() {
 	switch (action.type) {
 		case _channel.REMOVE_CHANNEL:
 			newState = Object.assign({}, state);
-			delete newState[action.channel];
+			// delete newState[action.channel.toLowerCase()];
+			newState[action.channel.toLowerCase()].status = false;
 			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		case _channel.RECEIVE_CHANNEL:
 			newState = Object.assign({}, state);
-			newState[action.channel] = {};
+			if (newState[action.channel.toLowerCase()]) {
+				newState[action.channel.toLowerCase()].status = true;
+			} else {
+				newState[action.channel.toLowerCase()] = { message: {}, status: true };
+			}
 			localStorage.setItem('channel', JSON.stringify(newState));
+			return newState;
+		case _channel.RECEIVE_CHAT_MESSAGE:
+			newState = Object.assign({}, state);
+			var timestamp = new Date().getTime();
+			if (!newState[action.channel.toLowerCase()]) {
+				newState[action.channel.toLowerCase()] = { message: {}, status: true };
+			} else {
+				newState[action.channel.toLowerCase()].status = true;
+			}
+			newState[action.channel.toLowerCase()].message[timestamp] = { type: action.t, text: action.message };
 			return newState;
 		default:
 			return state;
@@ -34154,6 +34181,7 @@ var Share = function (_React$Component) {
 			var _this6 = this;
 
 			localStorage.removeItem('access_token');
+			localStorage.removeItem('currentUser');
 			this.props.removeCurrentUser();
 			setTimeout(function () {
 				_this6.props.history.push('/login');
@@ -35177,7 +35205,7 @@ var Canvas = function (_React$Component) {
 		value: function initializeCanvas(id) {
 			var container = document.querySelector('.container-' + id);
 			if (container) {
-				var canvas = new fabric.Canvas(id, { width: container.offsetWidth, height: 650 });
+				var canvas = new fabric.Canvas(id, { width: 650, height: 650 });
 				canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 				this.props.receiveCanvas(Object.assign({}, this.state.canvas, _defineProperty({}, id, canvas)));
 				this.setState({
@@ -36008,6 +36036,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		},
 		removeChannel: function removeChannel(channel) {
 			return dispatch((0, _channel.removeChannel)(channel));
+		},
+		receiveChatMessage: function receiveChatMessage(channel, message, type) {
+			return dispatch((0, _channel.receiveChatMessage)(channel, message, type));
 		}
 	};
 };
@@ -36049,7 +36080,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // import Websocket from 'react-websocket';
 
 
-var userList = ['Pavan', 'Tirth', 'Sam', 'Edward', 'Tim', 'Kelvin', 'Julia', 'Lu'];
+// const userList = ['Pavan', 'Tirth', 'Sam', 'Edward', 'Tim', 'Kelvin', 'Julia', 'Lu'];
+var userList = ['Shasha', 'Tirth'];
 
 var Chat = function (_React$Component) {
 	_inherits(Chat, _React$Component);
@@ -36075,10 +36107,13 @@ var Chat = function (_React$Component) {
 			var _this2 = this;
 
 			this.socket = (0, _socket2.default)("http://localhost:10000");
-			this.socket.emit('message', { username: this.props.currentUser.username });
+			this.socket.emit('online', { username: this.props.currentUser.username });
 			this.socket.on('my response', function (res) {
 				if (res.data === 'Connected') {
 					_this2.setState({ connected: true });
+					_this2.socket.on('receive', function (data) {
+						_this2.props.receiveChatMessage(data.from, data.text, 0);
+					});
 				} else {
 					_this2.setState({ connected: false });
 				}
@@ -36131,14 +36166,26 @@ var Chat = function (_React$Component) {
 			var _props = this.props,
 			    channel = _props.channel,
 			    removeChannel = _props.removeChannel,
-			    currentUser = _props.currentUser;
+			    currentUser = _props.currentUser,
+			    receiveChatMessage = _props.receiveChatMessage;
 
 			return _react2.default.createElement(
 				'div',
 				{ className: 'chat-area' },
-				Object.keys(channel).map(function (c, idx) {
-					return _react2.default.createElement(_channel2.default, { key: idx, idx: idx, user: c, removeChannel: removeChannel, socket: _this4.socket, currentUser: currentUser });
-				}),
+				channel && Object.keys(channel).length ? _react2.default.createElement(
+					'div',
+					null,
+					Object.keys(channel).filter(function (el) {
+						return channel[el].status;
+					}).map(function (c, idx) {
+						return _react2.default.createElement(
+							'div',
+							{ key: idx },
+							_react2.default.createElement(_channel2.default, { idx: idx, user: c, removeChannel: removeChannel, socket: _this4.socket, currentUser: currentUser, receiveChatMessage: receiveChatMessage, message: channel[c].message }),
+							')'
+						);
+					})
+				) : "",
 				_react2.default.createElement(
 					'div',
 					{ className: 'chat ' + (this.state.active ? 'chat-active' : "") },
@@ -36233,11 +36280,12 @@ var Channel = function (_React$Component) {
 
 	_createClass(Channel, [{
 		key: 'componentDidMount',
-		value: function componentDidMount() {
-			if (this.socket) {
-				this.socket.on('receive', function (data) {
-					debugger;
-				});
+		value: function componentDidMount() {}
+	}, {
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(nextProps) {
+			if (nextProps.socket) {
+				this.socket = nextProps.socket;
 			}
 		}
 	}, {
@@ -36271,7 +36319,8 @@ var Channel = function (_React$Component) {
 				receiver: this.props.user.toLowerCase(),
 				message: { text: this.state.input }
 			});
-			this.setState({ message: message, input: '' });
+			this.props.receiveChatMessage(this.props.user, this.state.input, 1);
+			this.setState({ input: '' });
 		}
 	}, {
 		key: 'render',
@@ -36280,7 +36329,8 @@ var Channel = function (_React$Component) {
 
 			var _props = this.props,
 			    user = _props.user,
-			    idx = _props.idx;
+			    idx = _props.idx,
+			    message = _props.message;
 
 			return _react2.default.createElement(
 				'div',
@@ -36308,17 +36358,17 @@ var Channel = function (_React$Component) {
 						'\xD7'
 					)
 				),
-				_react2.default.createElement(
+				message && Object.keys(message).length ? _react2.default.createElement(
 					'div',
 					{ className: 'message' },
-					this.state.message.map(function (msg, idx) {
+					Object.keys(message).map(function (t) {
 						return _react2.default.createElement(
 							'span',
-							{ key: idx },
-							msg
+							{ key: t, className: message[t].type ? '' : 'from' },
+							message[t].text
 						);
 					})
-				),
+				) : "",
 				_react2.default.createElement(
 					'form',
 					{ onSubmit: function onSubmit(e) {

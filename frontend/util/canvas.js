@@ -252,8 +252,10 @@ export const resetCanvas = (canvas) => {
   canvas.clear();
   photoNum = 0;
   const container = document.querySelector('.container')
-  canvas.setHeight(container.offsetHeight);
-  canvas.setWidth(container.offsetWidth - 50);
+  // canvas.setHeight(container.offsetHeight);
+  canvas.setHeight(650);
+  // canvas.setWidth(container.offsetWidth - 50);
+  canvas.setWidth(650);
   canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 };
 

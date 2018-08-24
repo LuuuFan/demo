@@ -1,4 +1,4 @@
-import {RECEIVE_CHANNEL, REMOVE_CHANNEL} from '../actions/channel';
+import {RECEIVE_CHANNEL, REMOVE_CHANNEL, RECEIVE_CHAT_MESSAGE} from '../actions/channel';
 
 const channelReducer = (state = {}, action) => {
 	Object.freeze(state);
@@ -6,13 +6,28 @@ const channelReducer = (state = {}, action) => {
 	switch(action.type){
 		case REMOVE_CHANNEL:
 			newState = Object.assign({}, state);
-			delete newState[action.channel];
+			// delete newState[action.channel.toLowerCase()];
+			newState[action.channel.toLowerCase()].status = false;
 			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		case RECEIVE_CHANNEL:
 			newState = Object.assign({}, state)
-			newState[action.channel] = {};
+			if (newState[action.channel.toLowerCase()]) {
+				newState[action.channel.toLowerCase()].status = true;
+			} else {
+				newState[action.channel.toLowerCase()] = {message: {}, status: true};
+			}
 			localStorage.setItem('channel', JSON.stringify(newState));
+			return newState;
+		case RECEIVE_CHAT_MESSAGE:
+			newState = Object.assign({}, state);
+			const timestamp = new Date().getTime();
+			if (!newState[action.channel.toLowerCase()]) {
+				newState[action.channel.toLowerCase()] = {message: {}, status: true};
+			} else {
+				newState[action.channel.toLowerCase()].status = true;
+			}
+			newState[action.channel.toLowerCase()].message[timestamp] = {type: action.t, text: action.message};
 			return newState;
 		default: 
 			return state;

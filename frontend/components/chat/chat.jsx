@@ -3,7 +3,8 @@ import React from 'react';
 import Channel from './channel';
 import socketIOClient from "socket.io-client";
 
-const userList = ['Pavan', 'Tirth', 'Sam', 'Edward', 'Tim', 'Kelvin', 'Julia', 'Lu'];
+// const userList = ['Pavan', 'Tirth', 'Sam', 'Edward', 'Tim', 'Kelvin', 'Julia', 'Lu'];
+const userList = ['Shasha', 'Tirth'];
 class Chat extends React.Component {
 	constructor(){
 		super();
@@ -18,10 +19,13 @@ class Chat extends React.Component {
 
 	componentDidMount(){
 		this.socket = socketIOClient("http://localhost:10000");
-		this.socket.emit('message', {username: this.props.currentUser.username});
+		this.socket.emit('online', {username: this.props.currentUser.username});
 		this.socket.on('my response', (res) => {
 			if (res.data === 'Connected') {
 				this.setState({connected: true})
+				this.socket.on('receive', (data) => {
+					this.props.receiveChatMessage(data.from, data.text, 0);
+				})
 			} else {
 				this.setState({connected: false})
 			}
@@ -59,10 +63,18 @@ class Chat extends React.Component {
 	}
 
 	render(){
-		const {channel, removeChannel, currentUser} = this.props;
+		const {channel, removeChannel, currentUser, receiveChatMessage} = this.props;
 		return (
 			<div className='chat-area'>
-				{Object.keys(channel).map((c, idx) => <Channel key={idx} idx={idx} user={c} removeChannel={removeChannel} socket={this.socket} currentUser={currentUser}/>)}
+				{channel && Object.keys(channel).length ? 
+					<div>
+						{Object.keys(channel).filter(el => channel[el].status).map((c, idx) => 
+							<div key={idx}>
+								<Channel idx={idx} user={c} removeChannel={removeChannel} socket={this.socket} currentUser={currentUser} receiveChatMessage={receiveChatMessage} message={channel[c].message}/>)
+							</div>)
+						}
+					</div>
+					: "" }
 				<div className={`chat ${this.state.active ? 'chat-active' : ""}`}>
 					<div className='header chat-header' onClick={()=>this.toggle()}>
 						<i className="fas fa-circle" style={{'color': `${this.state.connected ? 'green' : 'gray'}`}}></i>
