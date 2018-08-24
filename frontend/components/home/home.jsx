@@ -4,7 +4,7 @@ import SessionFormContainer from '../session/session_form_container';
 import PropTypes from 'prop-types';
 import Header from './header';
 import Canvas from './canvas';
-import Chat from './chat';
+import Chat from '../chat/chat';
 
 var interval;
 
