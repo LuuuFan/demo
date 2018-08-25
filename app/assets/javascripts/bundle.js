@@ -33576,22 +33576,18 @@ var Home = function (_React$Component) {
 	_createClass(Home, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			var _this2 = this;
-
 			this.fetchImg();
-			interval = setInterval(function () {
-				return _this2.fetchImg();
-			}, 900);
+			// interval = setInterval(()=>this.fetchImg(), 900);
 		}
 	}, {
 		key: 'fetchImg',
 		value: function fetchImg() {
-			var _this3 = this;
+			var _this2 = this;
 
 			this.props.fetchAllImgs(this.props.currentUser['access-token']).catch(function (err) {
 				clearInterval(interval);
 				localStorage.removeItem('access_token');
-				_this3.props.history.push('/login');
+				_this2.props.history.push('/login');
 			});
 		}
 	}, {
@@ -36124,7 +36120,7 @@ var Chat = function (_React$Component) {
 		value: function componentDidMount() {
 			var _this2 = this;
 
-			this.socket = (0, _socket2.default)("http://localhost:10000");
+			this.socket = (0, _socket2.default)("http://localhost:5000");
 			this.socket.emit('online', { username: this.props.currentUser.username });
 			this.socket.on('my response', function (res) {
 				if (res.data === 'Connected') {

@@ -36149,7 +36149,7 @@ var Chat = function (_React$Component) {
 		value: function componentDidMount() {
 			var _this2 = this;
 
-			this.socket = (0, _socket2.default)("http://localhost:5000");
+			this.socket = (0, _socket2.default)("http://localhost:10000");
 			this.socket.emit('online', { username: this.props.currentUser.username });
 			this.socket.on('my response', function (res) {
 				if (res.data === 'Connected') {

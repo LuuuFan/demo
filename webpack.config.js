@@ -25,7 +25,8 @@ module.exports = {
   context: __dirname,
   entry: './frontend/entry.jsx',
   output: {
-    path: path.resolve(__dirname, 'app', 'assets', 'javascripts'),
+    path: path.resolve(__dirname, 'static', 'assets', 'javascripts'),
+    // path: path.resolve(__dirname, 'backend', 'static', 'javascripts'),
     filename: 'bundle.js'
   },
   plugins: plugins,

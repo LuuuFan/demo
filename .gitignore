@@ -6,3 +6,6 @@ node_modules/
 tmp/
 log/
 .sass-cache/
+backend/.idea/
+backend/venv/
+

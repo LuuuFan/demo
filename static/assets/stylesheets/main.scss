@@ -1,0 +1,315 @@
+@import './reset';
+@import './header';
+@import './servicenow';
+@import './session';
+@import './canvas';
+@import './chat';
+
+$color-darkblue: #1C2A39;
+$color-blue: #2F425E;
+$font-white: #FFFFFF;
+$font-hover: #278efc;
+
+.main{
+	height: 100vh;
+  font-size: 14px;
+}
+
+button{
+  padding: 7px 15px;
+  color: $font-white;
+  background-color: $color-darkblue;
+  cursor: pointer;
+  border-radius: 5px;
+  i {
+    margin-right: 7px;
+  }
+}
+
+button:hover{
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+  background-color: $color-blue;  
+}
+
+.img-group{
+	position: fixed;
+  bottom: 15px;
+  left: 140px;
+  height: 150px;
+  width: 100%;
+  margin: 0px auto;
+  display: flex;
+  justify-content: flex-start;
+  overflow: scroll;
+	.img-container{
+		width: 90px;
+    height: 135px;
+		margin-right: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+    img{
+      height: 100%;
+      object-fit: cover;
+    }
+    img:hover{
+      opacity: 0.5;
+    }
+	}
+}
+
+.buttons{
+  position: fixed;
+  bottom: 170px;
+  left: 140px;
+  button{
+    margin-right: 20px;
+  }
+}
+
+.canvas-main{
+  display: flex;
+  #sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 93vh;
+    color: $font-white;
+    background-color: $color-darkblue;
+    li{
+      display: flex;
+      align-items: center;
+      align-content: center;
+      justify-content: flex-start;
+      padding: 15px 10px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 14px;
+      i{
+        margin-right: 10px;
+      }
+    }
+    li:hover{
+      color: $font-hover;
+    }
+    .selected{
+      background-color: white;
+      color: $color-darkblue;
+    }
+  }
+
+  .side-content-canvas{
+    display: flex;
+    flex: 1;
+    #side-content {
+      height: 75%;
+      margin: 15px;
+      border: solid 1px darkgrey;
+      overflow: auto;
+      box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+      border-radius: 5px;
+      #side-content-image{
+        #button-wrapper{
+          display: flex;
+          flex-direction: column;
+          button{
+            margin-bottom: 15px;
+          }
+        }
+      }
+    }
+    #side-content>div{
+      height: 90%;
+      width: 270px;
+      // min-width: 210px;
+      margin: 15px;
+      text-align: center;
+      button{
+        margin-top: 20px;
+      }
+      h2{
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 30px;
+      }
+      select, input{
+        padding: 8px;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      #shapes-list{
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+        li{
+          cursor: pointer;
+        }
+        li.ui-selected{
+          border-radius: 5px;
+          background-color: lightgray;
+          box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+        }
+      }
+
+      .container-checkbox {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 22px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      /* Hide the browser's default checkbox */
+      .container-checkbox input {
+          position: absolute;
+          opacity: 0;
+          cursor: pointer;
+      }
+
+      /* Create a custom checkbox */
+      .checkmark {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 20px;
+          width: 20px;
+          border-radius: 5px;
+          background-color: #eee;
+      }
+
+      /* On mouse-over, add a grey background color */
+      .container-checkbox:hover input ~ .checkmark {
+          background-color: #ccc;
+      }
+
+      /* When the checkbox is checked, add a blue background */
+      .container-checkbox input:checked ~ .checkmark {
+          background-color: $color-darkblue;
+      }
+
+      /* Create the checkmark/indicator (hidden when not checked) */
+      .checkmark:after {
+          content: "";
+          position: absolute;
+          display: none;
+      }
+
+      /* Show the checkmark when checked */
+      .container-checkbox input:checked ~ .checkmark:after {
+          display: block;
+      }
+
+      /* Style the checkmark/indicator */
+      .container-checkbox .checkmark:after {
+          left: 6px;
+          top: 2px;
+          width: 5px;
+          height: 10px;
+          border: solid white;
+          border-width: 0 3px 3px 0;
+          -webkit-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+          transform: rotate(45deg);
+      }
+
+
+      textarea{
+        padding: 8px;
+        border: 1px solid lightgray;
+        border-radius: 4px;
+        width: 95%;
+        min-height: 200px;
+        margin: 10px auto;
+        resize: vertical;
+        text-align: left;
+      }
+
+      .form-inline{
+        display: flex;
+        align-items:center;
+        margin-bottom: 15px;
+        min-height: 35px;
+        text-align: center;
+        label{
+          font-weight: bold;
+          text-align: left;
+          font-size:14px;
+          min-width: 65px;
+          margin-right: 10px;
+        }
+        input{
+          border: 1px solid lightgray;
+          padding: 8px;
+          border-radius: 5px;
+        }
+      }
+    }
+
+    .shapes-item{
+      padding: 5px;
+      img{
+        height: 50px;
+        width: 50px;
+      }
+    }
+
+    .selected-color {
+      height: 30px;
+      width: 30px;
+      margin-left: 10px;
+      border-radius: 5px;
+      box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+    }
+
+    .canvas-area{
+      flex: 1;
+      height: 740px;
+      margin-top: 15px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      .container{
+        width: 50%;
+        margin: 0 auto;
+        height: 650px;
+        margin-bottom: 10px;
+        canvas{
+          overflow: hidden;
+          border-radius: 5px;
+          box-shadow: 0 8px 6px -6px rgba(0,0,0,0.2);
+        }
+      } 
+    }
+  }
+}
+
+.modal-screen {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.is_open{
+  display: block;
+}
+
+.modal, .hidden{
+  display: none;
+}
+
+@-webkit-keyframes slide {
+    100% { right: 0; }
+}
+
+@keyframes slide {
+    100% { right: 0; }
+}
+
