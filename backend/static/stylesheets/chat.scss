@@ -1,0 +1,143 @@
+$color-darkblue: #1C2A39;
+$color-blue: #2F425E;
+$font-white: #FFFFFF;
+$font-hover: #278efc;
+
+.chat, .channel{
+	z-index: 20;
+	position: fixed;
+	bottom: -260px; 
+	width: 250px;
+	height: 300px;
+	border: 1px solid lightgray;
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all .5s;
+	border-radius: 5px;
+  background-color: white;
+  overflow: hidden;
+  .header{
+  	height: 40px;
+  	width: 100%;
+  	background-color: #2F425E;
+  	text-align: center;
+  	display: flex;
+  	flex-direction: row;
+  	align-items: center;
+  	cursor: pointer;
+  	justify-content: space-between;
+  	i{
+  		margin: auto 10px;
+  	}
+  }
+  form{
+  	width: 100%;
+  	height: 40px;
+  	display: flex;
+  	flex-direction: row;
+  	align-items: center;
+		border-top: 1px solid lightgray;
+  	i{
+  		color: lightgray;
+  		margin: 0 7px;
+  	}
+  	input{
+  		flex: 1;
+  		width: 100%;
+  		padding: 5px 10px;
+  		font-size: 12px;
+			overflow-wrap: break-word;
+  	}
+  	input:focus ~ i{
+  		color: gray;
+  	}
+  }
+}
+
+.chat{
+	right: 5px;
+  .userlist{
+  	height: 220px;
+  	padding: 10px;
+  	overflow: auto;
+  	.user{
+  		width: 100%;
+  		display: flex;
+  		flex-direction: row;
+  		align-items: center;
+  		cursor: pointer;
+  		.avatar{
+  			font-size: 20px;
+  			background-color: lightgray;
+  			border-radius: 50%;
+  			padding: 5px 9px;
+  			margin-right: 5px;
+  			margin-bottom: 5px;
+  			text-align: center;
+  		}
+  		.avatar:hover{
+  			background-color: $color-darkblue;
+  			color: white;
+  		}
+  	}
+  	.user:hover span{
+  		font-weight: bold;
+  	}
+  }
+  .header{
+  	border: 1px solid #2F425E;
+  }
+}
+
+.channel{
+	.channel-header{
+		background-color: lightgray;
+  	border: 1px solid lightgray;
+  	.close-channel{
+			text-align: right;
+			margin-right: 10px;
+			padding: 1px 5px;
+			border-radius: 50%;
+			font-size: 18px;
+			transition: all .5s;
+		}
+		.close-channel:hover{
+			font-weight: bold;
+			color: white;
+			// background-color: white;
+		}
+	}
+	.message{
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		overflow: auto;
+		padding: 10px;
+		padding: 5px;
+		span{
+			text-align: right;
+			background-color: lightgray;
+			width: 95%;
+			height: auto;
+			overflow-wrap: break-word;
+			border-radius: 5px;
+			margin-bottom: 5px;
+			padding: 5px;
+		}
+		.from{
+			text-align: left;
+			background: rgba(176,224,230, 0.3);
+		}
+	}
+}
+
+.chat-active, .channel-active{
+	bottom: 0;
+	.channel-header{
+		background-color: gray;
+		border: 1px solid gray;
+	}
+}
+

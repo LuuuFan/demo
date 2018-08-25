@@ -1,0 +1,820 @@
+/* PHASE 0: Reset */
+html, body, header, nav, h1, a,
+ul, ol, li, strong, main, button, i,
+section, img, div, h2, p, form,
+fieldset, label, input, textarea,
+span, article, footer, time, small {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  text-decoration: inherit;
+  vertical-align: inherit;
+  box-sizing: inherit;
+  background: transparent;
+  font-family: "Robot", sans-serif;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  color: lightgray;
+}
+
+label {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+input[type=password],
+input[type=email],
+input[type=text] {
+  padding: 5px 10px;
+}
+
+input[type=password],
+input[type=email],
+input[type=text],
+input[type=submit],
+textarea,
+button {
+  /*
+  Get rid of native styling. Read more here:
+  http://css-tricks.com/almanac/properties/a/appearance/
+  */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+button,
+input[type=submit] {
+  cursor: pointer;
+}
+
+/* Clearfix */
+.group::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.navbar {
+  height: 6vh;
+  display: flex;
+  color: #FFFFFF;
+  background-color: #1C2A39;
+  border-bottom: 5px solid #2F425E;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+  align-items: center;
+}
+.navbar a {
+  display: flex;
+  font-size: 24px;
+  font-weight: bold;
+}
+.navbar a img {
+  height: 30px;
+  width: 30px;
+  margin-right: 15px;
+}
+.navbar .header-buttons {
+  flex: 1;
+}
+.navbar .header-buttons .share {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.navbar .header-buttons .share .loading {
+  position: fixed;
+  top: 45%;
+  left: 48%;
+  z-index: 15;
+  height: 100px;
+  width: 100px;
+}
+.navbar .header-buttons .share .message {
+  color: #333;
+  padding: 5px 15px;
+  font-size: 12px;
+  position: fixed;
+  z-index: 10;
+  top: 80px;
+  left: 33%;
+  width: 33%;
+  border-radius: 5px;
+  background: rgba(10, 186, 181, 0.4);
+  transition: all 0.8s;
+}
+.navbar .header-buttons .share button, .navbar .header-buttons .share a.btn, .navbar .header-buttons .share a.dropbox-dropin-btn {
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  border: 1px solid #FFFFFF;
+  margin-right: 10px;
+  text-align: center;
+}
+.navbar .header-buttons .share .services {
+  position: relative;
+}
+.navbar .header-buttons .share .services .service-list {
+  z-index: 7;
+  position: absolute;
+  top: 140%;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+}
+.navbar .header-buttons .share .services .service-list ul li {
+  padding: 10px 20px;
+}
+.navbar .header-buttons .share .services .service-list ul li:hover {
+  text-decoration: underline;
+}
+.navbar .header-buttons .share .services .service-list:after, .navbar .header-buttons .share .services .service-list:before {
+  content: " ";
+  bottom: 100%;
+  left: 40%;
+  border: 2px solid transparent;
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.navbar .header-buttons .share .services .service-list:after {
+  border-bottom-color: white;
+  border-width: 10px;
+  margin-left: -10px;
+}
+.navbar .header-buttons .share .services .service-list:before {
+  border-bottom-color: #555;
+  border-width: 10px;
+  margin-left: -10px;
+}
+.navbar .header-buttons .share .services .modal-screen-servicelist {
+  background: rgba(255, 255, 255, 0.1);
+}
+.navbar .header-buttons .share button:hover, .navbar .header-buttons .share a.btn:hover {
+  color: #278efc;
+  border: 1px solid #278efc;
+}
+.navbar .header-buttons .share .share-canvas {
+  z-index: 7;
+  position: fixed;
+  top: 0;
+  left: 25%;
+  width: 50%;
+  background-color: white;
+  border-radius: 5px;
+  transition: all 0.8s;
+}
+.navbar .header-buttons .share .share-canvas form {
+  color: #333;
+  width: 60%;
+  font-size: 14px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+}
+.navbar .header-buttons .share .share-canvas form div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.navbar .header-buttons .share .share-canvas form input {
+  border-radius: 3px;
+  flex: 1;
+  border: 1px solid lightgray;
+}
+.navbar .header-buttons .share .share-canvas form input[type=submit] {
+  margin: 0 auto;
+  width: 30%;
+  padding: 8px;
+  background-color: #1C2A39;
+  color: #FFFFFF;
+  text-align: center;
+  border-radius: 5px;
+}
+.navbar .header-buttons .share .share-canvas form input[type=submit]:hover {
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+}
+.navbar .header-buttons .share .share-canvas form span {
+  padding-left: 50px;
+  font-size: 10px;
+  color: red;
+  height: 15px;
+  transition: all 0.8s;
+}
+.navbar .header-buttons .share .share-canvas form label {
+  width: 70px;
+  height: 15px;
+  margin: 0;
+}
+.navbar .header-buttons .share .share-canvas form select {
+  background: none;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid lightgray;
+  height: 33px;
+  flex: 1;
+  text-align: center;
+}
+.navbar i {
+  margin-right: 10px;
+}
+.navbar a:hover {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.loading {
+  z-index: 15;
+  height: 100px;
+  width: 100px;
+  position: fixed;
+  top: 45%;
+  left: 45%;
+}
+.loading img {
+  height: 100%;
+  object-fit: contain;
+}
+
+#table_left {
+  border-radius: 7px;
+  position: fixed;
+  left: 30%;
+  width: 40%;
+  top: 100px;
+  overflow: hidden;
+  z-index: 15;
+  color: #FFFFFF;
+  animation: slide 2s forwards;
+  -webkit-animation: slide 2s forwards;
+}
+#table_left table {
+  width: 100%;
+}
+#table_left table tr.normal {
+  cursor: pointer;
+  background-color: #1C2A39;
+}
+#table_left table tr.normal td {
+  padding: 8px 15px;
+}
+#table_left table tr.wv-pl td {
+  background-color: #2F425E;
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+}
+#table_left table tr.wv-pl td span {
+  width: 100px;
+}
+#table_left table tr.wv-pl td input[type=text] {
+  border-bottom: 1px solid #59687E;
+}
+#table_left table tr.wv-pl td #input-level {
+  border-bottom: 1px solid #59687E;
+}
+#table_left table tr.wv-pl td .input {
+  border: none;
+  color: #FFFFFF;
+  background: transparent;
+}
+#table_left table tr.wv-pl td .attached-files i {
+  font-size: 24px;
+}
+#table_left table tr.wv-pl td .send-service-button {
+  width: 100%;
+}
+#table_left table tr.wv-pl td .send-service-button > button {
+  cursor: pointer;
+  background-color: #5F7BF0;
+  border: none;
+  margin: 10px auto;
+  border-radius: 5px;
+  padding: 5px 25px;
+  text-align: center;
+}
+#table_left table tr.wv-pl td .send-service-button > button:hover {
+  color: #FFFFFF;
+  background-color: #3e5cd8;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+}
+#table_left table tr.wv-pl td select, #table_left table tr.wv-pl td input {
+  flex: 1;
+}
+#table_left table tr.wv-pl td select option, #table_left table tr.wv-pl td input option {
+  background-color: #2F425E;
+}
+
+.session-main {
+  width: 30vw;
+  margin: 150px auto;
+}
+.session-main h2 {
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-size: 36px;
+}
+.session-main .session-form {
+  width: 100%;
+}
+.session-main .session-form form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.session-main .session-form form div {
+  margin-bottom: 25px;
+}
+.session-main .session-form form input {
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 15px;
+  width: 94%;
+}
+.session-main .session-form form input[type=submit] {
+  text-align: center;
+}
+.session-main .session-form form input[type=submit]:hover {
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+  color: #FFFFFF;
+  background: #1C2A39;
+}
+.session-main .session-form form span {
+  font-size: 10px;
+  color: red;
+}
+.session-main .session-form small {
+  font-size: 12px;
+}
+.session-main .session-form small a {
+  color: #278efc;
+}
+.session-main .session-form small a:hover {
+  text-decoration: underline;
+  font-weight: bold;
+}
+.session-main .alert, .session-main .notification {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 25px;
+  border-radius: 5px;
+  font-size: 14px;
+  justify-content: space-between;
+}
+.session-main .alert span:last-of-type, .session-main .notification span:last-of-type {
+  cursor: pointer;
+}
+.session-main .notification {
+  background: rgba(10, 186, 81, 0.3);
+}
+.session-main .alert-danger {
+  background: rgba(255, 0, 0, 0.3);
+}
+
+.chat, .channel {
+  z-index: 20;
+  position: fixed;
+  bottom: -260px;
+  width: 250px;
+  height: 300px;
+  border: 1px solid lightgray;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.5s;
+  border-radius: 5px;
+  background-color: white;
+  overflow: hidden;
+}
+.chat .header, .channel .header {
+  height: 40px;
+  width: 100%;
+  background-color: #2F425E;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  justify-content: space-between;
+}
+.chat .header i, .channel .header i {
+  margin: auto 10px;
+}
+.chat form, .channel form {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-top: 1px solid lightgray;
+}
+.chat form i, .channel form i {
+  color: lightgray;
+  margin: 0 7px;
+}
+.chat form input, .channel form input {
+  flex: 1;
+  width: 100%;
+  padding: 5px 10px;
+  font-size: 12px;
+  overflow-wrap: break-word;
+}
+.chat form input:focus ~ i, .channel form input:focus ~ i {
+  color: gray;
+}
+
+.chat {
+  right: 5px;
+}
+.chat .userlist {
+  height: 220px;
+  padding: 10px;
+  overflow: auto;
+}
+.chat .userlist .user {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+.chat .userlist .user .avatar {
+  font-size: 20px;
+  background-color: lightgray;
+  border-radius: 50%;
+  padding: 5px 9px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+.chat .userlist .user .avatar:hover {
+  background-color: #1C2A39;
+  color: white;
+}
+.chat .userlist .user:hover span {
+  font-weight: bold;
+}
+.chat .header {
+  border: 1px solid #2F425E;
+}
+
+.channel .channel-header {
+  background-color: lightgray;
+  border: 1px solid lightgray;
+}
+.channel .channel-header .close-channel {
+  text-align: right;
+  margin-right: 10px;
+  padding: 1px 5px;
+  border-radius: 50%;
+  font-size: 18px;
+  transition: all 0.5s;
+}
+.channel .channel-header .close-channel:hover {
+  font-weight: bold;
+  color: white;
+}
+.channel .message {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding: 10px;
+  padding: 5px;
+}
+.channel .message span {
+  text-align: right;
+  background-color: lightgray;
+  width: 95%;
+  height: auto;
+  overflow-wrap: break-word;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+.channel .message .from {
+  text-align: left;
+  background: rgba(176, 224, 230, 0.3);
+}
+
+.chat-active, .channel-active {
+  bottom: 0;
+}
+.chat-active .channel-header, .channel-active .channel-header {
+  background-color: gray;
+  border: 1px solid gray;
+}
+
+.main {
+  height: 100vh;
+  font-size: 14px;
+}
+
+button {
+  padding: 7px 15px;
+  color: #FFFFFF;
+  background-color: #1C2A39;
+  cursor: pointer;
+  border-radius: 5px;
+}
+button i {
+  margin-right: 7px;
+}
+
+button:hover {
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+  background-color: #2F425E;
+}
+
+.img-group {
+  position: fixed;
+  bottom: 15px;
+  left: 140px;
+  height: 150px;
+  width: 100%;
+  margin: 0px auto;
+  display: flex;
+  justify-content: flex-start;
+  overflow: scroll;
+}
+.img-group .img-container {
+  width: 90px;
+  height: 135px;
+  margin-right: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+}
+.img-group .img-container img {
+  height: 100%;
+  object-fit: cover;
+}
+.img-group .img-container img:hover {
+  opacity: 0.5;
+}
+
+.buttons {
+  position: fixed;
+  bottom: 170px;
+  left: 140px;
+}
+.buttons button {
+  margin-right: 20px;
+}
+
+.canvas-main {
+  display: flex;
+}
+.canvas-main #sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 93vh;
+  color: #FFFFFF;
+  background-color: #1C2A39;
+}
+.canvas-main #sidebar li {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: flex-start;
+  padding: 15px 10px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 14px;
+}
+.canvas-main #sidebar li i {
+  margin-right: 10px;
+}
+.canvas-main #sidebar li:hover {
+  color: #278efc;
+}
+.canvas-main #sidebar .selected {
+  background-color: white;
+  color: #1C2A39;
+}
+.canvas-main .side-content-canvas {
+  display: flex;
+  flex: 1;
+}
+.canvas-main .side-content-canvas #side-content {
+  height: 75%;
+  margin: 15px;
+  border: solid 1px darkgrey;
+  overflow: auto;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+.canvas-main .side-content-canvas #side-content #side-content-image #button-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.canvas-main .side-content-canvas #side-content #side-content-image #button-wrapper button {
+  margin-bottom: 15px;
+}
+.canvas-main .side-content-canvas #side-content > div {
+  height: 90%;
+  width: 270px;
+  margin: 15px;
+  text-align: center;
+  /* Hide the browser's default checkbox */
+  /* Create a custom checkbox */
+  /* On mouse-over, add a grey background color */
+  /* When the checkbox is checked, add a blue background */
+  /* Create the checkmark/indicator (hidden when not checked) */
+  /* Show the checkmark when checked */
+  /* Style the checkmark/indicator */
+}
+.canvas-main .side-content-canvas #side-content > div button {
+  margin-top: 20px;
+}
+.canvas-main .side-content-canvas #side-content > div h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+.canvas-main .side-content-canvas #side-content > div select, .canvas-main .side-content-canvas #side-content > div input {
+  padding: 8px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.canvas-main .side-content-canvas #side-content > div #shapes-list {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+.canvas-main .side-content-canvas #side-content > div #shapes-list li {
+  cursor: pointer;
+}
+.canvas-main .side-content-canvas #side-content > div #shapes-list li.ui-selected {
+  border-radius: 5px;
+  background-color: lightgray;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+}
+.canvas-main .side-content-canvas #side-content > div .container-checkbox {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.canvas-main .side-content-canvas #side-content > div .container-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+.canvas-main .side-content-canvas #side-content > div .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  border-radius: 5px;
+  background-color: #eee;
+}
+.canvas-main .side-content-canvas #side-content > div .container-checkbox:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+.canvas-main .side-content-canvas #side-content > div .container-checkbox input:checked ~ .checkmark {
+  background-color: #1C2A39;
+}
+.canvas-main .side-content-canvas #side-content > div .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.canvas-main .side-content-canvas #side-content > div .container-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+.canvas-main .side-content-canvas #side-content > div .container-checkbox .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.canvas-main .side-content-canvas #side-content > div textarea {
+  padding: 8px;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+  width: 95%;
+  min-height: 200px;
+  margin: 10px auto;
+  resize: vertical;
+  text-align: left;
+}
+.canvas-main .side-content-canvas #side-content > div .form-inline {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  min-height: 35px;
+  text-align: center;
+}
+.canvas-main .side-content-canvas #side-content > div .form-inline label {
+  font-weight: bold;
+  text-align: left;
+  font-size: 14px;
+  min-width: 65px;
+  margin-right: 10px;
+}
+.canvas-main .side-content-canvas #side-content > div .form-inline input {
+  border: 1px solid lightgray;
+  padding: 8px;
+  border-radius: 5px;
+}
+.canvas-main .side-content-canvas .shapes-item {
+  padding: 5px;
+}
+.canvas-main .side-content-canvas .shapes-item img {
+  height: 50px;
+  width: 50px;
+}
+.canvas-main .side-content-canvas .selected-color {
+  height: 30px;
+  width: 30px;
+  margin-left: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+}
+.canvas-main .side-content-canvas .canvas-area {
+  flex: 1;
+  height: 740px;
+  margin-top: 15px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+.canvas-main .side-content-canvas .canvas-area .container {
+  width: 50%;
+  margin: 0 auto;
+  height: 650px;
+  margin-bottom: 10px;
+}
+.canvas-main .side-content-canvas .canvas-area .container canvas {
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.2);
+}
+
+.modal-screen {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.is_open {
+  display: block;
+}
+
+.modal, .hidden {
+  display: none;
+}
+
+@-webkit-keyframes slide {
+  100% {
+    right: 0;
+  }
+}
+@keyframes slide {
+  100% {
+    right: 0;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */
