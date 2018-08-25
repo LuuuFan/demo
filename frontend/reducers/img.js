@@ -1,4 +1,4 @@
-import {RECEIVE_ALL_IMGS, RECEIVE_IMG} from '../actions/images';
+import {RECEIVE_ALL_IMGS, RECEIVE_IMG, RECEIVE_SELECTED_IMG} from '../actions/images';
 
 const imgReducer = (state=[], action) => {
 	Object.freeze(state);

@@ -30546,6 +30546,10 @@ var _channel = __webpack_require__(120);
 
 var _channel2 = _interopRequireDefault(_channel);
 
+var _selected_img = __webpack_require__(196);
+
+var _selected_img2 = _interopRequireDefault(_selected_img);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
@@ -30554,7 +30558,8 @@ var rootReducer = (0, _redux.combineReducers)({
   error: _error2.default,
   canvas: _canvas2.default,
   message: _message2.default,
-  channel: _channel2.default
+  channel: _channel2.default,
+  selectedImg: _selected_img2.default
 });
 
 exports.default = rootReducer;
@@ -33468,7 +33473,8 @@ var mapStateToProps = function mapStateToProps(state) {
 		imgs: state.imgs,
 		canvas: state.canvas,
 		currentUser: state.session.currentUser,
-		message: state.message
+		message: state.message,
+		selectedImg: state.selectedImg
 	};
 };
 
@@ -33491,6 +33497,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		},
 		sendService: function sendService(data, token) {
 			return dispatch((0, _service.sendService)(data, token));
+		},
+		receiveSelectedImg: function receiveSelectedImg(img) {
+			return dispatch((0, _images.receiveSelectedImg)(img));
 		}
 	};
 };
@@ -33594,8 +33603,6 @@ var Home = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this4 = this;
-
 			var _props = this.props,
 			    imgs = _props.imgs,
 			    receiveCanvas = _props.receiveCanvas,
@@ -33604,26 +33611,16 @@ var Home = function (_React$Component) {
 			    message = _props.message,
 			    clearMessage = _props.clearMessage,
 			    sendService = _props.sendService,
-			    canvas = _props.canvas;
+			    canvas = _props.canvas,
+			    receiveSelectedImg = _props.receiveSelectedImg,
+			    selectedImg = _props.selectedImg;
 
 			return _react2.default.createElement(
 				'div',
 				null,
 				_react2.default.createElement(_header2.default, { receiveImg: receiveImg, sendEmail: sendEmail, message: message, clearMessage: clearMessage, sendService: sendService, canvas: canvas }),
-				_react2.default.createElement(_canvas2.default, { receiveCanvas: receiveCanvas, img: this.state.selectedImgURL, message: message }),
-				_react2.default.createElement(
-					'div',
-					{ className: 'img-group group' },
-					imgs.map(function (img, key) {
-						return _react2.default.createElement(
-							'div',
-							{ className: 'img-container', key: key, id: 'img-' + key, onClick: function onClick(e) {
-									return _this4.selectImg(e);
-								} },
-							_react2.default.createElement('img', { src: img.previewURL })
-						);
-					})
-				),
+				_react2.default.createElement(_canvas2.default, { receiveCanvas: receiveCanvas, img: selectedImg, message: message }),
+				_react2.default.createElement(_image_group2.default, { imgs: imgs, receiveSelectedImg: receiveSelectedImg }),
 				_react2.default.createElement(_chat_container2.default, null)
 			);
 		}
@@ -40204,10 +40201,22 @@ var ImageGroup = function (_React$Component) {
 	function ImageGroup() {
 		_classCallCheck(this, ImageGroup);
 
-		return _possibleConstructorReturn(this, (ImageGroup.__proto__ || Object.getPrototypeOf(ImageGroup)).call(this));
+		var _this = _possibleConstructorReturn(this, (ImageGroup.__proto__ || Object.getPrototypeOf(ImageGroup)).call(this));
+
+		_this.state = {
+			selectedImgURL: ''
+		};
+		return _this;
 	}
 
 	_createClass(ImageGroup, [{
+		key: 'selectImg',
+		value: function selectImg(e) {
+			var idx = e.currentTarget.id.split('-')[1] * 1;
+			this.props.receiveSelectedImg(this.props.imgs[idx].webformatURL);
+			// this.setState({selectedImgURL: this.props.imgs[idx].webformatURL});
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var _this2 = this;
@@ -40234,6 +40243,35 @@ var ImageGroup = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = ImageGroup;
+
+/***/ }),
+/* 196 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _images = __webpack_require__(49);
+
+var selectedImgReducer = function selectedImgReducer() {
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	var action = arguments[1];
+
+	Object.freeze(state);
+	var newState = void 0;
+	switch (action.type) {
+		case _images.RECEIVE_SELECTED_IMG:
+			return action.img;
+		default:
+			return state;
+	}
+};
+
+exports.default = selectedImgReducer;
 
 /***/ })
 /******/ ]);
