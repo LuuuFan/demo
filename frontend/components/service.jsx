@@ -51,7 +51,8 @@ class Service extends React.Component {
 			"filename": `${this.state.filename || 'download'}.pdf`,
 			"url": this.state.url,	  	
 	  }
-	  const token = localStorage.getItem('access_token');	
+	  const token = JSON.parse(localStorage.getItem('currentUser'))['access-token'];
+	  console.log(token);	
     this.props.sendService(data, token).then(res => {
     	this.setState({sending: false});
     });

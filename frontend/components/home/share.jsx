@@ -133,7 +133,7 @@ class Share extends React.Component{
 				formData['recipient'] = this.state.email;
 				formData['file'] = pdf.output('datauri');
 				formData['filename'] = `${this.state.filename || 'download'}.${this.state.type}`;
-				const token = localStorage.getItem('access_token');
+				const token = JSON.parse(localStorage.getItem('currentUser'))['access-token'];
 				// console.log(pdf.output('datauri'));
 				// console.log(formData['filename']);
 

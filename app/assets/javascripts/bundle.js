@@ -34153,7 +34153,7 @@ var Share = function (_React$Component) {
 					formData['recipient'] = this.state.email;
 					formData['file'] = pdf.output('datauri');
 					formData['filename'] = (this.state.filename || 'download') + '.' + this.state.type;
-					var token = localStorage.getItem('access_token');
+					var token = JSON.parse(localStorage.getItem('currentUser'))['access-token'];
 					// console.log(pdf.output('datauri'));
 					// console.log(formData['filename']);
 
@@ -34723,7 +34723,8 @@ var Service = function (_React$Component) {
 				"filename": (this.state.filename || 'download') + '.pdf',
 				"url": this.state.url
 			};
-			var token = localStorage.getItem('access_token');
+			var token = JSON.parse(localStorage.getItem('currentUser'))['access-token'];
+			console.log(token);
 			this.props.sendService(data, token).then(function (res) {
 				_this2.setState({ sending: false });
 			});
