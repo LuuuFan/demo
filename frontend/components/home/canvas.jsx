@@ -254,16 +254,16 @@ class Canvas extends React.Component{
 						<h2>Shapes</h2>
 						<ol id="shapes-list">
 							<li className={`shapes-item ${this.state.selectedShape === 'circle' ? 'ui-selected' : ''}`} id="circle" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
-							  <img src="app/assets/images/circle.png" />
+							  <img src="static/assets/images/circle.png" />
 							</li>
 							<li className={`shapes-item ${this.state.selectedShape === 'rect' ? 'ui-selected' : ''}`} id="rect" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
-							  <img src="app/assets/images/rect.png" />
+							  <img src="static/assets/images/rect.png" />
 							</li>
 							<li className={`shapes-item ${this.state.selectedShape === 'line' ? 'ui-selected' : ''}`} id="line" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
-							  <img src="app/assets/images/line.png" />
+							  <img src="static/assets/images/line.png" />
 							</li>
 							<li className={`shapes-item ${this.state.selectedShape === 'polyline' ? 'ui-selected' : ''}`} id="polyline" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
-							  <img src="app/assets/images/arrow.png" />
+							  <img src="static/assets/images/arrow.png" />
 							</li>
 						</ol>
 						<div className="form-inline">
@@ -311,13 +311,13 @@ class Canvas extends React.Component{
 						<h2>Dialog</h2>
 			        	<ol id="shapes-list">
 							<li className={`shapes-item ${this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''}`} id="dialog_1" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
-							  <img src="app/assets/images/dialog_1.png" />
+							  <img src="static/assets/images/dialog_1.png" />
 							</li>
 							<li className={`shapes-item ${this.state.selectedDialog === 'dialog_2' ? 'ui-selected' : ''}`} id="dialog_2" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
-							  <img src="app/assets/images/dialog_2.png" />
+							  <img src="static/assets/images/dialog_2.png" />
 							</li>
 							<li className={`shapes-item ${this.state.selectedDialog === 'dialog_3' ? 'ui-selected' : ''}`} id="dialog_3" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
-							  <img src="app/assets/images/dialog_3.png" />
+							  <img src="static/assets/images/dialog_3.png" />
 							</li>
 			        	</ol>
 		        		<textarea placeholder='Add Comment Here'></textarea>

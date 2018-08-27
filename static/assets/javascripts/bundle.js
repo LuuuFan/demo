@@ -33925,7 +33925,7 @@ var Header = function (_React$Component) {
 				_react2.default.createElement(
 					'a',
 					{ href: '/' },
-					_react2.default.createElement('img', { src: 'app/assets/images/favicon.ico' }),
+					_react2.default.createElement('img', { src: 'static/assets/images/favicon.ico' }),
 					'Expirements'
 				),
 				_react2.default.createElement(
@@ -35498,28 +35498,28 @@ var Canvas = function (_React$Component) {
 									{ className: 'shapes-item ' + (this.state.selectedShape === 'circle' ? 'ui-selected' : ''), id: 'circle', onClick: function onClick(e) {
 											return _this5.changeShape(e, 'selectedShape');
 										} },
-									_react2.default.createElement('img', { src: 'app/assets/images/circle.png' })
+									_react2.default.createElement('img', { src: 'static/assets/images/circle.png' })
 								),
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedShape === 'rect' ? 'ui-selected' : ''), id: 'rect', onClick: function onClick(e) {
 											return _this5.changeShape(e, 'selectedShape');
 										} },
-									_react2.default.createElement('img', { src: 'app/assets/images/rect.png' })
+									_react2.default.createElement('img', { src: 'static/assets/images/rect.png' })
 								),
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedShape === 'line' ? 'ui-selected' : ''), id: 'line', onClick: function onClick(e) {
 											return _this5.changeShape(e, 'selectedShape');
 										} },
-									_react2.default.createElement('img', { src: 'app/assets/images/line.png' })
+									_react2.default.createElement('img', { src: 'static/assets/images/line.png' })
 								),
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedShape === 'polyline' ? 'ui-selected' : ''), id: 'polyline', onClick: function onClick(e) {
 											return _this5.changeShape(e, 'selectedShape');
 										} },
-									_react2.default.createElement('img', { src: 'app/assets/images/arrow.png' })
+									_react2.default.createElement('img', { src: 'static/assets/images/arrow.png' })
 								)
 							),
 							_react2.default.createElement(
@@ -35663,21 +35663,21 @@ var Canvas = function (_React$Component) {
 									{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''), id: 'dialog_1', onClick: function onClick(e) {
 											return _this5.changeShape(e, 'selectedDialog');
 										} },
-									_react2.default.createElement('img', { src: 'app/assets/images/dialog_1.png' })
+									_react2.default.createElement('img', { src: 'static/assets/images/dialog_1.png' })
 								),
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_2' ? 'ui-selected' : ''), id: 'dialog_2', onClick: function onClick(e) {
 											return _this5.changeShape(e, 'selectedDialog');
 										} },
-									_react2.default.createElement('img', { src: 'app/assets/images/dialog_2.png' })
+									_react2.default.createElement('img', { src: 'static/assets/images/dialog_2.png' })
 								),
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_3' ? 'ui-selected' : ''), id: 'dialog_3', onClick: function onClick(e) {
 											return _this5.changeShape(e, 'selectedDialog');
 										} },
-									_react2.default.createElement('img', { src: 'app/assets/images/dialog_3.png' })
+									_react2.default.createElement('img', { src: 'static/assets/images/dialog_3.png' })
 								)
 							),
 							_react2.default.createElement('textarea', { placeholder: 'Add Comment Here' }),

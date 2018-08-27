@@ -11,7 +11,7 @@ class Header extends React.Component{
 		return(
 			<header className='navbar'>
 				<a href='/'>
-					<img src='app/assets/images/favicon.ico'/>
+					<img src='static/assets/images/favicon.ico'/>
 					{/*
 						<i className="fab fa-viadeo"></i>
 					*/}
