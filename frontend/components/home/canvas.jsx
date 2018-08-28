@@ -97,10 +97,6 @@ class Canvas extends React.Component{
 	}
 
 	scroll(id){
-		// console.log('~~~~~~~~~~~~~~~~~')
-		// console.log(`.container-${id}`);
-		// console.log($(`.container-${id}`).offset().top);
-		// console.log($('.canvas-area').offset().top)
 		$('.canvas-area').animate({
 			scrollTop: $(`.container-${id}`).offset().top
 		}, 800);

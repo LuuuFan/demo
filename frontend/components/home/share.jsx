@@ -87,6 +87,11 @@ class Share extends React.Component{
 				this.props.canvas[key]
 			})
 		}
+
+		const canvas = this.props.canvas;
+		Object.keys(this.props.canvas).forEach(idx => {
+			canvas[idx].setActiveObject(undefined);
+		})
 	}
 
 	closeModal(type){
@@ -182,14 +187,14 @@ class Share extends React.Component{
 
 	render(){
 		// const dropbox = JSON.parse(localStorage.getItem('dropbox'));
-		const {message, sendService} = this.props;
+		const {message, sendService, canvas} = this.props;
 		return (
 			<div className='share'>
 				{message.message ? 
 					<div className='message'>{message.message}</div>
 					: ""}
 				{this.state.sending ? <div className='loading'>
-					<img src='app/assets/images/sending_email.gif' />
+					<img src='static/assets/images/sending_email.gif' />
 				</div> : ""}
 				<button className="btn services" onMouseEnter={(e)=>this.openModal(e, 'modalList')} onMouseLeave={()=>this.closeModal('modalList')}>Send to Service
 					<div className={this.state.modalList}>
@@ -202,7 +207,7 @@ class Share extends React.Component{
 					</div>
 				</button>
 				<div className={this.state.servicenow}>
-					<Service sendService={sendService}/>
+					<Service sendService={sendService} canvas={canvas}/>
 	 	  		<div onClick={()=>this.closeModal('servicenow')} className="modal-screen"></div>
 				</div>
 				<button className="btn" onClick={(e)=>this.openModal(e, 'modalShare')}>Share</button>

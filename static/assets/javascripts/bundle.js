@@ -33969,6 +33969,12 @@ var _session = __webpack_require__(29);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var mapStateToProps = function mapStateToProps(state) {
+	return {
+		canvas: state.canvas
+	};
+};
+
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	return {
 		removeCurrentUser: function removeCurrentUser() {
@@ -34119,6 +34125,11 @@ var Share = function (_React$Component) {
 					_this4.props.canvas[key];
 				});
 			}
+
+			var canvas = this.props.canvas;
+			Object.keys(this.props.canvas).forEach(function (idx) {
+				canvas[idx].setActiveObject(undefined);
+			});
 		}
 	}, {
 		key: 'closeModal',
@@ -34237,7 +34248,8 @@ var Share = function (_React$Component) {
 			// const dropbox = JSON.parse(localStorage.getItem('dropbox'));
 			var _props = this.props,
 			    message = _props.message,
-			    sendService = _props.sendService;
+			    sendService = _props.sendService,
+			    canvas = _props.canvas;
 
 			return _react2.default.createElement(
 				'div',
@@ -34250,7 +34262,7 @@ var Share = function (_React$Component) {
 				this.state.sending ? _react2.default.createElement(
 					'div',
 					{ className: 'loading' },
-					_react2.default.createElement('img', { src: 'app/assets/images/sending_email.gif' })
+					_react2.default.createElement('img', { src: 'static/assets/images/sending_email.gif' })
 				) : "",
 				_react2.default.createElement(
 					'button',
@@ -34286,7 +34298,7 @@ var Share = function (_React$Component) {
 				_react2.default.createElement(
 					'div',
 					{ className: this.state.servicenow },
-					_react2.default.createElement(_service2.default, { sendService: sendService }),
+					_react2.default.createElement(_service2.default, { sendService: sendService, canvas: canvas }),
 					_react2.default.createElement('div', { onClick: function onClick() {
 							return _this7.closeModal('servicenow');
 						}, className: 'modal-screen' })
@@ -34772,7 +34784,7 @@ var Service = function (_React$Component) {
 				return _react2.default.createElement(
 					'div',
 					{ className: 'loading' },
-					_react2.default.createElement('img', { src: 'app/assets/images/sending_email.gif' })
+					_react2.default.createElement('img', { src: 'static/assets/images/sending_email.gif' })
 				);
 			} else {
 				return _react2.default.createElement(
@@ -35260,10 +35272,6 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'scroll',
 		value: function scroll(id) {
-			// console.log('~~~~~~~~~~~~~~~~~')
-			// console.log(`.container-${id}`);
-			// console.log($(`.container-${id}`).offset().top);
-			// console.log($('.canvas-area').offset().top)
 			$('.canvas-area').animate({
 				scrollTop: $('.container-' + id).offset().top
 			}, 800);
