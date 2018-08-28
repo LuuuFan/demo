@@ -2,13 +2,15 @@ import React from 'react';
 // import {fabric} from 'react-fabricjs';
 // import {fabric} from '../../util/fabric';
 import * as canvasUtil from '../../util/canvas';
+import ImageGroup from './image_group';
+import ChatContainer from '../chat/chat_container';
 
 class Canvas extends React.Component{
 	
 	constructor(){
 		super();
 		this.state = {
-			active: 'Shapes',
+			active: 'Image',
 			textSize: '24',
 			canvas: {},
 			shapeColor: 'Black',
@@ -26,25 +28,13 @@ class Canvas extends React.Component{
 			cropingImg: null,
 			selectedCanvas: null,
 			extraCanvas: [],
+			sideContentToggle: true,
+			chatToggle: false,
 		};
 	}
 
 	componentDidMount(){
 		this.initializeCanvas('0');
-
-		// canvas not working in redux
-		// this.props.receiveCanvas(canvas);
-		
-		// set activeObject, 
-		// canvas.on('mouse:down', (e)=>{
-		// 	let activeObj = canvas.getActiveObject();
-		// 	if (activeObj) {
-		// 		canvas.bringToFront(activeObj);
-		// 		this.setState({activeObj});
-		// 	} else {
-		// 		this.setState({activeObj: null});
-		// 	}
-		// })
 
 		// delete item on canvas
 		document.addEventListener('keydown', (e) => {
@@ -217,52 +207,70 @@ class Canvas extends React.Component{
 		this.setState({extraCanvas: this.state.extraCanvas.concat([last_el + 1])});
 	}
 
+	toggleSideContent(){
+		this.setState({sideContentToggle: !this.state.sideContentToggle});
+	}
+
+	toggleChat(){
+		this.setState({chatToggle: !this.state.chatToggle});
+	}
+
 	render(){
+		const {receiveSelectedImg, imgs} = this.props;
 		return (
 			<div className='canvas-main'>
 				<ul id="sidebar" role="tablist">
-			      <li className={`nav-item ${this.state.active === 'Shapes' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
-			          <i className="fas fa-shapes"></i>
-			          <div className="nav-text">Shapes</div>
-			      </li>
-			      <li className={`nav-item ${this.state.active === 'Dialog' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
-			          <i className="fas fa-comment"></i>
-			          <div className="nav-text">Dialog</div>
-			      </li>
-			      <li className={`nav-item ${this.state.active === 'Text' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
-			          <i className="fas fa-font"></i>
-			          <div className="nav-text">Text</div>
-			      </li>
-			      <li className={`nav-item ${this.state.active === 'Image' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
-				      <i className="far fa-image"></i>
-		          	<div className="nav-text">Image</div>
-			      </li>
-			      <li className={`nav-item ${this.state.active === 'Background' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
-			          <i className="fas fa-layer-group"></i>
-			          <div className="nav-text">Background</div>
-			      </li>
-			    </ul>
-		    	<div className='side-content-canvas'>
+		      <li className={`nav-item ${this.state.active === 'Image' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
+			      <i className="far fa-image"></i>
+	          	<div className="nav-text">Image</div>
+		      </li>
+		      <li className={`nav-item ${this.state.active === 'Shapes' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
+		          <i className="fas fa-shapes"></i>
+		          <div className="nav-text">Shapes</div>
+		      </li>
+		      <li className={`nav-item ${this.state.active === 'Dialog' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
+		          <i className="fas fa-comment"></i>
+		          <div className="nav-text">Dialog</div>
+		      </li>
+		      <li className={`nav-item ${this.state.active === 'Text' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
+		          <i className="fas fa-font"></i>
+		          <div className="nav-text">Text</div>
+		      </li>
+		      <li className={`nav-item ${this.state.active === 'Bground' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
+		          <i className="fas fa-layer-group"></i>
+		          <div className="nav-text">Bground</div>
+		      </li>
+		      <li className='selected'>
+		      	<i className="far fa-comments"></i>
+		      </li>
+		    </ul>
+    	<div className='side-content-canvas'>
 
-			    <div className="tab-content" id="side-content">
-			    	{this.state.active === 'Shapes' ? 
-			        <div id="shapes" role="tabpanel" aria-labelledby="shapes-button">
-						<h2>Shapes</h2>
-						<ol id="shapes-list">
-							<li className={`shapes-item ${this.state.selectedShape === 'circle' ? 'ui-selected' : ''}`} id="circle" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
-							  <img src="static/assets/images/circle.png" />
-							</li>
-							<li className={`shapes-item ${this.state.selectedShape === 'rect' ? 'ui-selected' : ''}`} id="rect" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
-							  <img src="static/assets/images/rect.png" />
-							</li>
-							<li className={`shapes-item ${this.state.selectedShape === 'line' ? 'ui-selected' : ''}`} id="line" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
-							  <img src="static/assets/images/line.png" />
-							</li>
-							<li className={`shapes-item ${this.state.selectedShape === 'polyline' ? 'ui-selected' : ''}`} id="polyline" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
-							  <img src="static/assets/images/arrow.png" />
-							</li>
-						</ol>
-						<div className="form-inline">
+		    <div className={`tab-content ${this.state.sideContentToggle ? "" : 'collapse'}`} id="side-content">
+		    	<div className='arrow-collapse' onClick={()=>this.toggleSideContent()}>
+		    		{ this.state.sideContentToggle ? 
+		    			<i className="fas fa-angle-left"></i>
+		    			: 
+		    			<i className="fas fa-angle-right"></i>}
+		    	</div>
+		    	{this.state.active === 'Shapes' ? 
+		        <div id="shapes" role="tabpanel" aria-labelledby="shapes-button">
+							<h2>Shapes</h2>
+							<ol id="shapes-list">
+								<li className={`shapes-item ${this.state.selectedShape === 'circle' ? 'ui-selected' : ''}`} id="circle" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
+								  <img src="static/assets/images/circle.png" />
+								</li>
+								<li className={`shapes-item ${this.state.selectedShape === 'rect' ? 'ui-selected' : ''}`} id="rect" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
+								  <img src="static/assets/images/rect.png" />
+								</li>
+								<li className={`shapes-item ${this.state.selectedShape === 'line' ? 'ui-selected' : ''}`} id="line" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
+								  <img src="static/assets/images/line.png" />
+								</li>
+								<li className={`shapes-item ${this.state.selectedShape === 'polyline' ? 'ui-selected' : ''}`} id="polyline" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
+								  <img src="static/assets/images/arrow.png" />
+								</li>
+							</ol>
+							<div className="form-inline">
 							<label htmlFor="shape-color">Color</label>
 							<select className="form-control" id="shape-color" onChange={(e)=>this.selectColor(e, 'shapeColor')}>
 								<option value="black">Black</option>
@@ -300,128 +308,129 @@ class Canvas extends React.Component{
 			        	<div id="button-wrapper">
 		            		<button type="button" id="addShape" onClick={()=>canvasUtil.addShape(this.state.selectedShape, this.state.selectedCanvas)}>Add Shape</button>
 			        	</div>
-			        </div>
-			        : ""}
-			    	{this.state.active === 'Dialog' ? 
-				    <div id="dialog" role="tabpanel" aria-labelledby='dialog-button'>
-						<h2>Dialog</h2>
-			        	<ol id="shapes-list">
-							<li className={`shapes-item ${this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''}`} id="dialog_1" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
-							  <img src="static/assets/images/dialog_1.png" />
-							</li>
-							<li className={`shapes-item ${this.state.selectedDialog === 'dialog_2' ? 'ui-selected' : ''}`} id="dialog_2" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
-							  <img src="static/assets/images/dialog_2.png" />
-							</li>
-							<li className={`shapes-item ${this.state.selectedDialog === 'dialog_3' ? 'ui-selected' : ''}`} id="dialog_3" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
-							  <img src="static/assets/images/dialog_3.png" />
-							</li>
-			        	</ol>
-		        		<textarea placeholder='Add Comment Here'></textarea>
-			        	<div id="button-wrapper">
-		            	<button type="button" id="addDialog" onClick={()=>canvasUtil.addDialog(this.state.selectedDialog, this.state.selectedCanvas)}>Add Dialog</button>
-			        	</div>
-			        </div>
-			        : ""}
-			    	{this.state.active === 'Text' ? 
-			        <div id="text" role="tabpanel" aria-labelledby="text-button">
-						<h2>Text</h2>
-						<div className="form-inline">
-							<label htmlFor="text-color">Color: </label>
-							<select className="form-control" id="text-color" onChange={(e)=>this.selectColor(e, 'textColor')}>
-							  <option value="black">Black</option>
-							  <option value="red">Red</option>
-							  <option value="orange">Orange</option>
-							  <option value="yellow">Yellow</option>
-							  <option value="green">Green</option>
-							  <option value="blue">Blue</option>
-							  <option value="brown">Brown</option>
-							  <option value="purple">Purple</option>
-							  <option value="white">White</option>
-							</select>
-							<div className="selected-color" style={{backgroundColor: `${this.state.textColor}`}}></div>
-		          		</div>
-						<div className="form-inline">
-							<label htmlFor="text-style">Style: </label>
-							<select className="form-control" id="text-style" defaultValue='Verdana' onChange={(e)=>this.changeStyle(e)}>
-							  <option value="Times">Times</option>
-							  <option value="Georgia">Georgia</option>
-							  <option value="Arial">Arial</option>
-							  <option value="Tahoma">Tahoma</option>
-							  <option value="Verdana">Verdana</option>
-							  <option value="Courier">Courier</option>
-							  <option value="Monaco">Monaco</option>
-							</select>
-						</div>
-						<div className="form-inline">
-							<label htmlFor="text-style">Size(px): &nbsp; </label>
-							<input id="text-size" type="number" step="1" min="1" max="50" value={this.state.textSize} onChange={this.handleInput()}/>
-						</div>
-						<div id="button-wrapper">
-							<button type="button" id="addText" onClick={()=>canvasUtil.addText(this.state.selectedCanvas)}>Add Text</button>
-						</div>
-			        </div>
-			        : ""}
-			    	{this.state.active === 'Background' ? 
-			        <div id="background" role="tabpanel" aria-labelledby="background-button">
-						<h2>Background Color</h2>
-						<div className="form-inline">
-							<label htmlFor="background-color">Color: </label>
-							<select className="form-control" id="background-color" onChange={(e)=>this.selectColor(e, 'backgroundColor')}>
-							  <option value="lightgray">Lightgray</option>
-							  <option value="white">White</option>
-							  <option value="red">Red</option>
-							  <option value="orange">Orange</option>
-							  <option value="yellow">Yellow</option>
-							  <option value="green">Green</option>
-							  <option value="blue">Blue</option>
-							  <option value="brown">Brown</option>
-							  <option value="purple">Purple</option>
-							  <option value="black">Black</option>
-							</select>
-							<div className="selected-color" style={{backgroundColor: `${this.state.backgroundColor}`}}>
+		        </div>
+		        : ""}
+		    	{this.state.active === 'Dialog' ? 
+			    	<div id="dialog" role="tabpanel" aria-labelledby='dialog-button'>
+							<h2>Dialog</h2>
+		        	<ol id="shapes-list">
+								<li className={`shapes-item ${this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''}`} id="dialog_1" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
+								  <img src="static/assets/images/dialog_1.png" />
+								</li>
+								<li className={`shapes-item ${this.state.selectedDialog === 'dialog_2' ? 'ui-selected' : ''}`} id="dialog_2" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
+								  <img src="static/assets/images/dialog_2.png" />
+								</li>
+								<li className={`shapes-item ${this.state.selectedDialog === 'dialog_3' ? 'ui-selected' : ''}`} id="dialog_3" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
+								  <img src="static/assets/images/dialog_3.png" />
+								</li>
+		        	</ol>
+	        		<textarea placeholder='Add Comment Here'></textarea>
+		        	<div id="button-wrapper">
+	            	<button type="button" id="addDialog" onClick={()=>canvasUtil.addDialog(this.state.selectedDialog, this.state.selectedCanvas)}>Add Dialog</button>
+		        	</div>
+		        </div>
+		        : ""}
+		    	{this.state.active === 'Text' ? 
+		        <div id="text" role="tabpanel" aria-labelledby="text-button">
+							<h2>Text</h2>
+							<div className="form-inline">
+								<label htmlFor="text-color">Color: </label>
+								<select className="form-control" id="text-color" onChange={(e)=>this.selectColor(e, 'textColor')}>
+								  <option value="black">Black</option>
+								  <option value="red">Red</option>
+								  <option value="orange">Orange</option>
+								  <option value="yellow">Yellow</option>
+								  <option value="green">Green</option>
+								  <option value="blue">Blue</option>
+								  <option value="brown">Brown</option>
+								  <option value="purple">Purple</option>
+								  <option value="white">White</option>
+								</select>
+								<div className="selected-color" style={{backgroundColor: `${this.state.textColor}`}}></div>
+          		</div>
+							<div className="form-inline">
+								<label htmlFor="text-style">Style: </label>
+								<select className="form-control" id="text-style" defaultValue='Verdana' onChange={(e)=>this.changeStyle(e)}>
+								  <option value="Times">Times</option>
+								  <option value="Georgia">Georgia</option>
+								  <option value="Arial">Arial</option>
+								  <option value="Tahoma">Tahoma</option>
+								  <option value="Verdana">Verdana</option>
+								  <option value="Courier">Courier</option>
+								  <option value="Monaco">Monaco</option>
+								</select>
 							</div>
-						</div>
-						{/*
+							<div className="form-inline">
+								<label htmlFor="text-style">Size(px): &nbsp; </label>
+								<input id="text-size" type="number" step="1" min="1" max="50" value={this.state.textSize} onChange={this.handleInput()}/>
+							</div>
 							<div id="button-wrapper">
-									<button type="button" id="changeBackground" onClick={()=>canvasUtil.changeBackground(this.state.backgroundColor, this.state.selectedCanvas)}>Change Background Color</button>
+								<button type="button" id="addText" onClick={()=>canvasUtil.addText(this.state.selectedCanvas)}>Add Text</button>
 							</div>
-						*/}
-			        </div>
-			        : ""}
-			    	{this.state.active === 'Image' ? 
-			        <div id='side-content-image'>
-			        	<h2>Image</h2>
-			        	{this.state.activeObj && this.state.activeObj.type === 'image' && !this.state.croping ? 
-			        		<div id="button-wrapper">
-								<button type="button" id="cropImage" onClick={()=>this.croping()}>
-									<i className="fas fa-crop"></i>
-									Crop Image
-								</button>
-								<button type="button" id="rotateImg" onClick={()=>canvasUtil.rotateImg(this.state.selectedCanvas, this.state.activeObj)}>
-									<i className="fas fa-sync-alt"></i>
-									90&#176; Rotate Image
-								</button>
-							</div>
-			        	: this.state.croping ? 
-			        		<div>
-			        			<div id="button-wrapper" className='croping'>
-									<button type="button" id='done-crop' onClick={()=>this.doneCrop()}>
-										<i className="fas fa-check-circle"></i>
-										Done
-									</button>
+		        </div>
+		        : ""}
+		    	{this.state.active === 'Bground' ? 
+		        <div id="background" role="tabpanel" aria-labelledby="background-button">
+							<h2>Background Color</h2>
+							<div className="form-inline">
+								<label htmlFor="background-color">Color: </label>
+								<select className="form-control" id="background-color" onChange={(e)=>this.selectColor(e, 'backgroundColor')}>
+								  <option value="lightgray">Lightgray</option>
+								  <option value="white">White</option>
+								  <option value="red">Red</option>
+								  <option value="orange">Orange</option>
+								  <option value="yellow">Yellow</option>
+								  <option value="green">Green</option>
+								  <option value="blue">Blue</option>
+								  <option value="brown">Brown</option>
+								  <option value="purple">Purple</option>
+								  <option value="black">Black</option>
+								</select>
+								<div className="selected-color" style={{backgroundColor: `${this.state.backgroundColor}`}}>
 								</div>
+							</div>
+							{/*
 								<div id="button-wrapper">
-									<button type="button" id='cancel-crop' onClick={()=>this.cancelCrop()}>
-										<i className="fas fa-ban"></i>
-										Cancel
-									</button>
+										<button type="button" id="changeBackground" onClick={()=>canvasUtil.changeBackground(this.state.backgroundColor, this.state.selectedCanvas)}>Change Background Color</button>
 								</div>
-			        		</div> 
-			        	: ""}
-			        </div>
-			        : ""}
-			    </div>
-
+							*/}
+		        </div>
+		        : ""}
+		    	{this.state.active === 'Image' ? 
+		        <div id='side-content-image'>
+		        	<h2>Image</h2>
+		        	<ImageGroup receiveSelectedImg={receiveSelectedImg} imgs={imgs}/>
+		        	{this.state.activeObj && this.state.activeObj.type === 'image' && !this.state.croping ? 
+		        		<div id="button-wrapper">
+							<button type="button" id="cropImage" onClick={()=>this.croping()}>
+								<i className="fas fa-crop"></i>
+								Crop Image
+							</button>
+							<button type="button" id="rotateImg" onClick={()=>canvasUtil.rotateImg(this.state.selectedCanvas, this.state.activeObj)}>
+								<i className="fas fa-sync-alt"></i>
+								90&#176; Rotate Image
+							</button>
+						</div>
+		        	: this.state.croping ? 
+		        		<div>
+		        			<div id="button-wrapper" className='croping'>
+								<button type="button" id='done-crop' onClick={()=>this.doneCrop()}>
+									<i className="fas fa-check-circle"></i>
+									Done
+								</button>
+							</div>
+							<div id="button-wrapper">
+								<button type="button" id='cancel-crop' onClick={()=>this.cancelCrop()}>
+									<i className="fas fa-ban"></i>
+									Cancel
+								</button>
+							</div>
+		        		</div> 
+		        	: ""}
+		        </div>
+		        : ""}
+		    </div>
+		    <div className='canvas-buttons'>
 			    <div className='canvas-area'>
 			    	<div className='container container-0' onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
 						<canvas ref='0' id='0'></canvas>
@@ -431,22 +440,25 @@ class Canvas extends React.Component{
 				    		<canvas ref={id} id={id}></canvas>
 				    	</div>)}
 				  </div>
-		   	</div> 
 
-		    <div className='buttons'>
-		    	<button onClick={()=>this.addCanvas()}>Add Canvas</button>
-		    	<button onClick={()=>this.resetCanvas()}>Reset Canvas</button>
-		    	{this.state.activeObj ? 
-	    			<button onClick={()=>canvasUtil.deleteItem(this.state.selectedCanvas)}>Delete {this.state.activeObj._objects ? 'Items' : 'Item'}</button>
-		    		: ""}
-	    		{this.state.activeObj &&  this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? 
-	    			<button onClick={()=>this.groupItems()}>Group Items</button>
-    			: ""}
-    			{this.state.activeObj && this.state.activeObj.type === 'group' ? 
-	    			<button onClick={()=>this.unGroupItems()}>Ungroup Item</button>
-    			: ""}
+			   	<div className='buttons-decoration'></div>
+			    <div className='buttons'>
+			    	<button onClick={()=>this.addCanvas()}>&#43;</button>
+			    	<button onClick={()=>this.resetCanvas()}>&times;</button>
+			    	{this.state.activeObj ? 
+		    			<button className='delete' onClick={()=>canvasUtil.deleteItem(this.state.selectedCanvas)}><i className="far fa-trash-alt"></i></button>
+			    		: ""}
+		    		{this.state.activeObj &&  this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? 
+		    			<button className='group' onClick={()=>this.groupItems()}><i className="far fa-object-group"></i></button>
+		  			: ""}
+		  			{this.state.activeObj && this.state.activeObj.type === 'group' ? 
+		    			<button className='ungroup' onClick={()=>this.unGroupItems()}><i className="far fa-object-ungroup"></i></button>
+		  			: ""}
+			    </div>
+				  
 		    </div>
-		    
+
+	   	</div> 
 		</div>
 		);
 	}

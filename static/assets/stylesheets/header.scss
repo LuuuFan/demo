@@ -1,26 +1,45 @@
 
-$color-darkblue: #1C2A39;
-$color-blue: #2F425E;
-$font-white: #FFFFFF;
-$font-hover: #278efc;
+$black: #3e3e3b;
+$color-darkblue: #4c586f;
+$color-blue: #a2aab0;
+$gray: #cbc5c1;
+$font-white: #ebeced;
+$font-hover: #cbc5c1;
+$hover: #0099fe;
 
 .navbar{
   height: 6vh;
   display: flex;
-  color: $font-white;
-  background-color: $color-darkblue;
-  border-bottom: 5px solid $color-blue;
+  color: $gray;
+  background-color: white;
+  // border-bottom: 5px solid $color-blue;
   box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
   align-items: center;
-
+  .user{
+    font-size: 18px;
+    padding: 5px 9px;
+    border: 2px solid $gray;
+    border-radius: 50%;
+    text-align: center;
+    margin: 5px 10px;
+    cursor: pointer;
+    i{
+      margin: 0;
+    }
+  }
+  .user:hover{
+    border: 2px solid $hover;
+    color: $hover;
+    transition: all .8s;
+  }
   a{	
     display: flex;
     font-size: 24px;
     font-weight: bold;
     img{
       height: 30px;
-      width: 30px;  
-      margin-right: 15px;
+      width: auto;
+      margin: 0 15px;
     }
   }
   .header-buttons{
@@ -53,17 +72,27 @@ $font-hover: #278efc;
       button, a.btn, a.dropbox-dropin-btn{
       	font-size: 12px;
       	padding: 5px 8px;
-        border-radius: 5px;
-        border: 1px solid $font-white;
         margin-right: 10px;
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        align-items: center;
+        font-size: 12px;
+        i{
+          font-size: 20px;
+          margin: 3px;
+        }
+      }
+      button, a.btn, a.dropbox-dropin-btn:hover{
       }
       .services{
       	position: relative;
       	.service-list{
       		z-index: 7;
         	position: absolute;
-        	top: 140%;
+        	top: 120%;
+          left: -30%;
         	border: 1px solid lightgray;
         	border-radius: 5px;
         	background-color: white;
@@ -89,21 +118,20 @@ $font-hover: #278efc;
         }
         .service-list:after {
           border-bottom-color: white;
-          border-width: 10px;
-          margin-left: -10px;
+          border-width: 7px;
+          margin-left: -7px;
         }
         .service-list:before {
           border-bottom-color: #555;
-          border-width: 10px;
-          margin-left: -10px;
+          border-width: 7px;
+          margin-left: -7px;
         }
         .modal-screen-servicelist{
   				background: rgba(255, 255, 255, 0.1);
         }
       }
       button:hover, a.btn:hover{
-      	color: $font-hover;
-      	border: 1px solid $font-hover;
+      	color: $hover;
       }
       .share-canvas{
 			  z-index: 7;

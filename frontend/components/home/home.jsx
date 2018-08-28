@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import Header from './header';
 import Canvas from './canvas';
 import ChatContainer from '../chat/chat_container';
-import ImageGroup from './image_group'
 
 var interval;
 
@@ -40,10 +39,21 @@ class Home extends React.Component {
 		const {imgs, receiveCanvas, receiveImg, sendEmail, message, clearMessage, sendService, canvas, receiveSelectedImg, selectedImg} = this.props;
 		return(
 			<div>
-				<Header receiveImg={receiveImg} sendEmail={sendEmail} message={message} clearMessage={clearMessage} sendService={sendService} canvas={canvas}/>
-				<Canvas receiveCanvas={receiveCanvas} img={selectedImg} message={message}/>
-				<ImageGroup imgs={imgs} receiveSelectedImg={receiveSelectedImg}/>
+				<Header 
+					receiveImg={receiveImg} 
+					sendEmail={sendEmail} 
+					message={message} 
+					clearMessage={clearMessage} 
+					sendService={sendService} 
+					canvas={canvas}/>
+				<Canvas 
+					receiveCanvas={receiveCanvas} 
+					img={selectedImg} 
+					message={message}
+					imgs={imgs}
+					receiveSelectedImg={receiveSelectedImg}/>
 				{/*
+				<ImageGroup imgs={imgs} receiveSelectedImg={receiveSelectedImg}/>
 				<div className='img-group group'>
 					{imgs.map((img, key) => 
 						<div className='img-container' key={key} id={`img-${key}`} onClick={(e)=>this.selectImg(e)}>

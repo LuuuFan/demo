@@ -5,10 +5,13 @@
 @import './canvas';
 @import './chat';
 
-$color-darkblue: #1C2A39;
-$color-blue: #2F425E;
-$font-white: #FFFFFF;
-$font-hover: #278efc;
+$black: #3e3e3b;
+$color-darkblue: #4c586f;
+$color-blue: #a2aab0;
+$gray: #cbc5c1;
+$font-white: #ebeced;
+$font-hover: #cbc5c1;
+$hover: #0099fe;
 
 .main{
 	height: 100vh;
@@ -17,8 +20,8 @@ $font-hover: #278efc;
 
 button{
   padding: 7px 15px;
-  color: $font-white;
-  background-color: $color-darkblue;
+  color: $gray;
+  background-color: transparent;
   cursor: pointer;
   border-radius: 5px;
   i {
@@ -26,25 +29,13 @@ button{
   }
 }
 
-button:hover{
-  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
-  background-color: $color-blue;  
-}
-
 .img-group{
-	position: fixed;
-  bottom: 15px;
-  left: 140px;
-  height: 150px;
-  width: 100%;
-  margin: 0px auto;
-  display: flex;
-  justify-content: flex-start;
-  overflow: scroll;
+  overflow: auto;
 	.img-container{
-		width: 90px;
+    float: left;
+		width: 45%;
     height: 135px;
-		margin-right: 10px;
+		margin: 5px;
     border-radius: 5px;
     overflow: hidden;
     box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
@@ -58,55 +49,82 @@ button:hover{
 	}
 }
 
-.buttons{
-  position: fixed;
-  bottom: 170px;
-  left: 140px;
-  button{
-    margin-right: 20px;
-  }
-}
+
 
 .canvas-main{
   display: flex;
   #sidebar {
     display: flex;
+    width: 62px;
     flex-direction: column;
-    height: 93vh;
+    height: 94vh;
     color: $font-white;
     background-color: $color-darkblue;
     li{
       display: flex;
       align-items: center;
       align-content: center;
+      flex-direction: column;
       justify-content: flex-start;
-      padding: 15px 10px;
+      padding: 10px 5px;
       cursor: pointer;
       text-align: center;
-      font-size: 14px;
+      font-size: 10px;
+      opacity: 0.8;
+      text-transform: uppercase;
       i{
-        margin-right: 10px;
+        font-size: 22px;
+        margin-bottom: 5px;
+        width: 100%;
+      }
+    }
+    li:last-of-type{
+      position: fixed;
+      padding: 10px 0;
+      bottom: 0;
+      width: 62px;
+      i{
+        font-size: 18px;
       }
     }
     li:hover{
-      color: $font-hover;
+      transition: all .8s;
+      opacity: 1;
+      color: white;
     }
     .selected{
-      background-color: white;
-      color: $color-darkblue;
+      background-color: $hover;
     }
   }
 
   .side-content-canvas{
     display: flex;
     flex: 1;
-    #side-content {
-      height: 75%;
-      margin: 15px;
-      border: solid 1px darkgrey;
-      overflow: auto;
+    .collapse{
+      width: 0;
+      transition: all .8s;
+    }
+    .tab-content {
+      height: 94vh;
+      // overflow: auto;
       box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
       border-radius: 5px;
+      width: 300px;
+      position: relative;
+      .arrow-collapse{
+        margin: 0;
+        cursor: pointer;
+        height: 20px;
+        width: 15px;
+        position: absolute;
+        top: 50%;
+        right: -15px;
+        background-color: $gray;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        color: $color-darkblue;
+      }
       #side-content-image{
         #button-wrapper{
           display: flex;
@@ -117,7 +135,7 @@ button:hover{
         }
       }
     }
-    #side-content>div{
+    .tab-content>div{
       height: 90%;
       width: 270px;
       // min-width: 210px;
@@ -129,6 +147,7 @@ button:hover{
       h2{
         font-size: 24px;
         font-weight: bold;
+        color: $gray;
         margin-bottom: 30px;
       }
       select, input{
@@ -264,26 +283,75 @@ button:hover{
       border-radius: 5px;
       box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
     }
-
-    .canvas-area{
+    .canvas-buttons{
+      height: 94vh;
       flex: 1;
-      height: 740px;
-      margin-top: 15px;
-      overflow: auto;
       display: flex;
       flex-direction: column;
-      .container{
-        width: 50%;
-        min-width: 650px;
-        margin: 0 auto;
-        height: 650px;
-        margin-bottom: 10px;
-        canvas{
-          overflow: hidden;
-          border-radius: 5px;
-          box-shadow: 0 8px 6px -6px rgba(0,0,0,0.2);
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      .buttons-decoration{
+          position: absolute;
+          left: 30%;
+          bottom: 75px;
+          border-top: 1px solid  #ddd;
+          z-index: -1;
+          width: 40%;
         }
-      } 
+
+        .buttons{
+          // position: fixed;
+          // bottom: 50px;
+          margin: 0 auto;
+          margin-bottom: 50px;
+          width: 70%;
+          // left: 55%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          button{
+            width: 22px;
+            height: 36px;
+            color: gray;
+            margin-right: 15px;
+            background-color: #e2e1e1;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 24px;
+            box-shadow: 2px 1px 4px 0 rgba(0,0,0,.2);
+          }
+          button:hover{
+            color: white;
+            background-color: $hover;
+            transition: all .8s;
+          }
+          .delete, .group, .ungroup{
+            font-size: 20px;
+            i{
+              margin-right: 0;
+            }
+          }
+        }
+      .canvas-area{
+        height: 740px;
+        margin: 25px auto;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        .container{
+          width: 50%;
+          min-width: 650px;
+          margin: 0 auto;
+          height: 650px;
+          margin-bottom: 10px;
+          canvas{
+            overflow: hidden;
+            border-radius: 5px;
+            box-shadow: 0 8px 6px -6px rgba(0,0,0,0.2);
+          }
+        } 
+      }
     }
   }
 }

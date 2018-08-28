@@ -54,6 +54,14 @@ class Share extends React.Component{
 			folderselect: false,
 		});
 		button.setAttribute('class', 'btn')
+		button.textContent = "";
+		const icon = document.createElement('i');
+		icon.classList.add('fab');
+		icon.classList.add('fa-dropbox');
+		const text = document.createElement('span');
+		text.textContent = 'Dropbox';
+		button.appendChild(icon);
+		button.appendChild(text);
 		document.querySelector('.share').appendChild(button);
 	}
 
@@ -176,15 +184,6 @@ class Share extends React.Component{
 		});
 	}
 
-	logout(){
-		localStorage.removeItem('access_token');
-		localStorage.removeItem('currentUser');
-		this.props.removeCurrentUser();
-		setTimeout(()=>{
-			this.props.history.push('/login');
-		}, 2000)
-	}
-
 	render(){
 		// const dropbox = JSON.parse(localStorage.getItem('dropbox'));
 		const {message, sendService, canvas} = this.props;
@@ -196,7 +195,9 @@ class Share extends React.Component{
 				{this.state.sending ? <div className='loading'>
 					<img src='static/assets/images/sending_email.gif' />
 				</div> : ""}
-				<button className="btn services" onMouseEnter={(e)=>this.openModal(e, 'modalList')} onMouseLeave={()=>this.closeModal('modalList')}>Send to Service
+				<button className="btn services" onMouseEnter={(e)=>this.openModal(e, 'modalList')} onMouseLeave={()=>this.closeModal('modalList')}>
+					<i className="fas fa-server"></i>
+					<span>Services</span>
 					<div className={this.state.modalList}>
 						<div className='service-list'>
 							<ul>
@@ -210,10 +211,17 @@ class Share extends React.Component{
 					<Service sendService={sendService} canvas={canvas}/>
 	 	  		<div onClick={()=>this.closeModal('servicenow')} className="modal-screen"></div>
 				</div>
-				<button className="btn" onClick={(e)=>this.openModal(e, 'modalShare')}>Share</button>
-				<button className="btn" onClick={(e)=>this.logout()}>Log Out</button>
+				<button className="btn" onClick={(e)=>this.openModal(e, 'modalShare')}>
+					<i className="far fa-share-square"></i>
+					<span>Share</span>
+				</button>
+				<button className='btn'>
+					<i className="fas fa-download"></i>
+					<span>Download</span>
+				</button>
+
 				{this.state.dropbox && Object.keys(this.state.dropbox) ? 
-				<button className="btn" onClick={()=>this.clearDropbox()}>Clear Dropbox</button>
+				<button className="btn" onClick={()=>this.clearDropbox()}><i className="far fa-trash-alt"></i>Dropbox</button>
 					: ""}
 				<div className={this.state.modalShare}>
 					<div className='share-canvas'>

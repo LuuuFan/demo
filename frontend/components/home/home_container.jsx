@@ -24,6 +24,7 @@ const mapDispatchToProps = (dispatch) => ({
 	clearMessage: () => dispatch(clearMessage()),
 	sendService: (data, token) => dispatch(sendService(data, token)),
 	receiveSelectedImg: (img) => dispatch(receiveSelectedImg(img)),
+	removeCurrentUser: () => dispatch(removeCurrentUser()),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
