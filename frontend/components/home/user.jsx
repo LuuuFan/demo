@@ -3,7 +3,13 @@ import React from 'react';
 class User extends React.Component {
 	constructor(){
 		super();
-		this.state = {};
+		this.state = {
+			toggleDropdown: false,
+		};
+	}
+
+	toggleDropdown(){
+		this.setState({toggleDropdown: !this.state.toggleDropdown});
 	}
 
 	logout(){
@@ -17,8 +23,20 @@ class User extends React.Component {
 
 	render(){
 		return(
-			<div className='user'>
+			<div className='user' onClick={()=>this.toggleDropdown()}>
 				<i className="far fa-user"></i>
+				<div className={`user-dropdown ${this.state.toggleDropdown ? 'is-open' : 'modal'}`}>
+					<div className='user-info'>
+						<div className='avatar'></div>
+						<div></div>
+					</div>
+					<ul>
+						<li><i className="far fa-user"></i>Profile</li>
+						<li><i className="fas fa-cog"></i>Account settings</li>
+						<li><i className="fas fa-sign-out-alt" onClick={()=>this.logout()}></i>Logout</li>
+					</ul>
+					<div></div>
+				</div>
 				{/*<button className="btn" onClick={(e)=>this.logout()}>Log Out</button>*/}
 			</div>
 		);

@@ -10,6 +10,7 @@ $hover: #0099fe;
 .navbar{
   height: 6vh;
   display: flex;
+  justify-content: space-between;
   color: $gray;
   background-color: white;
   // border-bottom: 5px solid $color-blue;
@@ -23,8 +24,25 @@ $hover: #0099fe;
     text-align: center;
     margin: 5px 10px;
     cursor: pointer;
+    position: relative;
     i{
       margin: 0;
+    }
+    .user-dropdown{
+      position: absolute;
+      z-index: 10;
+      padding: 10px;
+      left: -100%;
+      top: 0;
+      background-color: white;
+      box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+      color: $gray;
+      ul{
+        li{
+          display: flex;
+          flex-direction: row;
+        }
+      }
     }
   }
   .user:hover{
@@ -36,6 +54,10 @@ $hover: #0099fe;
     display: flex;
     font-size: 24px;
     font-weight: bold;
+    h2{
+      color: $color-darkblue;
+      text-shadow: 1px 1px rgba(0,0,0,0.2);
+    }
     img{
       height: 30px;
       width: auto;
@@ -43,7 +65,6 @@ $hover: #0099fe;
     }
   }
   .header-buttons{
-    flex:1;
     .share{
       display: flex;
       justify-content: flex-end;
@@ -79,6 +100,7 @@ $hover: #0099fe;
         height: 100%;
         align-items: center;
         font-size: 12px;
+        text-shadow: none;
         i{
           font-size: 20px;
           margin: 3px;
@@ -194,8 +216,6 @@ $hover: #0099fe;
 			    }
 			  }
 			}
-
-
     }
   }
  

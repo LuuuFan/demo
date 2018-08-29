@@ -77,6 +77,7 @@ input[type=submit] {
 .navbar {
   height: 6vh;
   display: flex;
+  justify-content: space-between;
   color: #cbc5c1;
   background-color: white;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
@@ -90,9 +91,24 @@ input[type=submit] {
   text-align: center;
   margin: 5px 10px;
   cursor: pointer;
+  position: relative;
 }
 .navbar .user i {
   margin: 0;
+}
+.navbar .user .user-dropdown {
+  position: absolute;
+  z-index: 10;
+  padding: 10px;
+  left: -100%;
+  top: 0;
+  background-color: white;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+  color: #cbc5c1;
+}
+.navbar .user .user-dropdown ul li {
+  display: flex;
+  flex-direction: row;
 }
 .navbar .user:hover {
   border: 2px solid #0099fe;
@@ -104,13 +120,14 @@ input[type=submit] {
   font-size: 24px;
   font-weight: bold;
 }
+.navbar a h2 {
+  color: #4c586f;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.2);
+}
 .navbar a img {
   height: 30px;
   width: auto;
   margin: 0 15px;
-}
-.navbar .header-buttons {
-  flex: 1;
 }
 .navbar .header-buttons .share {
   display: flex;
@@ -148,6 +165,7 @@ input[type=submit] {
   height: 100%;
   align-items: center;
   font-size: 12px;
+  text-shadow: none;
 }
 .navbar .header-buttons .share button i, .navbar .header-buttons .share a.btn i, .navbar .header-buttons .share a.dropbox-dropin-btn i {
   font-size: 20px;

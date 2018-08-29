@@ -34038,7 +34038,11 @@ var Header = function (_React$Component) {
 					'a',
 					{ href: '/' },
 					_react2.default.createElement('img', { src: 'static/assets/images/bluelogo.png' }),
-					'Expirements'
+					_react2.default.createElement(
+						'h2',
+						null,
+						'Expirements'
+					)
 				),
 				_react2.default.createElement(
 					'div',
@@ -35284,11 +35288,18 @@ var User = function (_React$Component) {
 
 		var _this = _possibleConstructorReturn(this, (User.__proto__ || Object.getPrototypeOf(User)).call(this));
 
-		_this.state = {};
+		_this.state = {
+			toggleDropdown: false
+		};
 		return _this;
 	}
 
 	_createClass(User, [{
+		key: 'toggleDropdown',
+		value: function toggleDropdown() {
+			this.setState({ toggleDropdown: !this.state.toggleDropdown });
+		}
+	}, {
 		key: 'logout',
 		value: function logout() {
 			var _this2 = this;
@@ -35303,10 +35314,49 @@ var User = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
+			var _this3 = this;
+
 			return _react2.default.createElement(
 				'div',
-				{ className: 'user' },
-				_react2.default.createElement('i', { className: 'far fa-user' })
+				{ className: 'user', onClick: function onClick() {
+						return _this3.toggleDropdown();
+					} },
+				_react2.default.createElement('i', { className: 'far fa-user' }),
+				_react2.default.createElement(
+					'div',
+					{ className: 'user-dropdown ' + (this.state.toggleDropdown ? 'is-open' : 'modal') },
+					_react2.default.createElement(
+						'div',
+						{ className: 'user-info' },
+						_react2.default.createElement('div', { className: 'avatar' }),
+						_react2.default.createElement('div', null)
+					),
+					_react2.default.createElement(
+						'ul',
+						null,
+						_react2.default.createElement(
+							'li',
+							null,
+							_react2.default.createElement('i', { className: 'far fa-user' }),
+							'Profile'
+						),
+						_react2.default.createElement(
+							'li',
+							null,
+							_react2.default.createElement('i', { className: 'fas fa-cog' }),
+							'Account settings'
+						),
+						_react2.default.createElement(
+							'li',
+							null,
+							_react2.default.createElement('i', { className: 'fas fa-sign-out-alt', onClick: function onClick() {
+									return _this3.logout();
+								} }),
+							'Logout'
+						)
+					),
+					_react2.default.createElement('div', null)
+				)
 			);
 		}
 	}]);
