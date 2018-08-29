@@ -5,6 +5,8 @@ import * as canvasUtil from '../../util/canvas';
 import ImageGroup from './image_group';
 import ChatContainer from '../chat/chat_container';
 
+const colorOptions = ["#000000", "#ffc0cb", "#ffffff", "#008080", "#ffe4e1", "#ff0000", "#ffd700", "#00ffff", "#40e0d0", "#ff7373", "#e6e6fa", "#d3ffce", "#0000ff", "#ffa500", "#f0f8ff", "#b0e0e6", "#7fffd4", "#c6e2ff", "#faebd7", "#800080", "#cccccc", "#eeeeee", "#ffb6c1", "#fa8072", "#800000", "#00ff00", "#333333", "#003366", "#ffff00", "#20b2aa", "#c0c0c0", "#ffc3a0", "#f08080", "#fff68f", "#f6546a", "#468499", "#66cdaa", "#ff6666", "#666666", "#c39797", "#00ced1", "#ffdab9", "#ff00ff", "#660066", "#008000", "#088da5", "#f5f5f5", "#c0d6e4", "#8b0000", "#0e2f44", "#ff7f50", "#afeeee", "#808080", "#990000", "#dddddd", "#b4eeb4", "#ffff66", "#daa520", "#cbbeb5", "#00ff7f", "#f5f5dc", "#8a2be2", "#81d8d0", "#ff4040", "#b6fcd5", "#66cccc", "#794044", "#3399ff", "#a0db8e", "#ccff00", "#cc0000", "#000080", "#3b5998", "#6897bb", "#0099cc", "#999999", "#191970", "#31698a", "#fef65b", "#ff4444", "#ff1493", "#f7f7f7", "#191919", "#6dc066"];
+
 class Canvas extends React.Component{
 	
 	constructor(){
@@ -127,10 +129,12 @@ class Canvas extends React.Component{
 	}
 
 	selectColor(e, type){
-		this.setState({[type]: e.target.options[e.target.options.selectedIndex].textContent});
 		if (type === 'backgroundColor') {
-			canvasUtil.changeBackground(e.target.options[e.target.options.selectedIndex].textContent, this.state.selectedCanvas);
+			this.setState({[type]: e.target.style.backgroundColor});
+			canvasUtil.changeBackground(e.target.style.backgroundColor, this.state.selectedCanvas);
 			return;
+		} else {
+			this.setState({[type]: e.target.options[e.target.options.selectedIndex].textContent});
 		}
 		const activeObject = this.state.selectedCanvas.getActiveObject();
 		if (activeObject) {
@@ -246,7 +250,7 @@ class Canvas extends React.Component{
 		    </ul>
     	<div className='side-content-canvas'>
 
-		    <div className={`tab-content ${this.state.sideContentToggle ? "" : 'collapse'}`} id="side-content" style={{'transform': `translate(${this.state.sideContentToggle ? '0px' : '-300px'})`}}>
+		    <div className={`tab-content ${this.state.sideContentToggle ? "" : 'collapse'}`} id="side-content" style={{'transform': `translate(${this.state.sideContentToggle ? '0px' : '-320px'})`}}>
 		    	<div className='arrow-collapse' onClick={()=>this.toggleSideContent()}>
 		    		{ this.state.sideContentToggle ? 
 		    			<i className="fas fa-angle-left"></i>
@@ -255,7 +259,7 @@ class Canvas extends React.Component{
 		    	</div>
 		    	{this.state.active === 'Shapes' ? 
 		        <div id="shapes" role="tabpanel" aria-labelledby="shapes-button">
-							<h2>Shapes</h2>
+		        	<h2> </h2>
 							<ol id="shapes-list">
 								<li className={`shapes-item ${this.state.selectedShape === 'circle' ? 'ui-selected' : ''}`} id="circle" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 								  <img src="static/assets/images/circle.png" />
@@ -312,7 +316,7 @@ class Canvas extends React.Component{
 		        : ""}
 		    	{this.state.active === 'Dialog' ? 
 			    	<div id="dialog" role="tabpanel" aria-labelledby='dialog-button'>
-							<h2>Dialog</h2>
+							<h2> </h2>
 		        	<ol id="shapes-list">
 								<li className={`shapes-item ${this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''}`} id="dialog_1" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
 								  <img src="static/assets/images/dialog_1.png" />
@@ -332,7 +336,7 @@ class Canvas extends React.Component{
 		        : ""}
 		    	{this.state.active === 'Text' ? 
 		        <div id="text" role="tabpanel" aria-labelledby="text-button">
-							<h2>Text</h2>
+		        	<h2> </h2>
 							<div className="form-inline">
 								<label htmlFor="text-color">Color: </label>
 								<select className="form-control" id="text-color" onChange={(e)=>this.selectColor(e, 'textColor')}>
@@ -371,7 +375,10 @@ class Canvas extends React.Component{
 		        : ""}
 		    	{this.state.active === 'Bground' ? 
 		        <div id="background" role="tabpanel" aria-labelledby="background-button">
-							<h2>Background Color</h2>
+							<h2> </h2>
+							<ul class='group color-options'>
+								{colorOptions.map(color => <li style={{'backgroundColor': `${color}`}} onClick={(e)=>this.selectColor(e, 'backgroundColor')}></li>)}
+							</ul>
 							<div className="form-inline">
 								<label htmlFor="background-color">Color: </label>
 								<select className="form-control" id="background-color" onChange={(e)=>this.selectColor(e, 'backgroundColor')}>
@@ -398,7 +405,6 @@ class Canvas extends React.Component{
 		        : ""}
 		    	{this.state.active === 'Image' ? 
 		        <div id='side-content-image'>
-		        	<h2>Image</h2>
 		        	<ImageGroup receiveSelectedImg={receiveSelectedImg} imgs={imgs}/>
 		        	{this.state.activeObj && this.state.activeObj.type === 'image' && !this.state.croping ? 
 		        		<div id="button-wrapper">

@@ -33,7 +33,7 @@ button{
   overflow: auto;
 	.img-container{
     float: left;
-		width: 43%;
+		width: 45%;
     height: 150px;
 		margin: 5px;
     border-radius: 5px;
@@ -101,28 +101,39 @@ button{
   .side-content-canvas{
     display: flex;
     flex: 1;
-    .collapse{
-      // transform: translateX(-300);
-      // transition: transform .8s;
-    }
     .tab-content {
       height: 94vh;
       // overflow: auto;
       box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
       border-radius: 5px;
-      width: 300px;
-      // transform: translateX(0);
+      width: 320px;
+      z-index: 10;
       transition: transform .8s;
       position: relative;
+      .color-options{
+        padding: 20px;
+        li{
+          float: left;
+          height: 20px;
+          width: 20px;
+          border: 1px solid white;
+          cursor: pointer;
+        }
+        li:hover{
+          transform: scale(1.5);
+          transition: all .5s;
+        }
+      }
       .arrow-collapse{
         margin: 0;
+        padding: 0;
         cursor: pointer;
-        z-index: 15;
-        height: 20px;
-        width: 20px;
+        z-index: 100;
+        height: 25px;
+        width: 12px;
         position: absolute;
         top: 50%;
-        right: -15px;
+        right: -12px;
         background-color: $gray;
         text-align: center;
         display: flex;
@@ -143,9 +154,8 @@ button{
     }
     .tab-content>div{
       height: 100%;
-      width: 100%;
       // min-width: 210px;
-      margin: 15px;
+      padding: 15px;
       text-align: center;
       button{
         margin-top: 20px;
@@ -306,7 +316,6 @@ button{
           z-index: -1;
           width: 40%;
         }
-
         .buttons{
           // position: fixed;
           // bottom: 50px;
