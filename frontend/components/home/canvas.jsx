@@ -174,6 +174,7 @@ class Canvas extends React.Component{
 		return activeObj && (activeObj.type === 'circle' || 
 													activeObj.type === 'rect' || 
 													activeObj.type === 'polyline' ||
+													activeObj.type === 'polygon' ||
 													activeObj.type === 'line')
 	}
 
@@ -267,7 +268,7 @@ class Canvas extends React.Component{
 		    	{this.state.active === 'Shapes' ? 
 		        <div id="shapes" role="tabpanel" aria-labelledby="shapes-button">
 		        	<h2> </h2>
-							<ol id="shapes-list">
+							<ol id="shapes-list group">
 								<li className={`shapes-item ${this.state.selectedShape === 'circle' ? 'ui-selected' : ''}`} id="circle" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 								  <img src="static/assets/images/circle.png" />
 								</li>
@@ -279,6 +280,9 @@ class Canvas extends React.Component{
 								</li>
 								<li className={`shapes-item ${this.state.selectedShape === 'polyline' ? 'ui-selected' : ''}`} id="polyline" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 								  <img src="static/assets/images/arrow.png" />
+								</li>
+								<li className={`shapes-item ${this.state.selectedShape === 'star' ? 'ui-selected' : ''}`} id="star" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
+								  <img src="static/assets/images/star.png" />
 								</li>
 							</ol>
 							<div className="form-inline">
@@ -447,32 +451,30 @@ class Canvas extends React.Component{
 		        </div>
 		        : ""}
 		    </div>
-			    <div className='canvas-area'>
-			    	<div className='container container-0' onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
-						<canvas ref='0' id='0'></canvas>
-				    </div>
-				    {this.state.extraCanvas.map((id, idx) => 
-				    	<div key={idx} className={`container container-${id}`} onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
-				    		<canvas ref={id} id={id}></canvas>
-				    	</div>)}
-				    <div className='buttons'>
-				   		<div className='buttons-decoration'></div>
-				    	<button onClick={()=>this.addCanvas()}>&#43;</button>
-				    	<button onClick={()=>this.resetCanvas()}>&times;</button>
-				    	{this.state.activeObj ? 
-			    			<button className='delete' onClick={()=>canvasUtil.deleteItem(this.state.selectedCanvas)}><i className="far fa-trash-alt"></i></button>
-				    		: ""}
-			    		{this.state.activeObj &&  this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? 
-			    			<button className='group' onClick={()=>this.groupItems()}><i className="far fa-object-group"></i></button>
-			  			: ""}
-			  			{this.state.activeObj && this.state.activeObj.type === 'group' ? 
-			    			<button className='ungroup' onClick={()=>this.unGroupItems()}><i className="far fa-object-ungroup"></i></button>
-			  			: ""}
-				    </div>
-				  </div>
-
-				  
-
+		    <div className='canvas-area'>
+		    	<div className='container container-0' onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
+					<canvas ref='0' id='0'></canvas>
+			    </div>
+			    {this.state.extraCanvas.map((id, idx) => 
+			    	<div key={idx} className={`container container-${id}`} onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
+			    		<canvas ref={id} id={id}></canvas>
+			    	</div>)}
+			  </div>
+			    
+		    <div className='buttons'>
+		   		<div className='buttons-decoration'></div>
+		    	<button onClick={()=>this.addCanvas()}>&#43;</button>
+		    	<button onClick={()=>this.resetCanvas()}>&times;</button>
+		    	{this.state.activeObj ? 
+	    			<button className='delete' onClick={()=>canvasUtil.deleteItem(this.state.selectedCanvas)}><i className="far fa-trash-alt"></i></button>
+		    		: ""}
+	    		{this.state.activeObj &&  this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? 
+	    			<button className='group' onClick={()=>this.groupItems()}><i className="far fa-object-group"></i></button>
+	  			: ""}
+	  			{this.state.activeObj && this.state.activeObj.type === 'group' ? 
+	    			<button className='ungroup' onClick={()=>this.unGroupItems()}><i className="far fa-object-ungroup"></i></button>
+	  			: ""}
+		    </div>
 	   	</div> 
 		</div>
 		);

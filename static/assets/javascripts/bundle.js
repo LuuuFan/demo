@@ -8349,12 +8349,14 @@ var addShape = exports.addShape = function addShape(selectedShape, canvas) {
       // const arrow = new Arrow(canvas, color);
       addArrow(canvas, color, fill, opacity);
       break;
+    case "star":
+      addStar(canvas, color, fill, opacity);
     default:
       return false;
   }
 };
 
-var addArrow = exports.addArrow = function addArrow(canvas, color, fill, opacity) {
+var addArrow = function addArrow(canvas, color, fill, opacity) {
   var fromx = 10,
       fromy = 10,
       tox = 50,
@@ -8415,6 +8417,44 @@ var addArrow = exports.addArrow = function addArrow(canvas, color, fill, opacity
   canvas.renderAll();
   canvas.setActiveObject(pline);
   canvas.trigger('object:modified');
+};
+
+var addStar = function addStar(canvas, color, fill, opacity) {
+  var points = starPolygonPoints(5, 50, 25);
+  var star = new fabric.Polygon(points, {
+    stroke: color,
+    left: 100,
+    top: 100,
+    strokeWidth: 2,
+    storkeLineJoin: 'bevil',
+    fill: fill,
+    opacity: opacity
+  }, false);
+  canvas.add(star);
+  canvas.renderAll();
+  canvas.setActiveObject(star);
+};
+
+var starPolygonPoints = function starPolygonPoints(spikeCount, outerRadius, innerRadius) {
+  var rot = Math.PI / 2 * 3;
+  var cx = outerRadius;
+  var cy = outerRadius;
+  var sweep = Math.PI / spikeCount;
+  var points = [];
+  var angle = 0;
+
+  for (var i = 0; i < spikeCount; i++) {
+    var x = cx + Math.cos(angle) * outerRadius;
+    var y = cy + Math.sin(angle) * outerRadius;
+    points.push({ x: x, y: y });
+    angle += sweep;
+
+    x = cx + Math.cos(angle) * innerRadius;
+    y = cy + Math.sin(angle) * innerRadius;
+    points.push({ x: x, y: y });
+    angle += sweep;
+  }
+  return points;
 };
 
 var addText = exports.addText = function addText(canvas) {
@@ -35514,7 +35554,7 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'isShape',
 		value: function isShape(activeObj) {
-			return activeObj && (activeObj.type === 'circle' || activeObj.type === 'rect' || activeObj.type === 'polyline' || activeObj.type === 'line');
+			return activeObj && (activeObj.type === 'circle' || activeObj.type === 'rect' || activeObj.type === 'polyline' || activeObj.type === 'polygon' || activeObj.type === 'line');
 		}
 	}, {
 		key: 'groupItems',
@@ -35684,7 +35724,7 @@ var Canvas = function (_React$Component) {
 							),
 							_react2.default.createElement(
 								'ol',
-								{ id: 'shapes-list' },
+								{ id: 'shapes-list group' },
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedShape === 'circle' ? 'ui-selected' : ''), id: 'circle', onClick: function onClick(e) {
@@ -35712,6 +35752,13 @@ var Canvas = function (_React$Component) {
 											return _this5.changeShape(e, 'selectedShape');
 										} },
 									_react2.default.createElement('img', { src: 'static/assets/images/arrow.png' })
+								),
+								_react2.default.createElement(
+									'li',
+									{ className: 'shapes-item ' + (this.state.selectedShape === 'star' ? 'ui-selected' : ''), id: 'star', onClick: function onClick(e) {
+											return _this5.changeShape(e, 'selectedShape');
+										} },
+									_react2.default.createElement('img', { src: 'static/assets/images/star.png' })
 								)
 							),
 							_react2.default.createElement(
@@ -36131,47 +36178,47 @@ var Canvas = function (_React$Component) {
 									} },
 								_react2.default.createElement('canvas', { ref: id, id: id })
 							);
-						}),
+						})
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: 'buttons' },
+						_react2.default.createElement('div', { className: 'buttons-decoration' }),
 						_react2.default.createElement(
-							'div',
-							{ className: 'buttons' },
-							_react2.default.createElement('div', { className: 'buttons-decoration' }),
-							_react2.default.createElement(
-								'button',
-								{ onClick: function onClick() {
-										return _this5.addCanvas();
-									} },
-								'+'
-							),
-							_react2.default.createElement(
-								'button',
-								{ onClick: function onClick() {
-										return _this5.resetCanvas();
-									} },
-								'\xD7'
-							),
-							this.state.activeObj ? _react2.default.createElement(
-								'button',
-								{ className: 'delete', onClick: function onClick() {
-										return canvasUtil.deleteItem(_this5.state.selectedCanvas);
-									} },
-								_react2.default.createElement('i', { className: 'far fa-trash-alt' })
-							) : "",
-							this.state.activeObj && this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? _react2.default.createElement(
-								'button',
-								{ className: 'group', onClick: function onClick() {
-										return _this5.groupItems();
-									} },
-								_react2.default.createElement('i', { className: 'far fa-object-group' })
-							) : "",
-							this.state.activeObj && this.state.activeObj.type === 'group' ? _react2.default.createElement(
-								'button',
-								{ className: 'ungroup', onClick: function onClick() {
-										return _this5.unGroupItems();
-									} },
-								_react2.default.createElement('i', { className: 'far fa-object-ungroup' })
-							) : ""
-						)
+							'button',
+							{ onClick: function onClick() {
+									return _this5.addCanvas();
+								} },
+							'+'
+						),
+						_react2.default.createElement(
+							'button',
+							{ onClick: function onClick() {
+									return _this5.resetCanvas();
+								} },
+							'\xD7'
+						),
+						this.state.activeObj ? _react2.default.createElement(
+							'button',
+							{ className: 'delete', onClick: function onClick() {
+									return canvasUtil.deleteItem(_this5.state.selectedCanvas);
+								} },
+							_react2.default.createElement('i', { className: 'far fa-trash-alt' })
+						) : "",
+						this.state.activeObj && this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? _react2.default.createElement(
+							'button',
+							{ className: 'group', onClick: function onClick() {
+									return _this5.groupItems();
+								} },
+							_react2.default.createElement('i', { className: 'far fa-object-group' })
+						) : "",
+						this.state.activeObj && this.state.activeObj.type === 'group' ? _react2.default.createElement(
+							'button',
+							{ className: 'ungroup', onClick: function onClick() {
+									return _this5.unGroupItems();
+								} },
+							_react2.default.createElement('i', { className: 'far fa-object-ungroup' })
+						) : ""
 					)
 				)
 			);

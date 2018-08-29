@@ -51,12 +51,14 @@ export const addShape = (selectedShape, canvas) => {
       // const arrow = new Arrow(canvas, color);
       addArrow(canvas, color, fill, opacity);
       break;
+    case "star":
+      addStar(canvas, color, fill, opacity);
     default:
       return false;
   }
 };
 
-export const addArrow = (canvas, color, fill, opacity) => {
+const addArrow = (canvas, color, fill, opacity) => {
   let fromx = 10,
     fromy = 10,
     tox = 50,
@@ -126,7 +128,45 @@ export const addArrow = (canvas, color, fill, opacity) => {
   canvas.renderAll();
   canvas.setActiveObject(pline);
   canvas.trigger('object:modified');
-}
+};
+
+const addStar = (canvas, color, fill, opacity) => {
+  const points = starPolygonPoints(5,50,25);
+  const star = new fabric.Polygon(points, {
+    stroke: color,
+    left: 100,
+    top: 100,
+    strokeWidth: 2,
+    storkeLineJoin: 'bevil',
+    fill: fill,
+    opacity: opacity,
+  }, false);
+  canvas.add(star);
+  canvas.renderAll();
+  canvas.setActiveObject(star);
+};
+
+const starPolygonPoints = (spikeCount, outerRadius, innerRadius) => {
+  let rot = Math.PI / 2 * 3;
+  let cx = outerRadius;
+  let cy = outerRadius;
+  let sweep = Math.PI / spikeCount;
+  let points = [];
+  let angle = 0;
+
+  for (let i = 0; i < spikeCount; i++) {
+    let x = cx + Math.cos(angle) * outerRadius;
+    let y = cy + Math.sin(angle) * outerRadius;
+    points.push({x: x, y: y});
+    angle += sweep;
+
+    x = cx + Math.cos(angle) * innerRadius;
+    y = cy + Math.sin(angle) * innerRadius;
+    points.push({x: x, y: y});
+    angle += sweep
+  }
+  return (points);
+};
 
 export const addText = (canvas) => {
   let style = $(`#text-style`).val();
