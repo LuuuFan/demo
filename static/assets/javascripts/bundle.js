@@ -35539,7 +35539,7 @@ var Canvas = function (_React$Component) {
 					{ className: 'side-content-canvas' },
 					_react2.default.createElement(
 						'div',
-						{ className: 'tab-content ' + (this.state.sideContentToggle ? "" : 'collapse'), id: 'side-content' },
+						{ className: 'tab-content ' + (this.state.sideContentToggle ? "" : 'collapse'), id: 'side-content', style: { 'transform': 'translate(' + (this.state.sideContentToggle ? '0px' : '-300px') + ')' } },
 						_react2.default.createElement(
 							'div',
 							{ className: 'arrow-collapse', onClick: function onClick() {

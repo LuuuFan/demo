@@ -246,7 +246,7 @@ class Canvas extends React.Component{
 		    </ul>
     	<div className='side-content-canvas'>
 
-		    <div className={`tab-content ${this.state.sideContentToggle ? "" : 'collapse'}`} id="side-content">
+		    <div className={`tab-content ${this.state.sideContentToggle ? "" : 'collapse'}`} id="side-content" style={{'transform': `translate(${this.state.sideContentToggle ? '0px' : '-300px'})`}}>
 		    	<div className='arrow-collapse' onClick={()=>this.toggleSideContent()}>
 		    		{ this.state.sideContentToggle ? 
 		    			<i className="fas fa-angle-left"></i>
