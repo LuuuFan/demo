@@ -15,8 +15,8 @@ class Canvas extends React.Component{
 			active: 'Image',
 			textSize: '24',
 			canvas: {},
-			shapeColor: 'Black',
-			textColor: 'Black',
+			shapeColor: '#000000',
+			textColor: '#000000',
 			backgroundColor: 'lightgray',
 			selectedShape: 'circle',
 			selectedDialog: 'dialog_1',
@@ -134,12 +134,16 @@ class Canvas extends React.Component{
 			canvasUtil.changeBackground(e.target.style.backgroundColor, this.state.selectedCanvas);
 			return;
 		} else {
-			this.setState({[type]: e.target.options[e.target.options.selectedIndex].textContent});
+			this.setState({[type]: e.target.options[e.target.options.selectedIndex].value});
+			// this.setState({[type]: e.target.options[e.target.options.selectedIndex].textContent});
 		}
 		const activeObject = this.state.selectedCanvas.getActiveObject();
 		if (activeObject) {
-			if (this.state.selectedShape === activeObject.type || (type === 'textColor' && activeObject.type === 'i-text')) {
-				canvasUtil.changeColor(this.state.selectedCanvas, activeObject, e.target.options[e.target.options.selectedIndex].textContent);
+			if (this.state.selectedShape === activeObject.type || 
+					(type === 'textColor' && activeObject.type === 'i-text') ||
+					(this.state.selectedShape === 'star' && activeObject.type === 'polygon')
+				) {
+				canvasUtil.changeColor(this.state.selectedCanvas, activeObject, e.target.options[e.target.options.selectedIndex].value);
 			}
 		}
 	}
@@ -268,7 +272,7 @@ class Canvas extends React.Component{
 		    	{this.state.active === 'Shapes' ? 
 		        <div id="shapes" role="tabpanel" aria-labelledby="shapes-button">
 		        	<h2> </h2>
-							<ol id="shapes-list group">
+							<ol id="shapes-list" className='group'>
 								<li className={`shapes-item ${this.state.selectedShape === 'circle' ? 'ui-selected' : ''}`} id="circle" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 								  <img src="static/assets/images/circle.png" />
 								</li>
@@ -286,44 +290,47 @@ class Canvas extends React.Component{
 								</li>
 							</ol>
 							<div className="form-inline">
-							<label htmlFor="shape-color">Color</label>
-							<select className="form-control" id="shape-color" onChange={(e)=>this.selectColor(e, 'shapeColor')}>
-								<option value="black">Black</option>
-								<option value="red">Red</option>
-								<option value="orange">Orange</option>
-								<option value="yellow">Yellow</option>
-								<option value="green">Green</option>
-								<option value="blue">Blue</option>
-								<option value="brown">Brown</option>
-								<option value="purple">Purple</option>
-								<option value="white">White</option>
-								{/*
-									<option value="transparent">Transparent</option>
-								*/}
-							</select>
-							<div className="selected-color" style={{backgroundColor: `${this.state.shapeColor}`}}>
+								<label htmlFor="shape-color">Color</label>
+								<select className="form-control" id="shape-color" onChange={(e)=>this.selectColor(e, 'shapeColor')} style={{'backgroundColor': `${this.state.shapeColor}`}}>
+									{colorOptions.map((color, idx) => <option key={idx} style={{'backgroundColor':`${color}`}} value={color} ></option>)}
+									{/*
+										<option value="black">Black</option>
+										<option value="red">Red</option>
+										<option value="orange">Orange</option>
+										<option value="yellow">Yellow</option>
+										<option value="green">Green</option>
+										<option value="blue">Blue</option>
+										<option value="brown">Brown</option>
+										<option value="purple">Purple</option>
+										<option value="white">White</option>
+										<option value="transparent">Transparent</option>
+										<div className="selected-color" style={{backgroundColor: `${this.state.shapeColor}`}}>
+										</div>
+									*/}
+								</select>
 							</div>
-						</div>
-						<div className="form-inline" id="shape-fill">
-							<label>Fill</label>
-							<label className="container-checkbox">
-							  <input type="checkbox" checked={this.state.fillChecked} onChange={(e)=>this.checkBox(e)} />
-							  <span className="checkmark"></span>
-							</label>
-		        		</div>
-			        	<div className="form-inline">
-				            <label htmlFor="shape-opacity">Opacity: </label>
-				            <select className="form-control" id="shape-opacity" onChange={(e)=>this.changeOpacity(e)}>
-				              <option value="1">100%</option>
-				              <option value=".75">75%</option>
-				              <option value=".5">50%</option>
-				              <option value=".25">25%</option>
-				            </select>
-			          	</div>
-			        	<div id="button-wrapper">
-		            		<button type="button" id="addShape" onClick={()=>canvasUtil.addShape(this.state.selectedShape, this.state.selectedCanvas)}>Add Shape</button>
-			        	</div>
-		        </div>
+							<div className="form-inline" id="shape-fill">
+								<label>Fill</label>
+								<label className="container-checkbox">
+								  <input type="checkbox" checked={this.state.fillChecked} onChange={(e)=>this.checkBox(e)} />
+								  <span className="checkmark"></span>
+								</label>
+	        		</div>
+		        	<div className="form-inline">
+		            <label htmlFor="shape-opacity">Opacity: </label>
+		            <select className="form-control" id="shape-opacity" onChange={(e)=>this.changeOpacity(e)}>
+		              <option value="1">100%</option>
+		              <option value=".75">75%</option>
+		              <option value=".5">50%</option>
+		              <option value=".25">25%</option>
+		            </select>
+	          	</div>
+		        	<div id="button-wrapper">
+	            		<button type="button" id="addShape" onClick={()=>canvasUtil.addShape(this.state.selectedShape, this.state.selectedCanvas)}>
+	            			Add Shape
+	            		</button>
+		        	</div>
+	        	</div>
 		        : ""}
 		    	{this.state.active === 'Dialog' ? 
 			    	<div id="dialog" role="tabpanel" aria-labelledby='dialog-button'>
@@ -350,18 +357,21 @@ class Canvas extends React.Component{
 		        	<h2> </h2>
 							<div className="form-inline">
 								<label htmlFor="text-color">Color: </label>
-								<select className="form-control" id="text-color" onChange={(e)=>this.selectColor(e, 'textColor')}>
-								  <option value="black">Black</option>
-								  <option value="red">Red</option>
-								  <option value="orange">Orange</option>
-								  <option value="yellow">Yellow</option>
-								  <option value="green">Green</option>
-								  <option value="blue">Blue</option>
-								  <option value="brown">Brown</option>
-								  <option value="purple">Purple</option>
-								  <option value="white">White</option>
+								<select className="form-control" id="text-color" onChange={(e)=>this.selectColor(e, 'textColor')} style={{'backgroundColor': `${this.state.textColor}`}}>
+									{colorOptions.map((color, idx) => <option key={idx} style={{'backgroundColor':`${color}`}} value={color} ></option>)}
+									{/*
+									  <option value="black">Black</option>
+									  <option value="red">Red</option>
+									  <option value="orange">Orange</option>
+									  <option value="yellow">Yellow</option>
+									  <option value="green">Green</option>
+									  <option value="blue">Blue</option>
+									  <option value="brown">Brown</option>
+									  <option value="purple">Purple</option>
+									  <option value="white">White</option>
+										<div className="selected-color" style={{backgroundColor: `${this.state.textColor}`}}></div>
+									*/}
 								</select>
-								<div className="selected-color" style={{backgroundColor: `${this.state.textColor}`}}></div>
           		</div>
 							<div className="form-inline">
 								<label htmlFor="text-style">Style: </label>

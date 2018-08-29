@@ -257,7 +257,7 @@ export const changeBackground = (color, canvas) => {
 };  
 
 export const addDialog = (selectedDialog, canvas) => {
-  fabric.Image.fromURL(`app/assets/images/${selectedDialog}.png`, (img)=>{
+  fabric.Image.fromURL(`static/assets/images/${selectedDialog}.png`, (img)=>{
     const scale = 150 / img.height;
     const dialog = img.set({
     }).scale(scale);

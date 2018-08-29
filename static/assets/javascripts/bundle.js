@@ -8548,7 +8548,7 @@ var changeBackground = exports.changeBackground = function changeBackground(colo
 };
 
 var addDialog = exports.addDialog = function addDialog(selectedDialog, canvas) {
-  fabric.Image.fromURL('app/assets/images/' + selectedDialog + '.png', function (img) {
+  fabric.Image.fromURL('static/assets/images/' + selectedDialog + '.png', function (img) {
     var scale = 150 / img.height;
     var dialog = img.set({}).scale(scale);
 
@@ -35374,8 +35374,8 @@ var Canvas = function (_React$Component) {
 			active: 'Image',
 			textSize: '24',
 			canvas: {},
-			shapeColor: 'Black',
-			textColor: 'Black',
+			shapeColor: '#000000',
+			textColor: '#000000',
 			backgroundColor: 'lightgray',
 			selectedShape: 'circle',
 			selectedDialog: 'dialog_1',
@@ -35512,12 +35512,13 @@ var Canvas = function (_React$Component) {
 				canvasUtil.changeBackground(e.target.style.backgroundColor, this.state.selectedCanvas);
 				return;
 			} else {
-				this.setState(_defineProperty({}, type, e.target.options[e.target.options.selectedIndex].textContent));
+				this.setState(_defineProperty({}, type, e.target.options[e.target.options.selectedIndex].value));
+				// this.setState({[type]: e.target.options[e.target.options.selectedIndex].textContent});
 			}
 			var activeObject = this.state.selectedCanvas.getActiveObject();
 			if (activeObject) {
-				if (this.state.selectedShape === activeObject.type || type === 'textColor' && activeObject.type === 'i-text') {
-					canvasUtil.changeColor(this.state.selectedCanvas, activeObject, e.target.options[e.target.options.selectedIndex].textContent);
+				if (this.state.selectedShape === activeObject.type || type === 'textColor' && activeObject.type === 'i-text' || this.state.selectedShape === 'star' && activeObject.type === 'polygon') {
+					canvasUtil.changeColor(this.state.selectedCanvas, activeObject, e.target.options[e.target.options.selectedIndex].value);
 				}
 			}
 		}
@@ -35724,7 +35725,7 @@ var Canvas = function (_React$Component) {
 							),
 							_react2.default.createElement(
 								'ol',
-								{ id: 'shapes-list group' },
+								{ id: 'shapes-list', className: 'group' },
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedShape === 'circle' ? 'ui-selected' : ''), id: 'circle', onClick: function onClick(e) {
@@ -35773,54 +35774,11 @@ var Canvas = function (_React$Component) {
 									'select',
 									{ className: 'form-control', id: 'shape-color', onChange: function onChange(e) {
 											return _this5.selectColor(e, 'shapeColor');
-										} },
-									_react2.default.createElement(
-										'option',
-										{ value: 'black' },
-										'Black'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'red' },
-										'Red'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'orange' },
-										'Orange'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'yellow' },
-										'Yellow'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'green' },
-										'Green'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'blue' },
-										'Blue'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'brown' },
-										'Brown'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'purple' },
-										'Purple'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'white' },
-										'White'
-									)
-								),
-								_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.shapeColor } })
+										}, style: { 'backgroundColor': '' + this.state.shapeColor } },
+									colorOptions.map(function (color, idx) {
+										return _react2.default.createElement('option', { key: idx, style: { 'backgroundColor': '' + color }, value: color });
+									})
+								)
 							),
 							_react2.default.createElement(
 								'div',
@@ -35952,54 +35910,11 @@ var Canvas = function (_React$Component) {
 									'select',
 									{ className: 'form-control', id: 'text-color', onChange: function onChange(e) {
 											return _this5.selectColor(e, 'textColor');
-										} },
-									_react2.default.createElement(
-										'option',
-										{ value: 'black' },
-										'Black'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'red' },
-										'Red'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'orange' },
-										'Orange'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'yellow' },
-										'Yellow'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'green' },
-										'Green'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'blue' },
-										'Blue'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'brown' },
-										'Brown'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'purple' },
-										'Purple'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'white' },
-										'White'
-									)
-								),
-								_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.textColor } })
+										}, style: { 'backgroundColor': '' + this.state.textColor } },
+									colorOptions.map(function (color, idx) {
+										return _react2.default.createElement('option', { key: idx, style: { 'backgroundColor': '' + color }, value: color });
+									})
+								)
 							),
 							_react2.default.createElement(
 								'div',

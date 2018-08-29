@@ -756,20 +756,21 @@ button i {
 }
 .canvas-main .side-content-canvas .tab-content > div #shapes-list li {
   float: left;
-  width: 30%;
+  width: 85px;
+  height: 85px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.canvas-main .side-content-canvas .tab-content > div #shapes-list li img {
+  height: 60px;
+  width: 60px;
 }
 .canvas-main .side-content-canvas .tab-content > div #shapes-list li.ui-selected {
   border-radius: 5px;
   background-color: lightgray;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
-}
-.canvas-main .side-content-canvas .tab-content > div #shapes-list .shapes-item {
-  padding: 5px;
-}
-.canvas-main .side-content-canvas .tab-content > div #shapes-list .shapes-item img {
-  height: 50px;
-  width: 50px;
 }
 .canvas-main .side-content-canvas .tab-content > div .container-checkbox {
   display: block;
@@ -848,9 +849,13 @@ button i {
   margin-right: 10px;
 }
 .canvas-main .side-content-canvas .tab-content > div .form-inline input {
+  flex: 1;
   border: 1px solid lightgray;
   padding: 8px;
   border-radius: 5px;
+}
+.canvas-main .side-content-canvas .tab-content > div .form-inline select {
+  flex: 1;
 }
 .canvas-main .side-content-canvas .selected-color {
   height: 30px;
