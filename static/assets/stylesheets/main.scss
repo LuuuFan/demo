@@ -60,7 +60,7 @@ button{
     width: 62px;
     flex-direction: column;
     height: 94vh;
-    z-index: 15;
+    z-index: 2;
     color: $font-white;
     background-color: $color-darkblue;
     li{
@@ -109,7 +109,7 @@ button{
       box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
       border-radius: 5px;
       width: 320px;
-      z-index: 10;
+      // z-index: 10;
       transition: transform .8s;
       position: relative;
       .color-options{
@@ -132,7 +132,7 @@ button{
         height: 60px;
         padding: 10px 0;
         color: $color-darkblue;
-        z-index: 10;
+        z-index: 2;
         right: -13px;
         top: 50%;
         margin: -30px 0 0 0;
@@ -150,9 +150,6 @@ button{
           width: 13px;
           height: 40px;
           background-color: #ccc;
-          i{
-            z-index: 15;
-          }
         }
         .ac-inner:before{
           content: "";
@@ -422,7 +419,7 @@ button{
   background: rgba(0, 0, 0, 0.7);
 }
 
-.is_open{
+.is-open{
   display: block;
 }
 

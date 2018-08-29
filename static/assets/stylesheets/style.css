@@ -96,19 +96,19 @@ input[type=submit] {
 .navbar .user i {
   margin: 0;
 }
+.navbar .user .modal-screen {
+  background: rgba(0, 0, 0, 0);
+}
 .navbar .user .user-dropdown {
   position: absolute;
-  z-index: 10;
   width: 200px;
   left: -180px;
   top: 120%;
   background-color: white;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
   color: #cbc5c1;
+  z-index: 15;
   border-radius: 5px;
-}
-.navbar .user .user-dropdown .modal-screen {
-  background: rgba(0, 0, 0, 0);
 }
 .navbar .user .user-dropdown .user-info {
   padding: 10px 15px;
@@ -474,7 +474,6 @@ input[type=submit] {
   bottom: -260px;
   width: 250px;
   height: 300px;
-  border: 1px solid lightgray;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
@@ -655,7 +654,7 @@ button i {
   width: 62px;
   flex-direction: column;
   height: 94vh;
-  z-index: 15;
+  z-index: 2;
   color: #ebeced;
   background-color: #4c586f;
 }
@@ -703,7 +702,6 @@ button i {
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   width: 320px;
-  z-index: 10;
   transition: transform 0.8s;
   position: relative;
 }
@@ -727,7 +725,7 @@ button i {
   height: 60px;
   padding: 10px 0;
   color: #4c586f;
-  z-index: 10;
+  z-index: 2;
   right: -13px;
   top: 50%;
   margin: -30px 0 0 0;
@@ -746,9 +744,6 @@ button i {
   width: 13px;
   height: 40px;
   background-color: #ccc;
-}
-.canvas-main .side-content-canvas .tab-content .arrow-collapse .ac-inner i {
-  z-index: 15;
 }
 .canvas-main .side-content-canvas .tab-content .arrow-collapse .ac-inner:before {
   content: "";
@@ -995,7 +990,7 @@ button i {
   background: rgba(0, 0, 0, 0.7);
 }
 
-.is_open {
+.is-open {
   display: block;
 }
 

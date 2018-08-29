@@ -27,23 +27,26 @@ class User extends React.Component {
 		return(
 			<div className='user' onClick={()=>this.toggleDropdown()}>
 				<i className="far fa-user"></i>
-				<div className={`user-dropdown ${this.state.toggleDropdown ? 'is-open' : 'modal'}`}>
-					<div className='user-info'>
-						<div className='avatar'>
-							<i className="far fa-user"></i>
+				<div className={this.state.toggleDropdown ? 'is-open' : 'modal'}>
+					<div className='user-dropdown'>
+						<div className='user-info'>
+							<div className='avatar'>
+								<i className="far fa-user"></i>
+							</div>
+							<div className='username'>
+								{currentUser && currentUser.username ? currentUser.username : ''}
+							</div>
 						</div>
-						<div className='username'>
-							{currentUser && currentUser.username ? currentUser.username : ''}
-						</div>
+						<ul>
+							<li><i className="far fa-user"></i>Profile</li>
+							<li><i className="fas fa-cog"></i>Account settings</li>
+							<li onClick={()=>this.logout()}><i className="fas fa-sign-out-alt"></i>Logout</li>
+						</ul>
 					</div>
-					<ul>
-						<li><i className="far fa-user"></i>Profile</li>
-						<li><i className="fas fa-cog"></i>Account settings</li>
-						<li onClick={()=>this.logout()}><i className="fas fa-sign-out-alt"></i>Logout</li>
-					</ul>
       		<div onClick={()=>this.toggleDropdown()} className="modal-screen"></div>
 				</div>
-				{/*<button className="btn" onClick={(e)=>this.logout()}>Log Out</button>*/}
+				{/*
+					<button className="btn" onClick={(e)=>this.logout()}>Log Out</button>*/}
 			</div>
 		);
 	}

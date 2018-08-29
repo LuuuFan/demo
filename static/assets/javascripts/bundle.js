@@ -34286,28 +34286,41 @@ var Share = function (_React$Component) {
 			return imgDataArr;
 		}
 	}, {
+		key: 'makePDF',
+		value: function makePDF() {
+			var imgDataArr = this.extraPDF();
+			var pdf = new jsPDF('l', 'mm', [172, 172]);
+			imgDataArr.forEach(function (imgData, idx) {
+				pdf.addImage(imgData, 'JPEG', 0, 0);
+				if (idx !== imgDataArr.length - 1) {
+					pdf.addPage();
+				}
+			});
+			return pdf;
+		}
+	}, {
+		key: 'downloadPDF',
+		value: function downloadPDF() {
+			var pdf = this.makePDF();
+			// saving pdf to local
+			pdf.save('download.pdf');
+		}
+	}, {
 		key: 'sendFile',
 		value: function sendFile() {
 			var _this5 = this;
 
 			if (this.checkEmail()) {
-				var imgDataArr = this.extraPDF();
 				// const imgData = document.getElementById('0').toDataURL('image/jpeg', 1.0);
 				var selector = document.querySelector('.share-canvas select');
 				var type = selector.options[selector.selectedIndex].textContent;
 
 				if (type === 'PDF') {
 					this.setState({ sending: true, modalShare: 'modal' });
-					var pdf = new jsPDF('l', 'mm', [172, 172]);
-					imgDataArr.forEach(function (imgData, idx) {
-						pdf.addImage(imgData, 'JPEG', 0, 0);
-						if (idx !== imgDataArr.length - 1) {
-							pdf.addPage();
-						}
-					});
 					// pdf.setProperties({
 					//    title: "download",
 					// });
+					var pdf = this.makePDF();
 					var formData = {};
 					formData['recipient'] = this.state.email;
 					formData['file'] = pdf.output('datauri');
@@ -34321,9 +34334,6 @@ var Share = function (_React$Component) {
 					}).catch(function (err) {
 						console.log(err);
 					});
-
-					// saving pdf to local
-					// pdf.save('download.pdf');
 				} else {
 					var data = imgData.replace(/^data:image\/\w+;base64,/, "");
 					var buf = new Buffer(data, 'base64');
@@ -34433,7 +34443,9 @@ var Share = function (_React$Component) {
 				),
 				_react2.default.createElement(
 					'button',
-					{ className: 'btn' },
+					{ className: 'btn', onClick: function onClick() {
+							return _this6.downloadPDF();
+						} },
 					_react2.default.createElement('i', { className: 'fas fa-download' }),
 					_react2.default.createElement(
 						'span',
@@ -35322,43 +35334,47 @@ var User = function (_React$Component) {
 				_react2.default.createElement('i', { className: 'far fa-user' }),
 				_react2.default.createElement(
 					'div',
-					{ className: 'user-dropdown ' + (this.state.toggleDropdown ? 'is-open' : 'modal') },
+					{ className: this.state.toggleDropdown ? 'is-open' : 'modal' },
 					_react2.default.createElement(
 						'div',
-						{ className: 'user-info' },
+						{ className: 'user-dropdown' },
 						_react2.default.createElement(
 							'div',
-							{ className: 'avatar' },
-							_react2.default.createElement('i', { className: 'far fa-user' })
+							{ className: 'user-info' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'avatar' },
+								_react2.default.createElement('i', { className: 'far fa-user' })
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'username' },
+								currentUser && currentUser.username ? currentUser.username : ''
+							)
 						),
 						_react2.default.createElement(
-							'div',
-							{ className: 'username' },
-							currentUser && currentUser.username ? currentUser.username : ''
-						)
-					),
-					_react2.default.createElement(
-						'ul',
-						null,
-						_react2.default.createElement(
-							'li',
+							'ul',
 							null,
-							_react2.default.createElement('i', { className: 'far fa-user' }),
-							'Profile'
-						),
-						_react2.default.createElement(
-							'li',
-							null,
-							_react2.default.createElement('i', { className: 'fas fa-cog' }),
-							'Account settings'
-						),
-						_react2.default.createElement(
-							'li',
-							{ onClick: function onClick() {
-									return _this3.logout();
-								} },
-							_react2.default.createElement('i', { className: 'fas fa-sign-out-alt' }),
-							'Logout'
+							_react2.default.createElement(
+								'li',
+								null,
+								_react2.default.createElement('i', { className: 'far fa-user' }),
+								'Profile'
+							),
+							_react2.default.createElement(
+								'li',
+								null,
+								_react2.default.createElement('i', { className: 'fas fa-cog' }),
+								'Account settings'
+							),
+							_react2.default.createElement(
+								'li',
+								{ onClick: function onClick() {
+										return _this3.logout();
+									} },
+								_react2.default.createElement('i', { className: 'fas fa-sign-out-alt' }),
+								'Logout'
+							)
 						)
 					),
 					_react2.default.createElement('div', { onClick: function onClick() {
@@ -35516,10 +35532,11 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'scroll',
 		value: function scroll(id) {
+			var top = $('.container-' + id).offset().top + 650;
 			$('.canvas-area').animate({
-				// scrollTop: $(`.container-${id}`).offset().top
+				// scrollTop: `${$(`.container-${id}`).offset().bottom} - 650`
 				scrollTop: 9999
-			}, 1200);
+			}, 2000);
 		}
 	}, {
 		key: 'doubleClick',

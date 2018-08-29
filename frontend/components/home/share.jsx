@@ -123,25 +123,36 @@ class Share extends React.Component{
 		return imgDataArr
 	}
 
+	makePDF(){
+		const imgDataArr = this.extraPDF();
+		const pdf = new jsPDF('l', 'mm', [172, 172]);
+		imgDataArr.forEach((imgData, idx) => {
+			pdf.addImage(imgData, 'JPEG', 0, 0);
+			if (idx !== imgDataArr.length - 1) {
+				pdf.addPage();
+			}
+		});
+		return pdf;
+	}
+
+	downloadPDF(){
+		const pdf = this.makePDF();
+		// saving pdf to local
+		pdf.save('download.pdf');
+	}
+
 	sendFile(){
 		if (this.checkEmail()) {
-			const imgDataArr = this.extraPDF();
 			// const imgData = document.getElementById('0').toDataURL('image/jpeg', 1.0);
 			const selector = document.querySelector('.share-canvas select');
 			const type = selector.options[selector.selectedIndex].textContent;
 
 			if (type === 'PDF') {
 				this.setState({sending: true, modalShare: 'modal'});
-				const pdf = new jsPDF('l', 'mm', [172, 172]);
-				imgDataArr.forEach((imgData, idx) => {
-					pdf.addImage(imgData, 'JPEG', 0, 0);
-					if (idx !== imgDataArr.length - 1) {
-						pdf.addPage();
-					}
-				});
 				// pdf.setProperties({
-			 //    title: "download",
+			 	//    title: "download",
 				// });
+				const pdf = this.makePDF();
 				const formData = {};
 				formData['recipient'] = this.state.email;
 				formData['file'] = pdf.output('datauri');
@@ -155,9 +166,6 @@ class Share extends React.Component{
 				}).catch(err => {
 					console.log(err);
 				});
-
-				// saving pdf to local
-				// pdf.save('download.pdf');
 			} else {
 				const data = imgData.replace(/^data:image\/\w+;base64,/, "");
 				const buf = new Buffer(data, 'base64');
@@ -215,7 +223,7 @@ class Share extends React.Component{
 					<i className="far fa-share-square"></i>
 					<span>Share</span>
 				</button>
-				<button className='btn'>
+				<button className='btn' onClick={()=>this.downloadPDF()}>
 					<i className="fas fa-download"></i>
 					<span>Download</span>
 				</button>
