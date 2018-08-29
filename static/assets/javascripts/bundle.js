@@ -4561,11 +4561,19 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 var RECEIVE_CANVAS = exports.RECEIVE_CANVAS = 'RECEIVE_CANVAS';
+var REMOVE_CANVAS = exports.REMOVE_CANVAS = 'REMOVE_CANVAS';
 
 var receiveCanvas = exports.receiveCanvas = function receiveCanvas(canvas) {
 	return {
 		type: RECEIVE_CANVAS,
 		canvas: canvas
+	};
+};
+
+var removeCanvas = exports.removeCanvas = function removeCanvas(id) {
+	return {
+		type: REMOVE_CANVAS,
+		id: id
 	};
 };
 
@@ -30842,6 +30850,10 @@ var canvasReducer = function canvasReducer() {
 	switch (action.type) {
 		case _canvas.RECEIVE_CANVAS:
 			return action.canvas;
+		case _canvas.REMOVE_CANVAS:
+			newState = Object.assign({}, state);
+			delete newState[action.id];
+			return newState;
 		default:
 			return state;
 	}
@@ -33622,6 +33634,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		},
 		removeCurrentUser: function removeCurrentUser() {
 			return dispatch((0, _session.removeCurrentUser)());
+		},
+		removeCanvas: function removeCanvas(id) {
+			return dispatch((0, _canvas.removeCanvas)(id));
 		}
 	};
 };
@@ -33729,7 +33744,8 @@ var Home = function (_React$Component) {
 			    receiveSelectedImg = _props.receiveSelectedImg,
 			    selectedImg = _props.selectedImg,
 			    removeCurrentUser = _props.removeCurrentUser,
-			    currentUser = _props.currentUser;
+			    currentUser = _props.currentUser,
+			    removeCanvas = _props.removeCanvas;
 
 			return _react2.default.createElement(
 				'div',
@@ -33749,7 +33765,8 @@ var Home = function (_React$Component) {
 					img: selectedImg,
 					message: message,
 					imgs: imgs,
-					receiveSelectedImg: receiveSelectedImg }),
+					receiveSelectedImg: receiveSelectedImg,
+					removeCanvas: removeCanvas }),
 				_react2.default.createElement(_chat_container2.default, null)
 			);
 		}
@@ -35475,8 +35492,8 @@ var Canvas = function (_React$Component) {
 			var _this2 = this;
 
 			this.initializeCanvas(this.state.canvasIdList[0]);
-
 			// delete item on canvas
+
 			document.addEventListener('keydown', function (e) {
 				if (e.key === 'Backspace' || e.key === 'Delete') {
 					_this2.setState({ activeObj: null });
@@ -35497,7 +35514,7 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate(prevProps, prevState) {
-			if (prevState.canvasIdList.length !== this.state.canvasIdList.length) {
+			if (prevState.canvasIdList.length < this.state.canvasIdList.length) {
 				var id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
 				if (id) {
 					this.initializeCanvas('' + id);
@@ -35709,6 +35726,26 @@ var Canvas = function (_React$Component) {
 		value: function pickColor(e) {
 			this.setState({ backgroundColor: e.target.value });
 			canvasUtil.changeBackground(e.target.value, this.state.selectedCanvas);
+		}
+
+		// moveCanvasUp
+		// moveCanvasDown
+
+	}, {
+		key: 'copyCanvas',
+		value: function copyCanvas(e, id) {}
+	}, {
+		key: 'deleteCanvas',
+		value: function deleteCanvas(e, id) {
+			if (this.state.canvasIdList.length > 1) {
+				var canvas = Object.assign({}, this.state.canvas);
+				delete canvas[id];
+				var idx = this.state.canvasIdList.indexOf(id);
+				var canvasIdList = Array.from(this.state.canvasIdList);
+				canvasIdList.splice(idx, 1);
+				this.setState({ canvas: canvas, canvasIdList: canvasIdList });
+				this.props.removeCanvas(id);
+			}
 		}
 	}, {
 		key: 'render',
@@ -36170,7 +36207,7 @@ var Canvas = function (_React$Component) {
 						this.state.canvasIdList.map(function (id, idx) {
 							return _react2.default.createElement(
 								'div',
-								{ key: idx, className: 'container container-' + id, onDoubleClick: function onDoubleClick() {
+								{ key: id, className: 'container container-' + id, onDoubleClick: function onDoubleClick() {
 										return _this5.doubleClick();
 									}, onClick: function onClick(e) {
 										return _this5.singleClick(e);
@@ -36179,7 +36216,23 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'div',
 									{ className: 'container-sidebar' },
-									idx + 1
+									_react2.default.createElement('i', { className: 'fas fa-arrow-up', onClick: function onClick(e) {
+											return _this5.moveCanvasUp(e, id);
+										}, style: { 'color': '' + (!idx ? '#cbc5c1' : '') } }),
+									_react2.default.createElement(
+										'span',
+										null,
+										idx + 1
+									),
+									_react2.default.createElement('i', { className: 'fas fa-arrow-down', onClick: function onClick(e) {
+											return _this5.moveCanvasDown(e, id);
+										} }),
+									_react2.default.createElement('i', { className: 'far fa-copy', onClick: function onClick(e) {
+											return _this5.copyCanvas(e, id);
+										} }),
+									_react2.default.createElement('i', { className: 'fas fa-trash', onClick: function onClick(e) {
+											return _this5.deleteCanvas(e, id);
+										} })
 								)
 							);
 						})

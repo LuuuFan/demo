@@ -36,7 +36,9 @@ class Home extends React.Component {
 	}
 
 	render(){
-		const {imgs, receiveCanvas, receiveImg, sendEmail, message, clearMessage, sendService, canvas, receiveSelectedImg, selectedImg, removeCurrentUser, currentUser} = this.props;
+		const {imgs, receiveCanvas, receiveImg, sendEmail, message, 
+				clearMessage, sendService, canvas, receiveSelectedImg, 
+				selectedImg, removeCurrentUser, currentUser, removeCanvas} = this.props;
 		return(
 			<div>
 				<Header 
@@ -54,7 +56,8 @@ class Home extends React.Component {
 					img={selectedImg} 
 					message={message}
 					imgs={imgs}
-					receiveSelectedImg={receiveSelectedImg}/>
+					receiveSelectedImg={receiveSelectedImg}
+					removeCanvas={removeCanvas}/>
 				{/*
 				<ImageGroup imgs={imgs} receiveSelectedImg={receiveSelectedImg}/>
 				<div className='img-group group'>

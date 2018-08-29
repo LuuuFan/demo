@@ -37,8 +37,8 @@ class Canvas extends React.Component{
 
 	componentDidMount(){
 		this.initializeCanvas(this.state.canvasIdList[0]);
-
 		// delete item on canvas
+
 		document.addEventListener('keydown', (e) => {
 			if (e.key === 'Backspace' || e.key === 'Delete') {
 				this.setState({activeObj: null});
@@ -57,7 +57,7 @@ class Canvas extends React.Component{
 	}
 
 	componentDidUpdate(prevProps, prevState){
-		if (prevState.canvasIdList.length !== this.state.canvasIdList.length) {
+		if (prevState.canvasIdList.length < this.state.canvasIdList.length) {
 			const id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
 			if (id) {
 				this.initializeCanvas(`${id}`);
@@ -247,6 +247,26 @@ class Canvas extends React.Component{
 		this.setState({backgroundColor: e.target.value});
 		canvasUtil.changeBackground(e.target.value, this.state.selectedCanvas);
 	}
+
+	// moveCanvasUp
+	// moveCanvasDown
+	copyCanvas(e, id){
+
+	}
+	
+	deleteCanvas(e, id){
+		if (this.state.canvasIdList.length > 1) {
+			const canvas = Object.assign({}, this.state.canvas);
+			delete canvas[id];
+			const idx = this.state.canvasIdList.indexOf(id);
+			const canvasIdList = Array.from(this.state.canvasIdList);
+			canvasIdList.splice(idx, 1);
+			this.setState({canvas, canvasIdList});
+			this.props.removeCanvas(id);
+		}
+	}
+
+
 
 	render(){
 		const {receiveSelectedImg, imgs} = this.props;
@@ -490,10 +510,14 @@ class Canvas extends React.Component{
 				    </div>
 		    	*/}
 			    {this.state.canvasIdList.map((id, idx) => 
-			    	<div key={idx} className={`container container-${id}`} onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
+			    	<div key={id} className={`container container-${id}`} onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
 			    		<canvas ref={id} id={id}></canvas>
 			    		<div className='container-sidebar'>
-			    			{idx + 1}
+			    			<i className="fas fa-arrow-up" onClick={(e)=>this.moveCanvasUp(e, id)} style={{'color': `${!idx ? '#cbc5c1' : ''}`}}></i>
+			    			<span>{idx + 1}</span>
+			    			<i className="fas fa-arrow-down" onClick={(e)=>this.moveCanvasDown(e, id)}></i>
+			    			<i className="far fa-copy" onClick={(e)=>this.copyCanvas(e, id)}></i>
+			    			<i className="fas fa-trash" onClick={(e)=>this.deleteCanvas(e, id)}></i>
 			    		</div>
 			    	</div>)}
 			  </div>

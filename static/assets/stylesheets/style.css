@@ -83,6 +83,9 @@ input[type=submit] {
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
   align-items: center;
 }
+.navbar button {
+  border: 1px solid transparent;
+}
 .navbar .user {
   font-size: 18px;
   padding: 5px 9px;
@@ -621,6 +624,7 @@ button {
   background-color: transparent;
   cursor: pointer;
   border-radius: 5px;
+  border: 1px solid #cbc5c1;
 }
 button i {
   margin-right: 7px;
@@ -925,6 +929,10 @@ button i {
   display: flex;
   flex-direction: column;
 }
+.canvas-main .side-content-canvas .canvas-area .container:first-of-type .fa-arrow-up:hover {
+  border: 1px solid transparent;
+  color: #cbc5c1;
+}
 .canvas-main .side-content-canvas .canvas-area .container {
   width: 50%;
   min-width: 700px;
@@ -947,6 +955,23 @@ button i {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  color: #666;
+}
+.canvas-main .side-content-canvas .canvas-area .container .container-sidebar i {
+  cursor: pointer;
+  font-size: 16px;
+  margin: 3px;
+  padding: 7px;
+  border: 1px solid transparent;
+}
+.canvas-main .side-content-canvas .canvas-area .container .container-sidebar i:hover {
+  transition: all 0.8s;
+  background-color: white;
+  border: 1px solid #0099fe;
+  color: #0099fe;
+}
+.canvas-main .side-content-canvas .canvas-area .container .container-sidebar span {
+  color: #0099fe;
 }
 
 .buttons {

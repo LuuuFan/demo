@@ -28,6 +28,7 @@ button{
   background-color: transparent;
   cursor: pointer;
   border-radius: 5px;
+  border: 1px solid $gray;
   i {
     margin-right: 7px;
   }
@@ -351,6 +352,12 @@ button{
       overflow: auto;
       display: flex;
       flex-direction: column;
+      .container:first-of-type{
+        .fa-arrow-up:hover{
+          border: 1px solid transparent;
+          color: $gray;
+        }
+      }
       .container{
         width: 50%;
         min-width: 700px;
@@ -372,6 +379,23 @@ button{
           flex-direction: column;
           align-items: center;
           justify-content: center;
+          color: #666;
+          i{
+            cursor: pointer;
+            font-size: 16px;
+            margin: 3px;
+            padding: 7px;
+            border: 1px solid transparent;
+          }
+          i:hover{
+            transition: all .8s;
+            background-color: white;
+            border: 1px solid $hover;
+            color: $hover;
+          }
+          span{
+            color: $hover;
+          }
         }
       }
     }

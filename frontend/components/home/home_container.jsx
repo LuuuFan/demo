@@ -4,7 +4,7 @@ import {withRouter} from 'react-router';
 import Home from './home';
 import {fetchAllImgs, receiveImg, receiveSelectedImg} from '../../actions/images';
 import {removeCurrentUser} from '../../actions/session';
-import {receiveCanvas} from '../../actions/canvas';
+import {receiveCanvas, removeCanvas} from '../../actions/canvas';
 import {sendEmail} from '../../actions/mail';
 import {clearMessage} from '../../actions/message';
 import {sendService} from '../../actions/service';
@@ -26,6 +26,7 @@ const mapDispatchToProps = (dispatch) => ({
 	sendService: (data, token) => dispatch(sendService(data, token)),
 	receiveSelectedImg: (img) => dispatch(receiveSelectedImg(img)),
 	removeCurrentUser: () => dispatch(removeCurrentUser()),
+	removeCanvas: (id) => dispatch(removeCanvas(id)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
