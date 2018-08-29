@@ -77,7 +77,9 @@ class Chat extends React.Component {
 					: "" }
 				<div className={`chat ${this.state.active ? 'chat-active' : ""}`}>
 					<div className='header chat-header' onClick={()=>this.toggle()}>
-						<i className="fas fa-circle" style={{'color': `${this.state.connected ? 'green' : 'gray'}`}}></i>
+						{this.state.connected ? 
+							<i className="fas fa-circle" style={{'color': `${this.state.connected ? 'green' : 'gray'}`}}></i>
+						: <img src='static/assets/images/connection.gif'/>}
 					</div>
 					<div className='userlist'>
 						{this.state.userList.map((user, idx) => 

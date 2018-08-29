@@ -36431,7 +36431,7 @@ var Chat = function (_React$Component) {
 						{ className: 'header chat-header', onClick: function onClick() {
 								return _this4.toggle();
 							} },
-						_react2.default.createElement('i', { className: 'fas fa-circle', style: { 'color': '' + (this.state.connected ? 'green' : 'gray') } })
+						this.state.connected ? _react2.default.createElement('i', { className: 'fas fa-circle', style: { 'color': '' + (this.state.connected ? 'green' : 'gray') } }) : _react2.default.createElement('img', { src: 'static/assets/images/connection.gif' })
 					),
 					_react2.default.createElement(
 						'div',

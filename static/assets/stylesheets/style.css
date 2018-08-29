@@ -495,6 +495,9 @@ input[type=submit] {
   cursor: pointer;
   justify-content: space-between;
 }
+.chat .header img, .channel .header img {
+  height: 10px;
+}
 .chat .header i, .channel .header i {
   margin: auto 10px;
 }
