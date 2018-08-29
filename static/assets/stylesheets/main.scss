@@ -18,6 +18,10 @@ $hover: #0099fe;
   font-size: 14px;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
 button{
   padding: 7px 15px;
   color: $gray;
@@ -189,6 +193,8 @@ button{
       // min-width: 210px;
       // padding: 15px;
       text-align: center;
+      // transform: translateY(400px);
+      // transition: transform .8s;
       button{
         margin-top: 20px;
       }

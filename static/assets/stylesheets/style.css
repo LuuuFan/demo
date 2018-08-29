@@ -496,7 +496,8 @@ input[type=submit] {
   justify-content: space-between;
 }
 .chat .header img, .channel .header img {
-  height: 10px;
+  height: 40px;
+  width: 50px;
 }
 .chat .header i, .channel .header i {
   margin: auto 10px;
@@ -609,6 +610,10 @@ input[type=submit] {
 .main {
   height: 100vh;
   font-size: 14px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
 }
 
 button {

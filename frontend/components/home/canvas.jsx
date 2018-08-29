@@ -111,7 +111,7 @@ class Canvas extends React.Component{
 		this.setState({
 			activeObj, 
 			selectedCanvas,
-			});
+		});
 	}
 
 	handleInput(){
@@ -126,7 +126,24 @@ class Canvas extends React.Component{
 
 	handleClick(e){
 		e.preventDefault();	
-		this.setState({active: e.currentTarget.textContent});
+		let id;
+		if (e.currentTarget.textContent === 'Image') {
+			id = 'side-content-image';
+		} else if (e.currentTarget.textContent === 'Bground') {
+			id = 'background';
+		} else {
+			id = e.currentTarget.textContent.toLowerCase();
+		}
+		this.setState({
+			active: e.currentTarget.textContent,
+			sideContentToggle: true,
+		});
+		setTimeout(() => {
+			$(`#${id}`).slideUp(1);
+			setTimeout(() => {
+				$(`#${id}`).slideDown(800);
+			}, 400)
+		}, 1)
 	}
 
 	selectColor(e, type){
@@ -235,23 +252,23 @@ class Canvas extends React.Component{
 		return (
 			<div className='canvas-main'>
 				<ul id="sidebar" role="tablist">
-		      <li className={`nav-item ${this.state.active === 'Image' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
+		      <li className={`nav-item sidebar-Image ${this.state.active === 'Image' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
 			      <i className="far fa-image"></i>
 	          	<div className="nav-text">Image</div>
 		      </li>
-		      <li className={`nav-item ${this.state.active === 'Shapes' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
+		      <li className={`nav-item sidebar-Shapes ${this.state.active === 'Shapes' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
 		          <i className="fas fa-shapes"></i>
 		          <div className="nav-text">Shapes</div>
 		      </li>
-		      <li className={`nav-item ${this.state.active === 'Dialog' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
+		      <li className={`nav-item sidebar-Dialog ${this.state.active === 'Dialog' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
 		          <i className="fas fa-comment"></i>
 		          <div className="nav-text">Dialog</div>
 		      </li>
-		      <li className={`nav-item ${this.state.active === 'Text' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
+		      <li className={`nav-item sidebar-Text ${this.state.active === 'Text' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
 		          <i className="fas fa-font"></i>
 		          <div className="nav-text">Text</div>
 		      </li>
-		      <li className={`nav-item ${this.state.active === 'Bground' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
+		      <li className={`nav-item sidebar-Bground ${this.state.active === 'Bground' ? 'selected' : ''}`} onClick={(e)=>this.handleClick(e)}>
 		          <i className="fas fa-layer-group"></i>
 		          <div className="nav-text">Bground</div>
 		      </li>

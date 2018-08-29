@@ -33694,22 +33694,18 @@ var Home = function (_React$Component) {
 	_createClass(Home, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			var _this2 = this;
-
 			this.fetchImg();
-			interval = setInterval(function () {
-				return _this2.fetchImg();
-			}, 900);
+			// interval = setInterval(()=>this.fetchImg(), 900);
 		}
 	}, {
 		key: 'fetchImg',
 		value: function fetchImg() {
-			var _this3 = this;
+			var _this2 = this;
 
 			this.props.fetchAllImgs(this.props.currentUser['access-token']).catch(function (err) {
 				clearInterval(interval);
 				localStorage.removeItem('access_token');
-				_this3.props.history.push('/login');
+				_this2.props.history.push('/login');
 			});
 		}
 	}, {
@@ -35565,7 +35561,24 @@ var Canvas = function (_React$Component) {
 		key: 'handleClick',
 		value: function handleClick(e) {
 			e.preventDefault();
-			this.setState({ active: e.currentTarget.textContent });
+			var id = void 0;
+			if (e.currentTarget.textContent === 'Image') {
+				id = 'side-content-image';
+			} else if (e.currentTarget.textContent === 'Bground') {
+				id = 'background';
+			} else {
+				id = e.currentTarget.textContent.toLowerCase();
+			}
+			this.setState({
+				active: e.currentTarget.textContent,
+				sideContentToggle: true
+			});
+			setTimeout(function () {
+				$('#' + id).slideUp(1);
+				setTimeout(function () {
+					$('#' + id).slideDown(800);
+				}, 400);
+			}, 1);
 		}
 	}, {
 		key: 'selectColor',
@@ -35697,7 +35710,7 @@ var Canvas = function (_React$Component) {
 					{ id: 'sidebar', role: 'tablist' },
 					_react2.default.createElement(
 						'li',
-						{ className: 'nav-item ' + (this.state.active === 'Image' ? 'selected' : ''), onClick: function onClick(e) {
+						{ className: 'nav-item sidebar-Image ' + (this.state.active === 'Image' ? 'selected' : ''), onClick: function onClick(e) {
 								return _this5.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'far fa-image' }),
@@ -35709,7 +35722,7 @@ var Canvas = function (_React$Component) {
 					),
 					_react2.default.createElement(
 						'li',
-						{ className: 'nav-item ' + (this.state.active === 'Shapes' ? 'selected' : ''), onClick: function onClick(e) {
+						{ className: 'nav-item sidebar-Shapes ' + (this.state.active === 'Shapes' ? 'selected' : ''), onClick: function onClick(e) {
 								return _this5.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-shapes' }),
@@ -35721,7 +35734,7 @@ var Canvas = function (_React$Component) {
 					),
 					_react2.default.createElement(
 						'li',
-						{ className: 'nav-item ' + (this.state.active === 'Dialog' ? 'selected' : ''), onClick: function onClick(e) {
+						{ className: 'nav-item sidebar-Dialog ' + (this.state.active === 'Dialog' ? 'selected' : ''), onClick: function onClick(e) {
 								return _this5.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-comment' }),
@@ -35733,7 +35746,7 @@ var Canvas = function (_React$Component) {
 					),
 					_react2.default.createElement(
 						'li',
-						{ className: 'nav-item ' + (this.state.active === 'Text' ? 'selected' : ''), onClick: function onClick(e) {
+						{ className: 'nav-item sidebar-Text ' + (this.state.active === 'Text' ? 'selected' : ''), onClick: function onClick(e) {
 								return _this5.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-font' }),
@@ -35745,7 +35758,7 @@ var Canvas = function (_React$Component) {
 					),
 					_react2.default.createElement(
 						'li',
-						{ className: 'nav-item ' + (this.state.active === 'Bground' ? 'selected' : ''), onClick: function onClick(e) {
+						{ className: 'nav-item sidebar-Bground ' + (this.state.active === 'Bground' ? 'selected' : ''), onClick: function onClick(e) {
 								return _this5.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-layer-group' }),
