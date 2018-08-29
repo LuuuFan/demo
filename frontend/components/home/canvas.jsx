@@ -252,10 +252,12 @@ class Canvas extends React.Component{
 
 		    <div className={`tab-content ${this.state.sideContentToggle ? "" : 'collapse'}`} id="side-content" style={{'transform': `translate(${this.state.sideContentToggle ? '0px' : '-320px'})`}}>
 		    	<div className='arrow-collapse' onClick={()=>this.toggleSideContent()}>
+		    		<div className='ac-inner'>
 		    		{ this.state.sideContentToggle ? 
 		    			<i className="fas fa-angle-left"></i>
 		    			: 
 		    			<i className="fas fa-angle-right"></i>}
+		    		</div>
 		    	</div>
 		    	{this.state.active === 'Shapes' ? 
 		        <div id="shapes" role="tabpanel" aria-labelledby="shapes-button">

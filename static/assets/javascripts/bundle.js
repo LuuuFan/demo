@@ -35662,7 +35662,11 @@ var Canvas = function (_React$Component) {
 							{ className: 'arrow-collapse', onClick: function onClick() {
 									return _this5.toggleSideContent();
 								} },
-							this.state.sideContentToggle ? _react2.default.createElement('i', { className: 'fas fa-angle-left' }) : _react2.default.createElement('i', { className: 'fas fa-angle-right' })
+							_react2.default.createElement(
+								'div',
+								{ className: 'ac-inner' },
+								this.state.sideContentToggle ? _react2.default.createElement('i', { className: 'fas fa-angle-left' }) : _react2.default.createElement('i', { className: 'fas fa-angle-right' })
+							)
 						),
 						this.state.active === 'Shapes' ? _react2.default.createElement(
 							'div',

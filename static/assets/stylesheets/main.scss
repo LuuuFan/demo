@@ -123,22 +123,55 @@ button{
         }
       }
       .arrow-collapse{
-        margin: 0;
-        padding: 0;
-        cursor: pointer;
-        z-index: 100;
-        height: 25px;
-        width: 12px;
+        width: 13px;
         position: absolute;
-        top: 50%;
-        right: -12px;
-        background-color: $gray;
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
+        height: 60px;
+        padding: 10px 0;
         color: $color-darkblue;
+        z-index: 10;
+        right: -13px;
+        top: 50%;
+        margin: -30px 0 0 0;
+        cursor: pointer;
+        overflow: hidden;
+        font-size: 12px;
+        .ac-inner{
+          cursor: pointer;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 0 6px 3px 6px;
+          position: relative;
+          width: 13px;
+          height: 40px;
+          background-color: #ccc;
+          i{
+            z-index: 15;
+          }
+        }
+        .ac-inner:before{
+          content: "";
+          display: block;
+          height: 17px;
+          transform: rotate(30deg);
+          width: 17px;
+          position: absolute;
+          top: -4px;
+          left: -6px;
+          background-color: #ccc;
+        }
+        .ac-inner:after{
+          content: "";
+          display: block;
+          height: 17px;
+          transform: rotate(-30deg);
+          width: 17px;
+          position: absolute;
+          bottom: -4px;
+          left: -6px;
+          background-color: #ccc;
+        }
       }
       #side-content-image{
         #button-wrapper{
