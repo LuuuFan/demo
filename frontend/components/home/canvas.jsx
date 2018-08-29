@@ -29,14 +29,14 @@ class Canvas extends React.Component{
 			croping: false,
 			cropingImg: null,
 			selectedCanvas: null,
-			extraCanvas: [],
+			canvasIdList: ['0'],
 			sideContentToggle: true,
 			chatToggle: false,
 		};
 	}
 
 	componentDidMount(){
-		this.initializeCanvas('0');
+		this.initializeCanvas(this.state.canvasIdList[0]);
 
 		// delete item on canvas
 		document.addEventListener('keydown', (e) => {
@@ -57,8 +57,8 @@ class Canvas extends React.Component{
 	}
 
 	componentDidUpdate(prevProps, prevState){
-		if (prevState.extraCanvas.length !== this.state.extraCanvas.length) {
-			const id = this.state.extraCanvas[this.state.extraCanvas.length - 1];
+		if (prevState.canvasIdList.length !== this.state.canvasIdList.length) {
+			const id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
 			if (id) {
 				this.initializeCanvas(`${id}`);
 				this.scroll(id);
@@ -69,7 +69,7 @@ class Canvas extends React.Component{
 	resetCanvas(){
 		const defaultCanvas = this.state.canvas['0'];
 		this.setState({
-			extraCanvas: [],
+			canvasIdList: ['0'],
 			canvas: {'0': defaultCanvas},
 		});
 		canvasUtil.resetCanvas(defaultCanvas);
@@ -231,8 +231,8 @@ class Canvas extends React.Component{
 	}
 
 	addCanvas(){
-		const last_el = this.state.extraCanvas.length ? this.state.extraCanvas[this.state.extraCanvas.length - 1] : 0;
-		this.setState({extraCanvas: this.state.extraCanvas.concat([last_el + 1])});
+		const last_el = this.state.canvasIdList[this.state.canvasIdList.length - 1];
+		this.setState({canvasIdList: this.state.canvasIdList.concat([last_el * 1 + 1])});
 	}
 
 	toggleSideContent(){
@@ -481,12 +481,20 @@ class Canvas extends React.Component{
 		        : ""}
 		    </div>
 		    <div className='canvas-area'>
-		    	<div className='container container-0' onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
-					<canvas ref='0' id='0'></canvas>
-			    </div>
-			    {this.state.extraCanvas.map((id, idx) => 
+		    	{/*
+			    	<div className='container container-0' onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
+							<canvas ref='0' id='0'></canvas>
+							<div className='container-sidebar'>
+			    			1
+			    		</div>
+				    </div>
+		    	*/}
+			    {this.state.canvasIdList.map((id, idx) => 
 			    	<div key={idx} className={`container container-${id}`} onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
 			    		<canvas ref={id} id={id}></canvas>
+			    		<div className='container-sidebar'>
+			    			{idx + 1}
+			    		</div>
 			    	</div>)}
 			  </div>
 			    

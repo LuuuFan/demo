@@ -927,15 +927,26 @@ button i {
 }
 .canvas-main .side-content-canvas .canvas-area .container {
   width: 50%;
-  min-width: 650px;
+  min-width: 700px;
   margin: 20px auto;
   height: 650px;
-  margin-bottom: 10px;
+  min-height: 650px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
 }
 .canvas-main .side-content-canvas .canvas-area .container canvas {
   overflow: hidden;
   border-radius: 5px;
   box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.2);
+}
+.canvas-main .side-content-canvas .canvas-area .container .container-sidebar {
+  width: 50px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .buttons {

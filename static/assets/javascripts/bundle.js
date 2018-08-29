@@ -35462,7 +35462,7 @@ var Canvas = function (_React$Component) {
 			croping: false,
 			cropingImg: null,
 			selectedCanvas: null,
-			extraCanvas: [],
+			canvasIdList: ['0'],
 			sideContentToggle: true,
 			chatToggle: false
 		};
@@ -35474,7 +35474,7 @@ var Canvas = function (_React$Component) {
 		value: function componentDidMount() {
 			var _this2 = this;
 
-			this.initializeCanvas('0');
+			this.initializeCanvas(this.state.canvasIdList[0]);
 
 			// delete item on canvas
 			document.addEventListener('keydown', function (e) {
@@ -35497,8 +35497,8 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate(prevProps, prevState) {
-			if (prevState.extraCanvas.length !== this.state.extraCanvas.length) {
-				var id = this.state.extraCanvas[this.state.extraCanvas.length - 1];
+			if (prevState.canvasIdList.length !== this.state.canvasIdList.length) {
+				var id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
 				if (id) {
 					this.initializeCanvas('' + id);
 					this.scroll(id);
@@ -35510,7 +35510,7 @@ var Canvas = function (_React$Component) {
 		value: function resetCanvas() {
 			var defaultCanvas = this.state.canvas['0'];
 			this.setState({
-				extraCanvas: [],
+				canvasIdList: ['0'],
 				canvas: { '0': defaultCanvas }
 			});
 			canvasUtil.resetCanvas(defaultCanvas);
@@ -35691,8 +35691,8 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'addCanvas',
 		value: function addCanvas() {
-			var last_el = this.state.extraCanvas.length ? this.state.extraCanvas[this.state.extraCanvas.length - 1] : 0;
-			this.setState({ extraCanvas: this.state.extraCanvas.concat([last_el + 1]) });
+			var last_el = this.state.canvasIdList[this.state.canvasIdList.length - 1];
+			this.setState({ canvasIdList: this.state.canvasIdList.concat([last_el * 1 + 1]) });
 		}
 	}, {
 		key: 'toggleSideContent',
@@ -36167,16 +36167,7 @@ var Canvas = function (_React$Component) {
 					_react2.default.createElement(
 						'div',
 						{ className: 'canvas-area' },
-						_react2.default.createElement(
-							'div',
-							{ className: 'container container-0', onDoubleClick: function onDoubleClick() {
-									return _this5.doubleClick();
-								}, onClick: function onClick(e) {
-									return _this5.singleClick(e);
-								} },
-							_react2.default.createElement('canvas', { ref: '0', id: '0' })
-						),
-						this.state.extraCanvas.map(function (id, idx) {
+						this.state.canvasIdList.map(function (id, idx) {
 							return _react2.default.createElement(
 								'div',
 								{ key: idx, className: 'container container-' + id, onDoubleClick: function onDoubleClick() {
@@ -36184,7 +36175,12 @@ var Canvas = function (_React$Component) {
 									}, onClick: function onClick(e) {
 										return _this5.singleClick(e);
 									} },
-								_react2.default.createElement('canvas', { ref: id, id: id })
+								_react2.default.createElement('canvas', { ref: id, id: id }),
+								_react2.default.createElement(
+									'div',
+									{ className: 'container-sidebar' },
+									idx + 1
+								)
 							);
 						})
 					),
