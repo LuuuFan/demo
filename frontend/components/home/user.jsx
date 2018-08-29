@@ -15,6 +15,7 @@ class User extends React.Component {
 	logout(){
 		localStorage.removeItem('access_token');
 		localStorage.removeItem('currentUser');
+		localStorage.removeItem('channel');
 		this.props.removeCurrentUser();
 		setTimeout(()=>{
 			this.props.history.push('/login');

@@ -20,7 +20,7 @@ class ImageGroup extends React.Component {
 			<div className='img-group group'>
 					{imgs.map((img, key) => 
 						<div className='img-container' key={key} id={`img-${key}`} onClick={(e)=>this.selectImg(e)}>
-							<img src={img.previewURL}/>
+							<img src={img.webformatURL}/>
 						</div>)}
 				</div>
 		);

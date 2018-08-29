@@ -160,8 +160,8 @@ input[type=submit] {
   top: 45%;
   left: 48%;
   z-index: 15;
-  height: 100px;
-  width: 100px;
+  height: 300px;
+  width: 300px;
 }
 .navbar .header-buttons .share .message {
   color: #333;
@@ -929,14 +929,14 @@ button i {
   margin: 0 auto;
   width: 70%;
   min-width: 650px;
-  left: 30%;
+  left: 23%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .buttons .buttons-decoration {
   position: fixed;
-  left: 40%;
+  left: 30%;
   bottom: 50px;
   width: 50%;
   border-top: 1px solid #ddd;

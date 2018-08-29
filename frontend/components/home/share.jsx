@@ -193,7 +193,7 @@ class Share extends React.Component{
 					<div className='message'>{message.message}</div>
 					: ""}
 				{this.state.sending ? <div className='loading'>
-					<img src='static/assets/images/sending_email.gif' />
+					<img src='static/assets/images/sending_email_2.gif' />
 				</div> : ""}
 				<button className="btn services" onMouseEnter={(e)=>this.openModal(e, 'modalList')} onMouseLeave={()=>this.closeModal('modalList')}>
 					<i className="fas fa-server"></i>

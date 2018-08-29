@@ -69,7 +69,7 @@ class Service extends React.Component {
 		if (this.state.sending) {
 			return (
 				<div className='loading'>
-					<img src='static/assets/images/sending_email.gif' />
+					<img src='static/assets/images/sending_email_2.gif' />
 				</div>
 			)
 		} else {
