@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {withRouter} from 'react-router';
 import Home from './home';
 import {fetchAllImgs, receiveImg, receiveSelectedImg} from '../../actions/images';
+import {removeCurrentUser} from '../../actions/session';
 import {receiveCanvas} from '../../actions/canvas';
 import {sendEmail} from '../../actions/mail';
 import {clearMessage} from '../../actions/message';

@@ -27,13 +27,15 @@ class User extends React.Component {
 				<i className="far fa-user"></i>
 				<div className={`user-dropdown ${this.state.toggleDropdown ? 'is-open' : 'modal'}`}>
 					<div className='user-info'>
-						<div className='avatar'></div>
+						<div className='avatar'>
+							<i className="far fa-user"></i>
+						</div>
 						<div></div>
 					</div>
 					<ul>
 						<li><i className="far fa-user"></i>Profile</li>
 						<li><i className="fas fa-cog"></i>Account settings</li>
-						<li><i className="fas fa-sign-out-alt" onClick={()=>this.logout()}></i>Logout</li>
+						<li onClick={()=>this.logout()}><i className="fas fa-sign-out-alt"></i>Logout</li>
 					</ul>
 					<div></div>
 				</div>

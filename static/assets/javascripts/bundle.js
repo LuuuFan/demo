@@ -33575,6 +33575,8 @@ var _home2 = _interopRequireDefault(_home);
 
 var _images = __webpack_require__(30);
 
+var _session = __webpack_require__(29);
+
 var _canvas = __webpack_require__(50);
 
 var _mail = __webpack_require__(194);
@@ -33618,19 +33620,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		receiveSelectedImg: function receiveSelectedImg(img) {
 			return dispatch((0, _images.receiveSelectedImg)(img));
 		},
-		removeCurrentUser: function (_removeCurrentUser) {
-			function removeCurrentUser() {
-				return _removeCurrentUser.apply(this, arguments);
-			}
-
-			removeCurrentUser.toString = function () {
-				return _removeCurrentUser.toString();
-			};
-
-			return removeCurrentUser;
-		}(function () {
-			return dispatch(removeCurrentUser());
-		})
+		removeCurrentUser: function removeCurrentUser() {
+			return dispatch((0, _session.removeCurrentUser)());
+		}
 	};
 };
 
@@ -33735,7 +33727,8 @@ var Home = function (_React$Component) {
 			    sendService = _props.sendService,
 			    canvas = _props.canvas,
 			    receiveSelectedImg = _props.receiveSelectedImg,
-			    selectedImg = _props.selectedImg;
+			    selectedImg = _props.selectedImg,
+			    removeCurrentUser = _props.removeCurrentUser;
 
 			return _react2.default.createElement(
 				'div',
@@ -33746,7 +33739,9 @@ var Home = function (_React$Component) {
 					message: message,
 					clearMessage: clearMessage,
 					sendService: sendService,
-					canvas: canvas }),
+					canvas: canvas,
+					removeCurrentUser: removeCurrentUser
+				}),
 				_react2.default.createElement(_canvas2.default, {
 					receiveCanvas: receiveCanvas,
 					img: selectedImg,
@@ -35328,7 +35323,11 @@ var User = function (_React$Component) {
 					_react2.default.createElement(
 						'div',
 						{ className: 'user-info' },
-						_react2.default.createElement('div', { className: 'avatar' }),
+						_react2.default.createElement(
+							'div',
+							{ className: 'avatar' },
+							_react2.default.createElement('i', { className: 'far fa-user' })
+						),
 						_react2.default.createElement('div', null)
 					),
 					_react2.default.createElement(
@@ -35348,10 +35347,10 @@ var User = function (_React$Component) {
 						),
 						_react2.default.createElement(
 							'li',
-							null,
-							_react2.default.createElement('i', { className: 'fas fa-sign-out-alt', onClick: function onClick() {
+							{ onClick: function onClick() {
 									return _this3.logout();
-								} }),
+								} },
+							_react2.default.createElement('i', { className: 'fas fa-sign-out-alt' }),
 							'Logout'
 						)
 					),
@@ -35509,8 +35508,9 @@ var Canvas = function (_React$Component) {
 		key: 'scroll',
 		value: function scroll(id) {
 			$('.canvas-area').animate({
-				scrollTop: $('.container-' + id).offset().top
-			}, 800);
+				// scrollTop: $(`.container-${id}`).offset().top
+				scrollTop: 9999
+			}, 1200);
 		}
 	}, {
 		key: 'doubleClick',

@@ -36,7 +36,7 @@ class Home extends React.Component {
 	}
 
 	render(){
-		const {imgs, receiveCanvas, receiveImg, sendEmail, message, clearMessage, sendService, canvas, receiveSelectedImg, selectedImg} = this.props;
+		const {imgs, receiveCanvas, receiveImg, sendEmail, message, clearMessage, sendService, canvas, receiveSelectedImg, selectedImg, removeCurrentUser} = this.props;
 		return(
 			<div>
 				<Header 
@@ -45,7 +45,9 @@ class Home extends React.Component {
 					message={message} 
 					clearMessage={clearMessage} 
 					sendService={sendService} 
-					canvas={canvas}/>
+					canvas={canvas}
+					removeCurrentUser={removeCurrentUser}
+					/>
 				<Canvas 
 					receiveCanvas={receiveCanvas} 
 					img={selectedImg} 

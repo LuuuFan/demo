@@ -90,8 +90,9 @@ class Canvas extends React.Component{
 
 	scroll(id){
 		$('.canvas-area').animate({
-			scrollTop: $(`.container-${id}`).offset().top
-		}, 800);
+			// scrollTop: $(`.container-${id}`).offset().top
+			scrollTop: 9999
+		}, 1200);
 	}
 
 	doubleClick(){

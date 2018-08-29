@@ -99,16 +99,37 @@ input[type=submit] {
 .navbar .user .user-dropdown {
   position: absolute;
   z-index: 10;
-  padding: 10px;
-  left: -100%;
-  top: 0;
+  width: 200px;
+  left: -180px;
+  top: 120%;
   background-color: white;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
   color: #cbc5c1;
+  border-radius: 5px;
+}
+.navbar .user .user-dropdown .user-info {
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+}
+.navbar .user .user-dropdown ul {
+  border-top: 1px solid #cbc5c1;
 }
 .navbar .user .user-dropdown ul li {
   display: flex;
+  padding: 10px 15px;
   flex-direction: row;
+  align-items: center;
+  font-size: 14px;
+}
+.navbar .user .user-dropdown ul li i {
+  font-size: 16px;
+  margin-right: 10px;
+}
+.navbar .user .user-dropdown ul li:hover {
+  background-color: #cbc5c1;
+  color: #0099fe;
+  transition: all 0.8s;
 }
 .navbar .user:hover {
   border: 2px solid #0099fe;
