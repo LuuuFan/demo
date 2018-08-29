@@ -35320,7 +35320,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // import {fabric} from '../../util/fabric';
 
 
-var colorOptions = ["#000000", "#ffc0cb", "#ffffff", "#008080", "#ffe4e1", "#ff0000", "#ffd700", "#00ffff", "#40e0d0", "#ff7373", "#e6e6fa", "#d3ffce", "#0000ff", "#ffa500", "#f0f8ff", "#b0e0e6", "#7fffd4", "#c6e2ff", "#faebd7", "#800080", "#cccccc", "#eeeeee", "#ffb6c1", "#fa8072", "#800000", "#00ff00", "#333333", "#003366", "#ffff00", "#20b2aa", "#c0c0c0", "#ffc3a0", "#f08080", "#fff68f", "#f6546a", "#468499", "#66cdaa", "#ff6666", "#666666", "#c39797", "#00ced1", "#ffdab9", "#ff00ff", "#660066", "#008000", "#088da5", "#f5f5f5", "#c0d6e4", "#8b0000", "#0e2f44", "#ff7f50", "#afeeee", "#808080", "#990000", "#dddddd", "#b4eeb4", "#ffff66", "#daa520", "#cbbeb5", "#00ff7f", "#f5f5dc", "#8a2be2", "#81d8d0", "#ff4040", "#b6fcd5", "#66cccc", "#794044", "#3399ff", "#a0db8e", "#ccff00", "#cc0000", "#000080", "#3b5998", "#6897bb", "#0099cc", "#999999", "#191970", "#31698a", "#fef65b", "#ff4444", "#ff1493", "#f7f7f7", "#191919", "#6dc066"];
+var colorOptions = ["#000000", "#ffc0cb", "#ffffff", "#008080", "#ffe4e1", "#ff0000", "#ffd700", "#00ffff", "#40e0d0", "#ff7373", "#e6e6fa", "#d3ffce", "#0000ff", "#ffa500", "#f0f8ff", "#b0e0e6", "#7fffd4", "#c6e2ff", "#faebd7", "#800080", "#cccccc", "#eeeeee", "#ffb6c1", "#fa8072", "#800000", "#00ff00", "#333333", "#003366", "#ffff00", "#20b2aa", "#c0c0c0", "#ffc3a0", "#f08080", "#fff68f", "#f6546a", "#468499", "#66cdaa", "#ff6666", "#666666", "#c39797", "#00ced1", "#ffdab9", "#ff00ff", "#660066", "#008000", "#088da5", "#f5f5f5", "#c0d6e4", "#8b0000", "#0e2f44", "#ff7f50", "#afeeee", "#808080", "#990000", "#dddddd", "#b4eeb4", "#ffff66", "#daa520", "#cbbeb5", "#00ff7f", "#f5f5dc", "#8a2be2", "#81d8d0", "#ff4040", "#b6fcd5", "#66cccc", "#794044", "#3399ff", "#a0db8e", "#ccff00", "#cc0000", "#000080", "#3b5998", "#6897bb", "#0099cc", "#999999", "#191970", "#31698a", "#fef65b", "#ff4444", "#ff1493", "#f7f7f7", "#191919", "#6dc066", "#423226", "#4d3727", "#fff8f6", "#701700", "#201104", "#53abb5", "#ffb6b1", "#ff3232", "#c39797", "#e6e6fa", "#40e0d0", "#ffb6b1", "#a8cbfd", "#2f92d7", "#ff3232", "#a8cbfd", "#ccfff1", "#f7e6fd", "#133337", "#113377", "#c4b6c4", "#ac98ac", "#c4b0b0", "#c4b0ba", "#b4abbf", "#256645", "#305130", "#16f1b4", "#f4ebe2", "#edf3f3", "#f6eced", "#f6f2f1", "#f0e3f5", "#f5e1eb", "#f5e8e0", "#fdd5cd", "#e8f2f3", "#edf3f3", "#f6f6f6", "#f6eced", "#f6f2f1", "#f7f5f6"];
 
 var Canvas = function (_React$Component) {
 	_inherits(Canvas, _React$Component);
@@ -36027,77 +36027,11 @@ var Canvas = function (_React$Component) {
 							_react2.default.createElement(
 								'ul',
 								{ 'class': 'group color-options' },
-								colorOptions.map(function (color) {
-									return _react2.default.createElement('li', { style: { 'backgroundColor': '' + color }, onClick: function onClick(e) {
+								colorOptions.map(function (color, idx) {
+									return _react2.default.createElement('li', { key: idx, style: { 'backgroundColor': '' + color }, onClick: function onClick(e) {
 											return _this5.selectColor(e, 'backgroundColor');
 										} });
 								})
-							),
-							_react2.default.createElement(
-								'div',
-								{ className: 'form-inline' },
-								_react2.default.createElement(
-									'label',
-									{ htmlFor: 'background-color' },
-									'Color: '
-								),
-								_react2.default.createElement(
-									'select',
-									{ className: 'form-control', id: 'background-color', onChange: function onChange(e) {
-											return _this5.selectColor(e, 'backgroundColor');
-										} },
-									_react2.default.createElement(
-										'option',
-										{ value: 'lightgray' },
-										'Lightgray'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'white' },
-										'White'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'red' },
-										'Red'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'orange' },
-										'Orange'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'yellow' },
-										'Yellow'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'green' },
-										'Green'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'blue' },
-										'Blue'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'brown' },
-										'Brown'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'purple' },
-										'Purple'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: 'black' },
-										'Black'
-									)
-								),
-								_react2.default.createElement('div', { className: 'selected-color', style: { backgroundColor: '' + this.state.backgroundColor } })
 							)
 						) : "",
 						this.state.active === 'Image' ? _react2.default.createElement(
