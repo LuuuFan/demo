@@ -35571,6 +35571,12 @@ var Canvas = function (_React$Component) {
 			this.setState({ chatToggle: !this.state.chatToggle });
 		}
 	}, {
+		key: 'pickColor',
+		value: function pickColor(e) {
+			this.setState({ backgroundColor: e.target.value });
+			canvasUtil.changeBackground(e.target.value, this.state.selectedCanvas);
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var _this5 = this;
@@ -36030,12 +36036,24 @@ var Canvas = function (_React$Component) {
 							),
 							_react2.default.createElement(
 								'ul',
-								{ 'class': 'group color-options' },
+								{ className: 'group color-options' },
 								colorOptions.map(function (color, idx) {
 									return _react2.default.createElement('li', { key: idx, style: { 'backgroundColor': '' + color }, onClick: function onClick(e) {
 											return _this5.selectColor(e, 'backgroundColor');
 										} });
 								})
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'form-inline' },
+								_react2.default.createElement(
+									'label',
+									null,
+									'Pick a color'
+								),
+								_react2.default.createElement('input', { type: 'color', onChange: function onChange(e) {
+										return _this5.pickColor(e);
+									} })
 							)
 						) : "",
 						this.state.active === 'Image' ? _react2.default.createElement(
@@ -36093,35 +36111,31 @@ var Canvas = function (_React$Component) {
 					),
 					_react2.default.createElement(
 						'div',
-						{ className: 'canvas-buttons' },
+						{ className: 'canvas-area' },
 						_react2.default.createElement(
 							'div',
-							{ className: 'canvas-area' },
-							_react2.default.createElement(
+							{ className: 'container container-0', onDoubleClick: function onDoubleClick() {
+									return _this5.doubleClick();
+								}, onClick: function onClick(e) {
+									return _this5.singleClick(e);
+								} },
+							_react2.default.createElement('canvas', { ref: '0', id: '0' })
+						),
+						this.state.extraCanvas.map(function (id, idx) {
+							return _react2.default.createElement(
 								'div',
-								{ className: 'container container-0', onDoubleClick: function onDoubleClick() {
+								{ key: idx, className: 'container container-' + id, onDoubleClick: function onDoubleClick() {
 										return _this5.doubleClick();
 									}, onClick: function onClick(e) {
 										return _this5.singleClick(e);
 									} },
-								_react2.default.createElement('canvas', { ref: '0', id: '0' })
-							),
-							this.state.extraCanvas.map(function (id, idx) {
-								return _react2.default.createElement(
-									'div',
-									{ key: idx, className: 'container container-' + id, onDoubleClick: function onDoubleClick() {
-											return _this5.doubleClick();
-										}, onClick: function onClick(e) {
-											return _this5.singleClick(e);
-										} },
-									_react2.default.createElement('canvas', { ref: id, id: id })
-								);
-							})
-						),
-						_react2.default.createElement('div', { className: 'buttons-decoration' }),
+								_react2.default.createElement('canvas', { ref: id, id: id })
+							);
+						}),
 						_react2.default.createElement(
 							'div',
 							{ className: 'buttons' },
+							_react2.default.createElement('div', { className: 'buttons-decoration' }),
 							_react2.default.createElement(
 								'button',
 								{ onClick: function onClick() {

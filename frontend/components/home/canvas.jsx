@@ -219,6 +219,11 @@ class Canvas extends React.Component{
 		this.setState({chatToggle: !this.state.chatToggle});
 	}
 
+	pickColor(e){
+		this.setState({backgroundColor: e.target.value});
+		canvasUtil.changeBackground(e.target.value, this.state.selectedCanvas);
+	}
+
 	render(){
 		const {receiveSelectedImg, imgs} = this.props;
 		return (
@@ -378,9 +383,13 @@ class Canvas extends React.Component{
 		    	{this.state.active === 'Bground' ? 
 		        <div id="background" role="tabpanel" aria-labelledby="background-button">
 							<h2> </h2>
-							<ul class='group color-options'>
+							<ul className='group color-options'>
 								{colorOptions.map((color, idx) => <li key={idx} style={{'backgroundColor': `${color}`}} onClick={(e)=>this.selectColor(e, 'backgroundColor')}></li>)}
 							</ul>
+							<div className='form-inline'>
+								<label>Pick a color</label>
+								<input type='color' onChange={(e)=>this.pickColor(e)}/>
+							</div>
 							{/*
 								<div className="form-inline">
 									<label htmlFor="background-color">Color: </label>
@@ -438,7 +447,6 @@ class Canvas extends React.Component{
 		        </div>
 		        : ""}
 		    </div>
-		    <div className='canvas-buttons'>
 			    <div className='canvas-area'>
 			    	<div className='container container-0' onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
 						<canvas ref='0' id='0'></canvas>
@@ -447,24 +455,23 @@ class Canvas extends React.Component{
 				    	<div key={idx} className={`container container-${id}`} onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
 				    		<canvas ref={id} id={id}></canvas>
 				    	</div>)}
+				    <div className='buttons'>
+				   		<div className='buttons-decoration'></div>
+				    	<button onClick={()=>this.addCanvas()}>&#43;</button>
+				    	<button onClick={()=>this.resetCanvas()}>&times;</button>
+				    	{this.state.activeObj ? 
+			    			<button className='delete' onClick={()=>canvasUtil.deleteItem(this.state.selectedCanvas)}><i className="far fa-trash-alt"></i></button>
+				    		: ""}
+			    		{this.state.activeObj &&  this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? 
+			    			<button className='group' onClick={()=>this.groupItems()}><i className="far fa-object-group"></i></button>
+			  			: ""}
+			  			{this.state.activeObj && this.state.activeObj.type === 'group' ? 
+			    			<button className='ungroup' onClick={()=>this.unGroupItems()}><i className="far fa-object-ungroup"></i></button>
+			  			: ""}
+				    </div>
 				  </div>
 
-			   	<div className='buttons-decoration'></div>
-			    <div className='buttons'>
-			    	<button onClick={()=>this.addCanvas()}>&#43;</button>
-			    	<button onClick={()=>this.resetCanvas()}>&times;</button>
-			    	{this.state.activeObj ? 
-		    			<button className='delete' onClick={()=>canvasUtil.deleteItem(this.state.selectedCanvas)}><i className="far fa-trash-alt"></i></button>
-			    		: ""}
-		    		{this.state.activeObj &&  this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? 
-		    			<button className='group' onClick={()=>this.groupItems()}><i className="far fa-object-group"></i></button>
-		  			: ""}
-		  			{this.state.activeObj && this.state.activeObj.type === 'group' ? 
-		    			<button className='ungroup' onClick={()=>this.unGroupItems()}><i className="far fa-object-ungroup"></i></button>
-		  			: ""}
-			    </div>
 				  
-		    </div>
 
 	   	</div> 
 		</div>

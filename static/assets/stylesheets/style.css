@@ -823,6 +823,7 @@ button i {
 }
 .canvas-main .side-content-canvas .tab-content > div .form-inline {
   display: flex;
+  padding: 0 20px;
   align-items: center;
   margin-bottom: 15px;
   min-height: 35px;
@@ -854,16 +855,37 @@ button i {
   border-radius: 5px;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
 }
-.canvas-main .side-content-canvas .canvas-buttons {
-  height: 94vh;
-  flex: 1;
+.canvas-main .side-content-canvas .canvas-area {
+  height: 740px;
+  margin: 25px auto;
+  overflow: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
 }
-.canvas-main .side-content-canvas .canvas-buttons .buttons-decoration {
+.canvas-main .side-content-canvas .canvas-area .container {
+  width: 50%;
+  min-width: 650px;
+  margin: 0 auto;
+  height: 650px;
+  margin-bottom: 10px;
+}
+.canvas-main .side-content-canvas .canvas-area .container canvas {
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.2);
+}
+.canvas-main .side-content-canvas .canvas-area .buttons {
+  position: absolute;
+  bottom: 50px;
+  margin: 0 auto;
+  margin-bottom: 50px;
+  width: 70%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.canvas-main .side-content-canvas .canvas-area .buttons .buttons-decoration {
   position: absolute;
   left: 30%;
   bottom: 75px;
@@ -871,15 +893,7 @@ button i {
   z-index: -1;
   width: 40%;
 }
-.canvas-main .side-content-canvas .canvas-buttons .buttons {
-  margin: 0 auto;
-  margin-bottom: 50px;
-  width: 70%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.canvas-main .side-content-canvas .canvas-buttons .buttons button {
+.canvas-main .side-content-canvas .canvas-area .buttons button {
   width: 22px;
   height: 36px;
   color: gray;
@@ -890,35 +904,16 @@ button i {
   font-size: 24px;
   box-shadow: 2px 1px 4px 0 rgba(0, 0, 0, 0.2);
 }
-.canvas-main .side-content-canvas .canvas-buttons .buttons button:hover {
+.canvas-main .side-content-canvas .canvas-area .buttons button:hover {
   color: white;
   background-color: #0099fe;
   transition: all 0.8s;
 }
-.canvas-main .side-content-canvas .canvas-buttons .buttons .delete, .canvas-main .side-content-canvas .canvas-buttons .buttons .group, .canvas-main .side-content-canvas .canvas-buttons .buttons .ungroup {
+.canvas-main .side-content-canvas .canvas-area .buttons .delete, .canvas-main .side-content-canvas .canvas-area .buttons .group, .canvas-main .side-content-canvas .canvas-area .buttons .ungroup {
   font-size: 20px;
 }
-.canvas-main .side-content-canvas .canvas-buttons .buttons .delete i, .canvas-main .side-content-canvas .canvas-buttons .buttons .group i, .canvas-main .side-content-canvas .canvas-buttons .buttons .ungroup i {
+.canvas-main .side-content-canvas .canvas-area .buttons .delete i, .canvas-main .side-content-canvas .canvas-area .buttons .group i, .canvas-main .side-content-canvas .canvas-area .buttons .ungroup i {
   margin-right: 0;
-}
-.canvas-main .side-content-canvas .canvas-buttons .canvas-area {
-  height: 740px;
-  margin: 25px auto;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-}
-.canvas-main .side-content-canvas .canvas-buttons .canvas-area .container {
-  width: 50%;
-  min-width: 650px;
-  margin: 0 auto;
-  height: 650px;
-  margin-bottom: 10px;
-}
-.canvas-main .side-content-canvas .canvas-buttons .canvas-area .container canvas {
-  overflow: hidden;
-  border-radius: 5px;
-  box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.2);
 }
 
 .modal-screen {
