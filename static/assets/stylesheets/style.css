@@ -107,13 +107,25 @@ input[type=submit] {
   color: #cbc5c1;
   border-radius: 5px;
 }
+.navbar .user .user-dropdown .modal-screen {
+  background: rgba(0, 0, 0, 0);
+}
 .navbar .user .user-dropdown .user-info {
   padding: 10px 15px;
   display: flex;
+  color: #333;
   align-items: center;
+}
+.navbar .user .user-dropdown .user-info i {
+  font-size: 36px;
+  margin-right: 15px;
+}
+.navbar .user .user-dropdown .user-info .username {
+  text-transform: capitalize;
 }
 .navbar .user .user-dropdown ul {
   border-top: 1px solid #cbc5c1;
+  padding-top: 5px;
 }
 .navbar .user .user-dropdown ul li {
   display: flex;
@@ -457,7 +469,7 @@ input[type=submit] {
 }
 
 .chat, .channel {
-  z-index: 20;
+  z-index: 3;
   position: fixed;
   bottom: -260px;
   width: 250px;

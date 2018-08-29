@@ -22,10 +22,7 @@ class Service extends React.Component {
 	sendService(){
 		this.setState({sending: true});
 		const imgDataArr = this.extraPDF();
-		// for img png file
-		// const data = imgData.replace(/^data:image\/\w+;base64,/, "");
-		// console.log(data);
-		const pdf = new jsPDF();
+		const pdf = new jsPDF('l', 'mm', [172, 172]);
 		imgDataArr.forEach((imgData, idx) => {
 			pdf.addImage(imgData, 'JPEG', 0, 0);
 			if (idx !== imgDataArr.length - 1) {

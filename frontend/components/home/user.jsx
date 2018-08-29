@@ -23,6 +23,7 @@ class User extends React.Component {
 	}
 
 	render(){
+		const {currentUser} = this.props;
 		return(
 			<div className='user' onClick={()=>this.toggleDropdown()}>
 				<i className="far fa-user"></i>
@@ -31,14 +32,16 @@ class User extends React.Component {
 						<div className='avatar'>
 							<i className="far fa-user"></i>
 						</div>
-						<div></div>
+						<div className='username'>
+							{currentUser && currentUser.username ? currentUser.username : ''}
+						</div>
 					</div>
 					<ul>
 						<li><i className="far fa-user"></i>Profile</li>
 						<li><i className="fas fa-cog"></i>Account settings</li>
 						<li onClick={()=>this.logout()}><i className="fas fa-sign-out-alt"></i>Logout</li>
 					</ul>
-					<div></div>
+      		<div onClick={()=>this.toggleDropdown()} className="modal-screen"></div>
 				</div>
 				{/*<button className="btn" onClick={(e)=>this.logout()}>Log Out</button>*/}
 			</div>

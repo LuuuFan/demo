@@ -33732,7 +33732,8 @@ var Home = function (_React$Component) {
 			    canvas = _props.canvas,
 			    receiveSelectedImg = _props.receiveSelectedImg,
 			    selectedImg = _props.selectedImg,
-			    removeCurrentUser = _props.removeCurrentUser;
+			    removeCurrentUser = _props.removeCurrentUser,
+			    currentUser = _props.currentUser;
 
 			return _react2.default.createElement(
 				'div',
@@ -33744,7 +33745,8 @@ var Home = function (_React$Component) {
 					clearMessage: clearMessage,
 					sendService: sendService,
 					canvas: canvas,
-					removeCurrentUser: removeCurrentUser
+					removeCurrentUser: removeCurrentUser,
+					currentUser: currentUser
 				}),
 				_react2.default.createElement(_canvas2.default, {
 					receiveCanvas: receiveCanvas,
@@ -34028,7 +34030,8 @@ var Header = function (_React$Component) {
 			    clearMessage = _props.clearMessage,
 			    sendService = _props.sendService,
 			    canvas = _props.canvas,
-			    removeCurrentUser = _props.removeCurrentUser;
+			    removeCurrentUser = _props.removeCurrentUser,
+			    currentUser = _props.currentUser;
 
 			return _react2.default.createElement(
 				'header',
@@ -34048,7 +34051,7 @@ var Header = function (_React$Component) {
 					{ className: 'header-buttons' },
 					_react2.default.createElement(_share_container2.default, { receiveImg: receiveImg, sendEmail: sendEmail, message: message, clearMessage: clearMessage, sendService: sendService, canvas: canvas })
 				),
-				_react2.default.createElement(_user2.default, { removeCurrentUser: removeCurrentUser })
+				_react2.default.createElement(_user2.default, { removeCurrentUser: removeCurrentUser, currentUser: currentUser })
 			);
 		}
 	}]);
@@ -34857,10 +34860,7 @@ var Service = function (_React$Component) {
 
 			this.setState({ sending: true });
 			var imgDataArr = this.extraPDF();
-			// for img png file
-			// const data = imgData.replace(/^data:image\/\w+;base64,/, "");
-			// console.log(data);
-			var pdf = new jsPDF();
+			var pdf = new jsPDF('l', 'mm', [172, 172]);
 			imgDataArr.forEach(function (imgData, idx) {
 				pdf.addImage(imgData, 'JPEG', 0, 0);
 				if (idx !== imgDataArr.length - 1) {
@@ -35316,6 +35316,8 @@ var User = function (_React$Component) {
 		value: function render() {
 			var _this3 = this;
 
+			var currentUser = this.props.currentUser;
+
 			return _react2.default.createElement(
 				'div',
 				{ className: 'user', onClick: function onClick() {
@@ -35333,7 +35335,11 @@ var User = function (_React$Component) {
 							{ className: 'avatar' },
 							_react2.default.createElement('i', { className: 'far fa-user' })
 						),
-						_react2.default.createElement('div', null)
+						_react2.default.createElement(
+							'div',
+							{ className: 'username' },
+							currentUser && currentUser.username ? currentUser.username : ''
+						)
 					),
 					_react2.default.createElement(
 						'ul',
@@ -35359,7 +35365,9 @@ var User = function (_React$Component) {
 							'Logout'
 						)
 					),
-					_react2.default.createElement('div', null)
+					_react2.default.createElement('div', { onClick: function onClick() {
+							return _this3.toggleDropdown();
+						}, className: 'modal-screen' })
 				)
 			);
 		}

@@ -9,7 +9,7 @@ class Header extends React.Component{
 	// }
 
 	render(){
-		const {receiveImg, sendEmail, message, clearMessage, sendService, canvas, removeCurrentUser} = this.props;
+		const {receiveImg, sendEmail, message, clearMessage, sendService, canvas, removeCurrentUser, currentUser} = this.props;
 		return(
 			<header className='navbar'>
 				<a href='/'>
@@ -22,7 +22,7 @@ class Header extends React.Component{
 				<div className='header-buttons'>
 					<ShareContainer receiveImg={receiveImg} sendEmail={sendEmail} message={message} clearMessage={clearMessage} sendService={sendService} canvas={canvas}/>
 				</div>
-				<User removeCurrentUser={removeCurrentUser}/>
+				<User removeCurrentUser={removeCurrentUser} currentUser={currentUser}/>
 			</header>
 
 		);
