@@ -8830,6 +8830,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		},
 		receiveChatMessage: function receiveChatMessage(channel, message, type) {
 			return dispatch((0, _channel.receiveChatMessage)(channel, message, type));
+		},
+		toggleChannel: function toggleChannel(channel, active) {
+			return dispatch((0, _channel.toggleChannel)(channel, active));
 		}
 	};
 };
@@ -30934,8 +30937,9 @@ var channelReducer = function channelReducer() {
 			newState = Object.assign({}, state);
 			if (newState[action.channel.toLowerCase()]) {
 				newState[action.channel.toLowerCase()].status = true;
+				newState[action.channel.toLowerCase()].active = true;
 			} else {
-				newState[action.channel.toLowerCase()] = { message: {}, status: true };
+				newState[action.channel.toLowerCase()] = { message: {}, status: true, active: true };
 			}
 			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
@@ -30943,17 +30947,20 @@ var channelReducer = function channelReducer() {
 			newState = Object.assign({}, state);
 			var timestamp = new Date().getTime();
 			if (!newState[action.channel.toLowerCase()]) {
-				newState[action.channel.toLowerCase()] = { message: {}, status: true };
+				newState[action.channel.toLowerCase()] = { message: {}, status: true, active: true };
 			} else {
 				newState[action.channel.toLowerCase()].status = true;
+				newState[action.channel.toLowerCase()].active = true;
 			}
 			newState[action.channel.toLowerCase()].message[timestamp] = { type: action.t, text: action.message };
+			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		case _channel.TOGGLE_CHANNEL:
 			newState = Object.assign({}, state);
 			if (newState[action.channel]) {
 				newState[action.channel].active = action.active;
 			}
+			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		default:
 			return state;
@@ -36614,7 +36621,8 @@ var Chat = function (_React$Component) {
 			    channel = _props.channel,
 			    removeChannel = _props.removeChannel,
 			    currentUser = _props.currentUser,
-			    receiveChatMessage = _props.receiveChatMessage;
+			    receiveChatMessage = _props.receiveChatMessage,
+			    toggleChannel = _props.toggleChannel;
 
 			return _react2.default.createElement(
 				'div',
@@ -36628,8 +36636,17 @@ var Chat = function (_React$Component) {
 						return _react2.default.createElement(
 							'div',
 							{ key: idx },
-							_react2.default.createElement(_channel2.default, { idx: idx, user: c, removeChannel: removeChannel, socket: _this4.socket, currentUser: currentUser, receiveChatMessage: receiveChatMessage, message: channel[c].message }),
-							')'
+							_react2.default.createElement(_channel2.default, {
+								idx: idx,
+								user: c,
+								removeChannel: removeChannel,
+								socket: _this4.socket,
+								currentUser: currentUser,
+								receiveChatMessage: receiveChatMessage,
+								message: channel[c].message,
+								active: channel[c].active,
+								toggleChannel: toggleChannel
+							})
 						);
 					})
 				) : "",
@@ -36717,7 +36734,7 @@ var Channel = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (Channel.__proto__ || Object.getPrototypeOf(Channel)).call(this, props));
 
 		_this.state = {
-			active: true,
+			// active: true,
 			input: '',
 			message: []
 		};
@@ -36726,9 +36743,6 @@ var Channel = function (_React$Component) {
 	}
 
 	_createClass(Channel, [{
-		key: 'componentDidMount',
-		value: function componentDidMount() {}
-	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
 			if (nextProps.socket) {
@@ -36739,7 +36753,8 @@ var Channel = function (_React$Component) {
 		key: 'toggle',
 		value: function toggle(e) {
 			if (e.target.className !== 'close-channel') {
-				this.setState({ active: !this.state.active });
+				// this.setState({active: !this.state.active});
+				this.props.toggleChannel(this.props.user, !this.props.active);
 			}
 		}
 	}, {
@@ -36777,11 +36792,12 @@ var Channel = function (_React$Component) {
 			var _props = this.props,
 			    user = _props.user,
 			    idx = _props.idx,
-			    message = _props.message;
+			    message = _props.message,
+			    active = _props.active;
 
 			return _react2.default.createElement(
 				'div',
-				{ className: 'channel ' + (this.state.active ? 'channel-active' : ''), id: 'channel-' + user, style: { 'right': 260 * (idx + 1) + 'px' } },
+				{ className: 'channel ' + (active ? 'channel-active' : ''), id: 'channel-' + user, style: { 'right': 260 * (idx + 1) + 'px' } },
 				_react2.default.createElement(
 					'div',
 					{ className: 'header channel-header', onClick: function onClick(e) {

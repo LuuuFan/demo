@@ -63,14 +63,24 @@ class Chat extends React.Component {
 	}
 
 	render(){
-		const {channel, removeChannel, currentUser, receiveChatMessage} = this.props;
+		const {channel, removeChannel, currentUser, receiveChatMessage, toggleChannel} = this.props;
 		return (
 			<div className='chat-area'>
 				{channel && Object.keys(channel).length ? 
 					<div>
 						{Object.keys(channel).filter(el => channel[el].status).map((c, idx) => 
 							<div key={idx}>
-								<Channel idx={idx} user={c} removeChannel={removeChannel} socket={this.socket} currentUser={currentUser} receiveChatMessage={receiveChatMessage} message={channel[c].message}/>)
+								<Channel 
+									idx={idx} 
+									user={c} 
+									removeChannel={removeChannel} 
+									socket={this.socket} 
+									currentUser={currentUser} 
+									receiveChatMessage={receiveChatMessage} 
+									message={channel[c].message}
+									active={channel[c].active}
+									toggleChannel={toggleChannel}
+								/>
 							</div>)
 						}
 					</div>

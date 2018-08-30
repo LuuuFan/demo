@@ -5,15 +5,11 @@ class Channel extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			active: true,
+			// active: true,
 			input: '',
 			message: [],
 		};
 		this.socket = this.props.socket;
-	}
-
-	componentDidMount(){
-
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -24,7 +20,8 @@ class Channel extends React.Component{
 
 	toggle(e){
 		if (e.target.className !== 'close-channel') {
-			this.setState({active: !this.state.active});
+			// this.setState({active: !this.state.active});
+			this.props.toggleChannel(this.props.user, !this.props.active);
 		}
 	}
 
@@ -52,9 +49,9 @@ class Channel extends React.Component{
 
 
 	render(){
-		const {user, idx, message} = this.props;
+		const {user, idx, message, active} = this.props;
 		return(
-			<div className={`channel ${this.state.active ? 'channel-active' : ''}`} id={`channel-${user}`} style={{'right': `${260 * (idx + 1)}px`}}>
+			<div className={`channel ${active ? 'channel-active' : ''}`} id={`channel-${user}`} style={{'right': `${260 * (idx + 1)}px`}}>
 				<div className='header channel-header' onClick={(e)=>this.toggle(e)}>
 					<div>
 						<i className="far fa-user"></i>

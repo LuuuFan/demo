@@ -14,8 +14,9 @@ const channelReducer = (state = {}, action) => {
 			newState = Object.assign({}, state)
 			if (newState[action.channel.toLowerCase()]) {
 				newState[action.channel.toLowerCase()].status = true;
+				newState[action.channel.toLowerCase()].active = true;
 			} else {
-				newState[action.channel.toLowerCase()] = {message: {}, status: true};
+				newState[action.channel.toLowerCase()] = {message: {}, status: true, active: true};
 			}
 			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
@@ -23,17 +24,20 @@ const channelReducer = (state = {}, action) => {
 			newState = Object.assign({}, state);
 			const timestamp = new Date().getTime();
 			if (!newState[action.channel.toLowerCase()]) {
-				newState[action.channel.toLowerCase()] = {message: {}, status: true};
+				newState[action.channel.toLowerCase()] = {message: {}, status: true, active: true};
 			} else {
 				newState[action.channel.toLowerCase()].status = true;
+				newState[action.channel.toLowerCase()].active = true;
 			}
 			newState[action.channel.toLowerCase()].message[timestamp] = {type: action.t, text: action.message};
+			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		case TOGGLE_CHANNEL:
 			newState = Object.assign({}, state);
 			if (newState[action.channel]) {
 				newState[action.channel].active = action.active;
 			}
+			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		default: 
 			return state;
