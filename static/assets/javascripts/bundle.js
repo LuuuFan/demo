@@ -35568,12 +35568,13 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'scroll',
 		value: function scroll(id, scrollToCanvas) {
-			console.log($('#' + id).offset().top);
-			debugger;
+			var scroll = $('.canvas-area').height() + $('.canvas-area').offset().top;
+			console.log(scroll);
+			console.log($('.canvas-area').offset().top);
 			top += $('#' + id).offset().top;
 			$('.canvas-area').animate({
 				// scrollTop: `${$(`#${id}`).offset().top}`
-				scrollTop: '' + (scrollToCanvas ? $('#' + id).offset().top : top)
+				scrollTop: '' + (scrollToCanvas ? scroll : top)
 			}, 800);
 		}
 	}, {
