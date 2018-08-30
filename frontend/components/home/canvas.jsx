@@ -561,13 +561,21 @@ class Canvas extends React.Component{
 			    	<div key={id} className={`container container-${id}`} onDoubleClick={()=>this.doubleClick()} onClick={(e)=>this.singleClick(e)}>
 			    		<canvas ref={id} id={id}></canvas>
 			    		<div className='container-sidebar'>
-			    			<i className="fas fa-arrow-up" onClick={(e)=>this.moveCanvasUp(e, id)} style={{'color': `${!idx ? '#cbc5c1' : ''}`}}></i>
+			    			<i className="fas fa-arrow-up" onClick={(e)=>this.moveCanvasUp(e, id)} style={{'color': `${!idx ? '#cbc5c1' : ''}`}}>
+			    				{idx ? <span className='tooltip'>Move Up</span> : ""}
+			    			</i>
 			    			<span>{idx + 1}</span>
-			    			<i className="fas fa-arrow-down" onClick={(e)=>this.moveCanvasDown(e, id)} style={{'color': `${idx < this.state.canvasIdList.length - 1 ? "" : '#cbc5c1'}`}}></i>
-			    			<i className="far fa-copy" onClick={(e)=>this.copyCanvas(e, id)}></i>
+			    			<i className="fas fa-arrow-down" onClick={(e)=>this.moveCanvasDown(e, id)} style={{'color': `${idx < this.state.canvasIdList.length - 1 ? "" : '#cbc5c1'}`}}>
+			    				{idx < this.state.canvasIdList.length - 1 ? <span className='tooltip'>Move Down</span> : ""}
+			    			</i>
+			    			<i className="far fa-copy" onClick={(e)=>this.copyCanvas(e, id)}>
+			    				<span className='tooltip'>Copy</span>
+			    			</i>
 			    			<i className="fas fa-trash" onClick={(e)=>this.deleteCanvas(e, id)} style={{
 			    				'color': `${this.state.canvasIdList.length === 1 ? '#cbc5c1' : ''}`
-			    			}}></i>
+			    			}}>
+			    				<span className='tooltip'>Delete</span>
+			    			</i>
 			    		</div>
 			    	</div>)}
 			  </div>

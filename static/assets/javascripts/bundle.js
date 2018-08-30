@@ -36273,25 +36273,57 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'div',
 									{ className: 'container-sidebar' },
-									_react2.default.createElement('i', { className: 'fas fa-arrow-up', onClick: function onClick(e) {
-											return _this5.moveCanvasUp(e, id);
-										}, style: { 'color': '' + (!idx ? '#cbc5c1' : '') } }),
+									_react2.default.createElement(
+										'i',
+										{ className: 'fas fa-arrow-up', onClick: function onClick(e) {
+												return _this5.moveCanvasUp(e, id);
+											}, style: { 'color': '' + (!idx ? '#cbc5c1' : '') } },
+										idx ? _react2.default.createElement(
+											'span',
+											{ className: 'tooltip' },
+											'Move Up'
+										) : ""
+									),
 									_react2.default.createElement(
 										'span',
 										null,
 										idx + 1
 									),
-									_react2.default.createElement('i', { className: 'fas fa-arrow-down', onClick: function onClick(e) {
-											return _this5.moveCanvasDown(e, id);
-										}, style: { 'color': '' + (idx < _this5.state.canvasIdList.length - 1 ? "" : '#cbc5c1') } }),
-									_react2.default.createElement('i', { className: 'far fa-copy', onClick: function onClick(e) {
-											return _this5.copyCanvas(e, id);
-										} }),
-									_react2.default.createElement('i', { className: 'fas fa-trash', onClick: function onClick(e) {
-											return _this5.deleteCanvas(e, id);
-										}, style: {
-											'color': '' + (_this5.state.canvasIdList.length === 1 ? '#cbc5c1' : '')
-										} })
+									_react2.default.createElement(
+										'i',
+										{ className: 'fas fa-arrow-down', onClick: function onClick(e) {
+												return _this5.moveCanvasDown(e, id);
+											}, style: { 'color': '' + (idx < _this5.state.canvasIdList.length - 1 ? "" : '#cbc5c1') } },
+										idx < _this5.state.canvasIdList.length - 1 ? _react2.default.createElement(
+											'span',
+											{ className: 'tooltip' },
+											'Move Down'
+										) : ""
+									),
+									_react2.default.createElement(
+										'i',
+										{ className: 'far fa-copy', onClick: function onClick(e) {
+												return _this5.copyCanvas(e, id);
+											} },
+										_react2.default.createElement(
+											'span',
+											{ className: 'tooltip' },
+											'Copy'
+										)
+									),
+									_react2.default.createElement(
+										'i',
+										{ className: 'fas fa-trash', onClick: function onClick(e) {
+												return _this5.deleteCanvas(e, id);
+											}, style: {
+												'color': '' + (_this5.state.canvasIdList.length === 1 ? '#cbc5c1' : '')
+											} },
+										_react2.default.createElement(
+											'span',
+											{ className: 'tooltip' },
+											'Delete'
+										)
+									)
 								)
 							);
 						})

@@ -355,11 +355,13 @@ button{
       .container:first-of-type{
         .fa-arrow-up:hover{
           border: 1px solid transparent;
+          box-shadow: none;
         }
       }
       .container:last-of-type{
         .fa-arrow-down:hover{
           border: 1px solid transparent;
+          box-shadow: none;
         }
       }
       .container{
@@ -384,21 +386,65 @@ button{
           align-items: center;
           justify-content: center;
           color: #666;
+          i:hover .tooltip{
+            display: block;
+          }
           i{
             cursor: pointer;
             font-size: 16px;
             margin: 3px;
             padding: 7px;
             border: 1px solid transparent;
+            border-radius: 3px;
+            position: relative;
+            .tooltip{
+              display: none;
+              font-size: 10px;
+              border-radius: 3px;
+              padding: 3px 7px;
+              position: absolute;
+              top: 0;
+              left: 120%; 
+              color: white;
+              font-weight: normal;
+              background: rgba(0,0,0,0.6);
+            }
+            .tooltip:before, .tooltip:after{
+              content: " ";
+              left: -6px;
+              top: 30%;
+              border: 2px solid transparent;
+              height: 0;
+              width: 0;
+              position: absolute;
+              pointer-events: none;
+            }
+            .tooltip:after {
+              border-right-color: rgba(0,0,0,0.6);
+              border-width: 3px;
+              // margin-left: -3px;
+            }
+            .tooltip:before {
+              border-right-color: rgba(0,0,0,0.6);
+              border-width: 3px;
+              // margin-left: -3px;
+            }
           }
           i:hover{
             transition: all .8s;
             background-color: white;
             border: 1px solid $hover;
             color: $hover;
+            box-shadow: 2px 1px 4px 0 rgba(0,0,0,.2);
           }
           span{
             color: $hover;
+            padding: 7px 15px;
+            margin: 3px;
+            cursor: pointer;
+          }
+          span:hover{
+            box-shadow: 2px 1px 4px 0 rgba(0,0,0,.2);
           }
         }
       }
