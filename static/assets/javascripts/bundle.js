@@ -4563,9 +4563,10 @@ Object.defineProperty(exports, "__esModule", {
 var RECEIVE_CANVAS = exports.RECEIVE_CANVAS = 'RECEIVE_CANVAS';
 var REMOVE_CANVAS = exports.REMOVE_CANVAS = 'REMOVE_CANVAS';
 
-var receiveCanvas = exports.receiveCanvas = function receiveCanvas(canvas) {
+var receiveCanvas = exports.receiveCanvas = function receiveCanvas(id, canvas) {
 	return {
 		type: RECEIVE_CANVAS,
+		id: id,
 		canvas: canvas
 	};
 };
@@ -30849,7 +30850,9 @@ var canvasReducer = function canvasReducer() {
 	var newState = void 0;
 	switch (action.type) {
 		case _canvas.RECEIVE_CANVAS:
-			return action.canvas;
+			newState = Object.assign({}, state);
+			newState[action.id] = action.canvas;
+			return newState;
 		case _canvas.REMOVE_CANVAS:
 			newState = Object.assign({}, state);
 			delete newState[action.id];
@@ -33614,8 +33617,8 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		fetchAllImgs: function fetchAllImgs(token) {
 			return dispatch((0, _images.fetchAllImgs)(token));
 		},
-		receiveCanvas: function receiveCanvas(canvas) {
-			return dispatch((0, _canvas.receiveCanvas)(canvas));
+		receiveCanvas: function receiveCanvas(id, canvas) {
+			return dispatch((0, _canvas.receiveCanvas)(id, canvas));
 		},
 		receiveImg: function receiveImg(img) {
 			return dispatch((0, _images.receiveImg)(img));
@@ -35518,15 +35521,15 @@ var Canvas = function (_React$Component) {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate(prevProps, prevState) {
 			if (prevState.canvasIdList.length < this.state.canvasIdList.length) {
-				var id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
+				var id = void 0;
 				if (this.state.copy) {
-					this.initializeCanvas('' + id, this.state.copy, this.state.prevId);
-					// setTimeout(this.scroll(id, true), 800);
-					this.scroll(id, true);
-				} else if (id) {
+					id = this.state.canvasIdList[this.state.canvasIdList.indexOf(this.state.prevId) + 1];
+					this.initializeCanvas('' + id, this.state.copy);
+				} else {
+					id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
 					this.initializeCanvas('' + id);
-					this.scroll(id);
 				}
+				this.scroll(id);
 			}
 		}
 	}, {
@@ -35544,48 +35547,37 @@ var Canvas = function (_React$Component) {
 		value: function initializeCanvas(id, copy, prevId) {
 			var container = document.querySelector('.container-' + id);
 			var canvas = new fabric.Canvas(id, { width: 650, height: 650 });
-			var canvasIdList = Array.from(this.state.canvasIdList);
 			if (container) {
 				if (copy) {
 					canvas.loadFromJSON(copy.toJSON(), function () {
 						canvas.renderAll;
 					});
-					var idx = canvasIdList.indexOf(prevId);
-					canvasIdList.pop();
-					canvasIdList.splice(idx + 1, 0, id);
-					console.log(canvasIdList);
 				} else {
 					canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 				}
-				this.props.receiveCanvas(Object.assign({}, this.state.canvas, _defineProperty({}, id, canvas)));
+				this.props.receiveCanvas(id, canvas);
+				// refactor later, no need track canvas in component state since already have global state
 				this.setState({
 					canvas: Object.assign({}, this.state.canvas, _defineProperty({}, id, canvas)),
 					selectedCanvas: canvas,
-					canvasIdList: canvasIdList
+					prevId: '',
+					copy: ''
 				});
 			}
 		}
 	}, {
 		key: 'scroll',
-		value: function scroll(id, scrollToCanvas) {
-			console.log($('.canvas-area').offset().top);
-			top += $('#' + id).offset().top;
-			if (scrollToCanvas) {
-				setTimeout(function () {
-					console.log('~~~~~~~~~~~~~~~~');
-					console.log(id);
-					console.log($('#' + id).offset().top);
-					$('.canvas-area').animate({
-						scrollTop: '' + $('#' + id).offset().top
-						// scrollTop: 800
-					}, 800);
-				}, 800);
-			} else {
-				$('.canvas-area').animate({
-					// scrollTop: `${$(`#${id}`).offset().top}`
-					scrollTop: top
-				}, 800);
-			}
+		value: function scroll(id) {
+			console.log('~~~~~~~~~~~~~~~~');
+			console.log($('#' + id).offset().top);
+			console.log(id);
+			$('.canvas-area').animate({
+				scrollTop: $('#' + id).offset().top
+			}, 800);
+			// top += $(`#${id}`).offset().top;
+			// $('.canvas-area').animate({
+			// 	scrollTop: top
+			// }, 800);
 		}
 	}, {
 		key: 'doubleClick',
@@ -35741,8 +35733,15 @@ var Canvas = function (_React$Component) {
 		key: 'addCanvas',
 		value: function addCanvas(copy, prevId) {
 			var last_el = Array.from(this.state.canvasIdList).sort()[this.state.canvasIdList.length - 1];
+			var canvasIdList = Array.from(this.state.canvasIdList);
+			if (copy && prevId) {
+				var idx = this.state.canvasIdList.indexOf(prevId);
+				canvasIdList.splice(idx + 1, 0, last_el * 1 + 1);
+			} else {
+				canvasIdList.push(last_el * 1 + 1);
+			}
 			this.setState({
-				canvasIdList: this.state.canvasIdList.concat([last_el * 1 + 1]),
+				canvasIdList: canvasIdList,
 				copy: copy,
 				prevId: prevId
 			});
@@ -35763,10 +35762,30 @@ var Canvas = function (_React$Component) {
 			this.setState({ backgroundColor: e.target.value });
 			canvasUtil.changeBackground(e.target.value, this.state.selectedCanvas);
 		}
-
-		// moveCanvasUp
-		// moveCanvasDown
-
+	}, {
+		key: 'moveCanvasUp',
+		value: function moveCanvasUp(e, id) {
+			var canvasIdList = Array.from(this.state.canvasIdList);
+			var idx = canvasIdList.indexOf(id);
+			if (idx) {
+				var _ref = [canvasIdList[idx], canvasIdList[idx - 1]];
+				canvasIdList[idx - 1] = _ref[0];
+				canvasIdList[idx] = _ref[1];
+			}
+			this.setState({ canvasIdList: canvasIdList });
+		}
+	}, {
+		key: 'moveCanvasDown',
+		value: function moveCanvasDown(e, id) {
+			var canvasIdList = Array.from(this.state.canvasIdList);
+			var idx = canvasIdList.indexOf(id);
+			if (idx < canvasIdList.length - 1) {
+				var _ref2 = [canvasIdList[idx + 1], canvasIdList[idx]];
+				canvasIdList[idx] = _ref2[0];
+				canvasIdList[idx + 1] = _ref2[1];
+			}
+			this.setState({ canvasIdList: canvasIdList });
+		}
 	}, {
 		key: 'copyCanvas',
 		value: function copyCanvas(e, id) {
@@ -36264,7 +36283,7 @@ var Canvas = function (_React$Component) {
 									),
 									_react2.default.createElement('i', { className: 'fas fa-arrow-down', onClick: function onClick(e) {
 											return _this5.moveCanvasDown(e, id);
-										} }),
+										}, style: { 'color': '' + (idx < _this5.state.canvasIdList.length - 1 ? "" : '#cbc5c1') } }),
 									_react2.default.createElement('i', { className: 'far fa-copy', onClick: function onClick(e) {
 											return _this5.copyCanvas(e, id);
 										} }),

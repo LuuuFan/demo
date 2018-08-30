@@ -932,6 +932,9 @@ button i {
 .canvas-main .side-content-canvas .canvas-area .container:first-of-type .fa-arrow-up:hover {
   border: 1px solid transparent;
 }
+.canvas-main .side-content-canvas .canvas-area .container:last-of-type .fa-arrow-down:hover {
+  border: 1px solid transparent;
+}
 .canvas-main .side-content-canvas .canvas-area .container {
   width: 50%;
   min-width: 700px;

@@ -19,7 +19,7 @@ const mapStateToProps = (state)  => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	fetchAllImgs: token => dispatch(fetchAllImgs(token)),
-	receiveCanvas: canvas => dispatch(receiveCanvas(canvas)),
+	receiveCanvas: (id, canvas) => dispatch(receiveCanvas(id, canvas)),
 	receiveImg: img => dispatch(receiveImg(img)),
 	sendEmail: (token, formData) => dispatch(sendEmail(token, formData)),
 	clearMessage: () => dispatch(clearMessage()),

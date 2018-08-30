@@ -61,15 +61,15 @@ class Canvas extends React.Component{
 
 	componentDidUpdate(prevProps, prevState){
 		if (prevState.canvasIdList.length < this.state.canvasIdList.length) {
-			const id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
+			let id;
 			if (this.state.copy) {
-				this.initializeCanvas(`${id}`, this.state.copy, this.state.prevId);
-				// setTimeout(this.scroll(id, true), 800);
-				this.scroll(id, true);
-			} else if (id) {
+				id = this.state.canvasIdList[this.state.canvasIdList.indexOf(this.state.prevId) + 1];
+				this.initializeCanvas(`${id}`, this.state.copy);
+			} else {
+				id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
 				this.initializeCanvas(`${id}`);
-				this.scroll(id);
 			}
+			this.scroll(id);
 		}
 	}
 
@@ -85,47 +85,36 @@ class Canvas extends React.Component{
 	initializeCanvas(id, copy, prevId){
 		const container = document.querySelector(`.container-${id}`);
 		let canvas = new fabric.Canvas(id, {width: 650, height: 650});
-		const canvasIdList = Array.from(this.state.canvasIdList);
 		if (container) {
 			if (copy) {
 				canvas.loadFromJSON(copy.toJSON(), ()=>{
 					canvas.renderAll;
 				})
-				const idx = canvasIdList.indexOf(prevId);
-				canvasIdList.pop();
-				canvasIdList.splice(idx + 1, 0, id);
-				console.log(canvasIdList);
 			} else {
 				canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 			}
-			this.props.receiveCanvas(Object.assign({}, this.state.canvas, {[id]: canvas}));
+			this.props.receiveCanvas(id, canvas);
+			// refactor later, no need track canvas in component state since already have global state
 			this.setState({
 				canvas: Object.assign({}, this.state.canvas, {[id]: canvas}),
 				selectedCanvas: canvas,
-				canvasIdList,
+				prevId: '',
+				copy: '',
 			});
 		}
 	}
 
-	scroll(id, scrollToCanvas){
-		console.log($('.canvas-area').offset().top);
-		top += $(`#${id}`).offset().top;
-		if (scrollToCanvas) {
-			setTimeout(()=>{
-				console.log('~~~~~~~~~~~~~~~~')
-				console.log(id)
-				console.log($(`#${id}`).offset().top);
-				$('.canvas-area').animate({
-				scrollTop: `${$(`#${id}`).offset().top}`
-					// scrollTop: 800
-				}, 800)
-			}, 800)
-		} else {
-			$('.canvas-area').animate({
-				// scrollTop: `${$(`#${id}`).offset().top}`
-				scrollTop: top
-			}, 800);
-		}
+	scroll(id){
+		console.log('~~~~~~~~~~~~~~~~')
+		console.log($(`#${id}`).offset().top);
+		console.log(id)
+		$('.canvas-area').animate({
+			scrollTop: $(`#${id}`).offset().top
+		}, 800)
+		// top += $(`#${id}`).offset().top;
+		// $('.canvas-area').animate({
+		// 	scrollTop: top
+		// }, 800);
 	}
 
 	doubleClick(){
@@ -264,8 +253,15 @@ class Canvas extends React.Component{
 
 	addCanvas(copy, prevId){
 		const last_el = Array.from(this.state.canvasIdList).sort()[this.state.canvasIdList.length - 1];
+		let canvasIdList = Array.from(this.state.canvasIdList)
+		if (copy && prevId) {
+			const idx = this.state.canvasIdList.indexOf(prevId);
+			canvasIdList.splice(idx + 1, 0, last_el * 1 + 1);
+		} else {
+			canvasIdList.push(last_el * 1 + 1);
+		}
 		this.setState({
-			canvasIdList: this.state.canvasIdList.concat([last_el * 1 + 1]),
+			canvasIdList,
 			copy,
 			prevId,
 		});
@@ -284,8 +280,23 @@ class Canvas extends React.Component{
 		canvasUtil.changeBackground(e.target.value, this.state.selectedCanvas);
 	}
 
-	// moveCanvasUp
-	// moveCanvasDown
+	moveCanvasUp(e, id){
+		const canvasIdList = Array.from(this.state.canvasIdList);
+		const idx = canvasIdList.indexOf(id);
+		if (idx) {
+			[canvasIdList[idx - 1], canvasIdList[idx]] = [canvasIdList[idx], canvasIdList[idx - 1]];
+		}
+		this.setState({canvasIdList});
+	}
+
+	moveCanvasDown(e, id){
+		const canvasIdList = Array.from(this.state.canvasIdList);
+		const idx = canvasIdList.indexOf(id);
+		if (idx < canvasIdList.length - 1) {
+			[canvasIdList[idx], canvasIdList[idx + 1]] = [canvasIdList[idx + 1], canvasIdList[idx]]
+		}
+		this.setState({canvasIdList});
+	}
 
 	copyCanvas(e, id){
 		this.addCanvas(this.state.canvas[id], id);
@@ -552,7 +563,7 @@ class Canvas extends React.Component{
 			    		<div className='container-sidebar'>
 			    			<i className="fas fa-arrow-up" onClick={(e)=>this.moveCanvasUp(e, id)} style={{'color': `${!idx ? '#cbc5c1' : ''}`}}></i>
 			    			<span>{idx + 1}</span>
-			    			<i className="fas fa-arrow-down" onClick={(e)=>this.moveCanvasDown(e, id)}></i>
+			    			<i className="fas fa-arrow-down" onClick={(e)=>this.moveCanvasDown(e, id)} style={{'color': `${idx < this.state.canvasIdList.length - 1 ? "" : '#cbc5c1'}`}}></i>
 			    			<i className="far fa-copy" onClick={(e)=>this.copyCanvas(e, id)}></i>
 			    			<i className="fas fa-trash" onClick={(e)=>this.deleteCanvas(e, id)} style={{
 			    				'color': `${this.state.canvasIdList.length === 1 ? '#cbc5c1' : ''}`

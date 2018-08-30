@@ -357,6 +357,11 @@ button{
           border: 1px solid transparent;
         }
       }
+      .container:last-of-type{
+        .fa-arrow-down:hover{
+          border: 1px solid transparent;
+        }
+      }
       .container{
         width: 50%;
         min-width: 700px;
