@@ -46,6 +46,12 @@ class Canvas extends React.Component{
 				canvasUtil.deleteItem(this.state.selectedCanvas);				
 			}
 		});
+
+		$.extend($.scrollTo.defaults, {
+		  axis: 'y',
+		  duration: 800,
+		  offset: -50
+		});
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -106,9 +112,11 @@ class Canvas extends React.Component{
 		console.log('~~~~~~~~~~~~~~~~')
 		console.log($(`#${id}`).offset().top);
 		console.log(id)
-		$('.canvas-area').animate({
-			scrollTop: $(`#${id}`).offset().top
-		}, 800)
+		$('.canvas-area').scrollTo(`#${id}`);
+		// $('.canvas-area').animate({
+		// 	scrollTop: $(`#${id}`).offset().top,
+		// 	offset: -50,
+		// }, 800)
 		// top += $(`#${id}`).offset().top;
 		// $('.canvas-area').animate({
 		// 	scrollTop: top

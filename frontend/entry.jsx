@@ -4,6 +4,8 @@ import configureStore from './store/configureStore';
 import Root from './components/root';
 
 document.addEventListener('DOMContentLoaded', () => {
+	
+
 	let preloadedState;
 	let currentUser = JSON.parse(localStorage.getItem('currentUser'));
 	const channel = JSON.parse(localStorage.getItem('channel'));

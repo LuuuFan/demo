@@ -24,6 +24,7 @@
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
+    "emoji-mart": "^2.8.1",
     "file-system": "^2.2.2",
     "fs": "0.0.1-security",
     "node-sass": "^4.9.3",

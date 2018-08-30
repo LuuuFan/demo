@@ -10512,6 +10512,7 @@ var _root2 = _interopRequireDefault(_root);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 document.addEventListener('DOMContentLoaded', function () {
+
 	var preloadedState = void 0;
 	var currentUser = JSON.parse(localStorage.getItem('currentUser'));
 	var channel = JSON.parse(localStorage.getItem('channel'));
@@ -35541,6 +35542,12 @@ var Canvas = function (_React$Component) {
 					canvasUtil.deleteItem(_this2.state.selectedCanvas);
 				}
 			});
+
+			$.extend($.scrollTo.defaults, {
+				axis: 'y',
+				duration: 800,
+				offset: -50
+			});
 		}
 	}, {
 		key: 'componentWillReceiveProps',
@@ -35606,9 +35613,11 @@ var Canvas = function (_React$Component) {
 			console.log('~~~~~~~~~~~~~~~~');
 			console.log($('#' + id).offset().top);
 			console.log(id);
-			$('.canvas-area').animate({
-				scrollTop: $('#' + id).offset().top
-			}, 800);
+			$('.canvas-area').scrollTo('#' + id);
+			// $('.canvas-area').animate({
+			// 	scrollTop: $(`#${id}`).offset().top,
+			// 	offset: -50,
+			// }, 800)
 			// top += $(`#${id}`).offset().top;
 			// $('.canvas-area').animate({
 			// 	scrollTop: top
@@ -36715,10 +36724,206 @@ exports.default = Chat;
 
 /***/ }),
 /* 169 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-throw new Error("Module build failed: SyntaxError: C:/Users/N3N/Luuu/expirements/demo/frontend/components/chat/channel.jsx: Unexpected character '…' (97:1114)\n\n  95 | export default Channel;\n  96 | \n> 97 | const smileys = [\"U+1F600\", \"U+1F603\", \"U+1F604\", \"U+1F601\", \"U+1F606\", \"U+1F605\", \"U+1F923\", \"U+1F602\", \"U+1F642\", \"U+1F643\", \"U+1F609\", \"U+1F60A\", \"U+1F607\", \"U+1F970\", \"U+1F60D\", \"U+1F929\", \"U+1F618\", \"U+1F617\", \"U+263A\", \"U+1F61A\", \"U+1F619\", \"U+1F60B\", \"U+1F61B\", \"U+1F61C\", \"U+1F92A\", \"U+1F61D\", \"U+1F911\", \"U+1F917\", \"U+1F92D\", \"U+1F92B\", \"U+1F914\", \"U+1F910\", \"U+1F928\", \"U+1F610\", \"U+1F611\", \"U+1F636\", \"U+1F60F\", \"U+1F612\", \"U+1F644\", \"U+1F62C\", \"U+1F925\", \"U+1F60C\", \"U+1F614\", \"U+1F62A\", \"U+1F924\", \"U+1F634\", \"U+1F637\", \"U+1F912\", \"U+1F915\", \"U+1F922\", \"U+1F92E\", \"U+1F927\", \"U+1F975\", \"U+1F976\", \"U+1F974\", \"U+1F635\", \"U+1F92F\", \"U+1F920\", \"U+1F973\", \"U+1F60E\", \"U+1F913\", \"U+1F9D0\", \"U+1F615\", \"U+1F61F\", \"U+1F641\", \"U+2639\", \"U+1F62E\", \"U+1F62F\", \"U+1F632\", \"U+1F633\", \"U+1F97A\", \"U+1F626\", \"U+1F627\", \"U+1F628\", \"U+1F630\", \"U+1F625\", \"U+1F622\", \"U+1F62D\", \"U+1F631\", \"U+1F616\", \"U+1F623\", \"U+1F61E\", \"U+1F613\", \"U+1F629\", \"U+1F62B\", \"U+1F624\", \"U+1F621\", \"U+1F620\", \"U+1F92C\", \"U+1F608\", \"U+1F47F\", \"U+1F480\", \"U+2620\", \"U+1F4A9\", \"U+1F921\", \"U+1F479\", \"U+1F47A\", \"U+1F47B\", \"U+1F47D\", \"U+1F47E\", …]\n     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^\n");
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Channel = function (_React$Component) {
+	_inherits(Channel, _React$Component);
+
+	function Channel(props) {
+		_classCallCheck(this, Channel);
+
+		var _this = _possibleConstructorReturn(this, (Channel.__proto__ || Object.getPrototypeOf(Channel)).call(this, props));
+
+		_this.state = {
+			// active: true,
+			input: '',
+			emojiModal: false
+		};
+		_this.socket = _this.props.socket;
+		return _this;
+	}
+
+	_createClass(Channel, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {}
+	}, {
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(nextProps) {
+			if (nextProps.socket) {
+				this.socket = nextProps.socket;
+			}
+		}
+	}, {
+		key: 'componentDidUpdate',
+		value: function componentDidUpdate() {
+			$('.message').animate({
+				scrollTop: 9999
+			}, 1000);
+		}
+	}, {
+		key: 'toggle',
+		value: function toggle(e) {
+			if (e.target.className !== 'close-channel') {
+				// this.setState({active: !this.state.active});
+				this.props.toggleChannel(this.props.user, !this.props.active);
+				this.setState({ emojiModal: false });
+			}
+		}
+	}, {
+		key: 'closeChannel',
+		value: function closeChannel() {
+			this.props.removeChannel(this.props.user);
+		}
+	}, {
+		key: 'handleInput',
+		value: function handleInput() {
+			var _this2 = this;
+
+			return function (e) {
+				_this2.setState({ input: e.target.value });
+			};
+		}
+	}, {
+		key: 'handleSubmit',
+		value: function handleSubmit(e) {
+			e.preventDefault();
+			// const message = this.state.message.concat([this.state.input]);
+			this.socket.emit('send_message', {
+				username: this.props.currentUser.username,
+				receiver: this.props.user.toLowerCase(),
+				message: { text: this.state.input }
+			});
+			this.props.receiveChatMessage(this.props.user, this.state.input, 1);
+			this.setState({ input: '', emojiModal: false });
+		}
+	}, {
+		key: 'toggleEmojiModal',
+		value: function toggleEmojiModal() {
+			this.setState({ emojiModal: !this.state.emojiModal });
+		}
+	}, {
+		key: 'selectEmoji',
+		value: function selectEmoji(e) {
+			this.setState({ input: this.state.input + e.target.textContent });
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var _this3 = this;
+
+			var _props = this.props,
+			    user = _props.user,
+			    idx = _props.idx,
+			    message = _props.message,
+			    active = _props.active;
+
+			return _react2.default.createElement(
+				'div',
+				{ className: 'channel ' + (active ? 'channel-active' : ''), id: 'channel-' + user, style: { 'right': 260 * (idx + 1) + 'px' } },
+				_react2.default.createElement(
+					'div',
+					{ className: 'header channel-header', onClick: function onClick(e) {
+							return _this3.toggle(e);
+						} },
+					_react2.default.createElement(
+						'div',
+						null,
+						_react2.default.createElement('i', { className: 'far fa-user' }),
+						_react2.default.createElement(
+							'span',
+							null,
+							user[0].toUpperCase() + user.slice(1).toLowerCase()
+						)
+					),
+					_react2.default.createElement(
+						'span',
+						{ className: 'close-channel', onClick: function onClick() {
+								return _this3.closeChannel();
+							} },
+						'\xD7'
+					)
+				),
+				message && Object.keys(message).length ? _react2.default.createElement(
+					'div',
+					{ className: 'message' },
+					Object.keys(message).map(function (t) {
+						return _react2.default.createElement(
+							'span',
+							{ key: t, className: message[t].type ? '' : 'from' },
+							message[t].text
+						);
+					})
+				) : "",
+				_react2.default.createElement(
+					'form',
+					{ onSubmit: function onSubmit(e) {
+							return _this3.handleSubmit(e);
+						} },
+					_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input, placeholder: 'Type a message' }),
+					_react2.default.createElement(
+						'i',
+						{ className: 'far fa-smile', onClick: function onClick() {
+								return _this3.toggleEmojiModal();
+							}, style: { 'color': '' + (this.state.emojiModal ? '#0099fe' : '') } },
+						_react2.default.createElement(
+							'span',
+							{ className: 'tooltip' },
+							'Choose emojis'
+						)
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: this.state.emojiModal ? 'is-open' : 'modal' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'emoji group' },
+							emojis.map(function (e, idx) {
+								return _react2.default.createElement(
+									'div',
+									{ key: idx, onClick: function onClick(e) {
+											_this3.selectEmoji(e);
+										} },
+									e
+								);
+							})
+						),
+						_react2.default.createElement('div', { className: 'modal-screen', onClick: function onClick() {
+								return _this3.toggleEmojiModal();
+							} })
+					)
+				)
+			);
+		}
+	}]);
+
+	return Channel;
+}(_react2.default.Component);
+
+exports.default = Channel;
+
+
+var emojis = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "🙃", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘", "😗", "☺", "😚", "😙", "😋", "😛", "😜", "🤪", "😝", "🤑", "🤗", "🤭", "🤫", "🤔", "🤐", "🤨", "😐", "😑", "😶", "😏", "😒", "🙄", "😬", "🤥", "😌", "😔", "😪", "🤤", "😴", "😷", "🤒", "🤕", "🤢", "🤮", "🤧", "🥵", "🥶", "🥴", "😵", "🤯", "🤠", "🥳", "😎", "🤓", "🧐", "😕", "😟", "🙁", "☹", "😮", "😯", "😲", "😳", "🥺", "😦", "😧", "😨", "😰", "😥", "😢", "😭", "😱", "😖", "😣", "😞", "😓", "😩", "😫", "😤", "😡", "😠", "🤬", "😈", "👿", "💀", "☠", "💩", "🤡", "👹", "👺", "👻", "👽", "👾"];
 
 /***/ }),
 /* 170 */
