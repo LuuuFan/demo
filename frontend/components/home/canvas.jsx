@@ -6,6 +6,7 @@ import ImageGroup from './image_group';
 import ChatContainer from '../chat/chat_container';
 
 const colorOptions = ["#000000", "#ffc0cb", "#ffffff", "#008080", "#ffe4e1", "#ff0000", "#ffd700", "#00ffff", "#40e0d0", "#ff7373", "#e6e6fa", "#d3ffce", "#0000ff", "#ffa500", "#f0f8ff", "#b0e0e6", "#7fffd4", "#c6e2ff", "#faebd7", "#800080", "#cccccc", "#eeeeee", "#ffb6c1", "#fa8072", "#800000", "#00ff00", "#333333", "#003366", "#ffff00", "#20b2aa", "#c0c0c0", "#ffc3a0", "#f08080", "#fff68f", "#f6546a", "#468499", "#66cdaa", "#ff6666", "#666666", "#c39797", "#00ced1", "#ffdab9", "#ff00ff", "#660066", "#008000", "#088da5", "#f5f5f5", "#c0d6e4", "#8b0000", "#0e2f44", "#ff7f50", "#afeeee", "#808080", "#990000", "#dddddd", "#b4eeb4", "#ffff66", "#daa520", "#cbbeb5", "#00ff7f", "#f5f5dc", "#8a2be2", "#81d8d0", "#ff4040", "#b6fcd5", "#66cccc", "#794044", "#3399ff", "#a0db8e", "#ccff00", "#cc0000", "#000080", "#3b5998", "#6897bb", "#0099cc", "#999999", "#191970", "#31698a", "#fef65b", "#ff4444", "#ff1493", "#f7f7f7", "#191919", "#6dc066", "#423226", "#4d3727", "#fff8f6", "#701700", "#201104", "#53abb5", "#ffb6b1", "#ff3232", "#c39797", "#e6e6fa", "#40e0d0", "#ffb6b1", "#a8cbfd", "#2f92d7", "#ff3232", "#a8cbfd", "#ccfff1", "#f7e6fd", "#133337", "#113377", "#c4b6c4", "#ac98ac", "#c4b0b0", "#c4b0ba", "#b4abbf", "#256645", "#305130", "#16f1b4", "#f4ebe2", "#edf3f3", "#f6eced", "#f6f2f1", "#f0e3f5", "#f5e1eb", "#f5e8e0", "#fdd5cd", "#e8f2f3", "#edf3f3", "#f6f6f6", "#f6eced", "#f6f2f1", "#f7f5f6"];
+let top = 0;
 
 class Canvas extends React.Component{
 	
@@ -63,6 +64,8 @@ class Canvas extends React.Component{
 			const id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
 			if (this.state.copy) {
 				this.initializeCanvas(`${id}`, this.state.copy, this.state.prevId);
+				setTimeout(this.scroll(id, true), 800);
+				// this.scroll(id, true);
 			} else if (id) {
 				this.initializeCanvas(`${id}`);
 				this.scroll(id);
@@ -104,12 +107,14 @@ class Canvas extends React.Component{
 		}
 	}
 
-	scroll(id){
-		const top = $(`.container-${id}`).offset().top + 650;
+	scroll(id, scrollToCanvas){
+		console.log($(`#${id}`).offset().top);
+		debugger
+		top += $(`#${id}`).offset().top;
 		$('.canvas-area').animate({
-			// scrollTop: `${$(`.container-${id}`).offset().bottom} - 650`
-			scrollTop: 9999
-		}, 2000);
+			// scrollTop: `${$(`#${id}`).offset().top}`
+			scrollTop: `${scrollToCanvas ? $(`#${id}`).offset().top : top }`
+		}, 800);
 	}
 
 	doubleClick(){
