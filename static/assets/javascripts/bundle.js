@@ -35521,8 +35521,8 @@ var Canvas = function (_React$Component) {
 				var id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
 				if (this.state.copy) {
 					this.initializeCanvas('' + id, this.state.copy, this.state.prevId);
-					setTimeout(this.scroll(id, true), 800);
-					// this.scroll(id, true);
+					// setTimeout(this.scroll(id, true), 800);
+					this.scroll(id, true);
 				} else if (id) {
 					this.initializeCanvas('' + id);
 					this.scroll(id);
@@ -35568,14 +35568,24 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'scroll',
 		value: function scroll(id, scrollToCanvas) {
-			var scroll = $('.canvas-area').height() + $('.canvas-area').offset().top;
-			console.log(scroll);
 			console.log($('.canvas-area').offset().top);
 			top += $('#' + id).offset().top;
-			$('.canvas-area').animate({
-				// scrollTop: `${$(`#${id}`).offset().top}`
-				scrollTop: '' + (scrollToCanvas ? scroll : top)
-			}, 800);
+			if (scrollToCanvas) {
+				setTimeout(function () {
+					console.log('~~~~~~~~~~~~~~~~');
+					console.log(id);
+					console.log($('#' + id).offset().top);
+					$('.canvas-area').animate({
+						scrollTop: '' + $('#' + id).offset().top
+						// scrollTop: 800
+					}, 800);
+				}, 800);
+			} else {
+				$('.canvas-area').animate({
+					// scrollTop: `${$(`#${id}`).offset().top}`
+					scrollTop: top
+				}, 800);
+			}
 		}
 	}, {
 		key: 'doubleClick',
