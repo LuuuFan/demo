@@ -36749,18 +36749,28 @@ var Channel = function (_React$Component) {
 		_this.state = {
 			// active: true,
 			input: '',
-			message: []
+			emojiModal: false
 		};
 		_this.socket = _this.props.socket;
 		return _this;
 	}
 
 	_createClass(Channel, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {}
+	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
 			if (nextProps.socket) {
 				this.socket = nextProps.socket;
 			}
+		}
+	}, {
+		key: 'componentDidUpdate',
+		value: function componentDidUpdate() {
+			$('.message').animate({
+				scrollTop: 9999
+			}, 1000);
 		}
 	}, {
 		key: 'toggle',
@@ -36788,7 +36798,7 @@ var Channel = function (_React$Component) {
 		key: 'handleSubmit',
 		value: function handleSubmit(e) {
 			e.preventDefault();
-			var message = this.state.message.concat([this.state.input]);
+			// const message = this.state.message.concat([this.state.input]);
 			this.socket.emit('send_message', {
 				username: this.props.currentUser.username,
 				receiver: this.props.user.toLowerCase(),
@@ -36796,6 +36806,11 @@ var Channel = function (_React$Component) {
 			});
 			this.props.receiveChatMessage(this.props.user, this.state.input, 1);
 			this.setState({ input: '' });
+		}
+	}, {
+		key: 'toggleEmojiModal',
+		value: function toggleEmojiModal() {
+			this.setState({ emojiModal: !this.state.emojiModal });
 		}
 	}, {
 		key: 'render',
@@ -36850,7 +36865,23 @@ var Channel = function (_React$Component) {
 					{ onSubmit: function onSubmit(e) {
 							return _this3.handleSubmit(e);
 						} },
-					_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input, placeholder: 'Type a message' })
+					_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input, placeholder: 'Type a message' }),
+					_react2.default.createElement(
+						'i',
+						{ className: 'far fa-smile', onClick: function onClick() {
+								return _this3.toggleEmojiModal();
+							} },
+						_react2.default.createElement(
+							'span',
+							{ className: 'tooltip' },
+							'Choose emojis'
+						)
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: this.state.emojiModal ? 'is-open' : 'modal' },
+						_react2.default.createElement('div', { className: 'emoji' })
+					)
 				)
 			);
 		}

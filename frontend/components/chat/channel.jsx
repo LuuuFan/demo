@@ -7,15 +7,25 @@ class Channel extends React.Component{
 		this.state = {
 			// active: true,
 			input: '',
-			message: [],
+			emojiModal: false,
 		};
 		this.socket = this.props.socket;
+	}
+
+	componentDidMount(){
+
 	}
 
 	componentWillReceiveProps(nextProps){
 		if (nextProps.socket) {
 			this.socket = nextProps.socket;
 		}
+	}
+
+	componentDidUpdate(){
+		$('.message').animate({
+				scrollTop: 9999
+			}, 1000);
 	}
 
 	toggle(e){
@@ -37,7 +47,7 @@ class Channel extends React.Component{
 
 	handleSubmit(e){
 		e.preventDefault();
-		const message = this.state.message.concat([this.state.input]);
+		// const message = this.state.message.concat([this.state.input]);
 		this.socket.emit('send_message', {
 			username: this.props.currentUser.username,
 			receiver: this.props.user.toLowerCase(),
@@ -47,6 +57,9 @@ class Channel extends React.Component{
 		this.setState({input: ''})
 	}
 
+	toggleEmojiModal(){
+		this.setState({emojiModal: !this.state.emojiModal});
+	}
 
 	render(){
 		const {user, idx, message, active} = this.props;
@@ -66,6 +79,12 @@ class Channel extends React.Component{
 				: ""}
 				<form onSubmit={(e)=>this.handleSubmit(e)}>
 					<input onChange={this.handleInput()} value={this.state.input} placeholder='Type a message'/>
+					<i className="far fa-smile" onClick={()=>this.toggleEmojiModal()}>
+						<span className='tooltip'>Choose emojis</span>
+					</i>
+					<div className={this.state.emojiModal ? 'is-open' : 'modal'}>
+						<div className='emoji'></div>
+					</div>
 				</form>
 			</div>
 		);
