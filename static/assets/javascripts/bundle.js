@@ -35482,7 +35482,8 @@ var Canvas = function (_React$Component) {
 			canvasIdList: ['0'],
 			sideContentToggle: true,
 			chatToggle: false,
-			copy: ''
+			copy: '',
+			prevId: ''
 		};
 		return _this;
 	}
@@ -35518,7 +35519,7 @@ var Canvas = function (_React$Component) {
 			if (prevState.canvasIdList.length < this.state.canvasIdList.length) {
 				var id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
 				if (this.state.copy) {
-					this.initializeCanvas('' + id, this.state.copy);
+					this.initializeCanvas('' + id, this.state.copy, this.state.prevId);
 				} else if (id) {
 					this.initializeCanvas('' + id);
 					this.scroll(id);
@@ -35537,21 +35538,27 @@ var Canvas = function (_React$Component) {
 		}
 	}, {
 		key: 'initializeCanvas',
-		value: function initializeCanvas(id, copy) {
+		value: function initializeCanvas(id, copy, prevId) {
 			var container = document.querySelector('.container-' + id);
 			var canvas = new fabric.Canvas(id, { width: 650, height: 650 });
+			var canvasIdList = Array.from(this.state.canvasIdList);
 			if (container) {
 				if (copy) {
 					canvas.loadFromJSON(copy.toJSON(), function () {
 						canvas.renderAll;
 					});
+					var idx = canvasIdList.indexOf(prevId);
+					canvasIdList.pop();
+					canvasIdList.splice(idx + 1, 0, id);
+					console.log(canvasIdList);
 				} else {
 					canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 				}
 				this.props.receiveCanvas(Object.assign({}, this.state.canvas, _defineProperty({}, id, canvas)));
 				this.setState({
 					canvas: Object.assign({}, this.state.canvas, _defineProperty({}, id, canvas)),
-					selectedCanvas: canvas
+					selectedCanvas: canvas,
+					canvasIdList: canvasIdList
 				});
 			}
 		}
@@ -35716,11 +35723,12 @@ var Canvas = function (_React$Component) {
 		}
 	}, {
 		key: 'addCanvas',
-		value: function addCanvas(copy) {
-			var last_el = this.state.canvasIdList[this.state.canvasIdList.length - 1];
+		value: function addCanvas(copy, prevId) {
+			var last_el = Array.from(this.state.canvasIdList).sort()[this.state.canvasIdList.length - 1];
 			this.setState({
 				canvasIdList: this.state.canvasIdList.concat([last_el * 1 + 1]),
-				copy: copy
+				copy: copy,
+				prevId: prevId
 			});
 		}
 	}, {
@@ -35746,7 +35754,7 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'copyCanvas',
 		value: function copyCanvas(e, id) {
-			this.addCanvas(this.state.canvas[id]);
+			this.addCanvas(this.state.canvas[id], id);
 		}
 	}, {
 		key: 'deleteCanvas',

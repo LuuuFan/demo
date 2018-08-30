@@ -32,7 +32,8 @@ class Canvas extends React.Component{
 			canvasIdList: ['0'],
 			sideContentToggle: true,
 			chatToggle: false,
-			copy: ''
+			copy: '',
+			prevId: '',
 		};
 	}
 
@@ -61,7 +62,7 @@ class Canvas extends React.Component{
 		if (prevState.canvasIdList.length < this.state.canvasIdList.length) {
 			const id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
 			if (this.state.copy) {
-				this.initializeCanvas(`${id}`, this.state.copy);
+				this.initializeCanvas(`${id}`, this.state.copy, this.state.prevId);
 			} else if (id) {
 				this.initializeCanvas(`${id}`);
 				this.scroll(id);
@@ -78,14 +79,19 @@ class Canvas extends React.Component{
 		canvasUtil.resetCanvas(defaultCanvas);
 	}
 
-	initializeCanvas(id, copy){
+	initializeCanvas(id, copy, prevId){
 		const container = document.querySelector(`.container-${id}`);
 		let canvas = new fabric.Canvas(id, {width: 650, height: 650});
+		const canvasIdList = Array.from(this.state.canvasIdList);
 		if (container) {
 			if (copy) {
 				canvas.loadFromJSON(copy.toJSON(), ()=>{
 					canvas.renderAll;
 				})
+				const idx = canvasIdList.indexOf(prevId);
+				canvasIdList.pop();
+				canvasIdList.splice(idx + 1, 0, id);
+				console.log(canvasIdList);
 			} else {
 				canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
 			}
@@ -93,6 +99,7 @@ class Canvas extends React.Component{
 			this.setState({
 				canvas: Object.assign({}, this.state.canvas, {[id]: canvas}),
 				selectedCanvas: canvas,
+				canvasIdList,
 			});
 		}
 	}
@@ -239,11 +246,12 @@ class Canvas extends React.Component{
 		this.setState({croping: false, cropingImg: null});
 	}
 
-	addCanvas(copy){
-		const last_el = this.state.canvasIdList[this.state.canvasIdList.length - 1];
+	addCanvas(copy, prevId){
+		const last_el = Array.from(this.state.canvasIdList).sort()[this.state.canvasIdList.length - 1];
 		this.setState({
 			canvasIdList: this.state.canvasIdList.concat([last_el * 1 + 1]),
-			copy: copy,
+			copy,
+			prevId,
 		});
 	}
 
@@ -264,7 +272,7 @@ class Canvas extends React.Component{
 	// moveCanvasDown
 
 	copyCanvas(e, id){
-		this.addCanvas(this.state.canvas[id]);
+		this.addCanvas(this.state.canvas[id], id);
 	}
 
 	deleteCanvas(e, id){
