@@ -582,16 +582,29 @@ class Canvas extends React.Component{
 			    
 		    <div className='buttons'>
 		   		<div className='buttons-decoration'></div>
-		    	<button onClick={()=>this.addCanvas()}>&#43;</button>
-		    	<button onClick={()=>this.resetCanvas()}>&times;</button>
+		    	<button onClick={()=>this.addCanvas()}>&#43;
+		    		<span className='tooltip'>Add</span>
+		    	</button>
+		    	<button onClick={()=>this.resetCanvas()}>&times;
+		    		<span className='tooltip'>Reset</span>
+		    	</button>
 		    	{this.state.activeObj ? 
-	    			<button className='delete' onClick={()=>canvasUtil.deleteItem(this.state.selectedCanvas)}><i className="far fa-trash-alt"></i></button>
+	    			<button className='delete' onClick={()=>canvasUtil.deleteItem(this.state.selectedCanvas)}>
+			    		<span className='tooltip'>Delete</span>
+	    				<i className="far fa-trash-alt"></i>
+	    			</button>
 		    		: ""}
 	    		{this.state.activeObj &&  this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? 
-	    			<button className='group' onClick={()=>this.groupItems()}><i className="far fa-object-group"></i></button>
+	    			<button className='group' onClick={()=>this.groupItems()}>
+	    				<i className="far fa-object-group"></i>
+			    		<span className='tooltip'>Group</span>
+	    			</button>
 	  			: ""}
 	  			{this.state.activeObj && this.state.activeObj.type === 'group' ? 
-	    			<button className='ungroup' onClick={()=>this.unGroupItems()}><i className="far fa-object-ungroup"></i></button>
+	    			<button className='ungroup' onClick={()=>this.unGroupItems()}>
+			    		<span className='tooltip'>Ungroup</span>
+	    				<i className="far fa-object-ungroup"></i>
+	    			</button>
 	  			: ""}
 		    </div>
 	   	</div> 

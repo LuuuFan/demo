@@ -36337,20 +36337,35 @@ var Canvas = function (_React$Component) {
 							{ onClick: function onClick() {
 									return _this5.addCanvas();
 								} },
-							'+'
+							'+',
+							_react2.default.createElement(
+								'span',
+								{ className: 'tooltip' },
+								'Add'
+							)
 						),
 						_react2.default.createElement(
 							'button',
 							{ onClick: function onClick() {
 									return _this5.resetCanvas();
 								} },
-							'\xD7'
+							'\xD7',
+							_react2.default.createElement(
+								'span',
+								{ className: 'tooltip' },
+								'Reset'
+							)
 						),
 						this.state.activeObj ? _react2.default.createElement(
 							'button',
 							{ className: 'delete', onClick: function onClick() {
 									return canvasUtil.deleteItem(_this5.state.selectedCanvas);
 								} },
+							_react2.default.createElement(
+								'span',
+								{ className: 'tooltip' },
+								'Delete'
+							),
 							_react2.default.createElement('i', { className: 'far fa-trash-alt' })
 						) : "",
 						this.state.activeObj && this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? _react2.default.createElement(
@@ -36358,13 +36373,23 @@ var Canvas = function (_React$Component) {
 							{ className: 'group', onClick: function onClick() {
 									return _this5.groupItems();
 								} },
-							_react2.default.createElement('i', { className: 'far fa-object-group' })
+							_react2.default.createElement('i', { className: 'far fa-object-group' }),
+							_react2.default.createElement(
+								'span',
+								{ className: 'tooltip' },
+								'Group'
+							)
 						) : "",
 						this.state.activeObj && this.state.activeObj.type === 'group' ? _react2.default.createElement(
 							'button',
 							{ className: 'ungroup', onClick: function onClick() {
 									return _this5.unGroupItems();
 								} },
+							_react2.default.createElement(
+								'span',
+								{ className: 'tooltip' },
+								'Ungroup'
+							),
 							_react2.default.createElement('i', { className: 'far fa-object-ungroup' })
 						) : ""
 					)

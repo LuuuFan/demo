@@ -108,6 +108,7 @@ input[type=submit] {
   left: -180px;
   top: 120%;
   background-color: white;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.4);
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
   color: #cbc5c1;
   z-index: 15;
@@ -974,34 +975,8 @@ button i {
   position: relative;
 }
 .canvas-main .side-content-canvas .canvas-area .container .container-sidebar i .tooltip {
-  display: none;
-  font-size: 10px;
-  border-radius: 3px;
   padding: 3px 7px;
-  position: absolute;
-  top: 0;
-  left: 120%;
   color: white;
-  font-weight: normal;
-  background: rgba(0, 0, 0, 0.6);
-}
-.canvas-main .side-content-canvas .canvas-area .container .container-sidebar i .tooltip:before, .canvas-main .side-content-canvas .canvas-area .container .container-sidebar i .tooltip:after {
-  content: " ";
-  left: -6px;
-  top: 30%;
-  border: 2px solid transparent;
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-}
-.canvas-main .side-content-canvas .canvas-area .container .container-sidebar i .tooltip:after {
-  border-right-color: rgba(0, 0, 0, 0.6);
-  border-width: 3px;
-}
-.canvas-main .side-content-canvas .canvas-area .container .container-sidebar i .tooltip:before {
-  border-right-color: rgba(0, 0, 0, 0.6);
-  border-width: 3px;
 }
 .canvas-main .side-content-canvas .canvas-area .container .container-sidebar i:hover {
   transition: all 0.8s;
@@ -1020,9 +995,35 @@ button i {
   box-shadow: 2px 1px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
+.tooltip {
+  display: none;
+  font-size: 10px;
+  border-radius: 3px;
+  padding: 3px 7px;
+  position: absolute;
+  top: 0;
+  left: 120%;
+  color: white;
+  font-weight: normal;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.tooltip:before, .tooltip:after {
+  content: " ";
+  left: -6px;
+  top: 30%;
+  border: 2px solid transparent;
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-right-color: rgba(0, 0, 0, 0.6);
+  border-width: 3px;
+}
+
 .buttons {
   position: fixed;
-  bottom: 25px;
+  bottom: 30px;
   margin: 0 auto;
   width: 70%;
   min-width: 650px;
@@ -1040,8 +1041,9 @@ button i {
   z-index: -1;
 }
 .buttons button {
-  width: 22px;
-  height: 36px;
+  padding: 0;
+  width: 40px;
+  height: 40px;
   color: gray;
   margin-right: 15px;
   background-color: #e2e1e1;
@@ -1049,11 +1051,25 @@ button i {
   text-align: center;
   font-size: 24px;
   box-shadow: 2px 1px 4px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+.buttons button .tooltip {
+  top: -50%;
+  left: 0;
+}
+.buttons button .tooltip:after, .buttons button .tooltip:before {
+  top: 100%;
+  left: 40%;
+  border-right-color: transparent;
+  border-top-color: rgba(0, 0, 0, 0.6);
 }
 .buttons button:hover {
   color: white;
   background-color: #0099fe;
   transition: all 0.8s;
+}
+.buttons button:hover .tooltip {
+  display: block;
 }
 .buttons .delete, .buttons .group, .buttons .ungroup {
   font-size: 20px;
