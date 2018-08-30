@@ -8811,12 +8811,15 @@ var _chat2 = _interopRequireDefault(_chat);
 
 var _channel = __webpack_require__(51);
 
+var _chat3 = __webpack_require__(199);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state) {
 	return {
 		channel: state.channel,
-		currentUser: state.session.currentUser
+		currentUser: state.session.currentUser,
+		active: state.chat.active
 	};
 };
 
@@ -8833,6 +8836,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		},
 		toggleChannel: function toggleChannel(channel, active) {
 			return dispatch((0, _channel.toggleChannel)(channel, active));
+		},
+		toggleChat: function toggleChat() {
+			return dispatch((0, _chat3.toggleChat)());
 		}
 	};
 };
@@ -33627,6 +33633,8 @@ var _message = __webpack_require__(17);
 
 var _service = __webpack_require__(196);
 
+var _chat = __webpack_require__(199);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -33667,6 +33675,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		},
 		removeCanvas: function removeCanvas(id) {
 			return dispatch((0, _canvas.removeCanvas)(id));
+		},
+		toggleChat: function toggleChat() {
+			return dispatch((0, _chat.toggleChat)());
 		}
 	};
 };
@@ -33775,7 +33786,8 @@ var Home = function (_React$Component) {
 			    selectedImg = _props.selectedImg,
 			    removeCurrentUser = _props.removeCurrentUser,
 			    currentUser = _props.currentUser,
-			    removeCanvas = _props.removeCanvas;
+			    removeCanvas = _props.removeCanvas,
+			    toggleChat = _props.toggleChat;
 
 			return _react2.default.createElement(
 				'div',
@@ -33796,7 +33808,8 @@ var Home = function (_React$Component) {
 					message: message,
 					imgs: imgs,
 					receiveSelectedImg: receiveSelectedImg,
-					removeCanvas: removeCanvas }),
+					removeCanvas: removeCanvas,
+					toggleChat: toggleChat }),
 				_react2.default.createElement(_chat_container2.default, null)
 			);
 		}
@@ -35462,10 +35475,6 @@ var _image_group = __webpack_require__(167);
 
 var _image_group2 = _interopRequireDefault(_image_group);
 
-var _chat_container = __webpack_require__(72);
-
-var _chat_container2 = _interopRequireDefault(_chat_container);
-
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -35512,7 +35521,6 @@ var Canvas = function (_React$Component) {
 			selectedCanvas: null,
 			canvasIdList: ['0'],
 			sideContentToggle: true,
-			chatToggle: false,
 			copy: '',
 			prevId: ''
 		};
@@ -35779,11 +35787,6 @@ var Canvas = function (_React$Component) {
 			this.setState({ sideContentToggle: !this.state.sideContentToggle });
 		}
 	}, {
-		key: 'toggleChat',
-		value: function toggleChat() {
-			this.setState({ chatToggle: !this.state.chatToggle });
-		}
-	}, {
 		key: 'pickColor',
 		value: function pickColor(e) {
 			this.setState({ backgroundColor: e.target.value });
@@ -35838,7 +35841,8 @@ var Canvas = function (_React$Component) {
 
 			var _props = this.props,
 			    receiveSelectedImg = _props.receiveSelectedImg,
-			    imgs = _props.imgs;
+			    imgs = _props.imgs,
+			    toggleChat = _props.toggleChat;
 
 			return _react2.default.createElement(
 				'div',
@@ -35908,7 +35912,9 @@ var Canvas = function (_React$Component) {
 					),
 					_react2.default.createElement(
 						'li',
-						{ className: 'selected' },
+						{ className: 'selected', onClick: function onClick() {
+								return toggleChat();
+							} },
 						_react2.default.createElement('i', { className: 'far fa-comments' })
 					)
 				),
@@ -36552,7 +36558,7 @@ var Chat = function (_React$Component) {
 
 		_this.state = {
 			connected: false,
-			active: false,
+			// active: false,
 			input: '',
 			userList: userList
 		};
@@ -36608,7 +36614,8 @@ var Chat = function (_React$Component) {
 	}, {
 		key: 'toggle',
 		value: function toggle() {
-			this.setState({ active: !this.state.active });
+			// this.setState({active: !this.state.active})
+			this.props.toggleChat();
 		}
 	}, {
 		key: 'openChannel',
@@ -36627,7 +36634,8 @@ var Chat = function (_React$Component) {
 			    removeChannel = _props.removeChannel,
 			    currentUser = _props.currentUser,
 			    receiveChatMessage = _props.receiveChatMessage,
-			    toggleChannel = _props.toggleChannel;
+			    toggleChannel = _props.toggleChannel,
+			    active = _props.active;
 
 			return _react2.default.createElement(
 				'div',
@@ -36657,7 +36665,7 @@ var Chat = function (_React$Component) {
 				) : "",
 				_react2.default.createElement(
 					'div',
-					{ className: 'chat ' + (this.state.active ? 'chat-active' : "") },
+					{ className: 'chat ' + (active ? 'chat-active' : "") },
 					_react2.default.createElement(
 						'div',
 						{ className: 'header chat-header', onClick: function onClick() {
@@ -40635,7 +40643,7 @@ Object.defineProperty(exports, "__esModule", {
 var _chat = __webpack_require__(199);
 
 var chatReducer = function chatReducer() {
-	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { action: true };
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { action: false };
 	var action = arguments[1];
 
 	Object.freeze(state);
@@ -40643,7 +40651,7 @@ var chatReducer = function chatReducer() {
 	switch (action.type) {
 		case _chat.TOGGLE_CHAT:
 			newState = Object.assign({}, state);
-			newState.action = !newState.action;
+			newState.active = !newState.active;
 			return newState;
 		default:
 			return state;

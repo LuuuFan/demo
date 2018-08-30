@@ -10,7 +10,7 @@ class Chat extends React.Component {
 		super();
 		this.state = {
 			connected: false,
-			active: false,
+			// active: false,
 			input: '',
 			userList: userList,
 		};
@@ -53,7 +53,8 @@ class Chat extends React.Component {
 	}
 
 	toggle(){
-		this.setState({active: !this.state.active})
+		// this.setState({active: !this.state.active})
+		this.props.toggleChat();
 	}
 
 	openChannel(e){
@@ -63,7 +64,7 @@ class Chat extends React.Component {
 	}
 
 	render(){
-		const {channel, removeChannel, currentUser, receiveChatMessage, toggleChannel} = this.props;
+		const {channel, removeChannel, currentUser, receiveChatMessage, toggleChannel, active} = this.props;
 		return (
 			<div className='chat-area'>
 				{channel && Object.keys(channel).length ? 
@@ -85,7 +86,7 @@ class Chat extends React.Component {
 						}
 					</div>
 					: "" }
-				<div className={`chat ${this.state.active ? 'chat-active' : ""}`}>
+				<div className={`chat ${active ? 'chat-active' : ""}`}>
 					<div className='header chat-header' onClick={()=>this.toggle()}>
 						{this.state.connected ? 
 							<i className="fas fa-circle" style={{'color': `${this.state.connected ? 'green' : 'gray'}`}}></i>

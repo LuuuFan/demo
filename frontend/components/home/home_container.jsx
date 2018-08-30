@@ -8,6 +8,7 @@ import {receiveCanvas, removeCanvas} from '../../actions/canvas';
 import {sendEmail} from '../../actions/mail';
 import {clearMessage} from '../../actions/message';
 import {sendService} from '../../actions/service';
+import {toggleChat} from '../../actions/chat';
 
 const mapStateToProps = (state)  => ({
 	imgs: state.imgs,
@@ -27,6 +28,7 @@ const mapDispatchToProps = (dispatch) => ({
 	receiveSelectedImg: (img) => dispatch(receiveSelectedImg(img)),
 	removeCurrentUser: () => dispatch(removeCurrentUser()),
 	removeCanvas: (id) => dispatch(removeCanvas(id)),
+	toggleChat: () => dispatch(toggleChat()),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));

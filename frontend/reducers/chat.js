@@ -1,12 +1,12 @@
 import {TOGGLE_CHAT} from '../actions/chat';
 
-const chatReducer = (state={action: true}, action) => {
+const chatReducer = (state={action: false}, action) => {
 	Object.freeze(state);
 	let newState;
 	switch(action.type){
 		case TOGGLE_CHAT:
 			newState = Object.assign({}, state);
-			newState.action = !newState.action;
+			newState.active = !newState.active;
 			return newState;
 		default:
 			return state;  
