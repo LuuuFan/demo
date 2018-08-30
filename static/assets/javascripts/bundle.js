@@ -4591,6 +4591,7 @@ Object.defineProperty(exports, "__esModule", {
 var RECEIVE_CHANNEL = exports.RECEIVE_CHANNEL = 'RECEIVE_CHANNEL';
 var REMOVE_CHANNEL = exports.REMOVE_CHANNEL = 'REMOVE-CHANNEL';
 var RECEIVE_CHAT_MESSAGE = exports.RECEIVE_CHAT_MESSAGE = 'RECEIVE_CHAT_MESSAGE';
+var TOGGLE_CHANNEL = exports.TOGGLE_CHANNEL = 'TOGGLE_CHANNEL';
 
 var receiveChannel = exports.receiveChannel = function receiveChannel(channel) {
 	return {
@@ -4612,6 +4613,14 @@ var receiveChatMessage = exports.receiveChatMessage = function receiveChatMessag
 		channel: channel,
 		message: message,
 		t: t
+	};
+};
+
+var toggleChannel = exports.toggleChannel = function toggleChannel(channel, active) {
+	return {
+		type: TOGGLE_CHANNEL,
+		channel: channel,
+		active: active
 	};
 };
 
@@ -30939,6 +30948,12 @@ var channelReducer = function channelReducer() {
 				newState[action.channel.toLowerCase()].status = true;
 			}
 			newState[action.channel.toLowerCase()].message[timestamp] = { type: action.t, text: action.message };
+			return newState;
+		case _channel.TOGGLE_CHANNEL:
+			newState = Object.assign({}, state);
+			if (newState[action.channel]) {
+				newState[action.channel].active = action.active;
+			}
 			return newState;
 		default:
 			return state;

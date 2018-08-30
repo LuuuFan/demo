@@ -1,6 +1,7 @@
 export const RECEIVE_CHANNEL = 'RECEIVE_CHANNEL';
 export const REMOVE_CHANNEL = 'REMOVE-CHANNEL';
 export const RECEIVE_CHAT_MESSAGE = 'RECEIVE_CHAT_MESSAGE';
+export const TOGGLE_CHANNEL = 'TOGGLE_CHANNEL';
 
 export const receiveChannel = (channel) => ({
 	type: RECEIVE_CHANNEL,
@@ -17,4 +18,10 @@ export const receiveChatMessage = (channel, message, t) => ({
 	channel,
 	message,
 	t,
+})
+
+export const toggleChannel = (channel, active) => ({
+	type: TOGGLE_CHANNEL,
+	channel,
+	active,
 })

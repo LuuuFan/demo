@@ -1,4 +1,4 @@
-import {RECEIVE_CHANNEL, REMOVE_CHANNEL, RECEIVE_CHAT_MESSAGE} from '../actions/channel';
+import {RECEIVE_CHANNEL, REMOVE_CHANNEL, RECEIVE_CHAT_MESSAGE, TOGGLE_CHANNEL} from '../actions/channel';
 
 const channelReducer = (state = {}, action) => {
 	Object.freeze(state);
@@ -28,6 +28,12 @@ const channelReducer = (state = {}, action) => {
 				newState[action.channel.toLowerCase()].status = true;
 			}
 			newState[action.channel.toLowerCase()].message[timestamp] = {type: action.t, text: action.message};
+			return newState;
+		case TOGGLE_CHANNEL:
+			newState = Object.assign({}, state);
+			if (newState[action.channel]) {
+				newState[action.channel].active = action.active;
+			}
 			return newState;
 		default: 
 			return state;
