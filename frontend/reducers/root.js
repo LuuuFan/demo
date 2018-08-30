@@ -6,6 +6,7 @@ import canvasReducer from './canvas';
 import messageReducer from './message';
 import channelReducer from './channel';
 import selectedImgReducer from './selected_img';
+import chatReducer from './chat';
 
 const rootReducer = combineReducers({
   session: sessionReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   message: messageReducer,
   channel: channelReducer,
   selectedImg: selectedImgReducer,
+  chat: chatReducer,
 });
 
 export default rootReducer;

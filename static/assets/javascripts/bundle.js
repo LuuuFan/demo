@@ -30659,6 +30659,10 @@ var _selected_img = __webpack_require__(122);
 
 var _selected_img2 = _interopRequireDefault(_selected_img);
 
+var _chat = __webpack_require__(198);
+
+var _chat2 = _interopRequireDefault(_chat);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
@@ -30668,7 +30672,8 @@ var rootReducer = (0, _redux.combineReducers)({
   canvas: _canvas2.default,
   message: _message2.default,
   channel: _channel2.default,
-  selectedImg: _selected_img2.default
+  selectedImg: _selected_img2.default,
+  chat: _chat2.default
 });
 
 exports.default = rootReducer;
@@ -40615,6 +40620,55 @@ var sendService = exports.sendService = function sendService(data, token) {
 //     alert("Incident Number ====>"+obj.records[0].number);
 // url: "http://ec2-54-214-224-99.us-west-2.compute.amazonaws.com:8888/n3n/snow/tasks",
 // dataType: 'html',
+
+/***/ }),
+/* 198 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _chat = __webpack_require__(199);
+
+var chatReducer = function chatReducer() {
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { action: true };
+	var action = arguments[1];
+
+	Object.freeze(state);
+	var newState = void 0;
+	switch (action.type) {
+		case _chat.TOGGLE_CHAT:
+			newState = Object.assign({}, state);
+			newState.action = !newState.action;
+			return newState;
+		default:
+			return state;
+	}
+};
+
+exports.default = chatReducer;
+
+/***/ }),
+/* 199 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var TOGGLE_CHAT = exports.TOGGLE_CHAT = 'TOGGLE_CHAT';
+
+var toggleChat = exports.toggleChat = function toggleChat() {
+	return {
+		type: TOGGLE_CHAT
+	};
+};
 
 /***/ })
 /******/ ]);
