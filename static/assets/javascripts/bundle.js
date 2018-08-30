@@ -35481,7 +35481,8 @@ var Canvas = function (_React$Component) {
 			selectedCanvas: null,
 			canvasIdList: ['0'],
 			sideContentToggle: true,
-			chatToggle: false
+			chatToggle: false,
+			copy: ''
 		};
 		return _this;
 	}
@@ -35516,7 +35517,9 @@ var Canvas = function (_React$Component) {
 		value: function componentDidUpdate(prevProps, prevState) {
 			if (prevState.canvasIdList.length < this.state.canvasIdList.length) {
 				var id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
-				if (id) {
+				if (this.state.copy) {
+					this.initializeCanvas('' + id, this.state.copy);
+				} else if (id) {
 					this.initializeCanvas('' + id);
 					this.scroll(id);
 				}
@@ -35534,11 +35537,17 @@ var Canvas = function (_React$Component) {
 		}
 	}, {
 		key: 'initializeCanvas',
-		value: function initializeCanvas(id) {
+		value: function initializeCanvas(id, copy) {
 			var container = document.querySelector('.container-' + id);
+			var canvas = new fabric.Canvas(id, { width: 650, height: 650 });
 			if (container) {
-				var canvas = new fabric.Canvas(id, { width: 650, height: 650 });
-				canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
+				if (copy) {
+					canvas.loadFromJSON(copy.toJSON(), function () {
+						canvas.renderAll;
+					});
+				} else {
+					canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
+				}
 				this.props.receiveCanvas(Object.assign({}, this.state.canvas, _defineProperty({}, id, canvas)));
 				this.setState({
 					canvas: Object.assign({}, this.state.canvas, _defineProperty({}, id, canvas)),
@@ -35707,9 +35716,12 @@ var Canvas = function (_React$Component) {
 		}
 	}, {
 		key: 'addCanvas',
-		value: function addCanvas() {
+		value: function addCanvas(copy) {
 			var last_el = this.state.canvasIdList[this.state.canvasIdList.length - 1];
-			this.setState({ canvasIdList: this.state.canvasIdList.concat([last_el * 1 + 1]) });
+			this.setState({
+				canvasIdList: this.state.canvasIdList.concat([last_el * 1 + 1]),
+				copy: copy
+			});
 		}
 	}, {
 		key: 'toggleSideContent',
@@ -35733,7 +35745,9 @@ var Canvas = function (_React$Component) {
 
 	}, {
 		key: 'copyCanvas',
-		value: function copyCanvas(e, id) {}
+		value: function copyCanvas(e, id) {
+			this.addCanvas(this.state.canvas[id]);
+		}
 	}, {
 		key: 'deleteCanvas',
 		value: function deleteCanvas(e, id) {
@@ -36232,6 +36246,8 @@ var Canvas = function (_React$Component) {
 										} }),
 									_react2.default.createElement('i', { className: 'fas fa-trash', onClick: function onClick(e) {
 											return _this5.deleteCanvas(e, id);
+										}, style: {
+											'color': '' + (_this5.state.canvasIdList.length === 1 ? '#cbc5c1' : '')
 										} })
 								)
 							);

@@ -32,6 +32,7 @@ class Canvas extends React.Component{
 			canvasIdList: ['0'],
 			sideContentToggle: true,
 			chatToggle: false,
+			copy: ''
 		};
 	}
 
@@ -59,7 +60,9 @@ class Canvas extends React.Component{
 	componentDidUpdate(prevProps, prevState){
 		if (prevState.canvasIdList.length < this.state.canvasIdList.length) {
 			const id = this.state.canvasIdList[this.state.canvasIdList.length - 1];
-			if (id) {
+			if (this.state.copy) {
+				this.initializeCanvas(`${id}`, this.state.copy);
+			} else if (id) {
 				this.initializeCanvas(`${id}`);
 				this.scroll(id);
 			}
@@ -75,11 +78,17 @@ class Canvas extends React.Component{
 		canvasUtil.resetCanvas(defaultCanvas);
 	}
 
-	initializeCanvas(id){
+	initializeCanvas(id, copy){
 		const container = document.querySelector(`.container-${id}`);
+		let canvas = new fabric.Canvas(id, {width: 650, height: 650});
 		if (container) {
-			let canvas = new fabric.Canvas(id, {width: 650, height: 650});
-			canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
+			if (copy) {
+				canvas.loadFromJSON(copy.toJSON(), ()=>{
+					canvas.renderAll;
+				})
+			} else {
+				canvas.setBackgroundColor('lightgray', canvas.renderAll.bind(canvas));
+			}
 			this.props.receiveCanvas(Object.assign({}, this.state.canvas, {[id]: canvas}));
 			this.setState({
 				canvas: Object.assign({}, this.state.canvas, {[id]: canvas}),
@@ -230,9 +239,12 @@ class Canvas extends React.Component{
 		this.setState({croping: false, cropingImg: null});
 	}
 
-	addCanvas(){
+	addCanvas(copy){
 		const last_el = this.state.canvasIdList[this.state.canvasIdList.length - 1];
-		this.setState({canvasIdList: this.state.canvasIdList.concat([last_el * 1 + 1])});
+		this.setState({
+			canvasIdList: this.state.canvasIdList.concat([last_el * 1 + 1]),
+			copy: copy,
+		});
 	}
 
 	toggleSideContent(){
@@ -250,10 +262,11 @@ class Canvas extends React.Component{
 
 	// moveCanvasUp
 	// moveCanvasDown
-	copyCanvas(e, id){
 
+	copyCanvas(e, id){
+		this.addCanvas(this.state.canvas[id]);
 	}
-	
+
 	deleteCanvas(e, id){
 		if (this.state.canvasIdList.length > 1) {
 			const canvas = Object.assign({}, this.state.canvas);
@@ -517,7 +530,9 @@ class Canvas extends React.Component{
 			    			<span>{idx + 1}</span>
 			    			<i className="fas fa-arrow-down" onClick={(e)=>this.moveCanvasDown(e, id)}></i>
 			    			<i className="far fa-copy" onClick={(e)=>this.copyCanvas(e, id)}></i>
-			    			<i className="fas fa-trash" onClick={(e)=>this.deleteCanvas(e, id)}></i>
+			    			<i className="fas fa-trash" onClick={(e)=>this.deleteCanvas(e, id)} style={{
+			    				'color': `${this.state.canvasIdList.length === 1 ? '#cbc5c1' : ''}`
+			    			}}></i>
 			    		</div>
 			    	</div>)}
 			  </div>
