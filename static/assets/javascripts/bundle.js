@@ -36718,7 +36718,8 @@ var Chat = function (_React$Component) {
 			chatActive: true,
 			input: '',
 			userList: [],
-			userSearchNotification: ''
+			userSearchNotification: '',
+			selectChannel: ''
 		};
 		_this.socket = null;
 		return _this;
@@ -36731,9 +36732,7 @@ var Chat = function (_React$Component) {
 
 			// user list
 			this.props.getUserList(this.props.currentUser['access-token']).then(function () {
-				return _this2.setState({ userList: _this2.props.userList.users[0].filter(function (u) {
-						return u != _this2.props.userList['current user'];
-					}) });
+				return _this2.setState({ userList: _this2.filterUserList(_this2.props.userList) });
 			});
 
 			// socket
@@ -36751,6 +36750,13 @@ var Chat = function (_React$Component) {
 			});
 		}
 	}, {
+		key: 'filterUserList',
+		value: function filterUserList(userList) {
+			return userList.users[0].filter(function (u) {
+				return u != userList['current user'];
+			});
+		}
+	}, {
 		key: 'handleInput',
 		value: function handleInput() {
 			var _this3 = this;
@@ -36759,13 +36765,11 @@ var Chat = function (_React$Component) {
 				if (!e.target.value) {
 					_this3.setState({
 						input: e.target.value,
-						userList: _this3.props.userList.users[0].filter(function (u) {
-							return u !== _this3.props.userList['current user'];
-						}),
+						userList: _this3.filterUserList(_this3.props.userList),
 						userSearchNotification: ""
 					});
 				} else {
-					var filterList = _this3.state.userList.filter(function (el) {
+					var filterList = _this3.filterUserList(_this3.props.userList).filter(function (el) {
 						return el.toLowerCase().includes(e.target.value.toLowerCase());
 					});
 					_this3.setState({
@@ -36788,13 +36792,18 @@ var Chat = function (_React$Component) {
 
 			if (this.state.userList.length === 1) {
 				this.props.receiveChannel(this.capitalizeStr(this.state.userList[0]));
-				this.setState({ input: '', userList: this.props.users[0].filter(function (u) {
+				this.setState({
+					input: '',
+					userList: this.props.users[0].filter(function (u) {
 						return u !== _this4.props.userList['current user'];
-					}) });
+					}),
+					selectChannel: this.capitalizeStr(this.state.userList[0])
+				});
 			} else if (!this.state.userList.length) {
 				// No user found
 				this.setState({ userSearchNotification: 'There is no User: "' + this.state.input + '"' });
 			} else {
+				// multiple result 
 				this.setState({ userSearchNotification: 'Please select one user' });
 			}
 		}
@@ -36809,12 +36818,21 @@ var Chat = function (_React$Component) {
 		value: function openChannel(e) {
 			var user = e.currentTarget.textContent.slice(1);
 			this.props.receiveChannel(user);
-			this.setState({ input: '', userList: userList });
+			this.setState({
+				input: '',
+				userList: this.filterUserList(this.props.userList),
+				selectChannel: this.capitalizeStr(user)
+			});
 		}
 	}, {
 		key: 'toggleChatActive',
 		value: function toggleChatActive() {
 			this.setState({ chatActive: !this.state.chatActive });
+		}
+	}, {
+		key: 'selectChannel',
+		value: function selectChannel(e) {
+			this.setState({ selectChannel: e.target.textContent });
 		}
 	}, {
 		key: 'render',
@@ -36846,36 +36864,36 @@ var Chat = function (_React$Component) {
 						}).map(function (c, idx) {
 							return _react2.default.createElement(
 								'li',
-								{ key: idx },
+								{
+									key: idx,
+									'data-channelname': c,
+									onClick: function onClick(e) {
+										return _this5.selectChannel(e);
+									},
+									className: '' + (_this5.state.selectChannel.toLowerCase() === c ? 'selected' : '')
+								},
 								_react2.default.createElement('i', { className: 'fas fa-circle' }),
-								_this5.capitalizeStr(c)
+								_this5.capitalizeStr(c),
+								_this5.state.selectChannel.toLowerCase() === c ? _react2.default.createElement(
+									'span',
+									null,
+									'\xD7'
+								) : ""
 							);
 						})
 					) : "",
-					channel && Object.keys(channel).length ? _react2.default.createElement(
-						'div',
-						null,
-						Object.keys(channel).filter(function (el) {
-							return channel[el].status;
-						}).map(function (c, idx) {
-							return _react2.default.createElement(
-								'div',
-								{ key: idx },
-								_react2.default.createElement(_channel2.default, {
-									idx: idx,
-									user: c,
-									removeChannel: removeChannel,
-									socket: _this5.socket,
-									currentUser: currentUser,
-									receiveChatMessage: receiveChatMessage,
-									message: channel[c].message,
-									active: channel[c].active,
-									toggleChannel: toggleChannel,
-									receiveChannel: receiveChannel
-								})
-							);
-						})
-					) : ""
+					this.state.selectChannel ? _react2.default.createElement(_channel2.default, {
+						user: this.state.selectChannel,
+						removeChannel: removeChannel,
+						socket: this.socket,
+						currentUser: currentUser,
+						receiveChatMessage: receiveChatMessage,
+						toggleChannel: toggleChannel,
+						receiveChannel: receiveChannel,
+						message: channel[this.state.selectChannel.toLowerCase()].message,
+						active: channel[this.state.selectChannel.toLowerCase()].active,
+						chatActive: this.state.chatActive
+					}) : ""
 				),
 				_react2.default.createElement(
 					'div',
@@ -37088,69 +37106,19 @@ var Channel = function (_React$Component) {
 
 			var _props = this.props,
 			    user = _props.user,
-			    idx = _props.idx,
 			    message = _props.message,
-			    active = _props.active;
+			    active = _props.active,
+			    chatActive = _props.chatActive;
 
 			var userList = user.split(' ');
 			return _react2.default.createElement(
 				'div',
-				{ className: 'channel ' + (active ? 'channel-active' : ''), id: 'channel-' + userList.join('&'), style: { 'right': 260 * (idx + 1) + 'px' } },
+				{
+					className: 'channel ' + (active ? 'channel-active' : ''),
+					id: 'channel-' + userList.join('&'),
+					style: { height: '' + (chatActive ? '70%' : '93%') }
+				},
 				_react2.default.createElement(
-					'div',
-					{ className: 'header channel-header', onClick: function onClick(e) {
-							return _this3.toggle(e);
-						} },
-					_react2.default.createElement(
-						'div',
-						null,
-						_react2.default.createElement('i', { className: 'far fa-user' }),
-						userList.length > 3 ? _react2.default.createElement(
-							'span',
-							null,
-							this.capitalizeStr(userList[0]),
-							' and other ',
-							userList.length - 1
-						) : _react2.default.createElement(
-							'span',
-							null,
-							userList.map(function (u) {
-								return _this3.capitalizeStr(u);
-							}).join(' ')
-						)
-					),
-					_react2.default.createElement(
-						'div',
-						null,
-						_react2.default.createElement(
-							'i',
-							{ className: 'fas fa-plus', onClick: function onClick() {
-									return _this3.toggleAddPeople();
-								} },
-							_react2.default.createElement(
-								'span',
-								{ className: 'tooltip' },
-								'Add user'
-							)
-						),
-						_react2.default.createElement(
-							'span',
-							{ className: 'close-channel', onClick: function onClick() {
-									return _this3.closeChannel();
-								} },
-							'\xD7'
-						)
-					),
-					this.state.toggleAddPeople ? _react2.default.createElement(
-						'form',
-						{ className: 'add-people', onSubmit: function onSubmit(e) {
-								return _this3.addPeopleToChannel(e);
-							} },
-						_react2.default.createElement('input', { type: 'text', value: this.state.addPeopleInput, onChange: this.handleInput('addPeopleInput'), placeholder: 'Add user to this chat' }),
-						_react2.default.createElement('input', { type: 'submit', value: '+' })
-					) : ""
-				),
-				message && Object.keys(message).length ? _react2.default.createElement(
 					'div',
 					{ className: 'message' },
 					Object.keys(message).map(function (t) {
@@ -37160,7 +37128,7 @@ var Channel = function (_React$Component) {
 							message[t].text
 						);
 					})
-				) : "",
+				),
 				_react2.default.createElement(
 					'form',
 					{ onSubmit: function onSubmit(e) {

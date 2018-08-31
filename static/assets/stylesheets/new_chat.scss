@@ -23,6 +23,8 @@ $hover: #0099fe;
 
 	.channel-list{
 		flex: 1;
+		display: flex;
+		flex-direction: column;
 		width: 100%;
 		.channel-tabs{
 			width: 100%;
@@ -39,17 +41,154 @@ $hover: #0099fe;
 				border-right: 1px solid $gray;
 				font-size: 12px;
 				cursor: pointer;
+				text-align: center;
 				i{
 					font-size: 10px;
+					color: $gray;
+					margin-right: 10px;
+				}
+				span{
+					margin-left: 10px;
 				}
 			}
 			li.selected{
 				background-color: $gray;
 				color: white;
   			box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+  			i{
+  				color: white;
+  			}
 			}
 		}
+		.channel{
+			// flex: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			transition: height .8s;
+			.message{
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				overflow: auto;
+				padding: 10px;
+				span{
+					text-align: right;
+					background-color: lightgray;
+					width: 95%;
+					height: auto;
+					overflow-wrap: break-word;
+					border-radius: 5px;
+					margin-bottom: 5px;
+					padding: 5px;
+				}
+				.from{
+					text-align: left;
+					background: rgba(176,224,230, 0.3);
+				}
+			}
+		  form{
+		    display: flex;
+		    align-items: center;
+		    justify-content: space-between;
+		    position: relative;
+		    input{
+		      padding: 10px;
+		      flex: 1;
+		    }
+		    i{
+		      position: relative;
+		      margin-right: 10px;
+		      cursor: pointer;
+		      .tooltip{
+		        top: -20px;
+		        width: 80px;
+		        left: -30px;
+		      }
+		      .tooltip:after, .tooltip:before{
+		        top: 100%;
+		        left: 40%;
+		        border-right-color: transparent;
+		        border-top-color: rgba(0,0,0,0.6);
+		      }
+		    }
+		    .modal-screen{
+		      background: rgba(255, 255, 255, 0);
+		    }
+		    .emoji:before, .emoji:after{
+		      content: " ";
+		      right: 5%;
+		      bottom: -20px;
+		      border: 2px solid transparent;
+		      height: 0;
+		      width: 0;
+		      position: absolute;
+		      pointer-events: none;
+		    }
+		    .emoji:after{
+		      border-top-color: white;
+		      border-width: 10px;
+		      margin-left: -10px;
+		    }
+		    .emoji:before{
+		      border-top-color: #555;
+		      border-width: 10px;
+		      margin-left: -10px;
+		    }
+		    .emoji{
+		      z-index: 10;
+		      position: absolute;
+		      padding: 10px;
+		      bottom: 45px;
+		      right: 10px;
+		      background-color: white;
+		      width: 200px;
+		      height: 220px;
+		      border: 1px solid $gray;
+		      box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+		      display: flex;
+		      flex-direction: column;
+		      justify-content: space-between;
+		      .emoji-group{
+		        flex: 1;
+		      }
+		      .page{
+		        font-size: 8px;
+		        height: 20px;
+		        width: 100%;
+		        display: flex;
+		        align-items: center;
+		        justify-content: space-around;
+		        .selected{
+		          color: $hover;
+		        }
+		        span{
+		          cursor: pointer;
+		        }
+		      }
+		      .emoji-item{
+		        float: left;
+		        height: 20px;
+		        width: 20px;
+		        text-align: center;
+		        cursor: pointer;
+		      }
+		      .emoji-item:hover{
+		        transform: scale(1.4);
+		        transition: all .5s;
+		      }
+    		}
+		    i:hover{
+		      color: $hover;
+		    }
+		    i:hover .tooltip{
+		      display: block;
+		      z-index: 5;
+		    }
+  		}
+		}
 	}
+
 	form{
 		display: flex;
 		flex-direction: row;
@@ -69,9 +208,11 @@ $hover: #0099fe;
 	
 	.chat{
 		position: fixed;
-		bottom: -220px;
+		// bottom: -220px;
+		bottom: -22%;
 		transition: bottom 0.8s;
-		height: 250px;
+		// height: 250px;
+		height: 25%;
 		width: 400px;
 		border-top: 1px solid $gray;
 		display: flex;
@@ -80,7 +221,8 @@ $hover: #0099fe;
 		.header{
 			cursor: pointer;
 			padding: 5px 0;
-			height: 25px;
+			// height: 25px;
+			height: 7%;
 			display: flex;
 			background-color: $gray;
   		box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);

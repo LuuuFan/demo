@@ -101,10 +101,16 @@ class Channel extends React.Component{
 
 
 	render(){
-		const {user, idx, message, active} = this.props;
+		const {user, message, active, chatActive} = this.props;
 		const userList = user.split(' ');
 		return(
-			<div className={`channel ${active ? 'channel-active' : ''}`} id={`channel-${userList.join('&')}`} style={{'right': `${260 * (idx + 1)}px`}}>
+			<div 
+				className={`channel ${active ? 'channel-active' : ''}`} 
+				id={`channel-${userList.join('&')}`}
+				style={{height: `${chatActive ? '70%' : '93%'}`}}
+			>
+				{/*
+					!-- old header --!
 				<div className='header channel-header' onClick={(e)=>this.toggle(e)}>
 					<div>
 						<i className="far fa-user"></i>
@@ -127,11 +133,11 @@ class Channel extends React.Component{
 						</form>
 					 : ""}
 				</div>
-				{ message && Object.keys(message).length ? 
+				*/}
+
 				<div className='message'>
 					{Object.keys(message).map(t => <span key={t} className={message[t].type ? '' : 'from'}>{message[t].text}</span>)}
 				</div>
-				: ""}
 				<form onSubmit={(e)=>this.handleSubmit(e)}>
 					<input onChange={this.handleInput('input')} value={this.state.input} placeholder='Type a message'/>
 					<i className="far fa-smile" onClick={()=>this.toggleEmojiModal()} style={{'color': `${this.state.emojiModal ? '#0099fe' : ''}`}}>
