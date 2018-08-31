@@ -566,9 +566,40 @@ input[type=submit] {
 .channel {
   overflow: visible;
 }
+.channel .channel-header:hover {
+  background-color: gray;
+}
 .channel .channel-header {
+  position: relative;
   background-color: lightgray;
   border-radius: 5px 5px 0 0;
+}
+.channel .channel-header div {
+  display: flex;
+  align-items: center;
+}
+.channel .channel-header .add-people {
+  position: absolute;
+  background-color: white;
+  color: gray;
+  z-index: 10;
+  left: 0;
+  top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.channel .channel-header .add-people input[type=text] {
+  text-align: left;
+}
+.channel .channel-header .add-people input[type=submit] {
+  max-width: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #cbc5c1;
+}
+.channel .channel-header .add-people input[type=submit]:hover {
+  color: black;
 }
 .channel .channel-header .close-channel {
   padding: 0;
@@ -582,6 +613,25 @@ input[type=submit] {
 .channel .channel-header .close-channel:hover {
   font-weight: bold;
   color: white;
+}
+.channel .channel-header .fa-plus {
+  font-size: 11px;
+  position: relative;
+}
+.channel .channel-header .fa-plus .tooltip {
+  z-index: 5;
+  top: -20px;
+  left: -30px;
+  width: 80px;
+}
+.channel .channel-header .fa-plus .tooltip:after, .channel .channel-header .fa-plus .tooltip:before {
+  top: 100%;
+  left: 40%;
+  border-right-color: transparent;
+  border-top-color: rgba(0, 0, 0, 0.6);
+}
+.channel .channel-header .fa-plus:hover .tooltip {
+  display: block;
 }
 .channel .message {
   flex: 1;
@@ -630,11 +680,34 @@ input[type=submit] {
   border-right-color: transparent;
   border-top-color: rgba(0, 0, 0, 0.6);
 }
+.channel form .modal-screen {
+  background: rgba(255, 255, 255, 0);
+}
+.channel form .emoji:before, .channel form .emoji:after {
+  content: " ";
+  left: 45%;
+  bottom: -20px;
+  border: 2px solid transparent;
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.channel form .emoji:after {
+  border-top-color: white;
+  border-width: 10px;
+  margin-left: -10px;
+}
+.channel form .emoji:before {
+  border-top-color: #555;
+  border-width: 10px;
+  margin-left: -10px;
+}
 .channel form .emoji {
   z-index: 10;
   position: absolute;
   padding: 10px;
-  bottom: 30px;
+  bottom: 45px;
   left: 120px;
   background-color: white;
   width: 200px;
@@ -662,7 +735,8 @@ input[type=submit] {
   bottom: 0;
 }
 .chat-active .channel-header, .channel-active .channel-header {
-  background-color: gray;
+  background-color: #0099fe;
+  color: white;
 }
 
 .main {

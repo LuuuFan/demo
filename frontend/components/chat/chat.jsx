@@ -64,7 +64,8 @@ class Chat extends React.Component {
 	}
 
 	render(){
-		const {channel, removeChannel, currentUser, receiveChatMessage, toggleChannel, active} = this.props;
+		const {channel, removeChannel, currentUser, receiveChatMessage, toggleChannel, active, receiveChannel} = this.props;
+		console.log(channel);
 		return (
 			<div className='chat-area'>
 				{channel && Object.keys(channel).length ? 
@@ -81,6 +82,7 @@ class Chat extends React.Component {
 									message={channel[c].message}
 									active={channel[c].active}
 									toggleChannel={toggleChannel}
+									receiveChannel={receiveChannel}
 								/>
 							</div>)
 						}

@@ -36644,8 +36644,10 @@ var Chat = function (_React$Component) {
 			    currentUser = _props.currentUser,
 			    receiveChatMessage = _props.receiveChatMessage,
 			    toggleChannel = _props.toggleChannel,
-			    active = _props.active;
+			    active = _props.active,
+			    receiveChannel = _props.receiveChannel;
 
+			console.log(channel);
 			return _react2.default.createElement(
 				'div',
 				{ className: 'chat-area' },
@@ -36667,7 +36669,8 @@ var Chat = function (_React$Component) {
 								receiveChatMessage: receiveChatMessage,
 								message: channel[c].message,
 								active: channel[c].active,
-								toggleChannel: toggleChannel
+								toggleChannel: toggleChannel,
+								receiveChannel: receiveChannel
 							})
 						);
 					})
@@ -36741,6 +36744,8 @@ var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -36758,7 +36763,9 @@ var Channel = function (_React$Component) {
 		_this.state = {
 			// active: true,
 			input: '',
-			emojiModal: false
+			emojiModal: false,
+			toggleAddPeople: false,
+			addPeopleInput: ''
 		};
 		_this.socket = _this.props.socket;
 		return _this;
@@ -36766,7 +36773,11 @@ var Channel = function (_React$Component) {
 
 	_createClass(Channel, [{
 		key: 'componentDidMount',
-		value: function componentDidMount() {}
+		value: function componentDidMount() {
+			$('.message').animate({
+				scrollTop: 9999
+			}, 1000);
+		}
 	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
@@ -36784,7 +36795,7 @@ var Channel = function (_React$Component) {
 	}, {
 		key: 'toggle',
 		value: function toggle(e) {
-			if (e.target.className !== 'close-channel') {
+			if (e.target.className !== 'close-channel' && !e.target.className.includes('fa-plus') && e.target.tagName !== 'INPUT') {
 				// this.setState({active: !this.state.active});
 				this.props.toggleChannel(this.props.user, !this.props.active);
 				this.setState({ emojiModal: false });
@@ -36797,11 +36808,11 @@ var Channel = function (_React$Component) {
 		}
 	}, {
 		key: 'handleInput',
-		value: function handleInput() {
+		value: function handleInput(type) {
 			var _this2 = this;
 
 			return function (e) {
-				_this2.setState({ input: e.target.value });
+				_this2.setState(_defineProperty({}, type, e.target.value));
 			};
 		}
 	}, {
@@ -36812,6 +36823,7 @@ var Channel = function (_React$Component) {
 			this.socket.emit('send_message', {
 				username: this.props.currentUser.username,
 				receiver: this.props.user.toLowerCase(),
+				// split(' ').map(u => u.toLowerCase()),
 				message: { text: this.state.input }
 			});
 			this.props.receiveChatMessage(this.props.user, this.state.input, 1);
@@ -36828,6 +36840,26 @@ var Channel = function (_React$Component) {
 			this.setState({ input: this.state.input + e.target.textContent });
 		}
 	}, {
+		key: 'toggleAddPeople',
+		value: function toggleAddPeople() {
+			this.setState({ toggleAddPeople: !this.state.toggleAddPeople });
+		}
+	}, {
+		key: 'addPeopleToChannel',
+		value: function addPeopleToChannel(e) {
+			e.preventDefault;
+			this.props.receiveChannel(this.state.addPeopleInput + ' ' + this.props.user);
+			this.setState({
+				toggleAddPeople: false,
+				addPeopleInput: ''
+			});
+		}
+	}, {
+		key: 'capitalizeStr',
+		value: function capitalizeStr(str) {
+			return str[0].toUpperCase() + str.slice(1).toLowerCase();
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var _this3 = this;
@@ -36838,9 +36870,10 @@ var Channel = function (_React$Component) {
 			    message = _props.message,
 			    active = _props.active;
 
+			var userList = user.split(' ');
 			return _react2.default.createElement(
 				'div',
-				{ className: 'channel ' + (active ? 'channel-active' : ''), id: 'channel-' + user, style: { 'right': 260 * (idx + 1) + 'px' } },
+				{ className: 'channel ' + (active ? 'channel-active' : ''), id: 'channel-' + userList.join('&'), style: { 'right': 260 * (idx + 1) + 'px' } },
 				_react2.default.createElement(
 					'div',
 					{ className: 'header channel-header', onClick: function onClick(e) {
@@ -36850,19 +36883,50 @@ var Channel = function (_React$Component) {
 						'div',
 						null,
 						_react2.default.createElement('i', { className: 'far fa-user' }),
-						_react2.default.createElement(
+						userList.length > 3 ? _react2.default.createElement(
 							'span',
 							null,
-							user[0].toUpperCase() + user.slice(1).toLowerCase()
+							this.capitalizeStr(userList[0]),
+							' and other ',
+							userList.length - 1
+						) : _react2.default.createElement(
+							'span',
+							null,
+							userList.map(function (u) {
+								return _this3.capitalizeStr(u);
+							}).join(' ')
 						)
 					),
 					_react2.default.createElement(
-						'span',
-						{ className: 'close-channel', onClick: function onClick() {
-								return _this3.closeChannel();
+						'div',
+						null,
+						_react2.default.createElement(
+							'i',
+							{ className: 'fas fa-plus', onClick: function onClick() {
+									return _this3.toggleAddPeople();
+								} },
+							_react2.default.createElement(
+								'span',
+								{ className: 'tooltip' },
+								'Add user to chat'
+							)
+						),
+						_react2.default.createElement(
+							'span',
+							{ className: 'close-channel', onClick: function onClick() {
+									return _this3.closeChannel();
+								} },
+							'\xD7'
+						)
+					),
+					this.state.toggleAddPeople ? _react2.default.createElement(
+						'form',
+						{ className: 'add-people', onSubmit: function onSubmit(e) {
+								return _this3.addPeopleToChannel(e);
 							} },
-						'\xD7'
-					)
+						_react2.default.createElement('input', { type: 'text', value: this.state.addPeopleInput, onChange: this.handleInput('addPeopleInput'), placeholder: 'Add user to this chat' }),
+						_react2.default.createElement('input', { type: 'submit', value: '+' })
+					) : ""
 				),
 				message && Object.keys(message).length ? _react2.default.createElement(
 					'div',
@@ -36880,7 +36944,7 @@ var Channel = function (_React$Component) {
 					{ onSubmit: function onSubmit(e) {
 							return _this3.handleSubmit(e);
 						} },
-					_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input, placeholder: 'Type a message' }),
+					_react2.default.createElement('input', { onChange: this.handleInput('input'), value: this.state.input, placeholder: 'Type a message' }),
 					_react2.default.createElement(
 						'i',
 						{ className: 'far fa-smile', onClick: function onClick() {
