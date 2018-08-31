@@ -31029,7 +31029,7 @@ Object.defineProperty(exports, "__esModule", {
 var _chat = __webpack_require__(31);
 
 var chatReducer = function chatReducer() {
-	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { action: false };
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { active: true };
 	var action = arguments[1];
 
 	Object.freeze(state);
@@ -36715,7 +36715,7 @@ var Chat = function (_React$Component) {
 
 		_this.state = {
 			connected: false,
-			// active: false,
+			chatActive: true,
 			input: '',
 			userList: [],
 			userSearchNotification: ''
@@ -36812,6 +36812,11 @@ var Chat = function (_React$Component) {
 			this.setState({ input: '', userList: userList });
 		}
 	}, {
+		key: 'toggleChatActive',
+		value: function toggleChatActive() {
+			this.setState({ chatActive: !this.state.chatActive });
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var _this5 = this;
@@ -36830,37 +36835,55 @@ var Chat = function (_React$Component) {
 			return _react2.default.createElement(
 				'div',
 				{ className: 'chat-area ' + (active ? 'chat-area-active' : '') },
-				channel && Object.keys(channel).length ? _react2.default.createElement(
-					'div',
-					null,
-					Object.keys(channel).filter(function (el) {
-						return channel[el].status;
-					}).map(function (c, idx) {
-						return _react2.default.createElement(
-							'div',
-							{ key: idx },
-							_react2.default.createElement(_channel2.default, {
-								idx: idx,
-								user: c,
-								removeChannel: removeChannel,
-								socket: _this5.socket,
-								currentUser: currentUser,
-								receiveChatMessage: receiveChatMessage,
-								message: channel[c].message,
-								active: channel[c].active,
-								toggleChannel: toggleChannel,
-								receiveChannel: receiveChannel
-							})
-						);
-					})
-				) : "",
 				_react2.default.createElement(
 					'div',
-					{ className: 'chat ' + (active ? 'chat-active' : "") },
+					{ className: 'channel-list' },
+					channel && Object.keys(channel).length ? _react2.default.createElement(
+						'ul',
+						{ className: 'channel-tabs' },
+						Object.keys(channel).filter(function (el) {
+							return channel[el].status;
+						}).map(function (c, idx) {
+							return _react2.default.createElement(
+								'li',
+								{ key: idx },
+								_react2.default.createElement('i', { className: 'fas fa-circle' }),
+								_this5.capitalizeStr(c)
+							);
+						})
+					) : "",
+					channel && Object.keys(channel).length ? _react2.default.createElement(
+						'div',
+						null,
+						Object.keys(channel).filter(function (el) {
+							return channel[el].status;
+						}).map(function (c, idx) {
+							return _react2.default.createElement(
+								'div',
+								{ key: idx },
+								_react2.default.createElement(_channel2.default, {
+									idx: idx,
+									user: c,
+									removeChannel: removeChannel,
+									socket: _this5.socket,
+									currentUser: currentUser,
+									receiveChatMessage: receiveChatMessage,
+									message: channel[c].message,
+									active: channel[c].active,
+									toggleChannel: toggleChannel,
+									receiveChannel: receiveChannel
+								})
+							);
+						})
+					) : ""
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'chat ' + (this.state.chatActive ? 'chat-active' : "") },
 					_react2.default.createElement(
 						'div',
 						{ className: 'header chat-header', onClick: function onClick() {
-								return _this5.toggle();
+								return _this5.toggleChatActive();
 							} },
 						this.state.connected ? _react2.default.createElement('i', { className: 'fas fa-circle', style: { 'color': '' + (this.state.connected ? 'green' : 'gray') } }) : _react2.default.createElement('img', { src: 'static/assets/images/connection.gif' })
 					),

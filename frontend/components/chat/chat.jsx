@@ -11,7 +11,7 @@ class Chat extends React.Component {
 		super(props);
 		this.state = {
 			connected: false,
-			// active: false,
+			chatActive: true,
 			input: '',
 			userList: [],
 			userSearchNotification: ''
@@ -85,33 +85,44 @@ class Chat extends React.Component {
 		this.setState({input: '', userList: userList});
 	}
 
+	toggleChatActive(){
+		this.setState({chatActive: !this.state.chatActive})
+	}
+
 	render(){
 		const {channel, removeChannel, currentUser, receiveChatMessage, toggleChannel, active, receiveChannel, userList} = this.props;
 
 		return (
 			<div className={`chat-area ${active ? 'chat-area-active' : ''}`}>
-				{channel && Object.keys(channel).length ? 
-					<div>
-						{Object.keys(channel).filter(el => channel[el].status).map((c, idx) => 
-							<div key={idx}>
-								<Channel 
-									idx={idx} 
-									user={c} 
-									removeChannel={removeChannel} 
-									socket={this.socket} 
-									currentUser={currentUser} 
-									receiveChatMessage={receiveChatMessage} 
-									message={channel[c].message}
-									active={channel[c].active}
-									toggleChannel={toggleChannel}
-									receiveChannel={receiveChannel}
-								/>
-							</div>)
-						}
-					</div>
-					: "" }
-				<div className={`chat ${active ? 'chat-active' : ""}`}>
-					<div className='header chat-header' onClick={()=>this.toggle()}>
+				<div className='channel-list'>
+						{channel && Object.keys(channel).length ? 
+							<ul className='channel-tabs'>
+								{Object.keys(channel).filter(el => channel[el].status).map((c, idx) => <li key={idx}><i className="fas fa-circle"></i>{this.capitalizeStr(c)}</li>)}
+							</ul>
+							: ""}
+					{channel && Object.keys(channel).length ? 
+						<div>
+							{Object.keys(channel).filter(el => channel[el].status).map((c, idx) => 
+								<div key={idx}>
+									<Channel 
+										idx={idx} 
+										user={c} 
+										removeChannel={removeChannel} 
+										socket={this.socket} 
+										currentUser={currentUser} 
+										receiveChatMessage={receiveChatMessage} 
+										message={channel[c].message}
+										active={channel[c].active}
+										toggleChannel={toggleChannel}
+										receiveChannel={receiveChannel}
+									/>
+								</div>)
+							}
+						</div>
+						: "" }
+				</div>
+				<div className={`chat ${this.state.chatActive ? 'chat-active' : ""}`}>
+					<div className='header chat-header' onClick={()=>this.toggleChatActive()}>
 						{this.state.connected ? 
 							<i className="fas fa-circle" style={{'color': `${this.state.connected ? 'green' : 'gray'}`}}></i>
 						: <img src='static/assets/images/connection.gif'/>}
