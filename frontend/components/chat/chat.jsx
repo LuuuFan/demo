@@ -16,13 +16,16 @@ class Chat extends React.Component {
 			userList: userList,
 		};
 		this.socket = null;
-	}
+	};
 
 	componentDidMount(){
 		// user list
-		this.props.getUserList();
+		this.props.getUserList(this.props.currentUser['access-token'])
+			.then(res => {
+				debugger
+			});
 		// socket
-		this.socket = socketIOClient("http://localhost:10000");
+		this.socket = socketIOClient("http://localhost:10000")
 		this.socket.emit('online', {username: this.props.currentUser.username});
 		this.socket.on('my response', (res) => {
 			if (res.data === 'Connected') {

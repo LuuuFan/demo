@@ -18,7 +18,7 @@ const mapDispatchToProps = (dispatch) => ({
 	receiveChatMessage: (channel, message, type) => dispatch(receiveChatMessage(channel, message, type)),
 	toggleChannel: (channel, active) => dispatch(toggleChannel(channel, active)),
 	toggleChat: () => dispatch(toggleChat()),
-	getUserList: ()=> dispatch(getUserList()),
+	getUserList: (token)=> dispatch(getUserList(token)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);

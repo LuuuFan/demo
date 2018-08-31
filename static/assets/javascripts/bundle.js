@@ -8843,8 +8843,8 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		toggleChat: function toggleChat() {
 			return dispatch((0, _chat3.toggleChat)());
 		},
-		getUserList: function getUserList() {
-			return dispatch((0, _user.getUserList)());
+		getUserList: function getUserList(token) {
+			return dispatch((0, _user.getUserList)(token));
 		}
 	};
 };
@@ -36592,7 +36592,9 @@ var Chat = function (_React$Component) {
 			var _this2 = this;
 
 			// user list
-			this.props.getUserList();
+			this.props.getUserList(this.props.currentUser['access-token']).then(function (res) {
+				debugger;
+			});
 			// socket
 			this.socket = (0, _socket2.default)("http://localhost:10000");
 			this.socket.emit('online', { username: this.props.currentUser.username });
@@ -40935,12 +40937,15 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 var RECEIVE_ALL_USER = exports.RECEIVE_ALL_USER = 'RECEIVE_ALL_USER';
 
 var receiveAllUser = exports.receiveAllUser = function receiveAllUser(users) {
-	type: RECEIVE_ALL_USER, users;
+	return {
+		type: RECEIVE_ALL_USER,
+		users: users
+	};
 };
 
-var getUserList = exports.getUserList = function getUserList() {
+var getUserList = exports.getUserList = function getUserList(token) {
 	return function (dispatch) {
-		return APIUtilUser.getUserList().then(function (users) {
+		return APIUtilUser.getUserList(token).then(function (users) {
 			return dispatch(receiveAllUser(users));
 		}, function (errors) {
 			return dispatch((0, _error.receiveError)(errors.responseJSON));
@@ -40950,9 +40955,23 @@ var getUserList = exports.getUserList = function getUserList() {
 
 /***/ }),
 /* 203 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-throw new Error("Module build failed: SyntaxError: C:/Users/N3N/Luuu/expirements/demo/frontend/util/user.js: Unexpected token, expected , (5:3)\n\n  3 | \t\turl: 'http://localhost:8999/userlist',\n  4 | \t\tmethod: 'GET',\n> 5 | \t});\n    | \t  ^\n  6 | );\n");
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var getUserList = exports.getUserList = function getUserList(token) {
+	return $.ajax({
+		url: 'http://localhost:8999/users',
+		method: 'GET',
+		beforeSend: function beforeSend(xhr) {
+			xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+		}
+	});
+};
 
 /***/ })
 /******/ ]);
