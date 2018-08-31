@@ -5,6 +5,7 @@ import socketIOClient from "socket.io-client";
 
 // const userList = ['Pavan', 'Tirth', 'Sam', 'Edward', 'Tim', 'Kelvin', 'Julia', 'Lu'];
 const userList = ['Pavan', 'Tirth', 'Shasha', ];
+
 class Chat extends React.Component {
 	constructor(){
 		super();
@@ -18,6 +19,9 @@ class Chat extends React.Component {
 	}
 
 	componentDidMount(){
+		// user list
+		this.props.getUserList();
+		// socket
 		this.socket = socketIOClient("http://localhost:10000");
 		this.socket.emit('online', {username: this.props.currentUser.username});
 		this.socket.on('my response', (res) => {
@@ -64,7 +68,7 @@ class Chat extends React.Component {
 	}
 
 	render(){
-		const {channel, removeChannel, currentUser, receiveChatMessage, toggleChannel, active, receiveChannel} = this.props;
+		const {channel, removeChannel, currentUser, receiveChatMessage, toggleChannel, active, receiveChannel, userList} = this.props;
 		console.log(channel);
 		return (
 			<div className='chat-area'>

@@ -8813,13 +8813,16 @@ var _channel = __webpack_require__(51);
 
 var _chat3 = __webpack_require__(199);
 
+var _user = __webpack_require__(202);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state) {
 	return {
 		channel: state.channel,
 		currentUser: state.session.currentUser,
-		active: state.chat.active
+		active: state.chat.active,
+		userList: state.user
 	};
 };
 
@@ -8839,6 +8842,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		},
 		toggleChat: function toggleChat() {
 			return dispatch((0, _chat3.toggleChat)());
+		},
+		getUserList: function getUserList() {
+			return dispatch((0, _user.getUserList)());
 		}
 	};
 };
@@ -36585,6 +36591,9 @@ var Chat = function (_React$Component) {
 		value: function componentDidMount() {
 			var _this2 = this;
 
+			// user list
+			this.props.getUserList();
+			// socket
 			this.socket = (0, _socket2.default)("http://localhost:10000");
 			this.socket.emit('online', { username: this.props.currentUser.username });
 			this.socket.on('my response', function (res) {
@@ -36650,7 +36659,8 @@ var Chat = function (_React$Component) {
 			    receiveChatMessage = _props.receiveChatMessage,
 			    toggleChannel = _props.toggleChannel,
 			    active = _props.active,
-			    receiveChannel = _props.receiveChannel;
+			    receiveChannel = _props.receiveChannel,
+			    userList = _props.userList;
 
 			console.log(channel);
 			return _react2.default.createElement(
