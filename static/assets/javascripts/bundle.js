@@ -36719,7 +36719,6 @@ var Chat = function (_React$Component) {
 				return _this.props.channel[el].status;
 			})[0];
 		}
-		debugger;
 		_this.state = {
 			connected: false,
 			chatActive: true,
@@ -36757,6 +36756,26 @@ var Chat = function (_React$Component) {
 			});
 		}
 	}, {
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(nextProps) {
+			var _this3 = this;
+
+			var nextActiveChannel = Object.keys(nextProps.channel).filter(function (el) {
+				return nextProps.channel[el].status;
+			});
+			var currentActiveChannel = Object.keys(this.props.channel).filter(function (el) {
+				return _this3.props.channel[el].status;
+			});
+			console.log(nextActiveChannel);
+			console.log(currentActiveChannel);
+			if (currentActiveChannel.length < nextActiveChannel.length) {
+				this.setState({ selectChannel: currentActiveChannel[0] || "" });
+			}
+		}
+	}, {
+		key: 'componentDidUpdate',
+		value: function componentDidUpdate(prevProps, prevState) {}
+	}, {
 		key: 'filterUserList',
 		value: function filterUserList(userList) {
 			return userList.users[0].filter(function (u) {
@@ -36766,20 +36785,20 @@ var Chat = function (_React$Component) {
 	}, {
 		key: 'handleInput',
 		value: function handleInput() {
-			var _this3 = this;
+			var _this4 = this;
 
 			return function (e) {
 				if (!e.target.value) {
-					_this3.setState({
+					_this4.setState({
 						input: e.target.value,
-						userList: _this3.filterUserList(_this3.props.userList),
+						userList: _this4.filterUserList(_this4.props.userList),
 						userSearchNotification: ""
 					});
 				} else {
-					var filterList = _this3.filterUserList(_this3.props.userList).filter(function (el) {
+					var filterList = _this4.filterUserList(_this4.props.userList).filter(function (el) {
 						return el.toLowerCase().includes(e.target.value.toLowerCase());
 					});
-					_this3.setState({
+					_this4.setState({
 						input: e.target.value,
 						userList: filterList,
 						userSearchNotification: ""
@@ -36795,14 +36814,14 @@ var Chat = function (_React$Component) {
 	}, {
 		key: 'handleSubmit',
 		value: function handleSubmit() {
-			var _this4 = this;
+			var _this5 = this;
 
 			if (this.state.userList.length === 1) {
 				this.props.receiveChannel(this.state.userList[0]);
 				this.setState({
 					input: '',
 					userList: this.props.users[0].filter(function (u) {
-						return u !== _this4.props.userList['current user'];
+						return u !== _this5.props.userList['current user'];
 					}),
 					selectChannel: this.capitalizeStr(this.state.userList[0])
 				});
@@ -36828,7 +36847,7 @@ var Chat = function (_React$Component) {
 			this.setState({
 				input: '',
 				userList: this.filterUserList(this.props.userList),
-				selectChannel: this.capitalizeStr(user)
+				selectChannel: user
 			});
 		}
 	}, {
@@ -36844,20 +36863,18 @@ var Chat = function (_React$Component) {
 	}, {
 		key: 'removeChannel',
 		value: function removeChannel(e, channel) {
-			var _this5 = this;
+			var _this6 = this;
 
 			this.props.removeChannel(channel);
 			var activeChannels = Object.keys(this.props.channel).filter(function (c) {
-				return _this5.props.channel[c].status;
+				return _this6.props.channel[c].status;
 			});
 			var selectChannel = activeChannels[0] || "";
-			console.log('~~~~~~~~' + selectChannel + '~~~~~~~~~~~~~~');
-			this.setState({ selectChannel: selectChannel });
 		}
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this6 = this;
+			var _this7 = this;
 
 			var _props = this.props,
 			    channel = _props.channel,
@@ -36868,7 +36885,6 @@ var Chat = function (_React$Component) {
 			    active = _props.active,
 			    receiveChannel = _props.receiveChannel;
 
-			console.log('*************' + this.state.selectChannel + '********************');
 			return _react2.default.createElement(
 				'div',
 				{ className: 'chat-area ' + (active ? 'chat-area-active' : '') },
@@ -36887,16 +36903,16 @@ var Chat = function (_React$Component) {
 									key: idx,
 									'data-channelname': c,
 									onClick: function onClick(e) {
-										return _this6.selectChannel(e, c);
+										return _this7.selectChannel(e, c);
 									},
-									className: '' + (_this6.state.selectChannel === c ? 'selected' : '')
+									className: '' + (_this7.state.selectChannel === c ? 'selected' : '')
 								},
 								_react2.default.createElement('i', { className: 'fas fa-circle' }),
-								_this6.capitalizeStr(c),
-								_this6.state.selectChannel === c ? _react2.default.createElement(
+								_this7.capitalizeStr(c),
+								_this7.state.selectChannel === c ? _react2.default.createElement(
 									'span',
 									{ onClick: function onClick(e) {
-											return _this6.removeChannel(e, c);
+											return _this7.removeChannel(e, c);
 										} },
 									'\xD7'
 								) : ""
@@ -36921,7 +36937,7 @@ var Chat = function (_React$Component) {
 					_react2.default.createElement(
 						'div',
 						{ className: 'header chat-header', onClick: function onClick() {
-								return _this6.toggleChatActive();
+								return _this7.toggleChatActive();
 							} },
 						this.state.connected ? _react2.default.createElement('i', { className: 'fas fa-circle', style: { 'color': '' + (this.state.connected ? 'green' : 'gray') } }) : _react2.default.createElement('img', { src: 'static/assets/images/connection.gif' })
 					),
@@ -36937,7 +36953,7 @@ var Chat = function (_React$Component) {
 							return _react2.default.createElement(
 								'div',
 								{ key: idx, className: 'user', onClick: function onClick(e) {
-										return _this6.openChannel(e);
+										return _this7.openChannel(e);
 									} },
 								_react2.default.createElement(
 									'div',
@@ -36947,7 +36963,7 @@ var Chat = function (_React$Component) {
 								_react2.default.createElement(
 									'span',
 									null,
-									_this6.capitalizeStr(u)
+									_this7.capitalizeStr(u)
 								)
 							);
 						})
@@ -36955,7 +36971,7 @@ var Chat = function (_React$Component) {
 					_react2.default.createElement(
 						'form',
 						{ onSubmit: function onSubmit() {
-								return _this6.handleSubmit();
+								return _this7.handleSubmit();
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-search' }),
 						_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input, placeholder: 'Search user' })

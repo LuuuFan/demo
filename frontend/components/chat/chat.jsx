@@ -13,7 +13,6 @@ class Chat extends React.Component {
 		if (this.props.channel) {
 			selectChannel = Object.keys(this.props.channel).filter(el => this.props.channel[el].status)[0];
 		}
-		debugger
 		this.state = {
 			connected: false,
 			chatActive: true,
@@ -44,6 +43,20 @@ class Chat extends React.Component {
 			}
 		})
 	}
+
+	componentWillReceiveProps(nextProps){
+		const nextActiveChannel = Object.keys(nextProps.channel).filter(el => nextProps.channel[el].status);
+		const currentActiveChannel = Object.keys(this.props.channel).filter(el => this.props.channel[el].status);
+		console.log(nextActiveChannel)
+		console.log(currentActiveChannel)
+		if (currentActiveChannel.length < nextActiveChannel.length) {
+			this.setState({selectChannel: currentActiveChannel[0] || ""});
+		}
+	}
+
+	componentDidUpdate(prevProps, prevState){
+	}
+
 
 	filterUserList(userList){
 		return userList.users[0].filter(u => u != userList['current user'])
@@ -100,7 +113,7 @@ class Chat extends React.Component {
 		this.setState({
 			input: '', 
 			userList: this.filterUserList(this.props.userList),
-			selectChannel: this.capitalizeStr(user),
+			selectChannel: user,
 		});
 	}
 
@@ -116,13 +129,10 @@ class Chat extends React.Component {
 		this.props.removeChannel(channel);
 		const activeChannels = Object.keys(this.props.channel).filter(c => this.props.channel[c].status);
 		const selectChannel = activeChannels[0] || "";
-		console.log(`~~~~~~~~${selectChannel}~~~~~~~~~~~~~~`)
-		this.setState({selectChannel: selectChannel});
 	}
 
 	render(){
 		const {channel, removeChannel, currentUser, receiveChatMessage, toggleChannel, active, receiveChannel} = this.props;
-		console.log(`*************${this.state.selectChannel}********************`)
 		return (
 			<div className={`chat-area ${active ? 'chat-area-active' : ''}`}>
 				<div className='channel-list'>
