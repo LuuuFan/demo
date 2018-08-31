@@ -485,6 +485,11 @@ input[type=submit] {
   justify-content: space-between;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
 }
+.chat-area .no-channel {
+  margin: 100px auto;
+  padding: 20px;
+  text-align: center;
+}
 .chat-area .channel-list {
   flex: 1;
   display: flex;
@@ -502,7 +507,7 @@ input[type=submit] {
 }
 .chat-area .channel-list .channel-tabs li {
   padding: 7px 10px;
-  border-radius: 0 7px 0 0;
+  border-radius: 7px 7px 0 0;
   border-top: 1px solid #cbc5c1;
   border-right: 1px solid #cbc5c1;
   font-size: 12px;

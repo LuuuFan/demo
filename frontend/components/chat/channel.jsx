@@ -53,10 +53,11 @@ class Channel extends React.Component{
 
 	handleSubmit(e){
 		e.preventDefault();
+		console.log(this.state.input);
 		// const message = this.state.message.concat([this.state.input]);
 		this.socket.emit('send_message', {
 			username: this.props.currentUser.username,
-			receiver: this.props.user.toLowerCase(),
+			receiver: this.props.user,
 			// split(' ').map(u => u.toLowerCase()),
 			message: {text: this.state.input},
 		});
