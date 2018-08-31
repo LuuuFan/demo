@@ -30670,10 +30670,15 @@ var _chat = __webpack_require__(198);
 
 var _chat2 = _interopRequireDefault(_chat);
 
+var _user = __webpack_require__(201);
+
+var _user2 = _interopRequireDefault(_user);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
   session: _session2.default,
+  user: _user2.default,
   imgs: _img2.default,
   error: _error2.default,
   canvas: _canvas2.default,
@@ -40867,6 +40872,77 @@ var emoji = exports.emoji = {
 	'13': ["↗", "➡", "↘", "⬇", "↙", "⬅", "↖", "↕", "↔", "↩", "↪", "⤴", "⤵", "🔃", "🔄", "🔙", "🔚", "🔛", "🔜", "🔝", "🛐", "⚛", "🕉", "✡", "☸", "☯", "✝", "☦", "☪", "☮", "🕎", "🔯", "♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓", "⛎", "🔀", "🔁", "🔂", "▶", "⏩", "⏭", "⏯", "◀", "⏪", "⏮", "🔼", "⏫", "🔽", "⏬", "⏸", "⏹", "⏺", "⏏", "🎦", "🔅", "🔆", "📶", "📳", "📴", "⚕", "♾", "♻", "⚜", "🔱", "📛", "🔰", "⭕", "✅", "☑", "✔", "✖", "❌", "❎", "➕", "➖", "➗", "➰", "➿", "〽", "✳", "✴", "❇", "‼", "⁉", "❓", "❔", "❕", "❗", "〰", "©"],
 	'14': ["®", "™", "#️⃣", "*️⃣", "0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "🔠", "🔡", "🔢", "🔣", "🔤", "🅰", "🆎", "🅱", "🆑", "🆒", "🆓", "ℹ", "🆔", "Ⓜ", "🆕", "🆖", "🅾", "🆗", "🅿", "🆘", "🆙", "🆚", "🈁", "🈂", "🈷", "🈶", "🈯", "🉐", "🈹", "🈚", "🈲", "🉑", "🈸", "🈴", "🈳", "㊗", "㊙", "🈺", "🈵", "🔴", "🔵", "⚪", "⚫", "⬜", "⬛", "◼", "◻", "◽", "◾", "▫", "▪", "🔶", "🔷", "🔸", "🔹", "🔺", "🔻", "💠", "🔘", "🔲", "🔳", "🏁", "🚩", "🎌", "🏴", "🏳", "🏳️‍🌈", "🏴‍☠️"]
 };
+
+/***/ }),
+/* 201 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _user = __webpack_require__(202);
+
+var userReducer = function userReducer() {
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	var action = arguments[1];
+
+	Object.freeze(state);
+	var newState = void 0;
+	switch (action.type) {
+		case _user.RECEIVE_ALL_USER:
+			return action.users;
+		default:
+			return state;
+	}
+};
+
+exports.default = userReducer;
+
+/***/ }),
+/* 202 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.getUserList = exports.receiveAllUser = exports.RECEIVE_ALL_USER = undefined;
+
+var _user = __webpack_require__(203);
+
+var APIUtilUser = _interopRequireWildcard(_user);
+
+var _error = __webpack_require__(12);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var RECEIVE_ALL_USER = exports.RECEIVE_ALL_USER = 'RECEIVE_ALL_USER';
+
+var receiveAllUser = exports.receiveAllUser = function receiveAllUser(users) {
+	type: RECEIVE_ALL_USER, users;
+};
+
+var getUserList = exports.getUserList = function getUserList() {
+	return function (dispatch) {
+		return APIUtilUser.getUserList().then(function (users) {
+			return dispatch(receiveAllUser(users));
+		}, function (errors) {
+			return dispatch((0, _error.receiveError)(errors.responseJSON));
+		});
+	};
+};
+
+/***/ }),
+/* 203 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: C:/Users/N3N/Luuu/expirements/demo/frontend/util/user.js: Unexpected token, expected , (5:3)\n\n  3 | \t\turl: 'http://localhost:8999/userlist',\n  4 | \t\tmethod: 'GET',\n> 5 | \t});\n    | \t  ^\n  6 | );\n");
 
 /***/ })
 /******/ ]);

@@ -7,9 +7,11 @@ import messageReducer from './message';
 import channelReducer from './channel';
 import selectedImgReducer from './selected_img';
 import chatReducer from './chat';
+import userReducer from './user';
 
 const rootReducer = combineReducers({
   session: sessionReducer,
+  user: userReducer,
   imgs: imgReducer,
   error: errorReducer,
   canvas: canvasReducer,
