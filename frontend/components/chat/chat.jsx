@@ -7,13 +7,14 @@ import socketIOClient from "socket.io-client";
 // const userList = ['Pavan', 'Tirth', 'Shasha', ];
 
 class Chat extends React.Component {
-	constructor(){
-		super();
+	constructor(props){
+		super(props);
 		this.state = {
 			connected: false,
 			// active: false,
 			input: '',
-			// userList: userList,
+			userList: [],
+			userSearchNotification: ''
 		};
 		this.socket = null;
 	};
@@ -21,6 +22,7 @@ class Chat extends React.Component {
 	componentDidMount(){
 		// user list
 		this.props.getUserList(this.props.currentUser['access-token'])
+			.then(()=>this.setState({userList: this.props.userList.users[0].filter(u => u != this.props.userList['current user'])}))
 
 		// socket
 		this.socket = socketIOClient("http://localhost:10000")
@@ -40,9 +42,9 @@ class Chat extends React.Component {
 	handleInput(){
 		return (e) => {
 			if (!e.target.value) {
-				this.setState({input: e.target.value, userList: userList});
+				this.setState({input: e.target.value, userList: this.props.userList.users[0].filter(u => u !== this.props.userList['current user'])});
 			} else {
-				const filterList = userList.filter(el => el.toLowerCase().includes(e.target.value.toLowerCase()));
+				const filterList = this.state.userList.filter(el => el.toLowerCase().includes(e.target.value.toLowerCase()));
 				this.setState({input: e.target.value, userList: filterList});
 			}
 		}
@@ -53,8 +55,15 @@ class Chat extends React.Component {
 	}
 
 	handleSubmit(){
-			this.props.receiveChannel(this.capitalizeStr(this.state.input))
-			this.setState({input: '', userList: userList});
+			if (this.state.userList.length === 1) {
+				this.props.receiveChannel(this.capitalizeStr(this.state.userList[0]))
+				this.setState({input: '', userList: this.props.users[0].filter(u => u !== this.props.userList['current user'])});
+			} else if (!this.state.userList.length){
+				// No user found
+				this.setState({userSearchNotification: `There is no User: "${this.state.input}"`});
+			} else {
+				this.setState({userSearchNotification: 'Please select one user'});
+			}
 	}
 
 	toggle(){
@@ -99,17 +108,16 @@ class Chat extends React.Component {
 							<i className="fas fa-circle" style={{'color': `${this.state.connected ? 'green' : 'gray'}`}}></i>
 						: <img src='static/assets/images/connection.gif'/>}
 					</div>
-					{userList.users ? 
-						<div className='userlist'>
-							{userList.users[0].map((u, idx) => 
-							<div key={idx} className='user' onClick={(e)=>this.openChannel(e)}>
-								<div className='avatar'>{u[0].toUpperCase()}</div>
-								<span>{this.capitalizeStr(u)}</span>
-							</div>)}
-						</div>
-						: ""}
+					<div className='userlist'>
+						{this.state.userList.map((u, idx) => 
+						<div key={idx} className='user' onClick={(e)=>this.openChannel(e)}>
+							<div className='avatar'>{u[0].toUpperCase()}</div>
+							<span>{this.capitalizeStr(u)}</span>
+						</div>)}
+					</div>
 					<form onSubmit={()=>this.handleSubmit()}>
 						<i className="fas fa-search"></i>
+						<div className='tooltip'>{this.state.userSearchNotification}</div>
 						<input onChange={this.handleInput()} value={this.state.input} placeholder='Search user'/>
 					</form>
 				</div>
