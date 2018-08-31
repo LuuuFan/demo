@@ -41,9 +41,9 @@ class Channel extends React.Component{
 		}
 	}
 
-	closeChannel(){
-		this.props.removeChannel(this.props.user);
-	}
+	// closeChannel(){
+	// 	this.props.removeChannel(this.props.user);
+	// }
 
 	handleInput(type){
 		return (e) => {
@@ -107,7 +107,7 @@ class Channel extends React.Component{
 			<div 
 				className={`channel ${active ? 'channel-active' : ''}`} 
 				id={`channel-${userList.join('&')}`}
-				style={{height: `${chatActive ? '70%' : '93%'}`}}
+				style={{height: `${chatActive ? '71%' : '93%'}`}}
 			>
 				{/*
 					!-- old header --!

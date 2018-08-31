@@ -7,7 +7,7 @@ const channelReducer = (state = {}, action) => {
 		case REMOVE_CHANNEL:
 			newState = Object.assign({}, state);
 			// delete newState[action.channel.toLowerCase()];
-			newState[action.channel.toLowerCase()].status = false;
+			newState[action.channel].status = false;
 			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		case RECEIVE_CHANNEL:

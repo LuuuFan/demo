@@ -10515,7 +10515,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	var preloadedState = void 0;
 	var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-	var channel = JSON.parse(localStorage.getItem('channel'));
+	var channel = JSON.parse(localStorage.getItem('channel')) || {};
 	if (currentUser) {
 		preloadedState = {
 			session: {
@@ -30947,7 +30947,7 @@ var channelReducer = function channelReducer() {
 		case _channel.REMOVE_CHANNEL:
 			newState = Object.assign({}, state);
 			// delete newState[action.channel.toLowerCase()];
-			newState[action.channel.toLowerCase()].status = false;
+			newState[action.channel].status = false;
 			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		case _channel.RECEIVE_CHANNEL:
@@ -36713,13 +36713,20 @@ var Chat = function (_React$Component) {
 
 		var _this = _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).call(this, props));
 
+		var selectChannel = void 0;
+		if (_this.props.channel) {
+			selectChannel = Object.keys(_this.props.channel).filter(function (el) {
+				return _this.props.channel[el].status;
+			})[0];
+		}
+		debugger;
 		_this.state = {
 			connected: false,
 			chatActive: true,
 			input: '',
 			userList: [],
 			userSearchNotification: '',
-			selectChannel: ''
+			selectChannel: selectChannel || ""
 		};
 		_this.socket = null;
 		return _this;
@@ -36791,7 +36798,7 @@ var Chat = function (_React$Component) {
 			var _this4 = this;
 
 			if (this.state.userList.length === 1) {
-				this.props.receiveChannel(this.capitalizeStr(this.state.userList[0]));
+				this.props.receiveChannel(this.state.userList[0]);
 				this.setState({
 					input: '',
 					userList: this.props.users[0].filter(function (u) {
@@ -36816,7 +36823,7 @@ var Chat = function (_React$Component) {
 	}, {
 		key: 'openChannel',
 		value: function openChannel(e) {
-			var user = e.currentTarget.textContent.slice(1);
+			var user = e.currentTarget.textContent.slice(1).toLowerCase();
 			this.props.receiveChannel(user);
 			this.setState({
 				input: '',
@@ -36831,13 +36838,26 @@ var Chat = function (_React$Component) {
 		}
 	}, {
 		key: 'selectChannel',
-		value: function selectChannel(e) {
-			this.setState({ selectChannel: e.target.textContent });
+		value: function selectChannel(e, c) {
+			this.setState({ selectChannel: c });
+		}
+	}, {
+		key: 'removeChannel',
+		value: function removeChannel(e, channel) {
+			var _this5 = this;
+
+			this.props.removeChannel(channel);
+			var activeChannels = Object.keys(this.props.channel).filter(function (c) {
+				return _this5.props.channel[c].status;
+			});
+			var selectChannel = activeChannels[0] || "";
+			console.log('~~~~~~~~' + selectChannel + '~~~~~~~~~~~~~~');
+			this.setState({ selectChannel: selectChannel });
 		}
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this5 = this;
+			var _this6 = this;
 
 			var _props = this.props,
 			    channel = _props.channel,
@@ -36846,10 +36866,9 @@ var Chat = function (_React$Component) {
 			    receiveChatMessage = _props.receiveChatMessage,
 			    toggleChannel = _props.toggleChannel,
 			    active = _props.active,
-			    receiveChannel = _props.receiveChannel,
-			    userList = _props.userList;
+			    receiveChannel = _props.receiveChannel;
 
-
+			console.log('*************' + this.state.selectChannel + '********************');
 			return _react2.default.createElement(
 				'div',
 				{ className: 'chat-area ' + (active ? 'chat-area-active' : '') },
@@ -36868,23 +36887,24 @@ var Chat = function (_React$Component) {
 									key: idx,
 									'data-channelname': c,
 									onClick: function onClick(e) {
-										return _this5.selectChannel(e);
+										return _this6.selectChannel(e, c);
 									},
-									className: '' + (_this5.state.selectChannel.toLowerCase() === c ? 'selected' : '')
+									className: '' + (_this6.state.selectChannel === c ? 'selected' : '')
 								},
 								_react2.default.createElement('i', { className: 'fas fa-circle' }),
-								_this5.capitalizeStr(c),
-								_this5.state.selectChannel.toLowerCase() === c ? _react2.default.createElement(
+								_this6.capitalizeStr(c),
+								_this6.state.selectChannel === c ? _react2.default.createElement(
 									'span',
-									null,
+									{ onClick: function onClick(e) {
+											return _this6.removeChannel(e, c);
+										} },
 									'\xD7'
 								) : ""
 							);
 						})
 					) : "",
-					this.state.selectChannel ? _react2.default.createElement(_channel2.default, {
+					channel[this.state.selectChannel] ? _react2.default.createElement(_channel2.default, {
 						user: this.state.selectChannel,
-						removeChannel: removeChannel,
 						socket: this.socket,
 						currentUser: currentUser,
 						receiveChatMessage: receiveChatMessage,
@@ -36901,7 +36921,7 @@ var Chat = function (_React$Component) {
 					_react2.default.createElement(
 						'div',
 						{ className: 'header chat-header', onClick: function onClick() {
-								return _this5.toggleChatActive();
+								return _this6.toggleChatActive();
 							} },
 						this.state.connected ? _react2.default.createElement('i', { className: 'fas fa-circle', style: { 'color': '' + (this.state.connected ? 'green' : 'gray') } }) : _react2.default.createElement('img', { src: 'static/assets/images/connection.gif' })
 					),
@@ -36917,7 +36937,7 @@ var Chat = function (_React$Component) {
 							return _react2.default.createElement(
 								'div',
 								{ key: idx, className: 'user', onClick: function onClick(e) {
-										return _this5.openChannel(e);
+										return _this6.openChannel(e);
 									} },
 								_react2.default.createElement(
 									'div',
@@ -36927,7 +36947,7 @@ var Chat = function (_React$Component) {
 								_react2.default.createElement(
 									'span',
 									null,
-									_this5.capitalizeStr(u)
+									_this6.capitalizeStr(u)
 								)
 							);
 						})
@@ -36935,7 +36955,7 @@ var Chat = function (_React$Component) {
 					_react2.default.createElement(
 						'form',
 						{ onSubmit: function onSubmit() {
-								return _this5.handleSubmit();
+								return _this6.handleSubmit();
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-search' }),
 						_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input, placeholder: 'Search user' })
@@ -37029,11 +37049,11 @@ var Channel = function (_React$Component) {
 				this.setState({ emojiModal: false });
 			}
 		}
-	}, {
-		key: 'closeChannel',
-		value: function closeChannel() {
-			this.props.removeChannel(this.props.user);
-		}
+
+		// closeChannel(){
+		// 	this.props.removeChannel(this.props.user);
+		// }
+
 	}, {
 		key: 'handleInput',
 		value: function handleInput(type) {
@@ -37116,7 +37136,7 @@ var Channel = function (_React$Component) {
 				{
 					className: 'channel ' + (active ? 'channel-active' : ''),
 					id: 'channel-' + userList.join('&'),
-					style: { height: '' + (chatActive ? '70%' : '93%') }
+					style: { height: '' + (chatActive ? '71%' : '93%') }
 				},
 				_react2.default.createElement(
 					'div',

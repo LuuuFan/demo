@@ -9,13 +9,18 @@ import socketIOClient from "socket.io-client";
 class Chat extends React.Component {
 	constructor(props){
 		super(props);
+		let selectChannel;
+		if (this.props.channel) {
+			selectChannel = Object.keys(this.props.channel).filter(el => this.props.channel[el].status)[0];
+		}
+		debugger
 		this.state = {
 			connected: false,
 			chatActive: true,
 			input: '',
 			userList: [],
 			userSearchNotification: '',
-			selectChannel: ''
+			selectChannel: selectChannel || "",
 		};
 		this.socket = null;
 	};
@@ -69,7 +74,7 @@ class Chat extends React.Component {
 
 	handleSubmit(){
 			if (this.state.userList.length === 1) {
-				this.props.receiveChannel(this.capitalizeStr(this.state.userList[0]))
+				this.props.receiveChannel(this.state.userList[0])
 				this.setState({
 					input: '', 
 					userList: this.props.users[0].filter(u => u !== this.props.userList['current user']),
@@ -90,7 +95,7 @@ class Chat extends React.Component {
 	}
 
 	openChannel(e){
-		const user = e.currentTarget.textContent.slice(1);
+		const user = e.currentTarget.textContent.slice(1).toLowerCase();
 		this.props.receiveChannel(user);
 		this.setState({
 			input: '', 
@@ -103,13 +108,21 @@ class Chat extends React.Component {
 		this.setState({chatActive: !this.state.chatActive})
 	}
 
-	selectChannel(e){
-		this.setState({selectChannel: e.target.textContent});
+	selectChannel(e, c){
+		this.setState({selectChannel: c});
+	}
+
+	removeChannel(e, channel){
+		this.props.removeChannel(channel);
+		const activeChannels = Object.keys(this.props.channel).filter(c => this.props.channel[c].status);
+		const selectChannel = activeChannels[0] || "";
+		console.log(`~~~~~~~~${selectChannel}~~~~~~~~~~~~~~`)
+		this.setState({selectChannel: selectChannel});
 	}
 
 	render(){
-		const {channel, removeChannel, currentUser, receiveChatMessage, toggleChannel, active, receiveChannel, userList} = this.props;
-
+		const {channel, removeChannel, currentUser, receiveChatMessage, toggleChannel, active, receiveChannel} = this.props;
+		console.log(`*************${this.state.selectChannel}********************`)
 		return (
 			<div className={`chat-area ${active ? 'chat-area-active' : ''}`}>
 				<div className='channel-list'>
@@ -119,21 +132,20 @@ class Chat extends React.Component {
 								<li 
 									key={idx} 
 									data-channelname={c}
-									onClick={(e)=>this.selectChannel(e)} 
-									className={`${this.state.selectChannel.toLowerCase() === c ? 'selected' : '' }`}
+									onClick={(e)=>this.selectChannel(e, c)} 
+									className={`${this.state.selectChannel === c ? 'selected' : '' }`}
 								>
 									<i className="fas fa-circle"></i>
 									{this.capitalizeStr(c)}
-									{this.state.selectChannel.toLowerCase() === c ? 
-										<span>&times;</span>
+									{this.state.selectChannel === c ? 
+										<span onClick={(e)=>this.removeChannel(e, c)}>&times;</span>
 									: ""}
 								</li>)}
 						</ul>
 					: ""}
-						{this.state.selectChannel ? 
+						{channel[this.state.selectChannel] ? 
 							<Channel 
 								user={this.state.selectChannel}
-								removeChannel={removeChannel} 
 								socket={this.socket} 
 								currentUser={currentUser} 
 								receiveChatMessage={receiveChatMessage} 

@@ -89,6 +89,7 @@ $hover: #0099fe;
 			}
 		  form{
 		    display: flex;
+		    padding: 0;
 		    align-items: center;
 		    justify-content: space-between;
 		    position: relative;
@@ -102,12 +103,12 @@ $hover: #0099fe;
 		      cursor: pointer;
 		      .tooltip{
 		        top: -20px;
-		        width: 80px;
-		        left: -30px;
+		        width: 70px;
+		        left: -60px;
 		      }
 		      .tooltip:after, .tooltip:before{
 		        top: 100%;
-		        left: 40%;
+		        left: 80%;
 		        border-right-color: transparent;
 		        border-top-color: rgba(0,0,0,0.6);
 		      }
