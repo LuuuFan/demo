@@ -4,7 +4,7 @@ import Channel from './channel';
 import socketIOClient from "socket.io-client";
 
 // const userList = ['Pavan', 'Tirth', 'Sam', 'Edward', 'Tim', 'Kelvin', 'Julia', 'Lu'];
-const userList = ['Pavan', 'Tirth', 'Shasha', ];
+// const userList = ['Pavan', 'Tirth', 'Shasha', ];
 
 class Chat extends React.Component {
 	constructor(){
@@ -13,7 +13,7 @@ class Chat extends React.Component {
 			connected: false,
 			// active: false,
 			input: '',
-			userList: userList,
+			// userList: userList,
 		};
 		this.socket = null;
 	};
@@ -21,9 +21,7 @@ class Chat extends React.Component {
 	componentDidMount(){
 		// user list
 		this.props.getUserList(this.props.currentUser['access-token'])
-			.then(res => {
-				debugger
-			});
+
 		// socket
 		this.socket = socketIOClient("http://localhost:10000")
 		this.socket.emit('online', {username: this.props.currentUser.username});
@@ -72,7 +70,7 @@ class Chat extends React.Component {
 
 	render(){
 		const {channel, removeChannel, currentUser, receiveChatMessage, toggleChannel, active, receiveChannel, userList} = this.props;
-		console.log(channel);
+
 		return (
 			<div className='chat-area'>
 				{channel && Object.keys(channel).length ? 
@@ -101,13 +99,15 @@ class Chat extends React.Component {
 							<i className="fas fa-circle" style={{'color': `${this.state.connected ? 'green' : 'gray'}`}}></i>
 						: <img src='static/assets/images/connection.gif'/>}
 					</div>
-					<div className='userlist'>
-						{this.state.userList.map((user, idx) => 
-						<div key={idx} className='user' onClick={(e)=>this.openChannel(e)}>
-							<div className='avatar'>{user[0]}</div>
-							<span>{user}</span>
-						</div>)}
-					</div>
+					{userList.users ? 
+						<div className='userlist'>
+							{userList.users[0].map((u, idx) => 
+							<div key={idx} className='user' onClick={(e)=>this.openChannel(e)}>
+								<div className='avatar'>{u[0].toUpperCase()}</div>
+								<span>{this.capitalizeStr(u)}</span>
+							</div>)}
+						</div>
+						: ""}
 					<form onSubmit={()=>this.handleSubmit()}>
 						<i className="fas fa-search"></i>
 						<input onChange={this.handleInput()} value={this.state.input} placeholder='Search user'/>

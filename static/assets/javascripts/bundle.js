@@ -36566,7 +36566,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 // const userList = ['Pavan', 'Tirth', 'Sam', 'Edward', 'Tim', 'Kelvin', 'Julia', 'Lu'];
-var userList = ['Pavan', 'Tirth', 'Shasha'];
+// const userList = ['Pavan', 'Tirth', 'Shasha', ];
 
 var Chat = function (_React$Component) {
 	_inherits(Chat, _React$Component);
@@ -36579,8 +36579,8 @@ var Chat = function (_React$Component) {
 		_this.state = {
 			connected: false,
 			// active: false,
-			input: '',
-			userList: userList
+			input: ''
+			// userList: userList,
 		};
 		_this.socket = null;
 		return _this;
@@ -36592,9 +36592,8 @@ var Chat = function (_React$Component) {
 			var _this2 = this;
 
 			// user list
-			this.props.getUserList(this.props.currentUser['access-token']).then(function (res) {
-				debugger;
-			});
+			this.props.getUserList(this.props.currentUser['access-token']);
+
 			// socket
 			this.socket = (0, _socket2.default)("http://localhost:10000");
 			this.socket.emit('online', { username: this.props.currentUser.username });
@@ -36664,7 +36663,7 @@ var Chat = function (_React$Component) {
 			    receiveChannel = _props.receiveChannel,
 			    userList = _props.userList;
 
-			console.log(channel);
+
 			return _react2.default.createElement(
 				'div',
 				{ className: 'chat-area' },
@@ -36702,10 +36701,10 @@ var Chat = function (_React$Component) {
 							} },
 						this.state.connected ? _react2.default.createElement('i', { className: 'fas fa-circle', style: { 'color': '' + (this.state.connected ? 'green' : 'gray') } }) : _react2.default.createElement('img', { src: 'static/assets/images/connection.gif' })
 					),
-					_react2.default.createElement(
+					userList.users ? _react2.default.createElement(
 						'div',
 						{ className: 'userlist' },
-						this.state.userList.map(function (user, idx) {
+						userList.users[0].map(function (u, idx) {
 							return _react2.default.createElement(
 								'div',
 								{ key: idx, className: 'user', onClick: function onClick(e) {
@@ -36714,16 +36713,16 @@ var Chat = function (_React$Component) {
 								_react2.default.createElement(
 									'div',
 									{ className: 'avatar' },
-									user[0]
+									u[0].toUpperCase()
 								),
 								_react2.default.createElement(
 									'span',
 									null,
-									user
+									_this4.capitalizeStr(u)
 								)
 							);
 						})
-					),
+					) : "",
 					_react2.default.createElement(
 						'form',
 						{ onSubmit: function onSubmit() {
