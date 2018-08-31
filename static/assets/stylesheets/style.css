@@ -485,9 +485,11 @@ input[type=submit] {
   transition: all 0.5s;
   border-radius: 5px;
   background-color: white;
-  overflow: hidden;
 }
 .chat .header, .channel .header {
+  box-sizing: border-box;
+  border: 1px solid #2F425E;
+  border-radius: 5px 5px 0 0;
   height: 40px;
   width: 100%;
   background-color: #2F425E;
@@ -530,6 +532,7 @@ input[type=submit] {
 
 .chat {
   right: 5px;
+  overflow: visible;
 }
 .chat .userlist {
   height: 220px;
@@ -559,26 +562,25 @@ input[type=submit] {
 .chat .userlist .user:hover span {
   font-weight: bold;
 }
-.chat .header {
-  border: 1px solid #2F425E;
-}
 
 .channel {
   overflow: visible;
 }
 .channel .channel-header:hover {
   background-color: gray;
+  border: 1px solid gray;
 }
 .channel .channel-header {
   position: relative;
+  border: 1px solid lightgray;
   background-color: lightgray;
-  border-radius: 5px 5px 0 0;
 }
 .channel .channel-header div {
   display: flex;
   align-items: center;
 }
 .channel .channel-header .add-people {
+  border-top: none;
   position: absolute;
   background-color: white;
   color: gray;
@@ -596,6 +598,7 @@ input[type=submit] {
   max-width: 15px;
   font-size: 18px;
   font-weight: bold;
+  margin-right: 10px;
   color: #cbc5c1;
 }
 .channel .channel-header .add-people input[type=submit]:hover {
@@ -759,6 +762,7 @@ input[type=submit] {
 }
 .chat-active .channel-header, .channel-active .channel-header {
   background-color: #0099fe;
+  border: 1px solid #0099fe;
   color: white;
 }
 

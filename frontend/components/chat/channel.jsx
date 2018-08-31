@@ -116,7 +116,7 @@ class Channel extends React.Component{
 					</div>
 					<div>
 						<i className="fas fa-plus" onClick={()=>this.toggleAddPeople()}>
-							<span className='tooltip'>Add user to chat</span>
+							<span className='tooltip'>Add user</span>
 						</i>
 						<span className='close-channel' onClick={()=>this.closeChannel()}>&times;</span>
 					</div>

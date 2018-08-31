@@ -36923,7 +36923,7 @@ var Channel = function (_React$Component) {
 							_react2.default.createElement(
 								'span',
 								{ className: 'tooltip' },
-								'Add user to chat'
+								'Add user'
 							)
 						),
 						_react2.default.createElement(
