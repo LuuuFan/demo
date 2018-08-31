@@ -1,0 +1,24 @@
+$black: #3e3e3b;
+$color-darkblue: #4c586f;
+$color-blue: #a2aab0;
+$gray: #cbc5c1;
+$font-white: #ebeced;
+$font-hover: #cbc5c1;
+$hover: #0099fe;
+
+
+.chat-area{
+	z-index: 3;
+	position: fixed;
+	top: 0;
+	right: -300px;
+	height: 100vh;
+	width: 300px;
+	background-color: white;
+	
+}
+
+.chat-area-active{
+	right: 0;
+	transition: all .8s;
+}

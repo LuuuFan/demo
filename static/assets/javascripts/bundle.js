@@ -36829,7 +36829,7 @@ var Chat = function (_React$Component) {
 
 			return _react2.default.createElement(
 				'div',
-				{ className: 'chat-area' },
+				{ className: 'chat-area ' + (active ? 'chat-area-active' : '') },
 				channel && Object.keys(channel).length ? _react2.default.createElement(
 					'div',
 					null,

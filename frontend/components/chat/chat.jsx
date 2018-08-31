@@ -89,7 +89,7 @@ class Chat extends React.Component {
 		const {channel, removeChannel, currentUser, receiveChatMessage, toggleChannel, active, receiveChannel, userList} = this.props;
 
 		return (
-			<div className='chat-area'>
+			<div className={`chat-area ${active ? 'chat-area-active' : ''}`}>
 				{channel && Object.keys(channel).length ? 
 					<div>
 						{Object.keys(channel).filter(el => channel[el].status).map((c, idx) => 
