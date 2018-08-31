@@ -1,5 +1,5 @@
 import React from 'react';
-import {emojis} from '../../util/emoji';
+import {emoji} from '../../util/emoji';
 
 class Channel extends React.Component{
 	constructor(props){
@@ -10,6 +10,7 @@ class Channel extends React.Component{
 			emojiModal: false,
 			toggleAddPeople: false,
 			addPeopleInput: '',
+			emojiPage: 1,
 		};
 		this.socket = this.props.socket;
 	}
@@ -64,7 +65,7 @@ class Channel extends React.Component{
 	}
 
 	toggleEmojiModal(){
-		this.setState({emojiModal: !this.state.emojiModal});
+		this.setState({emojiModal: !this.state.emojiModal, emojiPage: 1});
 	}
 
 	selectEmoji(e){
@@ -86,6 +87,16 @@ class Channel extends React.Component{
 
 	capitalizeStr(str){
 		return str[0].toUpperCase() + str.slice(1).toLowerCase();
+	}
+
+	changePage(n){
+		if (this.state.emojiPage  + n > 0 && this.state.emojiPage  + n < 15) {
+			this.setState({emojiPage: this.state.emojiPage * 1 + n});
+		}
+	}
+
+	goToPage(e){
+		this.setState({emojiPage: e.target.textContent * 1});
 	}
 
 
@@ -127,8 +138,18 @@ class Channel extends React.Component{
 						<span className='tooltip'>Choose emojis</span>
 					</i>
 					<div className={this.state.emojiModal ? 'is-open' : 'modal'}>
-						<div className='emoji group'>
-							{emojis.map((e, idx)=> <div key={idx} onClick={(e)=>{this.selectEmoji(e)}}>{e}</div>)}
+						<div className='emoji'>
+							<div className='emoji-group group'>
+								{emoji[this.state.emojiPage].map((e, idx)=> <div className='emoji-item' key={`emoji-item-${idx}`} onClick={(e)=>{this.selectEmoji(e)}}>{e}</div>)}
+							</div>
+							{/*
+								{Object.keys(emoji).map((key, idx) => <div key={`emoji-key-${idx}`}>{emoji[key].map((e, i)=><div key={`emoji-item-${i}`} className='emoji-item' key={idx} onClick={(e)=>{this.selectEmoji(e)}}>{e}</div>)}</div>)}
+							*/}
+							<div className='page'>
+								<i className="fas fa-chevron-left" onClick={()=>this.changePage(-1)}></i>
+								{Object.keys(emoji).map((p, idx) => <span onClick={(e)=>this.goToPage(e)} key={`page-${idx}`} className={this.state.emojiPage == p ? 'selected' : ''}>{p}</span>)}
+								<i className="fas fa-chevron-right" onClick={()=>this.changePage(1)}></i>
+							</div>
 						</div>
 						<div className='modal-screen' onClick={()=>this.toggleEmojiModal()}></div>
 					</div>

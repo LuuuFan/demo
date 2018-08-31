@@ -242,14 +242,37 @@ $font-hover: #278efc;
       left: 120px;
       background-color: white;
       width: 200px;
-      height: 200px;
+      height: 220px;
       border: 1px solid $gray;
       box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
-      div{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .emoji-group{
+        flex: 1;
+      }
+      .page{
+        font-size: 8px;
+        height: 20px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        .selected{
+          color: $hover;
+        }
+        span{
+          cursor: pointer;
+        }
+      }
+      .emoji-item{
         float: left;
+        height: 20px;
+        width: 20px;
+        text-align: center;
         cursor: pointer;
       }
-      div:hover{
+      .emoji-item:hover{
         transform: scale(1.4);
         transition: all .5s;
       }
