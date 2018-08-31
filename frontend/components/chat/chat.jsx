@@ -42,10 +42,18 @@ class Chat extends React.Component {
 	handleInput(){
 		return (e) => {
 			if (!e.target.value) {
-				this.setState({input: e.target.value, userList: this.props.userList.users[0].filter(u => u !== this.props.userList['current user'])});
+				this.setState({
+					input: e.target.value, 
+					userList: this.props.userList.users[0].filter(u => u !== this.props.userList['current user']),
+					userSearchNotification: "",
+				});
 			} else {
 				const filterList = this.state.userList.filter(el => el.toLowerCase().includes(e.target.value.toLowerCase()));
-				this.setState({input: e.target.value, userList: filterList});
+				this.setState({
+					input: e.target.value, 
+					userList: filterList, 
+					userSearchNotification: ""
+				});
 			}
 		}
 	}
@@ -108,6 +116,9 @@ class Chat extends React.Component {
 							<i className="fas fa-circle" style={{'color': `${this.state.connected ? 'green' : 'gray'}`}}></i>
 						: <img src='static/assets/images/connection.gif'/>}
 					</div>
+					{this.state.userSearchNotification ? 
+						<div className='notification'>{this.state.userSearchNotification}</div>
+						: ""}
 					<div className='userlist'>
 						{this.state.userList.map((u, idx) => 
 						<div key={idx} className='user' onClick={(e)=>this.openChannel(e)}>
@@ -117,7 +128,6 @@ class Chat extends React.Component {
 					</div>
 					<form onSubmit={()=>this.handleSubmit()}>
 						<i className="fas fa-search"></i>
-						<div className='tooltip'>{this.state.userSearchNotification}</div>
 						<input onChange={this.handleInput()} value={this.state.input} placeholder='Search user'/>
 					</form>
 				</div>

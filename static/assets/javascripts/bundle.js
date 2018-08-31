@@ -36757,14 +36757,22 @@ var Chat = function (_React$Component) {
 
 			return function (e) {
 				if (!e.target.value) {
-					_this3.setState({ input: e.target.value, userList: _this3.props.userList.users[0].filter(function (u) {
+					_this3.setState({
+						input: e.target.value,
+						userList: _this3.props.userList.users[0].filter(function (u) {
 							return u !== _this3.props.userList['current user'];
-						}) });
+						}),
+						userSearchNotification: ""
+					});
 				} else {
 					var filterList = _this3.state.userList.filter(function (el) {
 						return el.toLowerCase().includes(e.target.value.toLowerCase());
 					});
-					_this3.setState({ input: e.target.value, userList: filterList });
+					_this3.setState({
+						input: e.target.value,
+						userList: filterList,
+						userSearchNotification: ""
+					});
 				}
 			};
 		}
@@ -36856,6 +36864,11 @@ var Chat = function (_React$Component) {
 							} },
 						this.state.connected ? _react2.default.createElement('i', { className: 'fas fa-circle', style: { 'color': '' + (this.state.connected ? 'green' : 'gray') } }) : _react2.default.createElement('img', { src: 'static/assets/images/connection.gif' })
 					),
+					this.state.userSearchNotification ? _react2.default.createElement(
+						'div',
+						{ className: 'notification' },
+						this.state.userSearchNotification
+					) : "",
 					_react2.default.createElement(
 						'div',
 						{ className: 'userlist' },
@@ -36884,11 +36897,6 @@ var Chat = function (_React$Component) {
 								return _this5.handleSubmit();
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-search' }),
-						_react2.default.createElement(
-							'div',
-							{ className: 'tooltip' },
-							this.state.userSearchNotification
-						),
 						_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input, placeholder: 'Search user' })
 					)
 				)

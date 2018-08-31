@@ -534,6 +534,15 @@ input[type=submit] {
   right: 5px;
   overflow: visible;
 }
+.chat .notification {
+  width: 100%;
+  background-color: rgba(255, 0, 0, 0.2);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+  padding: 5px;
+}
 .chat .userlist {
   height: 220px;
   padding: 10px;
