@@ -156,11 +156,12 @@ $hover: #0099fe;
 				}
 			}
 		  form{
+		    position: relative;
 		    display: flex;
 		    padding: 0;
 		    align-items: center;
 		    justify-content: space-between;
-		    position: relative;
+				border-top: 1px solid $gray;
 		    input{
 		      padding: 10px;
 		      flex: 1;
@@ -171,7 +172,6 @@ $hover: #0099fe;
 		    }
 		    i{
 		      position: relative;
-		      margin-left: 0;
 		      margin-right: 10px;
 		      cursor: pointer;
 		      .tooltip{
@@ -260,28 +260,10 @@ $hover: #0099fe;
 		      display: block;
 		      z-index: 5;
 		    }
-		    
   		}
 		}
 	}
 
-	form{
-		display: flex;
-		flex-direction: row;
-		padding: 7px 0;
-		border-top: 1px solid $gray;
-		i{
-			margin: 0 7px;
-		}
-		input{
-			flex: 1;
-		}
-		input:focus .fa-search{
-			color: $hover;
-			transition: all .8s;
-		}
-	}
-	
 	.chat{
 		position: fixed;
 		// bottom: -220px;
@@ -294,6 +276,23 @@ $hover: #0099fe;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+		form{
+			display: flex;
+			flex-direction: row;
+			padding: 7px 0;
+			border-top: 1px solid $gray;
+	    flex-direction: row-reverse;
+			i{
+				margin: 0 7px;
+			}
+			input{
+				flex: 1;
+			}
+			input:focus ~ i{
+				color: $hover;
+				transition: all .8s;
+			}
+		}
 		.header{
 			cursor: pointer;
 			padding: 5px 0;
@@ -332,20 +331,22 @@ $hover: #0099fe;
 	  		flex-direction: row;
 	  		align-items: center;
 	  		cursor: pointer;
+	  		margin-bottom: 7px;
 	  		.avatar{
 	  			font-size: 18px;
 	  			background-color: lightgray;
 	  			border-radius: 50%;
 	  			padding: 5px 9px;
-	  			margin-right: 5px;
-	  			margin-bottom: 5px;
+	  			margin-right: 7px;
 	  			text-align: center;
 	  		}
 	  		.avatar:hover{
 	  			background-color: $color-darkblue;
 	  			color: white;
+	  			transition: all .8s;
 	  		}
 	      span:hover{
+	  			transition: all .8s;
 	  		  font-weight: bold;
 	      }
 	    }

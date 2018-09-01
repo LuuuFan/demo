@@ -72,7 +72,7 @@ class Chat extends React.Component {
 				this.props.receiveChannel(this.state.userList[0])
 				this.setState({
 					input: '', 
-					userList: this.props.users[0].filter(u => u !== this.props.userList['current user']),
+					userList: this.filterUserList(this.props.userList),
 					// selectChannel: this.capitalizeStr(this.state.userList[0])
 				});
 			} else if (!this.state.userList.length){
@@ -207,8 +207,8 @@ class Chat extends React.Component {
 						</div>)}
 					</div>
 					<form onSubmit={()=>this.handleSubmit()}>
-						<i className="fas fa-search"></i>
 						<input onChange={this.handleInput()} value={this.state.input} placeholder='Search user'/>
+						<i className="fas fa-search"></i>
 					</form>
 				</div>
 			</div>

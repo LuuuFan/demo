@@ -36814,15 +36814,11 @@ var Chat = function (_React$Component) {
 	}, {
 		key: 'handleSubmit',
 		value: function handleSubmit() {
-			var _this4 = this;
-
 			if (this.state.userList.length === 1) {
 				this.props.receiveChannel(this.state.userList[0]);
 				this.setState({
 					input: '',
-					userList: this.props.users[0].filter(function (u) {
-						return u !== _this4.props.userList['current user'];
-					})
+					userList: this.filterUserList(this.props.userList)
 					// selectChannel: this.capitalizeStr(this.state.userList[0])
 				});
 			} else if (!this.state.userList.length) {
@@ -36876,7 +36872,7 @@ var Chat = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this5 = this;
+			var _this4 = this;
 
 			var _props = this.props,
 			    channel = _props.channel,
@@ -36897,7 +36893,7 @@ var Chat = function (_React$Component) {
 				active ? _react2.default.createElement(
 					'div',
 					{ className: 'close-chat-area', onClick: function onClick() {
-							return _this5.props.toggleChat();
+							return _this4.props.toggleChat();
 						} },
 					'\xD7'
 				) : "",
@@ -36914,16 +36910,16 @@ var Chat = function (_React$Component) {
 									key: idx,
 									'data-channelname': c,
 									onClick: function onClick(e) {
-										return _this5.selectChannel(e, c);
+										return _this4.selectChannel(e, c);
 									},
 									className: '' + (selected === c ? 'selected' : '')
 								},
 								_react2.default.createElement('i', { className: 'fas fa-circle' }),
-								_this5.capitalizeStr(c),
+								_this4.capitalizeStr(c),
 								selected === c ? _react2.default.createElement(
 									'span',
 									{ onClick: function onClick(e) {
-											return _this5.removeChannel(e, c);
+											return _this4.removeChannel(e, c);
 										}, className: 'close-tab' },
 									'\xD7'
 								) : ""
@@ -36956,7 +36952,7 @@ var Chat = function (_React$Component) {
 					_react2.default.createElement(
 						'div',
 						{ className: 'header chat-header', onClick: function onClick() {
-								return _this5.toggleChatActive();
+								return _this4.toggleChatActive();
 							} },
 						this.state.connected ? _react2.default.createElement('i', { className: 'fas fa-circle', style: { 'color': '' + (this.state.connected ? 'green' : 'gray') } }) : _react2.default.createElement('img', { src: 'static/assets/images/connection.gif' })
 					),
@@ -36972,7 +36968,7 @@ var Chat = function (_React$Component) {
 							return _react2.default.createElement(
 								'div',
 								{ key: idx, className: 'user', onClick: function onClick(e) {
-										return _this5.openChannel(e);
+										return _this4.openChannel(e);
 									} },
 								_react2.default.createElement(
 									'div',
@@ -36982,7 +36978,7 @@ var Chat = function (_React$Component) {
 								_react2.default.createElement(
 									'span',
 									null,
-									_this5.capitalizeStr(u)
+									_this4.capitalizeStr(u)
 								)
 							);
 						})
@@ -36990,10 +36986,10 @@ var Chat = function (_React$Component) {
 					_react2.default.createElement(
 						'form',
 						{ onSubmit: function onSubmit() {
-								return _this5.handleSubmit();
+								return _this4.handleSubmit();
 							} },
-						_react2.default.createElement('i', { className: 'fas fa-search' }),
-						_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input, placeholder: 'Search user' })
+						_react2.default.createElement('input', { onChange: this.handleInput(), value: this.state.input, placeholder: 'Search user' }),
+						_react2.default.createElement('i', { className: 'fas fa-search' })
 					)
 				)
 			);
