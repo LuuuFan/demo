@@ -49,7 +49,7 @@ class Channel extends React.Component{
 
 	handleInput(type){
 		return (e) => {
-			const userFilter = !e.target.value ? [] : this.props.userList.filter(el => el.includes(e.target.value.toLowerCase()));
+			const userFilter = !e.target.value ? [] : this.props.userList.filter(el => el.includes(e.target.value.toLowerCase()) && el !== this.props.user);
 			this.setState({
 				[type]: e.target.value,
 				userSearchNotification: '',
@@ -154,28 +154,28 @@ class Channel extends React.Component{
 			>
 				{/*
 					!-- old header --!
-				<div className='header channel-header' onClick={(e)=>this.toggle(e)}>
-					<div>
-						<i className="far fa-user"></i>
-							{userList.length > 3 ? 
-								<span>{this.capitalizeStr(userList[0])} and other {userList.length - 1}</span>
-								: 
-								<span>{userList.map(u => this.capitalizeStr(u)).join(' ')}</span>
-							}
+					<div className='header channel-header' onClick={(e)=>this.toggle(e)}>
+						<div>
+							<i className="far fa-user"></i>
+								{userList.length > 3 ? 
+									<span>{this.capitalizeStr(userList[0])} and other {userList.length - 1}</span>
+									: 
+									<span>{userList.map(u => this.capitalizeStr(u)).join(' ')}</span>
+								}
+						</div>
+						<div>
+							<i className="fas fa-plus" onClick={()=>this.toggleAddPeople()}>
+								<span className='tooltip'>Add user</span>
+							</i>
+							<span className='close-channel' onClick={()=>this.closeChannel()}>&times;</span>
+						</div>
+						{this.state.toggleAddPeople ? 
+							<form className='add-people' onSubmit={(e)=>this.addPeopleToChannel(e)}>
+								<input type='text' value={this.state.addPeopleInput} onChange={this.handleInput('addPeopleInput')} placeholder='Add user to this chat' />
+								<input type='submit' value='+'/>
+							</form>
+						 : ""}
 					</div>
-					<div>
-						<i className="fas fa-plus" onClick={()=>this.toggleAddPeople()}>
-							<span className='tooltip'>Add user</span>
-						</i>
-						<span className='close-channel' onClick={()=>this.closeChannel()}>&times;</span>
-					</div>
-					{this.state.toggleAddPeople ? 
-						<form className='add-people' onSubmit={(e)=>this.addPeopleToChannel(e)}>
-							<input type='text' value={this.state.addPeopleInput} onChange={this.handleInput('addPeopleInput')} placeholder='Add user to this chat' />
-							<input type='submit' value='+'/>
-						</form>
-					 : ""}
-				</div>
 				*/}
 
 				<div className='message'>
@@ -189,7 +189,12 @@ class Channel extends React.Component{
 				</div>
 				{this.state.userFilter.length ? 
 					<div className='user-list'>
-						{this.state.userFilter.map((u, idx) => <p key={idx} onClick={(e)=>this.addPeopleToChannel(e.target.textContent)}><i className="far fa-user"></i>{u}</p>)}
+						{this.state.userFilter.map((u, idx) => 
+							<p key={idx} onClick={(e)=>this.addPeopleToChannel(u)}>
+								<i className="far fa-user"></i>
+								<span className='username'>{this.capitalizeStr(u)}</span>
+								<span className='hint'>Click to add chat</span>
+							</p>)}
 					</div>
 				: ""}
 				{this.state.userSearchNotification ? <div className='notification'>{this.state.userSearchNotification}</div> : ""}

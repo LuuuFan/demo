@@ -536,11 +536,21 @@ input[type=submit] {
   font-size: 12px;
   cursor: pointer;
   text-align: center;
+  display: flex;
+  align-items: center;
+}
+.chat-area .channel-list .channel-tabs li .multi-user {
+  margin-left: 7px;
+}
+.chat-area .channel-list .channel-tabs li .multi-user span {
+  border-radius: 50%;
+  padding: 0 3px;
+  margin: 0;
+  border: 1px solid #333;
 }
 .chat-area .channel-list .channel-tabs li i {
   font-size: 10px;
   color: #cbc5c1;
-  margin-right: 10px;
 }
 .chat-area .channel-list .channel-tabs li span {
   margin-left: 10px;
@@ -552,6 +562,12 @@ input[type=submit] {
   background-color: #cbc5c1;
   color: white;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+}
+.chat-area .channel-list .channel-tabs li.selected .multi-user span {
+  border: 1px solid white;
+}
+.chat-area .channel-list .channel-tabs li.selected .multi-user span:hover {
+  color: white;
 }
 .chat-area .channel-list .channel-tabs li.selected i {
   color: white;
@@ -571,9 +587,20 @@ input[type=submit] {
 .chat-area .channel-list .channel .user-list p {
   margin-top: 7px;
   cursor: pointer;
+  position: relative;
+}
+.chat-area .channel-list .channel .user-list p .hint {
+  float: right;
+  color: gray;
+  font-size: 10px;
+  visibility: hidden;
 }
 .chat-area .channel-list .channel .user-list p:hover {
   color: #0099fe;
+}
+.chat-area .channel-list .channel .user-list p:hover .hint {
+  visibility: visible;
+  transition: all 0.8s;
 }
 .chat-area .channel-list .channel .notification {
   padding: 7px 0;

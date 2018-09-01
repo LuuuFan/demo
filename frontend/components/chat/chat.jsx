@@ -111,7 +111,6 @@ class Chat extends React.Component {
 	}
 
 	removeChannel(e, channel){
-		// const selectChannel = Object.keys(this.props.channel).filter(el => this.props.channel[el].status && el !== channel)[0] || "";
 		this.props.removeChannel(channel);
 		// why cannot setState here ????????//
 		// make selectChannel to global state
@@ -121,7 +120,6 @@ class Chat extends React.Component {
 
 	render(){
 		const {channel, currentUser, receiveChatMessage, toggleChannel, active, receiveChannel} = this.props;
-		// console.log(`~~~~~~~~~~~${this.state.selectChannel}~~~~~~~~~~~`)
 		const activeChannel = channel ? Object.keys(channel).filter(el => channel[el].status && el !== 'selected') : [];
 		const selected = channel ? channel.selected : "";
 		return (
@@ -141,8 +139,18 @@ class Chat extends React.Component {
 									onClick={(e)=>this.selectChannel(e, c)} 
 									className={`${selected === c ? 'selected' : '' }`}
 								>
-									<i className="fas fa-circle"></i>
-									{this.capitalizeStr(c)}
+									{c.split(' ').length > 1 ? 
+										<i className="fas fa-plus-circle"></i>
+									 : 
+										<i className="fas fa-circle"></i>
+									}
+									{c.split(' ').length > 1 ? 
+										<div className='multi-user'>
+											{c.split(' ').map(u => <span>{u[0].toUpperCase()}</span>)}
+										</div>
+										 : 
+										<span>{this.capitalizeStr(c)}</span>
+									}
 									{selected === c ? 
 										<span onClick={(e)=>this.removeChannel(e, c)} className='close-tab'>&times;</span>
 									: ""}

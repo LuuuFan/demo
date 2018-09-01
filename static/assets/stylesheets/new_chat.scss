@@ -69,10 +69,23 @@ $hover: #0099fe;
 				font-size: 12px;
 				cursor: pointer;
 				text-align: center;
+				display: flex;
+				align-items: center;
+				.multi-user{
+  				margin-left: 7px;
+					span{
+						border-radius: 50%;
+						padding: 0 3px;
+						margin: 0;
+						border: 1px solid #333;
+					}
+					span:hover{
+
+					}
+				}
 				i{
 					font-size: 10px;
 					color: $gray;
-					margin-right: 10px;
 				}
 				span{
 					margin-left: 10px;
@@ -85,6 +98,14 @@ $hover: #0099fe;
 				background-color: $gray;
 				color: white;
   			box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+  			.multi-user{
+					span{
+						border: 1px solid white;
+					}
+					span:hover{
+						color: white;
+					}
+				}
   			i{
   				color: white;
   			}
@@ -104,9 +125,20 @@ $hover: #0099fe;
 				p{
 					margin-top: 7px;
 					cursor: pointer;
+					position: relative;
+					.hint{
+						float: right;
+						color: gray;
+						font-size: 10px;
+						visibility: hidden;
+					}
 				}
 				p:hover{
 					color: $hover;
+				}
+				p:hover .hint{
+					visibility: visible;
+					transition: all .8s;
 				}
 			}
 			.notification{

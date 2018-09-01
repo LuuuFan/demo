@@ -8,9 +8,9 @@ const channelReducer = (state = {selected: ''}, action) => {
 			newState = Object.assign({}, state);
 			// delete newState[action.channel.toLowerCase()];
 			newState[action.channel].status = false;
-			localStorage.setItem('channel', JSON.stringify(newState));
 			const activeChannels = Object.keys(newState).filter(el => newState[el].status && el !== 'selected');
 			newState.selected = activeChannels[0] || "";
+			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		case RECEIVE_CHANNEL:
 			newState = Object.assign({}, state)

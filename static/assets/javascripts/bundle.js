@@ -30954,11 +30954,11 @@ var channelReducer = function channelReducer() {
 			newState = Object.assign({}, state);
 			// delete newState[action.channel.toLowerCase()];
 			newState[action.channel].status = false;
-			localStorage.setItem('channel', JSON.stringify(newState));
 			var activeChannels = Object.keys(newState).filter(function (el) {
 				return newState[el].status && el !== 'selected';
 			});
 			newState.selected = activeChannels[0] || "";
+			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		case _channel.RECEIVE_CHANNEL:
 			newState = Object.assign({}, state);
@@ -36862,7 +36862,6 @@ var Chat = function (_React$Component) {
 	}, {
 		key: 'removeChannel',
 		value: function removeChannel(e, channel) {
-			// const selectChannel = Object.keys(this.props.channel).filter(el => this.props.channel[el].status && el !== channel)[0] || "";
 			this.props.removeChannel(channel);
 			// why cannot setState here ????????//
 			// make selectChannel to global state
@@ -36881,7 +36880,6 @@ var Chat = function (_React$Component) {
 			    toggleChannel = _props.toggleChannel,
 			    active = _props.active,
 			    receiveChannel = _props.receiveChannel;
-			// console.log(`~~~~~~~~~~~${this.state.selectChannel}~~~~~~~~~~~`)
 
 			var activeChannel = channel ? Object.keys(channel).filter(function (el) {
 				return channel[el].status && el !== 'selected';
@@ -36914,8 +36912,22 @@ var Chat = function (_React$Component) {
 									},
 									className: '' + (selected === c ? 'selected' : '')
 								},
-								_react2.default.createElement('i', { className: 'fas fa-circle' }),
-								_this4.capitalizeStr(c),
+								c.split(' ').length > 1 ? _react2.default.createElement('i', { className: 'fas fa-plus-circle' }) : _react2.default.createElement('i', { className: 'fas fa-circle' }),
+								c.split(' ').length > 1 ? _react2.default.createElement(
+									'div',
+									{ className: 'multi-user' },
+									c.split(' ').map(function (u) {
+										return _react2.default.createElement(
+											'span',
+											null,
+											u[0].toUpperCase()
+										);
+									})
+								) : _react2.default.createElement(
+									'span',
+									null,
+									_this4.capitalizeStr(c)
+								),
 								selected === c ? _react2.default.createElement(
 									'span',
 									{ onClick: function onClick(e) {
@@ -37095,7 +37107,7 @@ var Channel = function (_React$Component) {
 				var _this2$setState;
 
 				var userFilter = !e.target.value ? [] : _this2.props.userList.filter(function (el) {
-					return el.includes(e.target.value.toLowerCase());
+					return el.includes(e.target.value.toLowerCase()) && el !== _this2.props.user;
 				});
 				_this2.setState((_this2$setState = {}, _defineProperty(_this2$setState, type, e.target.value), _defineProperty(_this2$setState, 'userSearchNotification', ''), _defineProperty(_this2$setState, 'userFilter', userFilter), _this2$setState));
 			};
@@ -37241,10 +37253,19 @@ var Channel = function (_React$Component) {
 						return _react2.default.createElement(
 							'p',
 							{ key: idx, onClick: function onClick(e) {
-									return _this3.addPeopleToChannel(e.target.textContent);
+									return _this3.addPeopleToChannel(u);
 								} },
 							_react2.default.createElement('i', { className: 'far fa-user' }),
-							u
+							_react2.default.createElement(
+								'span',
+								{ className: 'username' },
+								_this3.capitalizeStr(u)
+							),
+							_react2.default.createElement(
+								'span',
+								{ className: 'hint' },
+								'Click to add chat'
+							)
 						);
 					})
 				) : "",
