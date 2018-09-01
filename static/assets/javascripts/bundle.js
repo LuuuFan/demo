@@ -30955,6 +30955,10 @@ var channelReducer = function channelReducer() {
 			// delete newState[action.channel.toLowerCase()];
 			newState[action.channel].status = false;
 			localStorage.setItem('channel', JSON.stringify(newState));
+			var activeChannels = Object.keys(newState).filter(function (el) {
+				return newState[el].status && el !== selected;
+			});
+			newState.selected = activeChannels[0] || "";
 			return newState;
 		case _channel.RECEIVE_CHANNEL:
 			newState = Object.assign({}, state);
@@ -30964,6 +30968,7 @@ var channelReducer = function channelReducer() {
 			} else {
 				newState[action.channel.toLowerCase()] = { message: {}, status: true, active: true };
 			}
+			newState.selected = action.channel.toLowerCase();
 			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		case _channel.RECEIVE_CHAT_MESSAGE:
@@ -30972,12 +30977,12 @@ var channelReducer = function channelReducer() {
 			if (!newState[action.channel.toLowerCase()]) {
 				newState[action.channel.toLowerCase()] = {
 					message: {},
-					status: true,
-					active: true
+					status: true
+					// active: true
 				};
 			} else {
 				newState[action.channel.toLowerCase()].status = true;
-				newState[action.channel.toLowerCase()].active = true;
+				// newState[action.channel.toLowerCase()].active = true;
 			}
 			newState[action.channel.toLowerCase()].message[timestamp.getTime()] = {
 				type: action.t,
@@ -30987,12 +30992,17 @@ var channelReducer = function channelReducer() {
 			};
 			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
-		case _channel.TOGGLE_CHANNEL:
+		// ** Not use for now **
+		// case TOGGLE_CHANNEL:
+		// 	newState = Object.assign({}, state);
+		// 	if (newState[action.channel]) {
+		// 		newState[action.channel].active = action.active;
+		// 	}
+		// 	localStorage.setItem('channel', JSON.stringify(newState));
+		// 	return newState;
+		case _channel.SELECT_CHANNEL:
 			newState = Object.assign({}, state);
-			if (newState[action.channel]) {
-				newState[action.channel].active = action.active;
-			}
-			localStorage.setItem('channel', JSON.stringify(newState));
+			newState.selected = action.channel;
 			return newState;
 		default:
 			return state;

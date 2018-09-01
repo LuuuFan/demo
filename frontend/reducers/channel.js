@@ -1,4 +1,4 @@
-import {RECEIVE_CHANNEL, REMOVE_CHANNEL, RECEIVE_CHAT_MESSAGE, TOGGLE_CHANNEL} from '../actions/channel';
+import {RECEIVE_CHANNEL, REMOVE_CHANNEL, RECEIVE_CHAT_MESSAGE, SELECT_CHANNEL} from '../actions/channel';
 
 const channelReducer = (state = {selected: ''}, action) => {
 	Object.freeze(state);
@@ -9,6 +9,8 @@ const channelReducer = (state = {selected: ''}, action) => {
 			// delete newState[action.channel.toLowerCase()];
 			newState[action.channel].status = false;
 			localStorage.setItem('channel', JSON.stringify(newState));
+			const activeChannels = Object.keys(newState).filter(el => newState[el].status && el !== selected);
+			newState.selected = activeChannels[0] || "";
 			return newState;
 		case RECEIVE_CHANNEL:
 			newState = Object.assign({}, state)
@@ -18,6 +20,7 @@ const channelReducer = (state = {selected: ''}, action) => {
 			} else {
 				newState[action.channel.toLowerCase()] = {message: {}, status: true, active: true};
 			}
+			newState.selected = action.channel.toLowerCase();
 			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		case RECEIVE_CHAT_MESSAGE:
@@ -27,11 +30,11 @@ const channelReducer = (state = {selected: ''}, action) => {
 				newState[action.channel.toLowerCase()] = {
 																										message: {}, 
 																										status: true, 
-																										active: true
+																										// active: true
 																									};
 			} else {
 				newState[action.channel.toLowerCase()].status = true;
-				newState[action.channel.toLowerCase()].active = true;
+				// newState[action.channel.toLowerCase()].active = true;
 			}
 			newState[action.channel.toLowerCase()].message[timestamp.getTime()] = {
 																																								type: action.t, 
@@ -41,12 +44,17 @@ const channelReducer = (state = {selected: ''}, action) => {
 																																							};
 			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
-		case TOGGLE_CHANNEL:
+		// ** Not use for now **
+		// case TOGGLE_CHANNEL:
+		// 	newState = Object.assign({}, state);
+		// 	if (newState[action.channel]) {
+		// 		newState[action.channel].active = action.active;
+		// 	}
+		// 	localStorage.setItem('channel', JSON.stringify(newState));
+		// 	return newState;
+		case SELECT_CHANNEL:
 			newState = Object.assign({}, state);
-			if (newState[action.channel]) {
-				newState[action.channel].active = action.active;
-			}
-			localStorage.setItem('channel', JSON.stringify(newState));
+			newState.selected = action.channel;
 			return newState;
 		default: 
 			return state;
