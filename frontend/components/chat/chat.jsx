@@ -122,7 +122,7 @@ class Chat extends React.Component {
 	render(){
 		const {channel, currentUser, receiveChatMessage, toggleChannel, active, receiveChannel} = this.props;
 		console.log(`~~~~~~~~~~~${this.state.selectChannel}~~~~~~~~~~~`)
-		const activeChannel = channel ? Object.keys(channel).filter(el => channel[el].status) : [];
+		const activeChannel = channel ? Object.keys(channel).filter(el => channel[el].status && el !== 'selected') : [];
 		return (
 			<div className={`chat-area ${active ? 'chat-area-active' : ''}`}>
 				{active ? 

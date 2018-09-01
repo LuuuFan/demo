@@ -4609,7 +4609,8 @@ Object.defineProperty(exports, "__esModule", {
 var RECEIVE_CHANNEL = exports.RECEIVE_CHANNEL = 'RECEIVE_CHANNEL';
 var REMOVE_CHANNEL = exports.REMOVE_CHANNEL = 'REMOVE-CHANNEL';
 var RECEIVE_CHAT_MESSAGE = exports.RECEIVE_CHAT_MESSAGE = 'RECEIVE_CHAT_MESSAGE';
-var TOGGLE_CHANNEL = exports.TOGGLE_CHANNEL = 'TOGGLE_CHANNEL';
+// export const TOGGLE_CHANNEL = 'TOGGLE_CHANNEL';
+var SELECT_CHANNEL = exports.SELECT_CHANNEL = 'SELECT_CHANNEL';
 
 var receiveChannel = exports.receiveChannel = function receiveChannel(channel) {
 	return {
@@ -4634,11 +4635,16 @@ var receiveChatMessage = exports.receiveChatMessage = function receiveChatMessag
 	};
 };
 
-var toggleChannel = exports.toggleChannel = function toggleChannel(channel, active) {
+// export const toggleChannel = (channel, active) => ({
+// 	type: TOGGLE_CHANNEL,
+// 	channel,
+// 	active,
+// })
+
+var selectChannel = exports.selectChannel = function selectChannel(channel) {
 	return {
-		type: TOGGLE_CHANNEL,
-		channel: channel,
-		active: active
+		type: SELECT_CHANNEL,
+		channel: channel
 	};
 };
 
@@ -30938,7 +30944,7 @@ Object.defineProperty(exports, "__esModule", {
 var _channel = __webpack_require__(52);
 
 var channelReducer = function channelReducer() {
-	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { selected: '' };
 	var action = arguments[1];
 
 	Object.freeze(state);
@@ -36662,14 +36668,15 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		receiveChatMessage: function receiveChatMessage(channel, message, type) {
 			return dispatch((0, _channel.receiveChatMessage)(channel, message, type));
 		},
-		toggleChannel: function toggleChannel(channel, active) {
-			return dispatch((0, _channel.toggleChannel)(channel, active));
-		},
+		// toggleChannel: (channel, active) => dispatch(toggleChannel(channel, active)),
 		toggleChat: function toggleChat() {
 			return dispatch((0, _chat3.toggleChat)());
 		},
 		getUserList: function getUserList(token) {
 			return dispatch((0, _user.getUserList)(token));
+		},
+		selectChannel: function selectChannel(channel) {
+			return dispatch((0, _channel.selectChannel)(channel));
 		}
 	};
 };
@@ -36877,7 +36884,7 @@ var Chat = function (_React$Component) {
 
 			console.log('~~~~~~~~~~~' + this.state.selectChannel + '~~~~~~~~~~~');
 			var activeChannel = channel ? Object.keys(channel).filter(function (el) {
-				return channel[el].status;
+				return channel[el].status && el !== 'selected';
 			}) : [];
 			return _react2.default.createElement(
 				'div',

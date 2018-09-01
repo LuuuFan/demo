@@ -1,6 +1,6 @@
 import {RECEIVE_CHANNEL, REMOVE_CHANNEL, RECEIVE_CHAT_MESSAGE, TOGGLE_CHANNEL} from '../actions/channel';
 
-const channelReducer = (state = {}, action) => {
+const channelReducer = (state = {selected: ''}, action) => {
 	Object.freeze(state);
 	let newState;
 	switch(action.type){
