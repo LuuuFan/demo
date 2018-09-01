@@ -30962,14 +30962,23 @@ var channelReducer = function channelReducer() {
 			return newState;
 		case _channel.RECEIVE_CHAT_MESSAGE:
 			newState = Object.assign({}, state);
-			var timestamp = new Date().getTime();
+			var timestamp = new Date();
 			if (!newState[action.channel.toLowerCase()]) {
-				newState[action.channel.toLowerCase()] = { message: {}, status: true, active: true };
+				newState[action.channel.toLowerCase()] = {
+					message: {},
+					status: true,
+					active: true
+				};
 			} else {
 				newState[action.channel.toLowerCase()].status = true;
 				newState[action.channel.toLowerCase()].active = true;
 			}
-			newState[action.channel.toLowerCase()].message[timestamp] = { type: action.t, text: action.message };
+			newState[action.channel.toLowerCase()].message[timestamp.getTime()] = {
+				type: action.t,
+				text: action.message,
+				date: timestamp.toDateString(),
+				time: timestamp.toLocaleTimeString().split(' ')[0].split(':').slice(0, 2).join(':') + ' ' + timestamp.toLocaleTimeString().split(' ')[1]
+			};
 			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		case _channel.TOGGLE_CHANNEL:
@@ -37202,19 +37211,28 @@ var Channel = function (_React$Component) {
 					{ className: 'message' },
 					Object.keys(message).map(function (t) {
 						return _react2.default.createElement(
-							'span',
+							'div',
 							{ key: t, className: message[t].type ? '' : 'from' },
-							message[t].text
+							_react2.default.createElement(
+								'span',
+								{ className: 'content' },
+								message[t].text
+							),
+							_react2.default.createElement(
+								'span',
+								{ className: 'timestamp' },
+								message[t].time ? message[t].time : ''
+							)
 						);
 					})
 				),
 				this.state.userFilter.length ? _react2.default.createElement(
 					'div',
 					{ className: 'user-list' },
-					this.state.userFilter.map(function (u) {
+					this.state.userFilter.map(function (u, idx) {
 						return _react2.default.createElement(
 							'p',
-							{ onClick: function onClick(e) {
+							{ key: idx, onClick: function onClick(e) {
 									return _this3.addPeopleToChannel(e.target.textContent);
 								} },
 							_react2.default.createElement('i', { className: 'far fa-user' }),

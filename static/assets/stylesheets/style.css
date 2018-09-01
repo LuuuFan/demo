@@ -567,6 +567,7 @@ input[type=submit] {
   margin-right: 10px;
 }
 .chat-area .channel-list .channel .user-list p {
+  margin-top: 7px;
   cursor: pointer;
 }
 .chat-area .channel-list .channel .user-list p:hover {
@@ -585,7 +586,15 @@ input[type=submit] {
   overflow: auto;
   padding: 10px;
 }
-.chat-area .channel-list .channel .message span {
+.chat-area .channel-list .channel .message div:hover .timestamp {
+  opacity: 1;
+  transition: all 1s;
+}
+.chat-area .channel-list .channel .message div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row-reverse;
   text-align: right;
   background-color: lightgray;
   width: 95%;
@@ -595,8 +604,17 @@ input[type=submit] {
   margin-bottom: 5px;
   padding: 5px;
 }
+.chat-area .channel-list .channel .message div .content {
+  flex: 1;
+}
+.chat-area .channel-list .channel .message div .timestamp {
+  font-size: 10px;
+  color: gray;
+  opacity: 0;
+}
 .chat-area .channel-list .channel .message .from {
   text-align: left;
+  flex-direction: row;
   background: rgba(176, 224, 230, 0.3);
 }
 .chat-area .channel-list .channel form {

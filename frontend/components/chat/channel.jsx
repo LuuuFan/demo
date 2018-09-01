@@ -179,11 +179,17 @@ class Channel extends React.Component{
 				*/}
 
 				<div className='message'>
-					{Object.keys(message).map(t => <span key={t} className={message[t].type ? '' : 'from'}>{message[t].text}</span>)}
+					{Object.keys(message).map(t => 
+						<div key={t} className={message[t].type ? '' : 'from'}>
+							<span className='content'>{message[t].text}</span>
+							<span className='timestamp'>
+								{message[t].time ? message[t].time : ''}
+							</span>
+						</div>)}
 				</div>
 				{this.state.userFilter.length ? 
 					<div className='user-list'>
-						{this.state.userFilter.map(u => <p onClick={(e)=>this.addPeopleToChannel(e.target.textContent)}><i className="far fa-user"></i>{u}</p>)}
+						{this.state.userFilter.map((u, idx) => <p key={idx} onClick={(e)=>this.addPeopleToChannel(e.target.textContent)}><i className="far fa-user"></i>{u}</p>)}
 					</div>
 				: ""}
 				{this.state.userSearchNotification ? <div className='notification'>{this.state.userSearchNotification}</div> : ""}

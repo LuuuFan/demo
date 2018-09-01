@@ -22,14 +22,23 @@ const channelReducer = (state = {}, action) => {
 			return newState;
 		case RECEIVE_CHAT_MESSAGE:
 			newState = Object.assign({}, state);
-			const timestamp = new Date().getTime();
+			const timestamp = new Date();
 			if (!newState[action.channel.toLowerCase()]) {
-				newState[action.channel.toLowerCase()] = {message: {}, status: true, active: true};
+				newState[action.channel.toLowerCase()] = {
+																										message: {}, 
+																										status: true, 
+																										active: true
+																									};
 			} else {
 				newState[action.channel.toLowerCase()].status = true;
 				newState[action.channel.toLowerCase()].active = true;
 			}
-			newState[action.channel.toLowerCase()].message[timestamp] = {type: action.t, text: action.message};
+			newState[action.channel.toLowerCase()].message[timestamp.getTime()] = {
+																																								type: action.t, 
+																																								text: action.message,
+																																								date: timestamp.toDateString(),
+																																								time: timestamp.toLocaleTimeString().split(' ')[0].split(':').slice(0, 2).join(':') + ' ' + timestamp.toLocaleTimeString().split(' ')[1],
+																																							};
 			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		case TOGGLE_CHANNEL:

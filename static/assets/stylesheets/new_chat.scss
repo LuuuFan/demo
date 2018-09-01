@@ -102,6 +102,7 @@ $hover: #0099fe;
 					margin-right: 10px;
 				}
 				p{
+					margin-top: 7px;
 					cursor: pointer;
 				}
 				p:hover{
@@ -120,7 +121,16 @@ $hover: #0099fe;
 				flex-direction: column;
 				overflow: auto;
 				padding: 10px;
-				span{
+				div:hover .timestamp{
+					opacity: 1;
+					// visibility: visible;
+					transition: all 1s;
+				}
+				div{
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					flex-direction: row-reverse;
 					text-align: right;
 					background-color: lightgray;
 					width: 95%;
@@ -129,9 +139,19 @@ $hover: #0099fe;
 					border-radius: 5px;
 					margin-bottom: 5px;
 					padding: 5px;
+					.content{
+						flex: 1;
+					}
+					.timestamp{
+						font-size: 10px;
+						color: gray;
+						opacity: 0;
+						// visibility: hidden;
+					}
 				}
 				.from{
 					text-align: left;
+					flex-direction: row;
 					background: rgba(176,224,230, 0.3);
 				}
 			}
