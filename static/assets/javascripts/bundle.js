@@ -37077,9 +37077,10 @@ var Channel = function (_React$Component) {
 			return function (e) {
 				var _this2$setState;
 
-				_this2.setState((_this2$setState = {}, _defineProperty(_this2$setState, type, e.target.value), _defineProperty(_this2$setState, 'userSearchNotification', ''), _defineProperty(_this2$setState, 'userFilter', _this2.props.userList.filter(function (el) {
-					return el.includes(e.target.value.toLowerCase);
-				})), _this2$setState));
+				var userFilter = !e.target.value ? [] : _this2.props.userList.filter(function (el) {
+					return el.includes(e.target.value.toLowerCase());
+				});
+				_this2.setState((_this2$setState = {}, _defineProperty(_this2$setState, type, e.target.value), _defineProperty(_this2$setState, 'userSearchNotification', ''), _defineProperty(_this2$setState, 'userFilter', userFilter), _this2$setState));
 			};
 		}
 	}, {
@@ -37087,14 +37088,16 @@ var Channel = function (_React$Component) {
 		value: function handleSubmit(e) {
 			e.preventDefault();
 			if (!this.state.toggleAddPeople) {
-				// const message = this.state.message.concat([this.state.input]);
-				this.socket.emit('send_message', {
-					username: this.props.currentUser.username,
-					receiver: this.props.user,
-					// split(' ').map(u => u.toLowerCase()),
-					message: { text: this.state.input }
-				});
-				this.props.receiveChatMessage(this.props.user, this.state.input, 1);
+				if (this.state.input) {
+					this.socket.emit('send_message', {
+						username: this.props.currentUser.username,
+						receiver: this.props.user,
+						// split(' ').map(u => u.toLowerCase()),
+						message: { text: this.state.input }
+					});
+					// const message = this.state.message.concat([this.state.input]);
+					this.props.receiveChatMessage(this.props.user, this.state.input, 1);
+				}
 			} else {
 				if (this.validUser(this.state.input)) {
 					this.addPeopleToChannel(this.state.input);
@@ -37154,7 +37157,8 @@ var Channel = function (_React$Component) {
 			this.props.receiveChannel(this.props.user + ' ' + newUser.trim().toLowerCase());
 			this.setState({
 				toggleAddPeople: false,
-				input: ''
+				input: '',
+				userFilter: []
 			});
 		}
 	}, {
@@ -37204,6 +37208,20 @@ var Channel = function (_React$Component) {
 						);
 					})
 				),
+				this.state.userFilter.length ? _react2.default.createElement(
+					'div',
+					{ className: 'user-list' },
+					this.state.userFilter.map(function (u) {
+						return _react2.default.createElement(
+							'p',
+							{ onClick: function onClick(e) {
+									return _this3.addPeopleToChannel(e.target.textContent);
+								} },
+							_react2.default.createElement('i', { className: 'far fa-user' }),
+							u
+						);
+					})
+				) : "",
 				this.state.userSearchNotification ? _react2.default.createElement(
 					'div',
 					{ className: 'notification' },
@@ -37228,7 +37246,7 @@ var Channel = function (_React$Component) {
 					) : "",
 					_react2.default.createElement(
 						'i',
-						{ className: 'fas fa-plus', onClick: function onClick() {
+						{ className: 'fas fa-user-plus', onClick: function onClick() {
 								return _this3.toggleAddPeople();
 							}, style: { 'color': '' + (this.state.toggleAddPeople ? '#0099fe' : '') } },
 						_react2.default.createElement(

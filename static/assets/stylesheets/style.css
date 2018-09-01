@@ -560,6 +560,18 @@ input[type=submit] {
   justify-content: space-between;
   transition: height 0.8s;
 }
+.chat-area .channel-list .channel .user-list {
+  margin: 10px;
+}
+.chat-area .channel-list .channel .user-list i {
+  margin-right: 10px;
+}
+.chat-area .channel-list .channel .user-list p {
+  cursor: pointer;
+}
+.chat-area .channel-list .channel .user-list p:hover {
+  color: #0099fe;
+}
 .chat-area .channel-list .channel .notification {
   padding: 7px 0;
   background-color: rgba(255, 0, 0, 0.2);
@@ -598,7 +610,7 @@ input[type=submit] {
   padding: 10px;
   flex: 1;
 }
-.chat-area .channel-list .channel form .fa-plus .tooltip {
+.chat-area .channel-list .channel form .fa-user-plus .tooltip {
   width: 50px;
   left: -50px;
 }

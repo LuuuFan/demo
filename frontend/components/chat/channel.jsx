@@ -49,10 +49,11 @@ class Channel extends React.Component{
 
 	handleInput(type){
 		return (e) => {
+			const userFilter = !e.target.value ? [] : this.props.userList.filter(el => el.includes(e.target.value.toLowerCase()));
 			this.setState({
 				[type]: e.target.value,
 				userSearchNotification: '',
-				userFilter: this.props.userList.filter(el => el.includes(e.target.value.toLowerCase)),
+				userFilter,
 			})
 		}
 	}
@@ -60,14 +61,16 @@ class Channel extends React.Component{
 	handleSubmit(e){
 		e.preventDefault();
 		if (!this.state.toggleAddPeople) {
+			if (this.state.input) {
+				this.socket.emit('send_message', {
+					username: this.props.currentUser.username,
+					receiver: this.props.user,
+					// split(' ').map(u => u.toLowerCase()),
+					message: {text: this.state.input},
+				});
 			// const message = this.state.message.concat([this.state.input]);
-			this.socket.emit('send_message', {
-				username: this.props.currentUser.username,
-				receiver: this.props.user,
-				// split(' ').map(u => u.toLowerCase()),
-				message: {text: this.state.input},
-			});
-			this.props.receiveChatMessage(this.props.user, this.state.input, 1);
+				this.props.receiveChatMessage(this.props.user, this.state.input, 1);
+			}
 		} else {
 				if (this.validUser(this.state.input)) {
 					this.addPeopleToChannel(this.state.input)
@@ -121,7 +124,8 @@ class Channel extends React.Component{
 		this.props.receiveChannel(`${this.props.user} ${newUser.trim().toLowerCase()}`);
 		this.setState({
 			toggleAddPeople: false,
-			input: ''
+			input: '',
+			userFilter: [],
 		});
 	}
 
@@ -177,6 +181,11 @@ class Channel extends React.Component{
 				<div className='message'>
 					{Object.keys(message).map(t => <span key={t} className={message[t].type ? '' : 'from'}>{message[t].text}</span>)}
 				</div>
+				{this.state.userFilter.length ? 
+					<div className='user-list'>
+						{this.state.userFilter.map(u => <p onClick={(e)=>this.addPeopleToChannel(e.target.textContent)}><i className="far fa-user"></i>{u}</p>)}
+					</div>
+				: ""}
 				{this.state.userSearchNotification ? <div className='notification'>{this.state.userSearchNotification}</div> : ""}
 				<form onSubmit={(e)=>this.handleSubmit(e)}>
 					<input onChange={this.handleInput('input')} value={this.state.input} placeholder={`${this.state.toggleAddPeople ? 'Add user to chat' : 'Type a message'}`}/>
@@ -185,7 +194,7 @@ class Channel extends React.Component{
 							<span className='tooltip'>Send Message</span>
 						</i>
 					: ""}
-					<i className="fas fa-plus" onClick={()=>this.toggleAddPeople()} style={{'color': `${this.state.toggleAddPeople ? '#0099fe' : ''}`}}>
+					<i className="fas fa-user-plus" onClick={()=>this.toggleAddPeople()} style={{'color': `${this.state.toggleAddPeople ? '#0099fe' : ''}`}}>
 							<span className='tooltip'>Add user</span>
 					</i>
 					<i className="far fa-smile" onClick={()=>this.toggleEmojiModal()} style={{'color': `${this.state.emojiModal ? '#0099fe' : ''}`}}>
