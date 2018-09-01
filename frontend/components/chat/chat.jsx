@@ -15,16 +15,12 @@ class Chat extends React.Component {
 			input: '',
 			userList: [],
 			userSearchNotification: '',
-			selectChannel: "",
+			// selectChannel: "",
 		};
 		this.socket = null;
 	};
 
 	componentDidMount(){
-		// setSelectedChannel
-		const selectChannel = Object.keys(this.props.channel).filter(el => this.props.channel[el].status)[0];
-		this.setState({selectChannel});
-
 		// user list
 		this.props.getUserList(this.props.currentUser['access-token'])
 			.then(()=>this.setState({userList: this.filterUserList(this.props.userList)}))
@@ -77,7 +73,7 @@ class Chat extends React.Component {
 				this.setState({
 					input: '', 
 					userList: this.props.users[0].filter(u => u !== this.props.userList['current user']),
-					selectChannel: this.capitalizeStr(this.state.userList[0])
+					// selectChannel: this.capitalizeStr(this.state.userList[0])
 				});
 			} else if (!this.state.userList.length){
 				// No user found
@@ -99,7 +95,7 @@ class Chat extends React.Component {
 		this.setState({
 			input: '', 
 			userList: this.filterUserList(this.props.userList),
-			selectChannel: user,
+			// selectChannel: user,
 		});
 	}
 
@@ -108,21 +104,26 @@ class Chat extends React.Component {
 	}
 
 	selectChannel(e, c){
-		this.setState({selectChannel: c});
+		if (e.target.className !== 'close-tab') {
+			this.props.selectChannel(c);
+		}
+		// this.setState({selectChannel: c});
 	}
 
 	removeChannel(e, channel){
-		const selectChannel = Object.keys(this.props.channel).filter(el => this.props.channel[el].status && el !== channel)[0] || "";
+		// const selectChannel = Object.keys(this.props.channel).filter(el => this.props.channel[el].status && el !== channel)[0] || "";
 		this.props.removeChannel(channel);
 		// why cannot setState here ????????//
-		console.log(`+++++++++${selectChannel}+++++++++++++++`)
-		this.setState({selectChannel});
+		// make selectChannel to global state
+		// console.log(`+++++++++${selectChannel}+++++++++++++++`)
+		// this.setState({selectChannel});
 	}
 
 	render(){
 		const {channel, currentUser, receiveChatMessage, toggleChannel, active, receiveChannel} = this.props;
-		console.log(`~~~~~~~~~~~${this.state.selectChannel}~~~~~~~~~~~`)
+		// console.log(`~~~~~~~~~~~${this.state.selectChannel}~~~~~~~~~~~`)
 		const activeChannel = channel ? Object.keys(channel).filter(el => channel[el].status && el !== 'selected') : [];
+		const selected = channel ? channel.selected : "";
 		return (
 			<div className={`chat-area ${active ? 'chat-area-active' : ''}`}>
 				{active ? 
@@ -138,12 +139,12 @@ class Chat extends React.Component {
 									key={idx} 
 									data-channelname={c}
 									onClick={(e)=>this.selectChannel(e, c)} 
-									className={`${this.state.selectChannel === c ? 'selected' : '' }`}
+									className={`${selected === c ? 'selected' : '' }`}
 								>
 									<i className="fas fa-circle"></i>
 									{this.capitalizeStr(c)}
-									{this.state.selectChannel === c ? 
-										<span onClick={(e)=>this.removeChannel(e, c)}>&times;</span>
+									{selected === c ? 
+										<span onClick={(e)=>this.removeChannel(e, c)} className='close-tab'>&times;</span>
 									: ""}
 								</li>)}
 						</ul>
@@ -153,14 +154,14 @@ class Chat extends React.Component {
 							<span>Communication Makes Life Meaningful</span>
 						</div>
 					}
-						{this.state.selectChannel && channel[this.state.selectChannel].status ? 
+						{selected && channel[selected].status ? 
 							<Channel 
-								user={this.state.selectChannel}
+								user={selected}
 								socket={this.socket} 
 								currentUser={currentUser} 
 								receiveChatMessage={receiveChatMessage} 
 								receiveChannel={receiveChannel}
-								message={channel[this.state.selectChannel].message}
+								message={channel[selected].message}
 								chatActive={this.state.chatActive}
 								userList={this.state.userList}
 							/>	
