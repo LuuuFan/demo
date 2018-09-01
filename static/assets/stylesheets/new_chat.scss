@@ -20,13 +20,31 @@ $hover: #0099fe;
 	flex-direction: column;
 	justify-content: space-between;
   box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
-  
+  .close-chat-area{
+  	position: absolute;
+  	cursor: pointer;
+  	width: 24px;
+  	height: 24px;
+  	text-align: center;
+  	font-size: 24px;
+  	top: 5px;
+  	right: 10px;
+  	color: $gray;
+  }
+  .close-chat-area:hover{
+  	color: #333;
+  }
+
   .no-channel{
   	margin: 100px auto;
-  	padding: 20px;
+  	padding: 50px;
   	text-align: center;
+  	img{
+  		margin-bottom: 50px;
+  	}
   	span{
-
+  		font-size: 14px;
+  		font-weight: bold;
   	}
   }
 
@@ -59,6 +77,9 @@ $hover: #0099fe;
 				span{
 					margin-left: 10px;
 				}
+				span:hover{
+					color: #333;
+				}
 			}
 			li.selected{
 				background-color: $gray;
@@ -75,6 +96,12 @@ $hover: #0099fe;
 			flex-direction: column;
 			justify-content: space-between;
 			transition: height .8s;
+			.notification{
+				padding: 7px 0;
+		    background-color: rgba(255, 0,0,.2);
+		    text-align: center;
+		    font-size: 10px;
+			}
 			.message{
 				flex: 1;
 				display: flex;
@@ -106,11 +133,17 @@ $hover: #0099fe;
 		      padding: 10px;
 		      flex: 1;
 		    }
+		    .fa-plus .tooltip{
+		    	width: 50px;
+		    	left: -50px;
+		    }
 		    i{
 		      position: relative;
+		      margin-left: 0;
 		      margin-right: 10px;
 		      cursor: pointer;
 		      .tooltip{
+		      	text-align: center;
 		        top: -20px;
 		        width: 70px;
 		        left: -60px;
@@ -195,6 +228,7 @@ $hover: #0099fe;
 		      display: block;
 		      z-index: 5;
 		    }
+		    
   		}
 		}
 	}

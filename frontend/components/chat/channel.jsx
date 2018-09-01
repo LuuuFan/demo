@@ -9,8 +9,10 @@ class Channel extends React.Component{
 			input: '',
 			emojiModal: false,
 			toggleAddPeople: false,
-			addPeopleInput: '',
+			// addPeopleInput: '',
 			emojiPage: 1,
+			userSearchNotification: '',
+			userFilter: [],
 		};
 		this.socket = this.props.socket;
 	}
@@ -33,13 +35,13 @@ class Channel extends React.Component{
 		}, 1000);	
 	}
 
-	toggle(e){
-		if (e.target.className !== 'close-channel' && !e.target.className.includes('fa-plus') && e.target.tagName !== 'INPUT') {
-			// this.setState({active: !this.state.active});
-			this.props.toggleChannel(this.props.user, !this.props.active);
-			this.setState({emojiModal: false});
-		}
-	}
+	// toggle(e){
+	// 	if (e.target.className !== 'close-channel' && !e.target.className.includes('fa-plus') && e.target.tagName !== 'INPUT') {
+	// 		// this.setState({active: !this.state.active});
+	// 		this.props.toggleChannel(this.props.user, !this.props.active);
+	// 		this.setState({emojiModal: false});
+	// 	}
+	// }
 
 	// closeChannel(){
 	// 	this.props.removeChannel(this.props.user);
@@ -47,21 +49,32 @@ class Channel extends React.Component{
 
 	handleInput(type){
 		return (e) => {
-			this.setState({[type]: e.target.value})
+			this.setState({
+				[type]: e.target.value,
+				userSearchNotification: '',
+				userFilter: this.props.userList.filter(el => el.includes(e.target.value.toLowerCase)),
+			})
 		}
 	}
 
 	handleSubmit(e){
 		e.preventDefault();
-		console.log(this.state.input);
-		// const message = this.state.message.concat([this.state.input]);
-		this.socket.emit('send_message', {
-			username: this.props.currentUser.username,
-			receiver: this.props.user,
-			// split(' ').map(u => u.toLowerCase()),
-			message: {text: this.state.input},
-		});
-		this.props.receiveChatMessage(this.props.user, this.state.input, 1);
+		if (!this.state.toggleAddPeople) {
+			// const message = this.state.message.concat([this.state.input]);
+			this.socket.emit('send_message', {
+				username: this.props.currentUser.username,
+				receiver: this.props.user,
+				// split(' ').map(u => u.toLowerCase()),
+				message: {text: this.state.input},
+			});
+			this.props.receiveChatMessage(this.props.user, this.state.input, 1);
+		} else {
+				if (this.validUser(this.state.input)) {
+					this.addPeopleToChannel(this.state.input)
+				} else {
+					this.errorHandleInvalidUser(this.state.input);
+				}
+		}
 		this.setState({input: '', emojiModal: false});
 	}
 
@@ -74,16 +87,42 @@ class Channel extends React.Component{
 	}
 
 	toggleAddPeople(){
-		this.setState({toggleAddPeople: !this.state.toggleAddPeople});
+		if (!this.state.input) {
+			this.setState({toggleAddPeople: !this.state.toggleAddPeople});
+		} else {
+			if (this.validUser(this.state.input)) {
+				this.addPeopleToChannel(this.state.input);
+			} else {
+				this.errorHandleInvalidUser(this.state.input);
+			}
+		}
 	}
 
-	addPeopleToChannel(e){
-		e.preventDefault;
-		this.props.receiveChannel(`${this.state.addPeopleInput} ${this.props.user}`);
+	errorHandleInvalidUser(user){
+		let userSearchNotification;
+		if (user.trim().toLowerCase() === this.props.user) {
+			userSearchNotification = 'Duplicate user';
+		} else if(user.trim().toLowerCase() === this.props.currentUser.username){
+			userSearchNotification = `You are already on board`;
+		} else {
+			userSearchNotification = `No user named "${user}" found`;
+		}
+		this.setState({
+			userSearchNotification,
+			input: '',
+		})
+	}
+
+	validUser(user){
+		return this.props.userList.includes(user.trim().toLowerCase()) && user.trim().toLowerCase() !== this.props.user
+	}
+
+	addPeopleToChannel(newUser){
+		this.props.receiveChannel(`${this.props.user} ${newUser.trim().toLowerCase()}`);
 		this.setState({
 			toggleAddPeople: false,
-			addPeopleInput: ''
-		})
+			input: ''
+		});
 	}
 
 	capitalizeStr(str){
@@ -102,12 +141,11 @@ class Channel extends React.Component{
 
 
 	render(){
-		const {user, message, active, chatActive} = this.props;
-		const userList = user.split(' ');
+		const {user, message, active, chatActive, userList} = this.props;
 		return(
 			<div 
 				className={`channel ${active ? 'channel-active' : ''}`} 
-				id={`channel-${userList.join('&')}`}
+				id={`channel-${user.split(' ').join('&')}`}
 				style={{height: `${chatActive ? '71%' : '93%'}`}}
 			>
 				{/*
@@ -139,8 +177,17 @@ class Channel extends React.Component{
 				<div className='message'>
 					{Object.keys(message).map(t => <span key={t} className={message[t].type ? '' : 'from'}>{message[t].text}</span>)}
 				</div>
+				{this.state.userSearchNotification ? <div className='notification'>{this.state.userSearchNotification}</div> : ""}
 				<form onSubmit={(e)=>this.handleSubmit(e)}>
-					<input onChange={this.handleInput('input')} value={this.state.input} placeholder='Type a message'/>
+					<input onChange={this.handleInput('input')} value={this.state.input} placeholder={`${this.state.toggleAddPeople ? 'Add user to chat' : 'Type a message'}`}/>
+					{this.state.input && !this.state.toggleAddPeople? 
+						<i className="far fa-paper-plane" onClick={(e)=>this.handleSubmit(e)}>
+							<span className='tooltip'>Send Message</span>
+						</i>
+					: ""}
+					<i className="fas fa-plus" onClick={()=>this.toggleAddPeople()} style={{'color': `${this.state.toggleAddPeople ? '#0099fe' : ''}`}}>
+							<span className='tooltip'>Add user</span>
+					</i>
 					<i className="far fa-smile" onClick={()=>this.toggleEmojiModal()} style={{'color': `${this.state.emojiModal ? '#0099fe' : ''}`}}>
 						<span className='tooltip'>Choose emojis</span>
 					</i>

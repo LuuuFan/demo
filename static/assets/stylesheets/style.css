@@ -485,10 +485,31 @@ input[type=submit] {
   justify-content: space-between;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
 }
+.chat-area .close-chat-area {
+  position: absolute;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  font-size: 24px;
+  top: 5px;
+  right: 10px;
+  color: #cbc5c1;
+}
+.chat-area .close-chat-area:hover {
+  color: #333;
+}
 .chat-area .no-channel {
   margin: 100px auto;
-  padding: 20px;
+  padding: 50px;
   text-align: center;
+}
+.chat-area .no-channel img {
+  margin-bottom: 50px;
+}
+.chat-area .no-channel span {
+  font-size: 14px;
+  font-weight: bold;
 }
 .chat-area .channel-list {
   flex: 1;
@@ -522,6 +543,9 @@ input[type=submit] {
 .chat-area .channel-list .channel-tabs li span {
   margin-left: 10px;
 }
+.chat-area .channel-list .channel-tabs li span:hover {
+  color: #333;
+}
 .chat-area .channel-list .channel-tabs li.selected {
   background-color: #cbc5c1;
   color: white;
@@ -535,6 +559,12 @@ input[type=submit] {
   flex-direction: column;
   justify-content: space-between;
   transition: height 0.8s;
+}
+.chat-area .channel-list .channel .notification {
+  padding: 7px 0;
+  background-color: rgba(255, 0, 0, 0.2);
+  text-align: center;
+  font-size: 10px;
 }
 .chat-area .channel-list .channel .message {
   flex: 1;
@@ -568,12 +598,18 @@ input[type=submit] {
   padding: 10px;
   flex: 1;
 }
+.chat-area .channel-list .channel form .fa-plus .tooltip {
+  width: 50px;
+  left: -50px;
+}
 .chat-area .channel-list .channel form i {
   position: relative;
+  margin-left: 0;
   margin-right: 10px;
   cursor: pointer;
 }
 .chat-area .channel-list .channel form i .tooltip {
+  text-align: center;
   top: -20px;
   width: 70px;
   left: -60px;

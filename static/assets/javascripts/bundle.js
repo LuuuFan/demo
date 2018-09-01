@@ -36849,6 +36849,7 @@ var Chat = function (_React$Component) {
 				return _this5.props.channel[el].status && el !== channel;
 			})[0] || "";
 			this.props.removeChannel(channel);
+			// why cannot setState here ????????//
 			console.log('+++++++++' + selectChannel + '+++++++++++++++');
 			this.setState({ selectChannel: selectChannel });
 		}
@@ -36872,6 +36873,13 @@ var Chat = function (_React$Component) {
 			return _react2.default.createElement(
 				'div',
 				{ className: 'chat-area ' + (active ? 'chat-area-active' : '') },
+				active ? _react2.default.createElement(
+					'div',
+					{ className: 'close-chat-area', onClick: function onClick() {
+							return _this6.props.toggleChat();
+						} },
+					'\xD7'
+				) : "",
 				_react2.default.createElement(
 					'div',
 					{ className: 'channel-list' },
@@ -36915,11 +36923,10 @@ var Chat = function (_React$Component) {
 						socket: this.socket,
 						currentUser: currentUser,
 						receiveChatMessage: receiveChatMessage,
-						toggleChannel: toggleChannel,
 						receiveChannel: receiveChannel,
 						message: channel[this.state.selectChannel].message,
-						active: channel[this.state.selectChannel].active,
-						chatActive: this.state.chatActive
+						chatActive: this.state.chatActive,
+						userList: this.state.userList
 					}) : ""
 				),
 				_react2.default.createElement(
@@ -37019,8 +37026,10 @@ var Channel = function (_React$Component) {
 			input: '',
 			emojiModal: false,
 			toggleAddPeople: false,
-			addPeopleInput: '',
-			emojiPage: 1
+			// addPeopleInput: '',
+			emojiPage: 1,
+			userSearchNotification: '',
+			userFilter: []
 		};
 		_this.socket = _this.props.socket;
 		return _this;
@@ -37047,15 +37056,14 @@ var Channel = function (_React$Component) {
 				scrollTop: 9999
 			}, 1000);
 		}
-	}, {
-		key: 'toggle',
-		value: function toggle(e) {
-			if (e.target.className !== 'close-channel' && !e.target.className.includes('fa-plus') && e.target.tagName !== 'INPUT') {
-				// this.setState({active: !this.state.active});
-				this.props.toggleChannel(this.props.user, !this.props.active);
-				this.setState({ emojiModal: false });
-			}
-		}
+
+		// toggle(e){
+		// 	if (e.target.className !== 'close-channel' && !e.target.className.includes('fa-plus') && e.target.tagName !== 'INPUT') {
+		// 		// this.setState({active: !this.state.active});
+		// 		this.props.toggleChannel(this.props.user, !this.props.active);
+		// 		this.setState({emojiModal: false});
+		// 	}
+		// }
 
 		// closeChannel(){
 		// 	this.props.removeChannel(this.props.user);
@@ -37067,22 +37075,33 @@ var Channel = function (_React$Component) {
 			var _this2 = this;
 
 			return function (e) {
-				_this2.setState(_defineProperty({}, type, e.target.value));
+				var _this2$setState;
+
+				_this2.setState((_this2$setState = {}, _defineProperty(_this2$setState, type, e.target.value), _defineProperty(_this2$setState, 'userSearchNotification', ''), _defineProperty(_this2$setState, 'userFilter', _this2.props.userList.filter(function (el) {
+					return el.includes(e.target.value.toLowerCase);
+				})), _this2$setState));
 			};
 		}
 	}, {
 		key: 'handleSubmit',
 		value: function handleSubmit(e) {
 			e.preventDefault();
-			console.log(this.state.input);
-			// const message = this.state.message.concat([this.state.input]);
-			this.socket.emit('send_message', {
-				username: this.props.currentUser.username,
-				receiver: this.props.user,
-				// split(' ').map(u => u.toLowerCase()),
-				message: { text: this.state.input }
-			});
-			this.props.receiveChatMessage(this.props.user, this.state.input, 1);
+			if (!this.state.toggleAddPeople) {
+				// const message = this.state.message.concat([this.state.input]);
+				this.socket.emit('send_message', {
+					username: this.props.currentUser.username,
+					receiver: this.props.user,
+					// split(' ').map(u => u.toLowerCase()),
+					message: { text: this.state.input }
+				});
+				this.props.receiveChatMessage(this.props.user, this.state.input, 1);
+			} else {
+				if (this.validUser(this.state.input)) {
+					this.addPeopleToChannel(this.state.input);
+				} else {
+					this.errorHandleInvalidUser(this.state.input);
+				}
+			}
 			this.setState({ input: '', emojiModal: false });
 		}
 	}, {
@@ -37098,16 +37117,44 @@ var Channel = function (_React$Component) {
 	}, {
 		key: 'toggleAddPeople',
 		value: function toggleAddPeople() {
-			this.setState({ toggleAddPeople: !this.state.toggleAddPeople });
+			if (!this.state.input) {
+				this.setState({ toggleAddPeople: !this.state.toggleAddPeople });
+			} else {
+				if (this.validUser(this.state.input)) {
+					this.addPeopleToChannel(this.state.input);
+				} else {
+					this.errorHandleInvalidUser(this.state.input);
+				}
+			}
+		}
+	}, {
+		key: 'errorHandleInvalidUser',
+		value: function errorHandleInvalidUser(user) {
+			var userSearchNotification = void 0;
+			if (user.trim().toLowerCase() === this.props.user) {
+				userSearchNotification = 'Duplicate user';
+			} else if (user.trim().toLowerCase() === this.props.currentUser.username) {
+				userSearchNotification = 'You are already on board';
+			} else {
+				userSearchNotification = 'No user named "' + user + '" found';
+			}
+			this.setState({
+				userSearchNotification: userSearchNotification,
+				input: ''
+			});
+		}
+	}, {
+		key: 'validUser',
+		value: function validUser(user) {
+			return this.props.userList.includes(user.trim().toLowerCase()) && user.trim().toLowerCase() !== this.props.user;
 		}
 	}, {
 		key: 'addPeopleToChannel',
-		value: function addPeopleToChannel(e) {
-			e.preventDefault;
-			this.props.receiveChannel(this.state.addPeopleInput + ' ' + this.props.user);
+		value: function addPeopleToChannel(newUser) {
+			this.props.receiveChannel(this.props.user + ' ' + newUser.trim().toLowerCase());
 			this.setState({
 				toggleAddPeople: false,
-				addPeopleInput: ''
+				input: ''
 			});
 		}
 	}, {
@@ -37136,14 +37183,14 @@ var Channel = function (_React$Component) {
 			    user = _props.user,
 			    message = _props.message,
 			    active = _props.active,
-			    chatActive = _props.chatActive;
+			    chatActive = _props.chatActive,
+			    userList = _props.userList;
 
-			var userList = user.split(' ');
 			return _react2.default.createElement(
 				'div',
 				{
 					className: 'channel ' + (active ? 'channel-active' : ''),
-					id: 'channel-' + userList.join('&'),
+					id: 'channel-' + user.split(' ').join('&'),
 					style: { height: '' + (chatActive ? '71%' : '93%') }
 				},
 				_react2.default.createElement(
@@ -37157,12 +37204,39 @@ var Channel = function (_React$Component) {
 						);
 					})
 				),
+				this.state.userSearchNotification ? _react2.default.createElement(
+					'div',
+					{ className: 'notification' },
+					this.state.userSearchNotification
+				) : "",
 				_react2.default.createElement(
 					'form',
 					{ onSubmit: function onSubmit(e) {
 							return _this3.handleSubmit(e);
 						} },
-					_react2.default.createElement('input', { onChange: this.handleInput('input'), value: this.state.input, placeholder: 'Type a message' }),
+					_react2.default.createElement('input', { onChange: this.handleInput('input'), value: this.state.input, placeholder: '' + (this.state.toggleAddPeople ? 'Add user to chat' : 'Type a message') }),
+					this.state.input && !this.state.toggleAddPeople ? _react2.default.createElement(
+						'i',
+						{ className: 'far fa-paper-plane', onClick: function onClick(e) {
+								return _this3.handleSubmit(e);
+							} },
+						_react2.default.createElement(
+							'span',
+							{ className: 'tooltip' },
+							'Send Message'
+						)
+					) : "",
+					_react2.default.createElement(
+						'i',
+						{ className: 'fas fa-plus', onClick: function onClick() {
+								return _this3.toggleAddPeople();
+							}, style: { 'color': '' + (this.state.toggleAddPeople ? '#0099fe' : '') } },
+						_react2.default.createElement(
+							'span',
+							{ className: 'tooltip' },
+							'Add user'
+						)
+					),
 					_react2.default.createElement(
 						'i',
 						{ className: 'far fa-smile', onClick: function onClick() {

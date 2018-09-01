@@ -114,6 +114,7 @@ class Chat extends React.Component {
 	removeChannel(e, channel){
 		const selectChannel = Object.keys(this.props.channel).filter(el => this.props.channel[el].status && el !== channel)[0] || "";
 		this.props.removeChannel(channel);
+		// why cannot setState here ????????//
 		console.log(`+++++++++${selectChannel}+++++++++++++++`)
 		this.setState({selectChannel});
 	}
@@ -124,6 +125,11 @@ class Chat extends React.Component {
 		const activeChannel = channel ? Object.keys(channel).filter(el => channel[el].status) : [];
 		return (
 			<div className={`chat-area ${active ? 'chat-area-active' : ''}`}>
+				{active ? 
+					<div className='close-chat-area' onClick={()=>this.props.toggleChat()}>
+						&times;
+					</div>
+				: ""}
 				<div className='channel-list'>
 					{activeChannel.length ? 
 						<ul className='channel-tabs'>
@@ -153,11 +159,10 @@ class Chat extends React.Component {
 								socket={this.socket} 
 								currentUser={currentUser} 
 								receiveChatMessage={receiveChatMessage} 
-								toggleChannel={toggleChannel}
 								receiveChannel={receiveChannel}
 								message={channel[this.state.selectChannel].message}
-								active={channel[this.state.selectChannel].active}
 								chatActive={this.state.chatActive}
+								userList={this.state.userList}
 							/>	
 						: ""}
 					{/*
