@@ -31003,6 +31003,7 @@ var channelReducer = function channelReducer() {
 		case _channel.SELECT_CHANNEL:
 			newState = Object.assign({}, state);
 			newState.selected = action.channel;
+			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		default:
 			return state;

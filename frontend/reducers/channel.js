@@ -55,6 +55,7 @@ const channelReducer = (state = {selected: ''}, action) => {
 		case SELECT_CHANNEL:
 			newState = Object.assign({}, state);
 			newState.selected = action.channel;
+			localStorage.setItem('channel', JSON.stringify(newState));
 			return newState;
 		default: 
 			return state;
