@@ -36917,10 +36917,10 @@ var Chat = function (_React$Component) {
 								c.split(' ').length > 1 ? _react2.default.createElement(
 									'div',
 									{ className: 'multi-user' },
-									c.split(' ').map(function (u) {
+									c.split(' ').map(function (u, idx) {
 										return _react2.default.createElement(
 											'span',
-											null,
+											{ key: idx },
 											u[0].toUpperCase()
 										);
 									})

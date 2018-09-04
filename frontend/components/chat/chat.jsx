@@ -146,7 +146,7 @@ class Chat extends React.Component {
 									}
 									{c.split(' ').length > 1 ? 
 										<div className='multi-user'>
-											{c.split(' ').map(u => <span>{u[0].toUpperCase()}</span>)}
+											{c.split(' ').map((u, idx) => <span key={idx}>{u[0].toUpperCase()}</span>)}
 										</div>
 										 : 
 										<span>{this.capitalizeStr(c)}</span>
