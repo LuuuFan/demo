@@ -207,6 +207,9 @@ input[type=submit] {
   font-size: 20px;
   margin: 3px;
 }
+.navbar .header-buttons .share button, .navbar .header-buttons .share a.btn, .navbar .header-buttons .share a.dropbox-dropin-btn:hover {
+  transition: all 0.8s;
+}
 .navbar .header-buttons .share .services {
   position: relative;
 }

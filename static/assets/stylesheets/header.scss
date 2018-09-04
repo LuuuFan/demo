@@ -141,6 +141,7 @@ $hover: #0099fe;
         }
       }
       button, a.btn, a.dropbox-dropin-btn:hover{
+        transition: all .8s;
       }
       .services{
       	position: relative;
