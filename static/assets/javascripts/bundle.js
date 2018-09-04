@@ -8546,6 +8546,9 @@ var addText = exports.addText = function addText(canvas, type) {
   var fontWeight = 'normal';
   var left = 50;
   var color = $('#text-color').val();
+  var underline = false,
+      overline = false,
+      linethrough = false;
   if (type) {
     switch (type) {
       case 'heading':
@@ -8574,6 +8577,9 @@ var addText = exports.addText = function addText(canvas, type) {
     size = parseInt($('#text-size').val());
     top = 50;
     content = 'Comment here';
+    underline = document.querySelector('#text-decoration-underline').checked;
+    overline = document.querySelector('#text-decoration-overline').checked;
+    linethrough = document.querySelector('#text-decoration-linethrough').checked;
   }
   var text = new fabric.IText(content, {
     left: left,
@@ -8581,7 +8587,10 @@ var addText = exports.addText = function addText(canvas, type) {
     fontFamily: style,
     fontSize: size,
     fill: color,
-    fontWeight: fontWeight
+    fontWeight: fontWeight,
+    underline: underline,
+    overline: overline,
+    linethrough: linethrough
   });
   canvas.add(text);
   canvas.setActiveObject(text);
@@ -35667,7 +35676,10 @@ var Canvas = function (_React$Component) {
 			canvasIdList: ['0'],
 			sideContentToggle: true,
 			copy: '',
-			prevId: ''
+			prevId: '',
+			underline: false,
+			overline: false,
+			linethrough: false
 		};
 		return _this;
 	}
@@ -35861,11 +35873,13 @@ var Canvas = function (_React$Component) {
 		}
 	}, {
 		key: 'checkBox',
-		value: function checkBox(e) {
+		value: function checkBox(e, type) {
+			this.setState(_defineProperty({}, type, e.target.checked));
 			var activeObj = this.state.selectedCanvas.getActiveObject();
-			this.setState({ fillChecked: e.target.checked });
 			if (this.isShape(activeObj)) {
 				canvasUtil.changeFill(activeObj, this.state.selectedCanvas, e.target.checked);
+			} else if (activeObj && activeObj.type === 'i-text') {
+				canvasUtil.changeTextStyle(activeObj, this.state.selectedCanvas, _defineProperty({}, type, e.target.checked));
 			}
 		}
 	}, {
@@ -35985,6 +35999,13 @@ var Canvas = function (_React$Component) {
 		key: 'addText',
 		value: function addText(type) {
 			canvasUtil.addText(this.state.selectedCanvas, type);
+		}
+	}, {
+		key: 'changeTextStyle',
+		value: function changeTextStyle(e, type) {
+			if (this.state.activeObj) {
+				canvasUtil.changeTextStyle(this.state.activeObj, this.state.selectedCanvas, { type: e.target.value });
+			}
 		}
 	}, {
 		key: 'render',
@@ -36164,7 +36185,7 @@ var Canvas = function (_React$Component) {
 									'label',
 									{ className: 'container-checkbox' },
 									_react2.default.createElement('input', { type: 'checkbox', checked: this.state.fillChecked, onChange: function onChange(e) {
-											return _this4.checkBox(e);
+											return _this4.checkBox(e, 'fillChecked');
 										} }),
 									_react2.default.createElement('span', { className: 'checkmark' })
 								)
@@ -36393,6 +36414,57 @@ var Canvas = function (_React$Component) {
 									colorOptions.map(function (color, idx) {
 										return _react2.default.createElement('option', { key: idx, style: { 'backgroundColor': '' + color }, value: color });
 									})
+								)
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'form-inline', id: 'text-decoration' },
+								_react2.default.createElement(
+									'label',
+									null,
+									'Underline: '
+								),
+								_react2.default.createElement(
+									'label',
+									{ className: 'container-checkbox' },
+									_react2.default.createElement('input', { id: 'text-decoration-underline', type: 'checkbox', checked: this.state.underline, onChange: function onChange(e) {
+											return _this4.checkBox(e, 'underline');
+										} }),
+									_react2.default.createElement('span', { className: 'checkmark' })
+								)
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'form-inline', id: 'text-decoration' },
+								_react2.default.createElement(
+									'label',
+									null,
+									'Overline: '
+								),
+								_react2.default.createElement(
+									'label',
+									{ className: 'container-checkbox' },
+									_react2.default.createElement('input', { id: 'text-decoration-overline', type: 'checkbox', checked: this.state.overline, onChange: function onChange(e) {
+											return _this4.checkBox(e, 'overline');
+										} }),
+									_react2.default.createElement('span', { className: 'checkmark' })
+								)
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'form-inline', id: 'text-decoration' },
+								_react2.default.createElement(
+									'label',
+									null,
+									'Linethrough: '
+								),
+								_react2.default.createElement(
+									'label',
+									{ className: 'container-checkbox' },
+									_react2.default.createElement('input', { id: 'text-decoration-linethrough', type: 'checkbox', checked: this.state.linethrough, onChange: function onChange(e) {
+											return _this4.checkBox(e, 'linethrough');
+										} }),
+									_react2.default.createElement('span', { className: 'checkmark' })
 								)
 							),
 							_react2.default.createElement(

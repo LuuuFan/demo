@@ -34,6 +34,9 @@ class Canvas extends React.Component{
 			sideContentToggle: true,
 			copy: '',
 			prevId: '',
+			underline: false,
+			overline: false,
+			linethrough: false,
 		};
 	}
 
@@ -209,11 +212,13 @@ class Canvas extends React.Component{
 		}
 	}
 
-	checkBox(e){
+	checkBox(e, type){
+		this.setState({[type]: e.target.checked});
 		const activeObj = this.state.selectedCanvas.getActiveObject();
-		this.setState({fillChecked: e.target.checked});
 		if (this.isShape(activeObj)) {
 			canvasUtil.changeFill(activeObj, this.state.selectedCanvas, e.target.checked);
+		} else if (activeObj && activeObj.type === 'i-text') {
+			canvasUtil.changeTextStyle(activeObj, this.state.selectedCanvas, {[type]: e.target.checked});			
 		}
 	}
 
@@ -317,6 +322,12 @@ class Canvas extends React.Component{
 		canvasUtil.addText(this.state.selectedCanvas, type);
 	}
 
+	changeTextStyle(e, type){
+		if (this.state.activeObj) {
+			canvasUtil.changeTextStyle(this.state.activeObj, this.state.selectedCanvas, {type: e.target.value});
+		}
+	}
+
 
 	render(){
 		const {receiveSelectedImg, imgs, toggleChat} = this.props;
@@ -401,7 +412,7 @@ class Canvas extends React.Component{
 							<div className="form-inline" id="shape-fill">
 								<label>Fill</label>
 								<label className="container-checkbox">
-								  <input type="checkbox" checked={this.state.fillChecked} onChange={(e)=>this.checkBox(e)} />
+								  <input type="checkbox" checked={this.state.fillChecked} onChange={(e)=>this.checkBox(e, 'fillChecked')} />
 								  <span className="checkmark"></span>
 								</label>
 	        		</div>
@@ -491,6 +502,27 @@ class Canvas extends React.Component{
 									{colorOptions.map((color, idx) => <option key={idx} style={{'backgroundColor':`${color}`}} value={color} ></option>)}
 								</select>
 							</div>
+							<div className="form-inline" id="text-decoration">
+								<label>Underline: </label>
+								<label className="container-checkbox">
+								  <input id='text-decoration-underline' type="checkbox" checked={this.state.underline} onChange={(e)=>this.checkBox(e, 'underline')} />
+								  <span className="checkmark"></span>
+								</label>
+							</div>
+							<div className="form-inline" id="text-decoration">
+								<label>Overline: </label>
+								<label className="container-checkbox">
+								  <input id='text-decoration-overline' type="checkbox" checked={this.state.overline} onChange={(e)=>this.checkBox(e, 'overline')} />
+								  <span className="checkmark"></span>
+								</label>
+							</div>
+							<div className="form-inline" id="text-decoration">
+								<label>Linethrough: </label>
+								<label className="container-checkbox">
+								  <input id='text-decoration-linethrough' type="checkbox" checked={this.state.linethrough} onChange={(e)=>this.checkBox(e, 'linethrough')} />
+								  <span className="checkmark"></span>
+								</label>
+	        		</div>
 							<div id="button-wrapper">
 								<button type="button" id="addText" onClick={()=>canvasUtil.addText(this.state.selectedCanvas)}>Add Text</button>
 							</div>

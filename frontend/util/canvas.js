@@ -173,6 +173,7 @@ export const addText = (canvas, type) => {
   let fontWeight = 'normal';
   let left = 50;
   let color = $(`#text-color`).val();
+  let underline = false, overline = false, linethrough = false;
   if (type) {
     switch(type){
       case 'heading': 
@@ -201,6 +202,9 @@ export const addText = (canvas, type) => {
     size = parseInt($(`#text-size`).val());
     top = 50;
     content = 'Comment here'
+    underline = document.querySelector('#text-decoration-underline').checked;
+    overline = document.querySelector('#text-decoration-overline').checked;
+    linethrough = document.querySelector('#text-decoration-linethrough').checked;
   }
   let text = new fabric.IText(content, {
     left: left,
@@ -209,6 +213,9 @@ export const addText = (canvas, type) => {
     fontSize: size,
     fill: color,
     fontWeight,
+    underline,
+    overline,
+    linethrough,
   });
   canvas.add(text);
   canvas.setActiveObject(text);
