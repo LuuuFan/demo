@@ -35660,7 +35660,7 @@ var Canvas = function (_React$Component) {
 			canvas: {},
 			shapeColor: '#000000',
 			textColor: '#000000',
-			textBgroundColor: '#ffffff',
+			textBgroundColor: 'Transparent',
 			backgroundColor: 'lightgray',
 			selectedShape: 'circle',
 			selectedDialog: 'dialog_1',
@@ -36411,6 +36411,11 @@ var Canvas = function (_React$Component) {
 									{ className: 'form-control', id: 'text-bground-color', onChange: function onChange(e) {
 											return _this4.selectColor(e, 'textBgroundColor');
 										}, style: { 'backgroundColor': '' + this.state.textBgroundColor } },
+									_react2.default.createElement(
+										'option',
+										{ value: 'transparent', style: { 'backgroundColor': 'transparent' } },
+										'Transparent'
+									),
 									colorOptions.map(function (color, idx) {
 										return _react2.default.createElement('option', { key: idx, style: { 'backgroundColor': '' + color }, value: color });
 									})

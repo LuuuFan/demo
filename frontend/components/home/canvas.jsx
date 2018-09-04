@@ -17,7 +17,7 @@ class Canvas extends React.Component{
 			canvas: {},
 			shapeColor: '#000000',
 			textColor: '#000000',
-			textBgroundColor: '#ffffff',
+			textBgroundColor: 'Transparent',
 			backgroundColor: 'lightgray',
 			selectedShape: 'circle',
 			selectedDialog: 'dialog_1',
@@ -499,6 +499,7 @@ class Canvas extends React.Component{
 							<div className='form-inline'>
 								<label htmlFor='text-bground-color'>Bground Color:</label>
 								<select className="form-control" id="text-bground-color" onChange={(e)=>this.selectColor(e, 'textBgroundColor')} style={{'backgroundColor': `${this.state.textBgroundColor}`}}>
+									<option value='transparent' style={{'backgroundColor': 'transparent'}}>Transparent</option>
 									{colorOptions.map((color, idx) => <option key={idx} style={{'backgroundColor':`${color}`}} value={color} ></option>)}
 								</select>
 							</div>
