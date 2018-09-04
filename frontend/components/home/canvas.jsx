@@ -40,12 +40,12 @@ class Canvas extends React.Component{
 		this.initializeCanvas(this.state.canvasIdList[0]);
 		// delete item on canvas
 
-		document.addEventListener('keydown', (e) => {
-			if (e.key === 'Backspace' || e.key === 'Delete') {
-				this.setState({activeObj: null});
-				canvasUtil.deleteItem(this.state.selectedCanvas);				
-			}
-		});
+		// document.addEventListener('keydown', (e) => {
+		// 	if (e.key === 'Backspace' || e.key === 'Delete') {
+		// 		this.setState({activeObj: null});
+		// 		canvasUtil.deleteItem(this.state.selectedCanvas);				
+		// 	}
+		// });
 
 		$.extend($.scrollTo.defaults, {
 		  axis: 'y',
@@ -142,9 +142,8 @@ class Canvas extends React.Component{
 	handleInput(){
 		return (e) => {
 			this.setState({textSize: e.target.value});
-			const activeObj = this.state.selectedCanvas.getActiveObject();
-			if (activeObj && activeObj.type === 'i-text') {
-				canvasUtil.changeTextStyle(activeObj, this.state.selectedCanvas, null, e.target.value);
+			if (this.state.activeObj && this.state.activeObj.type === 'i-text') {
+				canvasUtil.changeTextStyle(this.state.activeObj, this.state.selectedCanvas, {fontSize: e.target.value});
 			}
 		};
 	}
@@ -195,9 +194,8 @@ class Canvas extends React.Component{
 	}
 
 	changeStyle(e){
-		const activeObj = this.state.selectedCanvas.getActiveObject();
-		if (activeObj && activeObj.type === 'i-text') {
-			canvasUtil.changeTextStyle(activeObj, this.state.selectedCanvas, e.target.value);
+		if (this.state.activeObj && this.state.activeObj.type === 'i-text') {
+			canvasUtil.changeTextStyle(this.state.activeObj, this.state.selectedCanvas, {fontFamily: e.target.value});
 		}
 	}
 

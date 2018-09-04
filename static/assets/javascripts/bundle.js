@@ -8761,9 +8761,8 @@ var changeFill = exports.changeFill = function changeFill(obj, canvas, fill) {
   canvas.renderAll();
 };
 
-var changeTextStyle = exports.changeTextStyle = function changeTextStyle(obj, canvas, style, size) {
-  if (style) obj.set({ fontFamily: style });
-  if (size) obj.set({ fontSize: size });
+var changeTextStyle = exports.changeTextStyle = function changeTextStyle(obj, canvas, options) {
+  obj.set(options);
   canvas.renderAll();
 };
 
@@ -35675,17 +35674,15 @@ var Canvas = function (_React$Component) {
 	_createClass(Canvas, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			var _this2 = this;
-
 			this.initializeCanvas(this.state.canvasIdList[0]);
 			// delete item on canvas
 
-			document.addEventListener('keydown', function (e) {
-				if (e.key === 'Backspace' || e.key === 'Delete') {
-					_this2.setState({ activeObj: null });
-					canvasUtil.deleteItem(_this2.state.selectedCanvas);
-				}
-			});
+			// document.addEventListener('keydown', (e) => {
+			// 	if (e.key === 'Backspace' || e.key === 'Delete') {
+			// 		this.setState({activeObj: null});
+			// 		canvasUtil.deleteItem(this.state.selectedCanvas);				
+			// 	}
+			// });
 
 			$.extend($.scrollTo.defaults, {
 				axis: 'y',
@@ -35790,13 +35787,12 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'handleInput',
 		value: function handleInput() {
-			var _this3 = this;
+			var _this2 = this;
 
 			return function (e) {
-				_this3.setState({ textSize: e.target.value });
-				var activeObj = _this3.state.selectedCanvas.getActiveObject();
-				if (activeObj && activeObj.type === 'i-text') {
-					canvasUtil.changeTextStyle(activeObj, _this3.state.selectedCanvas, null, e.target.value);
+				_this2.setState({ textSize: e.target.value });
+				if (_this2.state.activeObj && _this2.state.activeObj.type === 'i-text') {
+					canvasUtil.changeTextStyle(_this2.state.activeObj, _this2.state.selectedCanvas, { fontSize: e.target.value });
 				}
 			};
 		}
@@ -35848,9 +35844,8 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'changeStyle',
 		value: function changeStyle(e) {
-			var activeObj = this.state.selectedCanvas.getActiveObject();
-			if (activeObj && activeObj.type === 'i-text') {
-				canvasUtil.changeTextStyle(activeObj, this.state.selectedCanvas, e.target.value);
+			if (this.state.activeObj && this.state.activeObj.type === 'i-text') {
+				canvasUtil.changeTextStyle(this.state.activeObj, this.state.selectedCanvas, { fontFamily: e.target.value });
 			}
 		}
 	}, {
@@ -35878,12 +35873,12 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'groupItems',
 		value: function groupItems() {
-			var _this4 = this;
+			var _this3 = this;
 
 			var objArr = Array.from(this.state.activeObj._objects);
 			var group = new fabric.Group(this.state.activeObj._objects);
 			objArr.forEach(function (obj) {
-				return _this4.state.selectedCanvas.remove(obj);
+				return _this3.state.selectedCanvas.remove(obj);
 			});
 			this.state.selectedCanvas.add(group);
 			this.state.selectedCanvas.setActiveObject(group);
@@ -35991,7 +35986,7 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this5 = this;
+			var _this4 = this;
 
 			var _props = this.props,
 			    receiveSelectedImg = _props.receiveSelectedImg,
@@ -36007,7 +36002,7 @@ var Canvas = function (_React$Component) {
 					_react2.default.createElement(
 						'li',
 						{ className: 'nav-item sidebar-Image ' + (this.state.active === 'Image' ? 'selected' : ''), onClick: function onClick(e) {
-								return _this5.handleClick(e);
+								return _this4.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'far fa-image' }),
 						_react2.default.createElement(
@@ -36019,7 +36014,7 @@ var Canvas = function (_React$Component) {
 					_react2.default.createElement(
 						'li',
 						{ className: 'nav-item sidebar-Shapes ' + (this.state.active === 'Shapes' ? 'selected' : ''), onClick: function onClick(e) {
-								return _this5.handleClick(e);
+								return _this4.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-shapes' }),
 						_react2.default.createElement(
@@ -36031,7 +36026,7 @@ var Canvas = function (_React$Component) {
 					_react2.default.createElement(
 						'li',
 						{ className: 'nav-item sidebar-Dialog ' + (this.state.active === 'Dialog' ? 'selected' : ''), onClick: function onClick(e) {
-								return _this5.handleClick(e);
+								return _this4.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-comment' }),
 						_react2.default.createElement(
@@ -36043,7 +36038,7 @@ var Canvas = function (_React$Component) {
 					_react2.default.createElement(
 						'li',
 						{ className: 'nav-item sidebar-Text ' + (this.state.active === 'Text' ? 'selected' : ''), onClick: function onClick(e) {
-								return _this5.handleClick(e);
+								return _this4.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-font' }),
 						_react2.default.createElement(
@@ -36055,7 +36050,7 @@ var Canvas = function (_React$Component) {
 					_react2.default.createElement(
 						'li',
 						{ className: 'nav-item sidebar-Bground ' + (this.state.active === 'Bground' ? 'selected' : ''), onClick: function onClick(e) {
-								return _this5.handleClick(e);
+								return _this4.handleClick(e);
 							} },
 						_react2.default.createElement('i', { className: 'fas fa-layer-group' }),
 						_react2.default.createElement(
@@ -36081,7 +36076,7 @@ var Canvas = function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'arrow-collapse', onClick: function onClick() {
-									return _this5.toggleSideContent();
+									return _this4.toggleSideContent();
 								} },
 							_react2.default.createElement(
 								'div',
@@ -36103,35 +36098,35 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedShape === 'circle' ? 'ui-selected' : ''), id: 'circle', onClick: function onClick(e) {
-											return _this5.changeShape(e, 'selectedShape');
+											return _this4.changeShape(e, 'selectedShape');
 										} },
 									_react2.default.createElement('img', { src: 'static/assets/images/circle.png' })
 								),
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedShape === 'rect' ? 'ui-selected' : ''), id: 'rect', onClick: function onClick(e) {
-											return _this5.changeShape(e, 'selectedShape');
+											return _this4.changeShape(e, 'selectedShape');
 										} },
 									_react2.default.createElement('img', { src: 'static/assets/images/rect.png' })
 								),
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedShape === 'line' ? 'ui-selected' : ''), id: 'line', onClick: function onClick(e) {
-											return _this5.changeShape(e, 'selectedShape');
+											return _this4.changeShape(e, 'selectedShape');
 										} },
 									_react2.default.createElement('img', { src: 'static/assets/images/line.png' })
 								),
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedShape === 'polyline' ? 'ui-selected' : ''), id: 'polyline', onClick: function onClick(e) {
-											return _this5.changeShape(e, 'selectedShape');
+											return _this4.changeShape(e, 'selectedShape');
 										} },
 									_react2.default.createElement('img', { src: 'static/assets/images/arrow.png' })
 								),
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedShape === 'star' ? 'ui-selected' : ''), id: 'star', onClick: function onClick(e) {
-											return _this5.changeShape(e, 'selectedShape');
+											return _this4.changeShape(e, 'selectedShape');
 										} },
 									_react2.default.createElement('img', { src: 'static/assets/images/star.png' })
 								)
@@ -36147,7 +36142,7 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'select',
 									{ className: 'form-control', id: 'shape-color', onChange: function onChange(e) {
-											return _this5.selectColor(e, 'shapeColor');
+											return _this4.selectColor(e, 'shapeColor');
 										}, style: { 'backgroundColor': '' + this.state.shapeColor } },
 									colorOptions.map(function (color, idx) {
 										return _react2.default.createElement('option', { key: idx, style: { 'backgroundColor': '' + color }, value: color });
@@ -36166,7 +36161,7 @@ var Canvas = function (_React$Component) {
 									'label',
 									{ className: 'container-checkbox' },
 									_react2.default.createElement('input', { type: 'checkbox', checked: this.state.fillChecked, onChange: function onChange(e) {
-											return _this5.checkBox(e);
+											return _this4.checkBox(e);
 										} }),
 									_react2.default.createElement('span', { className: 'checkmark' })
 								)
@@ -36182,7 +36177,7 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'select',
 									{ className: 'form-control', id: 'shape-opacity', onChange: function onChange(e) {
-											return _this5.changeOpacity(e);
+											return _this4.changeOpacity(e);
 										} },
 									_react2.default.createElement(
 										'option',
@@ -36212,7 +36207,7 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'button',
 									{ type: 'button', id: 'addShape', onClick: function onClick() {
-											return canvasUtil.addShape(_this5.state.selectedShape, _this5.state.selectedCanvas);
+											return canvasUtil.addShape(_this4.state.selectedShape, _this4.state.selectedCanvas);
 										} },
 									'Add Shape'
 								)
@@ -36232,21 +36227,21 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''), id: 'dialog_1', onClick: function onClick(e) {
-											return _this5.changeShape(e, 'selectedDialog');
+											return _this4.changeShape(e, 'selectedDialog');
 										} },
 									_react2.default.createElement('img', { src: 'static/assets/images/dialog_1.png' })
 								),
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_2' ? 'ui-selected' : ''), id: 'dialog_2', onClick: function onClick(e) {
-											return _this5.changeShape(e, 'selectedDialog');
+											return _this4.changeShape(e, 'selectedDialog');
 										} },
 									_react2.default.createElement('img', { src: 'static/assets/images/dialog_2.png' })
 								),
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_3' ? 'ui-selected' : ''), id: 'dialog_3', onClick: function onClick(e) {
-											return _this5.changeShape(e, 'selectedDialog');
+											return _this4.changeShape(e, 'selectedDialog');
 										} },
 									_react2.default.createElement('img', { src: 'static/assets/images/dialog_3.png' })
 								)
@@ -36258,7 +36253,7 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'button',
 									{ type: 'button', id: 'addDialog', onClick: function onClick() {
-											return canvasUtil.addDialog(_this5.state.selectedDialog, _this5.state.selectedCanvas);
+											return canvasUtil.addDialog(_this4.state.selectedDialog, _this4.state.selectedCanvas);
 										} },
 									'Add Dialog'
 								)
@@ -36281,21 +36276,21 @@ var Canvas = function (_React$Component) {
 									_react2.default.createElement(
 										'li',
 										{ className: 'heading', onClick: function onClick() {
-												return _this5.addText('heading');
+												return _this4.addText('heading');
 											} },
 										'Add heading'
 									),
 									_react2.default.createElement(
 										'li',
 										{ className: 'subheading', onClick: function onClick() {
-												return _this5.addText('subheading');
+												return _this4.addText('subheading');
 											} },
 										'Add Subheading'
 									),
 									_react2.default.createElement(
 										'li',
 										{ className: 'bodytext', onClick: function onClick() {
-												return _this5.addText('bodytext');
+												return _this4.addText('bodytext');
 											} },
 										'Add body text'
 									)
@@ -36312,7 +36307,7 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'select',
 									{ className: 'form-control', id: 'text-color', onChange: function onChange(e) {
-											return _this5.selectColor(e, 'textColor');
+											return _this4.selectColor(e, 'textColor');
 										}, style: { 'backgroundColor': '' + this.state.textColor } },
 									colorOptions.map(function (color, idx) {
 										return _react2.default.createElement('option', { key: idx, style: { 'backgroundColor': '' + color }, value: color });
@@ -36330,7 +36325,7 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'select',
 									{ className: 'form-control', id: 'text-style', defaultValue: 'Verdana', onChange: function onChange(e) {
-											return _this5.changeStyle(e);
+											return _this4.changeStyle(e);
 										} },
 									_react2.default.createElement(
 										'option',
@@ -36385,7 +36380,7 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'button',
 									{ type: 'button', id: 'addText', onClick: function onClick() {
-											return canvasUtil.addText(_this5.state.selectedCanvas);
+											return canvasUtil.addText(_this4.state.selectedCanvas);
 										} },
 									'Add Text'
 								)
@@ -36404,7 +36399,7 @@ var Canvas = function (_React$Component) {
 								{ className: 'group color-options' },
 								colorOptions.map(function (color, idx) {
 									return _react2.default.createElement('li', { key: idx, style: { 'backgroundColor': '' + color }, onClick: function onClick(e) {
-											return _this5.selectColor(e, 'backgroundColor');
+											return _this4.selectColor(e, 'backgroundColor');
 										} });
 								})
 							),
@@ -36417,7 +36412,7 @@ var Canvas = function (_React$Component) {
 									'Pick a color'
 								),
 								_react2.default.createElement('input', { type: 'color', onChange: function onChange(e) {
-										return _this5.pickColor(e);
+										return _this4.pickColor(e);
 									} })
 							)
 						) : "",
@@ -36431,7 +36426,7 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'button',
 									{ type: 'button', id: 'cropImage', onClick: function onClick() {
-											return _this5.croping();
+											return _this4.croping();
 										} },
 									_react2.default.createElement('i', { className: 'fas fa-crop' }),
 									'Crop Image'
@@ -36439,7 +36434,7 @@ var Canvas = function (_React$Component) {
 								_react2.default.createElement(
 									'button',
 									{ type: 'button', id: 'rotateImg', onClick: function onClick() {
-											return canvasUtil.rotateImg(_this5.state.selectedCanvas, _this5.state.activeObj);
+											return canvasUtil.rotateImg(_this4.state.selectedCanvas, _this4.state.activeObj);
 										} },
 									_react2.default.createElement('i', { className: 'fas fa-sync-alt' }),
 									'90\xB0 Rotate Image'
@@ -36453,7 +36448,7 @@ var Canvas = function (_React$Component) {
 									_react2.default.createElement(
 										'button',
 										{ type: 'button', id: 'done-crop', onClick: function onClick() {
-												return _this5.doneCrop();
+												return _this4.doneCrop();
 											} },
 										_react2.default.createElement('i', { className: 'fas fa-check-circle' }),
 										'Done'
@@ -36465,7 +36460,7 @@ var Canvas = function (_React$Component) {
 									_react2.default.createElement(
 										'button',
 										{ type: 'button', id: 'cancel-crop', onClick: function onClick() {
-												return _this5.cancelCrop();
+												return _this4.cancelCrop();
 											} },
 										_react2.default.createElement('i', { className: 'fas fa-ban' }),
 										'Cancel'
@@ -36481,9 +36476,9 @@ var Canvas = function (_React$Component) {
 							return _react2.default.createElement(
 								'div',
 								{ key: id, className: 'container container-' + id, onDoubleClick: function onDoubleClick() {
-										return _this5.doubleClick();
+										return _this4.doubleClick();
 									}, onClick: function onClick(e) {
-										return _this5.singleClick(e);
+										return _this4.singleClick(e);
 									} },
 								_react2.default.createElement('canvas', { ref: id, id: id }),
 								_react2.default.createElement(
@@ -36492,7 +36487,7 @@ var Canvas = function (_React$Component) {
 									_react2.default.createElement(
 										'i',
 										{ className: 'fas fa-arrow-up', onClick: function onClick(e) {
-												return _this5.moveCanvasUp(e, id);
+												return _this4.moveCanvasUp(e, id);
 											}, style: { 'color': '' + (!idx ? '#cbc5c1' : '') } },
 										idx ? _react2.default.createElement(
 											'span',
@@ -36508,9 +36503,9 @@ var Canvas = function (_React$Component) {
 									_react2.default.createElement(
 										'i',
 										{ className: 'fas fa-arrow-down', onClick: function onClick(e) {
-												return _this5.moveCanvasDown(e, id);
-											}, style: { 'color': '' + (idx < _this5.state.canvasIdList.length - 1 ? "" : '#cbc5c1') } },
-										idx < _this5.state.canvasIdList.length - 1 ? _react2.default.createElement(
+												return _this4.moveCanvasDown(e, id);
+											}, style: { 'color': '' + (idx < _this4.state.canvasIdList.length - 1 ? "" : '#cbc5c1') } },
+										idx < _this4.state.canvasIdList.length - 1 ? _react2.default.createElement(
 											'span',
 											{ className: 'tooltip' },
 											'Move Down'
@@ -36519,7 +36514,7 @@ var Canvas = function (_React$Component) {
 									_react2.default.createElement(
 										'i',
 										{ className: 'far fa-copy', onClick: function onClick(e) {
-												return _this5.copyCanvas(e, id);
+												return _this4.copyCanvas(e, id);
 											} },
 										_react2.default.createElement(
 											'span',
@@ -36530,9 +36525,9 @@ var Canvas = function (_React$Component) {
 									_react2.default.createElement(
 										'i',
 										{ className: 'fas fa-trash', onClick: function onClick(e) {
-												return _this5.deleteCanvas(e, id);
+												return _this4.deleteCanvas(e, id);
 											}, style: {
-												'color': '' + (_this5.state.canvasIdList.length === 1 ? '#cbc5c1' : '')
+												'color': '' + (_this4.state.canvasIdList.length === 1 ? '#cbc5c1' : '')
 											} },
 										_react2.default.createElement(
 											'span',
@@ -36551,7 +36546,7 @@ var Canvas = function (_React$Component) {
 						_react2.default.createElement(
 							'button',
 							{ onClick: function onClick() {
-									return _this5.addCanvas();
+									return _this4.addCanvas();
 								} },
 							'+',
 							_react2.default.createElement(
@@ -36563,7 +36558,7 @@ var Canvas = function (_React$Component) {
 						_react2.default.createElement(
 							'button',
 							{ onClick: function onClick() {
-									return _this5.resetCanvas();
+									return _this4.resetCanvas();
 								} },
 							'\xD7',
 							_react2.default.createElement(
@@ -36575,7 +36570,7 @@ var Canvas = function (_React$Component) {
 						this.state.activeObj ? _react2.default.createElement(
 							'button',
 							{ className: 'delete', onClick: function onClick() {
-									return canvasUtil.deleteItem(_this5.state.selectedCanvas);
+									return canvasUtil.deleteItem(_this4.state.selectedCanvas);
 								} },
 							_react2.default.createElement(
 								'span',
@@ -36587,7 +36582,7 @@ var Canvas = function (_React$Component) {
 						this.state.activeObj && this.state.activeObj.type !== 'group' && this.state.activeObj._objects ? _react2.default.createElement(
 							'button',
 							{ className: 'group', onClick: function onClick() {
-									return _this5.groupItems();
+									return _this4.groupItems();
 								} },
 							_react2.default.createElement('i', { className: 'far fa-object-group' }),
 							_react2.default.createElement(
@@ -36599,7 +36594,7 @@ var Canvas = function (_React$Component) {
 						this.state.activeObj && this.state.activeObj.type === 'group' ? _react2.default.createElement(
 							'button',
 							{ className: 'ungroup', onClick: function onClick() {
-									return _this5.unGroupItems();
+									return _this4.unGroupItems();
 								} },
 							_react2.default.createElement(
 								'span',

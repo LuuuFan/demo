@@ -385,9 +385,8 @@ export const changeFill = (obj, canvas, fill) => {
   canvas.renderAll();
 }
 
-export const changeTextStyle = (obj, canvas, style, size) => {
-  if(style) obj.set({fontFamily: style});
-  if(size) obj.set({fontSize: size});
+export const changeTextStyle = (obj, canvas, options) => {
+  obj.set(options);
   canvas.renderAll();
 };
 
