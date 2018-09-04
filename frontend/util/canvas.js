@@ -168,16 +168,47 @@ const starPolygonPoints = (spikeCount, outerRadius, innerRadius) => {
   return (points);
 };
 
-export const addText = (canvas) => {
-  let style = $(`#text-style`).val();
-  let size = parseInt($(`#text-size`).val());
+export const addText = (canvas, type) => {
+  let style, size, top, content;
+  let fontWeight = 'normal';
+  let left = 50;
   let color = $(`#text-color`).val();
-  let text = new fabric.IText("Comment here", {
-    left: 50,
-    top: 50,
+  if (type) {
+    switch(type){
+      case 'heading': 
+        style = 'Verdana';
+        size = 40;
+        top = 50;
+        fontWeight = 900;
+        content = 'Add heading';
+        break;
+      case 'subheading':
+        style = 'Georgia';
+        size = 28;
+        top = 100;
+        fontWeight = 'bold';
+        content = 'Add Subheading'
+        break;
+      case 'bodytext':
+        style = 'Arial';
+        size = 20;
+        top = 150;
+        content = 'Add body text';
+        break;
+    }
+  } else {
+    style = $(`#text-style`).val();
+    size = parseInt($(`#text-size`).val());
+    top = 50;
+    content = 'Comment here'
+  }
+  let text = new fabric.IText(content, {
+    left: left,
+    top: top,
     fontFamily: style,
     fontSize: size,
-    fill: color
+    fill: color,
+    fontWeight,
   });
   canvas.add(text);
   canvas.setActiveObject(text);
@@ -262,7 +293,7 @@ export const addDialog = (selectedDialog, canvas) => {
     const dialog = img.set({
     }).scale(scale);
 
-    const comment = document.querySelector('#dialog textarea').value;
+    const comment = document.querySelector('#dialog textarea').value || 'Add Comment Here';
     const fontSize = comment.length > 10 ? Math.floor(150 / comment.length) : 14;
 
     let text = new fabric.IText(comment, {
@@ -368,7 +399,7 @@ let mouseX, mouseY;
 export const cropingImage = (canvas, activeObj) => {
   let mouseDown;
   activeObj.selectable = false;
-  const container = document.getElementById('c').getBoundingClientRect();
+  const container = document.getElementById(canvas.contextContainer.canvas.id).getBoundingClientRect();
   console.log('~~~~~~~~~~~~~~~~~~~')
   console.log(container.left, container.top)
   rectangle = new fabric.Rect({
@@ -444,7 +475,6 @@ export const doneCrop = (canvas, activeObj) => {
     let width = rectangle.width * 1 / activeObj.scaleX;
     let height = rectangle.height * 1 / activeObj.scaleY;
     console.log(x, y, width, height);
-    debugger
     activeObj.clipTo = (ctx) => {
       ctx.rect(x, y, width, height);  
     }

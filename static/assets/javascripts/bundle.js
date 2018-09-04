@@ -8538,16 +8538,50 @@ var starPolygonPoints = function starPolygonPoints(spikeCount, outerRadius, inne
   return points;
 };
 
-var addText = exports.addText = function addText(canvas) {
-  var style = $('#text-style').val();
-  var size = parseInt($('#text-size').val());
+var addText = exports.addText = function addText(canvas, type) {
+  var style = void 0,
+      size = void 0,
+      top = void 0,
+      content = void 0;
+  var fontWeight = 'normal';
+  var left = 50;
   var color = $('#text-color').val();
-  var text = new fabric.IText("Comment here", {
-    left: 50,
-    top: 50,
+  if (type) {
+    switch (type) {
+      case 'heading':
+        style = 'Verdana';
+        size = 40;
+        top = 50;
+        fontWeight = 900;
+        content = 'Add heading';
+        break;
+      case 'subheading':
+        style = 'Georgia';
+        size = 28;
+        top = 100;
+        fontWeight = 'bold';
+        content = 'Add Subheading';
+        break;
+      case 'bodytext':
+        style = 'Arial';
+        size = 20;
+        top = 150;
+        content = 'Add body text';
+        break;
+    }
+  } else {
+    style = $('#text-style').val();
+    size = parseInt($('#text-size').val());
+    top = 50;
+    content = 'Comment here';
+  }
+  var text = new fabric.IText(content, {
+    left: left,
+    top: top,
     fontFamily: style,
     fontSize: size,
-    fill: color
+    fill: color,
+    fontWeight: fontWeight
   });
   canvas.add(text);
   canvas.setActiveObject(text);
@@ -8633,7 +8667,7 @@ var addDialog = exports.addDialog = function addDialog(selectedDialog, canvas) {
     var scale = 150 / img.height;
     var dialog = img.set({}).scale(scale);
 
-    var comment = document.querySelector('#dialog textarea').value;
+    var comment = document.querySelector('#dialog textarea').value || 'Add Comment Here';
     var fontSize = comment.length > 10 ? Math.floor(150 / comment.length) : 14;
 
     var text = new fabric.IText(comment, {
@@ -8740,7 +8774,7 @@ var mouseX = void 0,
 var cropingImage = exports.cropingImage = function cropingImage(canvas, activeObj) {
   var mouseDown = void 0;
   activeObj.selectable = false;
-  var container = document.getElementById('c').getBoundingClientRect();
+  var container = document.getElementById(canvas.contextContainer.canvas.id).getBoundingClientRect();
   console.log('~~~~~~~~~~~~~~~~~~~');
   console.log(container.left, container.top);
   rectangle = new fabric.Rect({
@@ -8815,7 +8849,6 @@ var doneCrop = exports.doneCrop = function doneCrop(canvas, activeObj) {
   var width = rectangle.width * 1 / activeObj.scaleX;
   var height = rectangle.height * 1 / activeObj.scaleY;
   console.log(x, y, width, height);
-  debugger;
   activeObj.clipTo = function (ctx) {
     ctx.rect(x, y, width, height);
   };
@@ -31055,7 +31088,7 @@ Object.defineProperty(exports, "__esModule", {
 var _chat = __webpack_require__(31);
 
 var chatReducer = function chatReducer() {
-	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { active: true };
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { active: false };
 	var action = arguments[1];
 
 	Object.freeze(state);
@@ -35614,7 +35647,7 @@ var Canvas = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (Canvas.__proto__ || Object.getPrototypeOf(Canvas)).call(this));
 
 		_this.state = {
-			active: 'Image',
+			active: 'Text',
 			textSize: '24',
 			canvas: {},
 			shapeColor: '#000000',
@@ -35721,9 +35754,6 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'scroll',
 		value: function scroll(id) {
-			console.log('~~~~~~~~~~~~~~~~');
-			console.log($('#' + id).offset().top);
-			console.log(id);
 			$('.canvas-area').scrollTo('#' + id);
 			// $('.canvas-area').animate({
 			// 	scrollTop: $(`#${id}`).offset().top,
@@ -35802,7 +35832,6 @@ var Canvas = function (_React$Component) {
 				return;
 			} else {
 				this.setState(_defineProperty({}, type, e.target.options[e.target.options.selectedIndex].value));
-				// this.setState({[type]: e.target.options[e.target.options.selectedIndex].textContent});
 			}
 			var activeObject = this.state.selectedCanvas.getActiveObject();
 			if (activeObject) {
@@ -35953,6 +35982,11 @@ var Canvas = function (_React$Component) {
 				this.setState({ canvas: canvas, canvasIdList: canvasIdList });
 				this.props.removeCanvas(id);
 			}
+		}
+	}, {
+		key: 'addText',
+		value: function addText(type) {
+			canvasUtil.addText(this.state.selectedCanvas, type);
 		}
 	}, {
 		key: 'render',
@@ -36194,7 +36228,7 @@ var Canvas = function (_React$Component) {
 							),
 							_react2.default.createElement(
 								'ol',
-								{ id: 'shapes-list' },
+								{ id: 'shapes-list', className: 'group' },
 								_react2.default.createElement(
 									'li',
 									{ className: 'shapes-item ' + (this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''), id: 'dialog_1', onClick: function onClick(e) {
@@ -36237,6 +36271,35 @@ var Canvas = function (_React$Component) {
 								'h2',
 								null,
 								' '
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'text-add-shortcut' },
+								_react2.default.createElement(
+									'ul',
+									null,
+									_react2.default.createElement(
+										'li',
+										{ className: 'heading', onClick: function onClick() {
+												return _this5.addText('heading');
+											} },
+										'Add heading'
+									),
+									_react2.default.createElement(
+										'li',
+										{ className: 'subheading', onClick: function onClick() {
+												return _this5.addText('subheading');
+											} },
+										'Add Subheading'
+									),
+									_react2.default.createElement(
+										'li',
+										{ className: 'bodytext', onClick: function onClick() {
+												return _this5.addText('bodytext');
+											} },
+										'Add body text'
+									)
+								)
 							),
 							_react2.default.createElement(
 								'div',
@@ -36746,7 +36809,6 @@ var Chat = function (_React$Component) {
 			input: '',
 			userList: [],
 			userSearchNotification: ''
-			// selectChannel: "",
 		};
 		_this.socket = null;
 		return _this;
@@ -36820,7 +36882,6 @@ var Chat = function (_React$Component) {
 				this.setState({
 					input: '',
 					userList: this.filterUserList(this.props.userList)
-					// selectChannel: this.capitalizeStr(this.state.userList[0])
 				});
 			} else if (!this.state.userList.length) {
 				// No user found
@@ -36833,7 +36894,6 @@ var Chat = function (_React$Component) {
 	}, {
 		key: 'toggle',
 		value: function toggle() {
-			// this.setState({active: !this.state.active})
 			this.props.toggleChat();
 		}
 	}, {
@@ -36844,7 +36904,6 @@ var Chat = function (_React$Component) {
 			this.setState({
 				input: '',
 				userList: this.filterUserList(this.props.userList)
-				// selectChannel: user,
 			});
 		}
 	}, {
@@ -36864,10 +36923,6 @@ var Chat = function (_React$Component) {
 		key: 'removeChannel',
 		value: function removeChannel(e, channel) {
 			this.props.removeChannel(channel);
-			// why cannot setState here ????????//
-			// make selectChannel to global state
-			// console.log(`+++++++++${selectChannel}+++++++++++++++`)
-			// this.setState({selectChannel});
 		}
 	}, {
 		key: 'render',

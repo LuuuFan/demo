@@ -15,7 +15,6 @@ class Chat extends React.Component {
 			input: '',
 			userList: [],
 			userSearchNotification: '',
-			// selectChannel: "",
 		};
 		this.socket = null;
 	};
@@ -73,7 +72,6 @@ class Chat extends React.Component {
 				this.setState({
 					input: '', 
 					userList: this.filterUserList(this.props.userList),
-					// selectChannel: this.capitalizeStr(this.state.userList[0])
 				});
 			} else if (!this.state.userList.length){
 				// No user found
@@ -85,7 +83,6 @@ class Chat extends React.Component {
 	}
 
 	toggle(){
-		// this.setState({active: !this.state.active})
 		this.props.toggleChat();
 	}
 
@@ -95,7 +92,6 @@ class Chat extends React.Component {
 		this.setState({
 			input: '', 
 			userList: this.filterUserList(this.props.userList),
-			// selectChannel: user,
 		});
 	}
 
@@ -112,10 +108,6 @@ class Chat extends React.Component {
 
 	removeChannel(e, channel){
 		this.props.removeChannel(channel);
-		// why cannot setState here ????????//
-		// make selectChannel to global state
-		// console.log(`+++++++++${selectChannel}+++++++++++++++`)
-		// this.setState({selectChannel});
 	}
 
 	render(){

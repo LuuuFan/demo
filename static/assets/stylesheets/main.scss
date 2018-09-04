@@ -37,6 +37,7 @@ button{
 
 .img-group{
   overflow: auto;
+  padding: 30px;
 	.img-container{
     float: left;
 		width: 45%;
@@ -113,7 +114,7 @@ button{
       transition: transform .8s;
       position: relative;
       .color-options{
-        padding: 20px;
+        padding: 30px;
         li{
           float: left;
           height: 20px;
@@ -186,12 +187,40 @@ button{
     }
     .tab-content>div{
       height: 92%;
-      margin: 30px;
       // min-width: 210px;
       // padding: 15px;
       text-align: center;
       // transform: translateY(400px);
       // transition: transform .8s;
+      .text-add-shortcut{
+        border-bottom: 1px solid lightgray;
+        margin-bottom: 30px;
+        ul{
+          li{
+            cursor: pointer;
+            padding: 15px;
+          }
+          li:hover{
+            box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+            background-color: $gray;
+          }
+          .heading{
+            font-weight: 900;
+            font-size: 40px;
+            font-family: Verdana;
+          }
+          .subheading{
+            font-weight: bold;
+            font-size: 28px;
+            font-family: Georgia;
+          }
+          .bodytext{
+            font-size: 20px;
+            font-family: Arial;
+          }
+        }
+      }
+
       button{
         margin-top: 20px;
       }
@@ -213,6 +242,7 @@ button{
       }
       #shapes-list{
         margin-bottom: 20px;
+        padding: 0 30px;
         li{
           float: left;
           width: 85px;
@@ -301,19 +331,19 @@ button{
 
 
       textarea{
-        padding: 8px;
+        padding: 15px;
         border: 1px solid lightgray;
         border-radius: 4px;
-        width: 95%;
+        width: 70%;
         min-height: 200px;
-        margin: 10px auto;
+        margin: 20px auto;
         resize: vertical;
         text-align: left;
       }
 
       .form-inline{
         display: flex;
-        padding: 0 20px;
+        padding: 0 40px;
         align-items:center;
         margin-bottom: 15px;
         min-height: 35px;

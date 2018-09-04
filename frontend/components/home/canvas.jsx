@@ -12,7 +12,7 @@ class Canvas extends React.Component{
 	constructor(){
 		super();
 		this.state = {
-			active: 'Image',
+			active: 'Text',
 			textSize: '24',
 			canvas: {},
 			shapeColor: '#000000',
@@ -109,9 +109,6 @@ class Canvas extends React.Component{
 	}
 
 	scroll(id){
-		console.log('~~~~~~~~~~~~~~~~')
-		console.log($(`#${id}`).offset().top);
-		console.log(id)
 		$('.canvas-area').scrollTo(`#${id}`);
 		// $('.canvas-area').animate({
 		// 	scrollTop: $(`#${id}`).offset().top,
@@ -181,7 +178,6 @@ class Canvas extends React.Component{
 			return;
 		} else {
 			this.setState({[type]: e.target.options[e.target.options.selectedIndex].value});
-			// this.setState({[type]: e.target.options[e.target.options.selectedIndex].textContent});
 		}
 		const activeObject = this.state.selectedCanvas.getActiveObject();
 		if (activeObject) {
@@ -316,6 +312,9 @@ class Canvas extends React.Component{
 		}
 	}
 
+	addText(type){
+		canvasUtil.addText(this.state.selectedCanvas, type);
+	}
 
 
 	render(){
@@ -382,7 +381,7 @@ class Canvas extends React.Component{
 								<label htmlFor="shape-color">Color</label>
 								<select className="form-control" id="shape-color" onChange={(e)=>this.selectColor(e, 'shapeColor')} style={{'backgroundColor': `${this.state.shapeColor}`}}>
 									{colorOptions.map((color, idx) => <option key={idx} style={{'backgroundColor':`${color}`}} value={color} ></option>)}
-									{/*
+									{/* Old color option hard code
 										<option value="black">Black</option>
 										<option value="red">Red</option>
 										<option value="orange">Orange</option>
@@ -424,7 +423,7 @@ class Canvas extends React.Component{
 		    	{this.state.active === 'Dialog' ? 
 			    	<div id="dialog" role="tabpanel" aria-labelledby='dialog-button'>
 							<h2> </h2>
-		        	<ol id="shapes-list">
+		        	<ol id="shapes-list" className='group'>
 								<li className={`shapes-item ${this.state.selectedDialog === 'dialog_1' ? 'ui-selected' : ''}`} id="dialog_1" onClick={(e)=>this.changeShape(e, 'selectedDialog')}>
 								  <img src="static/assets/images/dialog_1.png" />
 								</li>
@@ -444,11 +443,18 @@ class Canvas extends React.Component{
 		    	{this.state.active === 'Text' ? 
 		        <div id="text" role="tabpanel" aria-labelledby="text-button">
 		        	<h2> </h2>
+		        	<div className='text-add-shortcut'>
+		        		<ul>
+				        	<li className='heading' onClick={()=>this.addText('heading')}>Add heading</li>
+				        	<li className='subheading' onClick={()=>this.addText('subheading')}>Add Subheading</li>
+				        	<li className='bodytext' onClick={()=>this.addText('bodytext')}>Add body text</li>
+		        		</ul>
+		        	</div>
 							<div className="form-inline">
 								<label htmlFor="text-color">Color: </label>
 								<select className="form-control" id="text-color" onChange={(e)=>this.selectColor(e, 'textColor')} style={{'backgroundColor': `${this.state.textColor}`}}>
 									{colorOptions.map((color, idx) => <option key={idx} style={{'backgroundColor':`${color}`}} value={color} ></option>)}
-									{/*
+									{/* Old color option hard code
 									  <option value="black">Black</option>
 									  <option value="red">Red</option>
 									  <option value="orange">Orange</option>
