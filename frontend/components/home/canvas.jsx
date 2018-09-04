@@ -12,7 +12,7 @@ class Canvas extends React.Component{
 	constructor(){
 		super();
 		this.state = {
-			active: 'Text',
+			active: 'Shapes',
 			textSize: '24',
 			canvas: {},
 			shapeColor: '#000000',
@@ -225,6 +225,7 @@ class Canvas extends React.Component{
 	isShape(activeObj){
 		return activeObj && (activeObj.type === 'circle' || 
 													activeObj.type === 'rect' || 
+													activeObj.type === 'triangle' ||
 													activeObj.type === 'polyline' ||
 													activeObj.type === 'polygon' ||
 													activeObj.type === 'line')
@@ -388,6 +389,9 @@ class Canvas extends React.Component{
 								<li className={`shapes-item ${this.state.selectedShape === 'star' ? 'ui-selected' : ''}`} id="star" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 								  <img src="static/assets/images/star.png" />
 								</li>
+								<li className={`shapes-item ${this.state.selectedShape === 'triangle' ? 'ui-selected' : ''}`} id="triangle" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
+								  <img src="static/assets/images/triangle.png" />
+								</li>
 							</ol>
 							<div className="form-inline">
 								<label htmlFor="shape-color">Color</label>
@@ -462,6 +466,7 @@ class Canvas extends React.Component{
 				        	<li className='bodytext' onClick={()=>this.addText('bodytext')}>Add body text</li>
 		        		</ul>
 		        	</div>
+		        	<h2>{this.state.activeObj && this.state.activeObj.type==='i-text' ? 'Change Style' : 'Customize Text'}</h2>
 							<div className="form-inline">
 								<label htmlFor="text-color">Color: </label>
 								<select className="form-control" id="text-color" onChange={(e)=>this.selectColor(e, 'textColor')} style={{'backgroundColor': `${this.state.textColor}`}}>

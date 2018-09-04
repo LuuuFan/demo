@@ -7,7 +7,7 @@ export const addShape = (selectedShape, canvas) => {
   let color = $(`#shape-color`).val();
   let opacity = parseFloat($(`#shape-opacity`).val());
   let fill = $('#shape-fill input').prop('checked') ? color : 'transparent';
-  let hasBorder = $('#shape-fill input').prop('checked') ? false : true;
+  // let hasBorder = $('#shape-fill input').prop('checked') ? false : true;
   switch (selectedShape) {
     case "circle":
       let circle = new fabric.Circle({
@@ -17,7 +17,7 @@ export const addShape = (selectedShape, canvas) => {
         fill: fill,
         stroke: color,
         strokeWidth: 3,
-        opacity
+        opacity,
       });
       canvas.add(circle);
       canvas.setActiveObject(circle);
@@ -53,6 +53,21 @@ export const addShape = (selectedShape, canvas) => {
       break;
     case "star":
       addStar(canvas, color, fill, opacity);
+      break;
+    case "triangle":
+      let triangle = new fabric.Triangle({
+        left: 50,
+        top: 50,
+        fill,
+        width: 50,
+        height: 50,
+        stroke: color,
+        strokeWidth: 3,
+        opacity,
+      });
+      canvas.add(triangle);
+      canvas.setActiveObject(triangle);
+      break;
     default:
       return false;
   }
@@ -132,6 +147,7 @@ const addArrow = (canvas, color, fill, opacity) => {
 
 const addStar = (canvas, color, fill, opacity) => {
   const points = starPolygonPoints(5,50,25);
+  console.log(points)
   const star = new fabric.Polygon(points, {
     stroke: color,
     left: 100,

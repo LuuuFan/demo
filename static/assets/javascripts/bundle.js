@@ -8386,7 +8386,7 @@ var addShape = exports.addShape = function addShape(selectedShape, canvas) {
   var color = $('#shape-color').val();
   var opacity = parseFloat($('#shape-opacity').val());
   var fill = $('#shape-fill input').prop('checked') ? color : 'transparent';
-  var hasBorder = $('#shape-fill input').prop('checked') ? false : true;
+  // let hasBorder = $('#shape-fill input').prop('checked') ? false : true;
   switch (selectedShape) {
     case "circle":
       var circle = new fabric.Circle({
@@ -8432,6 +8432,21 @@ var addShape = exports.addShape = function addShape(selectedShape, canvas) {
       break;
     case "star":
       addStar(canvas, color, fill, opacity);
+      break;
+    case "triangle":
+      var triangle = new fabric.Triangle({
+        left: 50,
+        top: 50,
+        fill: fill,
+        width: 50,
+        height: 50,
+        stroke: color,
+        strokeWidth: 3,
+        opacity: opacity
+      });
+      canvas.add(triangle);
+      canvas.setActiveObject(triangle);
+      break;
     default:
       return false;
   }
@@ -8502,6 +8517,7 @@ var addArrow = function addArrow(canvas, color, fill, opacity) {
 
 var addStar = function addStar(canvas, color, fill, opacity) {
   var points = starPolygonPoints(5, 50, 25);
+  console.log(points);
   var star = new fabric.Polygon(points, {
     stroke: color,
     left: 100,
@@ -35655,7 +35671,7 @@ var Canvas = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (Canvas.__proto__ || Object.getPrototypeOf(Canvas)).call(this));
 
 		_this.state = {
-			active: 'Text',
+			active: 'Shapes',
 			textSize: '24',
 			canvas: {},
 			shapeColor: '#000000',
@@ -35885,7 +35901,7 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'isShape',
 		value: function isShape(activeObj) {
-			return activeObj && (activeObj.type === 'circle' || activeObj.type === 'rect' || activeObj.type === 'polyline' || activeObj.type === 'polygon' || activeObj.type === 'line');
+			return activeObj && (activeObj.type === 'circle' || activeObj.type === 'rect' || activeObj.type === 'triangle' || activeObj.type === 'polyline' || activeObj.type === 'polygon' || activeObj.type === 'line');
 		}
 	}, {
 		key: 'groupItems',
@@ -36153,6 +36169,13 @@ var Canvas = function (_React$Component) {
 											return _this4.changeShape(e, 'selectedShape');
 										} },
 									_react2.default.createElement('img', { src: 'static/assets/images/star.png' })
+								),
+								_react2.default.createElement(
+									'li',
+									{ className: 'shapes-item ' + (this.state.selectedShape === 'triangle' ? 'ui-selected' : ''), id: 'triangle', onClick: function onClick(e) {
+											return _this4.changeShape(e, 'selectedShape');
+										} },
+									_react2.default.createElement('img', { src: 'static/assets/images/triangle.png' })
 								)
 							),
 							_react2.default.createElement(
@@ -36319,6 +36342,11 @@ var Canvas = function (_React$Component) {
 										'Add body text'
 									)
 								)
+							),
+							_react2.default.createElement(
+								'h2',
+								null,
+								this.state.activeObj && this.state.activeObj.type === 'i-text' ? 'Change Style' : 'Customize Text'
 							),
 							_react2.default.createElement(
 								'div',
