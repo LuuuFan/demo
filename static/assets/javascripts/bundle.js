@@ -35651,6 +35651,7 @@ var Canvas = function (_React$Component) {
 			canvas: {},
 			shapeColor: '#000000',
 			textColor: '#000000',
+			textBgroundColor: '#ffffff',
 			backgroundColor: 'lightgray',
 			selectedShape: 'circle',
 			selectedDialog: 'dialog_1',
@@ -35833,6 +35834,8 @@ var Canvas = function (_React$Component) {
 			if (activeObject) {
 				if (this.state.selectedShape === activeObject.type || type === 'textColor' && activeObject.type === 'i-text' || this.state.selectedShape === 'star' && activeObject.type === 'polygon') {
 					canvasUtil.changeColor(this.state.selectedCanvas, activeObject, e.target.options[e.target.options.selectedIndex].value);
+				} else if (type === 'textBgroundColor') {
+					canvasUtil.changeTextStyle(activeObject, this.state.selectedCanvas, { textBackgroundColor: e.target.options[e.target.options.selectedIndex].value });
 				}
 			}
 		}
@@ -36373,6 +36376,24 @@ var Canvas = function (_React$Component) {
 									'Size(px): \xA0 '
 								),
 								_react2.default.createElement('input', { id: 'text-size', type: 'number', step: '1', min: '1', max: '50', value: this.state.textSize, onChange: this.handleInput() })
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'form-inline' },
+								_react2.default.createElement(
+									'label',
+									{ htmlFor: 'text-bground-color' },
+									'Bground Color:'
+								),
+								_react2.default.createElement(
+									'select',
+									{ className: 'form-control', id: 'text-bground-color', onChange: function onChange(e) {
+											return _this4.selectColor(e, 'textBgroundColor');
+										}, style: { 'backgroundColor': '' + this.state.textBgroundColor } },
+									colorOptions.map(function (color, idx) {
+										return _react2.default.createElement('option', { key: idx, style: { 'backgroundColor': '' + color }, value: color });
+									})
+								)
 							),
 							_react2.default.createElement(
 								'div',

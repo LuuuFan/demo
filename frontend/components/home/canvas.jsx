@@ -17,6 +17,7 @@ class Canvas extends React.Component{
 			canvas: {},
 			shapeColor: '#000000',
 			textColor: '#000000',
+			textBgroundColor: '#ffffff',
 			backgroundColor: 'lightgray',
 			selectedShape: 'circle',
 			selectedDialog: 'dialog_1',
@@ -185,6 +186,8 @@ class Canvas extends React.Component{
 					(this.state.selectedShape === 'star' && activeObject.type === 'polygon')
 				) {
 				canvasUtil.changeColor(this.state.selectedCanvas, activeObject, e.target.options[e.target.options.selectedIndex].value);
+			} else if (type === 'textBgroundColor') {
+				canvasUtil.changeTextStyle(activeObject, this.state.selectedCanvas, {textBackgroundColor: e.target.options[e.target.options.selectedIndex].value});
 			}
 		}
 	}
@@ -481,6 +484,12 @@ class Canvas extends React.Component{
 							<div className="form-inline">
 								<label htmlFor="text-style">Size(px): &nbsp; </label>
 								<input id="text-size" type="number" step="1" min="1" max="50" value={this.state.textSize} onChange={this.handleInput()}/>
+							</div>
+							<div className='form-inline'>
+								<label htmlFor='text-bground-color'>Bground Color:</label>
+								<select className="form-control" id="text-bground-color" onChange={(e)=>this.selectColor(e, 'textBgroundColor')} style={{'backgroundColor': `${this.state.textBgroundColor}`}}>
+									{colorOptions.map((color, idx) => <option key={idx} style={{'backgroundColor':`${color}`}} value={color} ></option>)}
+								</select>
 							</div>
 							<div id="button-wrapper">
 								<button type="button" id="addText" onClick={()=>canvasUtil.addText(this.state.selectedCanvas)}>Add Text</button>
