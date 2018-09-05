@@ -2,6 +2,8 @@ import {connect} from 'react-redux';
 import {createUser, createSession} from '../../actions/session';
 import SessionForm from './session_form';
 import {clearError} from '../../actions/error';
+import { withAuth } from '@okta/okta-react';
+
 
 const mapStateToProps = (state, ownProps) => {
   let formType = ownProps.match.path === '/signup' ? 'signup' : 'login';

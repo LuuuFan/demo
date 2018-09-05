@@ -1,7 +1,7 @@
 import React from 'react';
+import { withAuth } from '@okta/okta-react';
 
-
-class SessionForm extends React.Component {
+export default withAuth(class SessionForm extends React.Component {
 	constructor(){
 		super();
 		this.state = {
@@ -9,7 +9,12 @@ class SessionForm extends React.Component {
 			password:'',
 			usernameError: '',
 			passwordError: '',
+			authenticated: null,
 		};
+		// this.checkAuthentication = this.checkAuthentication.bind(this);
+  //   this.checkAuthentication();
+  //   this.login = this.login.bind(this);
+  //   this.logout = this.logout.bind(this);
 	}
 
 	handleInput(type){
@@ -17,6 +22,27 @@ class SessionForm extends React.Component {
 			this.setState({[type]: e.target.value, [`${type}Error`]: ''});
 		};
 	}
+
+	 // async checkAuthentication() {
+  //   const authenticated = await this.props.auth.isAuthenticated();
+  //   if (authenticated !== this.state.authenticated) {
+  //     this.setState({ authenticated });
+  //   }
+  // }
+
+  componentDidUpdate() {
+    // this.checkAuthentication();
+  }
+
+  // async login() {
+  //   // Redirect to '/' after login
+  //   this.props.login('/');
+  // }
+
+  // async logout() {
+  //   // Redirect to '/' after logout
+  //   this.props.logout('/login');
+  // }
 
 
 	handleSubmit(e){
@@ -58,9 +84,9 @@ class SessionForm extends React.Component {
 				<h2>{text}</h2>
 				<div className='session-form'>
 					{currentUser && currentUser.message && currentUser.message.startsWith('User') ? 
-					<div className='notification'>
-						<span>{currentUser.message}, please login</span>
-					</div> : ""}
+						<div className='notification'>
+							<span>{currentUser.message}, please login</span>
+						</div> : ""}
 					{error.error ? 
 						<div className='alert alert-danger'>
 							<span>{error.error}</span>
@@ -92,6 +118,6 @@ class SessionForm extends React.Component {
 			</div>
 		);
 	}
-}
+});
 
-export default SessionForm;
+// export default SessionForm;
