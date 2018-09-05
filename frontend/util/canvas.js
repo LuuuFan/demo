@@ -86,12 +86,13 @@ export const addShape = (selectedShape, canvas) => {
         scaleY: scale, 
         fill,
         stroke: color,
-        strokeWidth: 3,
+        strokeWidth: 10,
         opacity,
       })
       canvas.add(heart);
       canvas.renderAll();
       canvas.setActiveObject(heart);
+      break;
     case "hexagon":
       addHexagon(canvas, color, fill, opacity);
       break;

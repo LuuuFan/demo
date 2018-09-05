@@ -8464,12 +8464,13 @@ var addShape = exports.addShape = function addShape(selectedShape, canvas) {
         scaleY: scale,
         fill: fill,
         stroke: color,
-        strokeWidth: 3,
+        strokeWidth: 10,
         opacity: opacity
       });
       canvas.add(heart);
       canvas.renderAll();
       canvas.setActiveObject(heart);
+      break;
     case "hexagon":
       addHexagon(canvas, color, fill, opacity);
       break;
