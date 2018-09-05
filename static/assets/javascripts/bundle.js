@@ -8405,8 +8405,8 @@ var addShape = exports.addShape = function addShape(selectedShape, canvas) {
       var square = new fabric.Rect({
         left: 50,
         top: 50,
-        width: 25,
-        height: 25,
+        width: 50,
+        height: 50,
         fill: fill,
         stroke: color,
         strokeWidth: 3,
@@ -8446,6 +8446,32 @@ var addShape = exports.addShape = function addShape(selectedShape, canvas) {
       });
       canvas.add(triangle);
       canvas.setActiveObject(triangle);
+      break;
+    case "heart":
+      var heart = new fabric.Path('M 272.70141,238.71731 \
+        C 206.46141,238.71731 152.70146,292.4773 152.70146,358.71731  \
+        C 152.70146,493.47282 288.63461,528.80461 381.26391,662.02535 \
+        C 468.83815,529.62199 609.82641,489.17075 609.82641,358.71731 \
+        C 609.82641,292.47731 556.06651,238.7173 489.82641,238.71731  \
+        C 441.77851,238.71731 400.42481,267.08774 381.26391,307.90481 \
+        C 362.10311,267.08773 320.74941,238.7173 272.70141,238.71731  \
+        z ');
+      var scale = 100 / heart.width;
+      heart.set({
+        left: 50,
+        top: 50,
+        scaleX: scale,
+        scaleY: scale,
+        fill: fill,
+        stroke: color,
+        strokeWidth: 3,
+        opacity: opacity
+      });
+      canvas.add(heart);
+      canvas.renderAll();
+      canvas.setActiveObject(heart);
+    case "hexagon":
+      addHexagon(canvas, color, fill, opacity);
       break;
     default:
       return false;
@@ -8517,7 +8543,6 @@ var addArrow = function addArrow(canvas, color, fill, opacity) {
 
 var addStar = function addStar(canvas, color, fill, opacity) {
   var points = starPolygonPoints(5, 50, 25);
-  console.log(points);
   var star = new fabric.Polygon(points, {
     stroke: color,
     left: 100,
@@ -8550,6 +8575,35 @@ var starPolygonPoints = function starPolygonPoints(spikeCount, outerRadius, inne
     y = cy + Math.sin(angle) * innerRadius;
     points.push({ x: x, y: y });
     angle += sweep;
+  }
+  return points;
+};
+
+var addHexagon = function addHexagon(canvas, color, fill, opacity) {
+  var points = hexagonPoints(6, 30);
+  var hexagon = new fabric.Polygon(points, {
+    stroke: color,
+    left: 150,
+    top: 150,
+    strokeWidth: 3,
+    strokeLineJoin: 'bevil',
+    fill: fill,
+    opacity: opacity
+  }, false);
+  canvas.add(hexagon);
+  canvas.renderAll();
+  canvas.setActiveObject(hexagon);
+};
+
+var hexagonPoints = function hexagonPoints(sideCount, radius) {
+  var sweep = Math.PI * 2 / sideCount;
+  var cx = radius;
+  var cy = radius;
+  var points = [];
+  for (var i = 0; i < sideCount; i++) {
+    var x = cx + radius * Math.cos(i * sweep);
+    var y = cy + radius * Math.sin(i * sweep);
+    points.push({ x: x, y: y });
   }
   return points;
 };
@@ -35860,7 +35914,7 @@ var Canvas = function (_React$Component) {
 			}
 			var activeObject = this.state.selectedCanvas.getActiveObject();
 			if (activeObject) {
-				if (this.state.selectedShape === activeObject.type || type === 'textColor' && activeObject.type === 'i-text' || this.state.selectedShape === 'star' && activeObject.type === 'polygon') {
+				if (this.state.selectedShape === activeObject.type || type === 'textColor' && activeObject.type === 'i-text' || this.state.selectedShape === 'star' && activeObject.type === 'polygon' || this.state.selectedShape === 'hexagon' && activeObject.type === 'polygon' || this.state.selectedShape === 'heart' && activeObject.type === 'path') {
 					canvasUtil.changeColor(this.state.selectedCanvas, activeObject, e.target.options[e.target.options.selectedIndex].value);
 				} else if (type === 'textBgroundColor') {
 					canvasUtil.changeTextStyle(activeObject, this.state.selectedCanvas, { textBackgroundColor: e.target.options[e.target.options.selectedIndex].value });
@@ -35901,7 +35955,7 @@ var Canvas = function (_React$Component) {
 	}, {
 		key: 'isShape',
 		value: function isShape(activeObj) {
-			return activeObj && (activeObj.type === 'circle' || activeObj.type === 'rect' || activeObj.type === 'triangle' || activeObj.type === 'polyline' || activeObj.type === 'polygon' || activeObj.type === 'line');
+			return activeObj && (activeObj.type === 'circle' || activeObj.type === 'rect' || activeObj.type === 'triangle' || activeObj.type === 'polyline' || activeObj.type === 'polygon' || activeObj.type === 'path' || activeObj.type === 'line');
 		}
 	}, {
 		key: 'groupItems',
@@ -36176,6 +36230,20 @@ var Canvas = function (_React$Component) {
 											return _this4.changeShape(e, 'selectedShape');
 										} },
 									_react2.default.createElement('img', { src: 'static/assets/images/triangle.png' })
+								),
+								_react2.default.createElement(
+									'li',
+									{ className: 'shapes-item ' + (this.state.selectedShape === 'heart' ? 'ui-selected' : ''), id: 'heart', onClick: function onClick(e) {
+											return _this4.changeShape(e, 'selectedShape');
+										} },
+									_react2.default.createElement('img', { src: 'static/assets/images/heart.png' })
+								),
+								_react2.default.createElement(
+									'li',
+									{ className: 'shapes-item ' + (this.state.selectedShape === 'hexagon' ? 'ui-selected' : ''), id: 'hexagon', onClick: function onClick(e) {
+											return _this4.changeShape(e, 'selectedShape');
+										} },
+									_react2.default.createElement('img', { src: 'static/assets/images/hexagon.png' })
 								)
 							),
 							_react2.default.createElement(

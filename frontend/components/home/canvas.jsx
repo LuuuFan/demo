@@ -186,7 +186,9 @@ class Canvas extends React.Component{
 		if (activeObject) {
 			if (this.state.selectedShape === activeObject.type || 
 					(type === 'textColor' && activeObject.type === 'i-text') ||
-					(this.state.selectedShape === 'star' && activeObject.type === 'polygon')
+					(this.state.selectedShape === 'star' && activeObject.type === 'polygon') ||
+					(this.state.selectedShape === 'hexagon' && activeObject.type === 'polygon') ||
+					(this.state.selectedShape === 'heart' && activeObject.type === 'path') 
 				) {
 				canvasUtil.changeColor(this.state.selectedCanvas, activeObject, e.target.options[e.target.options.selectedIndex].value);
 			} else if (type === 'textBgroundColor') {
@@ -228,6 +230,7 @@ class Canvas extends React.Component{
 													activeObj.type === 'triangle' ||
 													activeObj.type === 'polyline' ||
 													activeObj.type === 'polygon' ||
+													activeObj.type === 'path' ||
 													activeObj.type === 'line')
 	}
 
@@ -391,6 +394,12 @@ class Canvas extends React.Component{
 								</li>
 								<li className={`shapes-item ${this.state.selectedShape === 'triangle' ? 'ui-selected' : ''}`} id="triangle" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
 								  <img src="static/assets/images/triangle.png" />
+								</li>
+								<li className={`shapes-item ${this.state.selectedShape === 'heart' ? 'ui-selected' : ''}`} id="heart" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
+								  <img src="static/assets/images/heart.png" />
+								</li>
+								<li className={`shapes-item ${this.state.selectedShape === 'hexagon' ? 'ui-selected' : ''}`} id="hexagon" onClick={(e)=>this.changeShape(e, 'selectedShape')}>
+								  <img src="static/assets/images/hexagon.png" />
 								</li>
 							</ol>
 							<div className="form-inline">

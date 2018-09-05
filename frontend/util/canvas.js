@@ -26,8 +26,8 @@ export const addShape = (selectedShape, canvas) => {
       let square = new fabric.Rect({
         left: 50,
         top: 50,
-        width: 25,
-        height: 25,
+        width: 50,
+        height: 50,
         fill: fill,
         stroke: color,
         strokeWidth: 3,
@@ -67,6 +67,33 @@ export const addShape = (selectedShape, canvas) => {
       });
       canvas.add(triangle);
       canvas.setActiveObject(triangle);
+      break;
+    case "heart":
+      const heart = new fabric.Path('M 272.70141,238.71731 \
+        C 206.46141,238.71731 152.70146,292.4773 152.70146,358.71731  \
+        C 152.70146,493.47282 288.63461,528.80461 381.26391,662.02535 \
+        C 468.83815,529.62199 609.82641,489.17075 609.82641,358.71731 \
+        C 609.82641,292.47731 556.06651,238.7173 489.82641,238.71731  \
+        C 441.77851,238.71731 400.42481,267.08774 381.26391,307.90481 \
+        C 362.10311,267.08773 320.74941,238.7173 272.70141,238.71731  \
+        z '
+      );
+      const scale = 100 / heart.width;
+      heart.set({
+        left: 50, 
+        top: 50, 
+        scaleX: scale, 
+        scaleY: scale, 
+        fill,
+        stroke: color,
+        strokeWidth: 3,
+        opacity,
+      })
+      canvas.add(heart);
+      canvas.renderAll();
+      canvas.setActiveObject(heart);
+    case "hexagon":
+      addHexagon(canvas, color, fill, opacity);
       break;
     default:
       return false;
@@ -147,7 +174,6 @@ const addArrow = (canvas, color, fill, opacity) => {
 
 const addStar = (canvas, color, fill, opacity) => {
   const points = starPolygonPoints(5,50,25);
-  console.log(points)
   const star = new fabric.Polygon(points, {
     stroke: color,
     left: 100,
@@ -183,6 +209,35 @@ const starPolygonPoints = (spikeCount, outerRadius, innerRadius) => {
   }
   return (points);
 };
+
+const addHexagon = (canvas, color, fill, opacity) => {
+  const points = hexagonPoints(6, 30);
+  const hexagon = new fabric.Polygon(points, {
+    stroke: color,
+    left: 150,
+    top: 150,
+    strokeWidth: 3,
+    strokeLineJoin: 'bevil',
+    fill,
+    opacity,
+  }, false);
+  canvas.add(hexagon);
+  canvas.renderAll();
+  canvas.setActiveObject(hexagon);
+}
+
+const hexagonPoints = (sideCount, radius) => {
+  let sweep=Math.PI*2/sideCount;
+  let cx=radius;
+  let cy=radius;
+  let points=[];
+  for(let i=0;i<sideCount;i++){
+    let x=cx+radius*Math.cos(i*sweep);
+    let y=cy+radius*Math.sin(i*sweep);
+    points.push({x:x,y:y});
+  }
+  return(points);
+}
 
 export const addText = (canvas, type) => {
   let style, size, top, content;
