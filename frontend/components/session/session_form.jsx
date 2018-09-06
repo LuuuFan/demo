@@ -1,7 +1,8 @@
 import React from 'react';
 // import 'babel-polyfill';
 import { withAuth } from '@okta/okta-react';
-import {initialOkta} from '../../util/okta_util';
+import {checkSession} from '../../util/okta_util';
+import {OKTA_CLIENT_ID} from '../../../config/key';
 
 class SessionForm extends React.Component {
 	constructor(){
@@ -25,9 +26,29 @@ class SessionForm extends React.Component {
 		};
 	}
 
+	initialOkta(){
+		let oktaSignIn = new OktaSignIn({
+		  baseUrl: "https://dev-772839.oktapreview.com",
+		  clientId: OKTA_CLIENT_ID,
+		  redirectUri: 'http://localhost:3000',
+		  authParams: {
+		    issuer: "https://dev-772839.oktapreview.com/oauth2/default",
+		    responseType: ['token', 'id_token'],
+		    display: 'json',
+		    scopes: ['openid', 'email', 'profile', 'address', 'phone'],
+		  }
+		});
+		this.props.receiveOktaSignIn(oktaSignIn);
+		return oktaSignIn;
+	};
+
 	componentDidMount(){
-		initialOkta();
-		this.checkAuthentication();
+		let oktaSignIn = this.initialOkta();
+		oktaSignIn.session.get((res) => {
+			debugger
+		})
+		// checkSession(oktaSignIn)
+		// this.checkAuthentication();
 	}
 
 	 async checkAuthentication() {
@@ -39,7 +60,7 @@ class SessionForm extends React.Component {
 
   componentDidUpdate() {
 		// initialOkta();
-    this.checkAuthentication();
+    // this.checkAuthentication();
   }
 
   async login() {

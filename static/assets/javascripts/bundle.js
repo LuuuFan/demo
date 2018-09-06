@@ -8178,7 +8178,7 @@ var getUserList = exports.getUserList = function getUserList(token) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.receiveOktaSignIn = exports.RECEIVE_OKTA_SIGNIN = undefined;
+exports.initialOkta = exports.receiveOktaSession = exports.receiveOktaToken = exports.receiveOktaSignIn = exports.RECEIVE_OKTA_SESSION = exports.RECEIVE_OKTA_TOKEN = exports.RECEIVE_OKTA_SIGNIN = undefined;
 
 var _okta_util = __webpack_require__(107);
 
@@ -8187,11 +8187,39 @@ var OktaUtil = _interopRequireWildcard(_okta_util);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var RECEIVE_OKTA_SIGNIN = exports.RECEIVE_OKTA_SIGNIN = 'RECEIVE_OKTA_SIGNIN';
+var RECEIVE_OKTA_TOKEN = exports.RECEIVE_OKTA_TOKEN = 'RECEIVE_OKTA_TOKEN';
+var RECEIVE_OKTA_SESSION = exports.RECEIVE_OKTA_SESSION = 'RECEIVE_OKTA_SESSION';
 
 var receiveOktaSignIn = exports.receiveOktaSignIn = function receiveOktaSignIn(okta) {
 	return {
 		type: RECEIVE_OKTA_SIGNIN,
 		okta: okta
+	};
+};
+
+var receiveOktaToken = exports.receiveOktaToken = function receiveOktaToken(accessToken, idToken) {
+	return {
+		type: RECEIVE_OKTA_TOKEN,
+		accessToken: accessToken,
+		idToken: idToken
+	};
+};
+
+var receiveOktaSession = exports.receiveOktaSession = function receiveOktaSession(session) {
+	return {
+		type: RECEIVE_OKTA_SESSION,
+		session: session
+	};
+};
+
+// cannot use this
+var initialOkta = exports.initialOkta = function initialOkta() {
+	return function (dispatch) {
+		return OktaUtil.initialOkta().then(function (res) {
+			debugger;
+		}).catch(function (err) {
+			debugger;
+		});
 	};
 };
 
@@ -8205,25 +8233,29 @@ var receiveOktaSignIn = exports.receiveOktaSignIn = function receiveOktaSignIn(o
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.initialOkta = undefined;
+exports.checkSession = undefined;
 
 var _key = __webpack_require__(205);
 
 var _okta = __webpack_require__(106);
 
-var initialOkta = exports.initialOkta = function initialOkta() {
+var initialOkta = function initialOkta() {
 	var oktaSignIn = new OktaSignIn({
 		baseUrl: "https://dev-772839.oktapreview.com",
 		clientId: _key.OKTA_CLIENT_ID,
+		redirectUri: 'http://localhost:3000',
 		authParams: {
 			issuer: "https://dev-772839.oktapreview.com/oauth2/default",
 			responseType: ['token', 'id_token'],
-			display: 'page'
+			display: 'json',
+			scopes: ['openid', 'email', 'profile', 'address', 'phone']
 		}
 	});
-
 	(0, _okta.receiveOktaSignIn)(oktaSignIn);
+	return oktaSignIn;
+};
 
+var checkSession = exports.checkSession = function checkSession(oktaSignIn) {
 	if (oktaSignIn.token.hasTokensInUrl()) {
 		oktaSignIn.token.parseTokensFromUrl(function success(res) {
 			// The tokens are returned in the order requested by `responseType` above
@@ -8255,6 +8287,10 @@ var initialOkta = exports.initialOkta = function initialOkta() {
 			oktaSignIn.renderEl({ el: '#okta-login-container' }, function success(res) {
 				// Nothing to do in this case, the widget will automatically redirect
 				// the user to Okta for authentication, then back to this page if successful
+				console.log('********************');
+				console.log(res);
+				localStorage.setItem('okta_token', JSON.stringify(res));
+				(0, _okta.receiveOktaToken)(res[0], res[1]);
 			}, function error(err) {
 				console.log('~~~~~~~~~~~~~~~~~~~');
 				// handle errors as needed
@@ -10075,6 +10111,8 @@ var _session_form2 = _interopRequireDefault(_session_form);
 
 var _error = __webpack_require__(16);
 
+var _okta = __webpack_require__(106);
+
 var _oktaReact = __webpack_require__(72);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -10096,6 +10134,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
     },
     clearError: function clearError() {
       return dispatch((0, _error.clearError)());
+    },
+    receiveOktaSignIn: function receiveOktaSignIn(okta) {
+      return dispatch((0, _okta.receiveOktaSignIn)(okta));
     }
   };
 };
@@ -36035,7 +36076,13 @@ var oktaReducer = function oktaReducer() {
 	var newState = void 0;
 	switch (action.type) {
 		case _okta.RECEIVE_OKTA_SIGNIN:
-			return { okta: action.okta };
+			newState = Object.assign({}, state);
+			newState['okta'] = action.okta;
+			return newState;
+		case _okta.RECEIVE_OKTA_TOKEN:
+			newState = Object.assgin({}, state);
+			newState['accessToken'] = action.accessToken, newState['idToken'] = action.idToken;
+			return newState;
 		default:
 			return state;
 	}
@@ -38912,6 +38959,8 @@ var _oktaReact = __webpack_require__(72);
 
 var _okta_util = __webpack_require__(107);
 
+var _key = __webpack_require__(205);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -38960,10 +39009,31 @@ var SessionForm = function (_React$Component) {
 			};
 		}
 	}, {
+		key: 'initialOkta',
+		value: function initialOkta() {
+			var oktaSignIn = new OktaSignIn({
+				baseUrl: "https://dev-772839.oktapreview.com",
+				clientId: _key.OKTA_CLIENT_ID,
+				redirectUri: 'http://localhost:3000',
+				authParams: {
+					issuer: "https://dev-772839.oktapreview.com/oauth2/default",
+					responseType: ['token', 'id_token'],
+					display: 'json',
+					scopes: ['openid', 'email', 'profile', 'address', 'phone']
+				}
+			});
+			this.props.receiveOktaSignIn(oktaSignIn);
+			return oktaSignIn;
+		}
+	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			(0, _okta_util.initialOkta)();
-			this.checkAuthentication();
+			var oktaSignIn = this.initialOkta();
+			oktaSignIn.session.get(function (res) {
+				debugger;
+			});
+			// checkSession(oktaSignIn)
+			// this.checkAuthentication();
 		}
 	}, {
 		key: 'checkAuthentication',
@@ -39002,7 +39072,7 @@ var SessionForm = function (_React$Component) {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate() {
 			// initialOkta();
-			this.checkAuthentication();
+			// this.checkAuthentication();
 		}
 	}, {
 		key: 'login',
