@@ -90,8 +90,8 @@ class SessionForm extends React.Component {
 
 	componentDidMount(){
 		if (this.props.formType === 'login') {
-			if (this.props.oktaSignIn) {
-				this.checkOktaSession(this.props.oktaSignIn);
+			if (this.props.okta) {
+				this.checkOktaSession(this.props.okta);
 				console.log('~~~~~~~~~~~~~~~~~~~~~')
 			} else {
 				console.log('&&&&&&&&&&&&&&&&&&&&&&&&&')
@@ -113,9 +113,9 @@ class SessionForm extends React.Component {
   componentDidUpdate(prevProps, prevState) {
 		// initialOkta();
 		if (prevProps.formType !== this.props.formType && this.props.formType === 'login') {
-			if (this.props.oktaSignIn) {
+			if (this.props.okta) {
 				console.log('******************')
-				this.checkOktaSession(this.props.oktaSignIn);
+				this.checkOktaSession(this.props.okta);
 			} else {
 				console.log('++++++++++++++++++++++++++++')
 				const oktaSignIn = this.initialOkta();

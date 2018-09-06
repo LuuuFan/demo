@@ -8178,7 +8178,7 @@ var getUserList = exports.getUserList = function getUserList(token) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.initialOkta = exports.receiveOktaSession = exports.receiveOktaToken = exports.receiveOktaSignIn = exports.RECEIVE_OKTA_SESSION = exports.RECEIVE_OKTA_TOKEN = exports.RECEIVE_OKTA_SIGNIN = undefined;
+exports.initialOkta = exports.removeOktaSession = exports.receiveOktaSession = exports.receiveOktaToken = exports.receiveOktaSignIn = exports.REMOVE_OKTA_SESSION = exports.RECEIVE_OKTA_SESSION = exports.RECEIVE_OKTA_TOKEN = exports.RECEIVE_OKTA_SIGNIN = undefined;
 
 var _okta_util = __webpack_require__(107);
 
@@ -8189,6 +8189,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 var RECEIVE_OKTA_SIGNIN = exports.RECEIVE_OKTA_SIGNIN = 'RECEIVE_OKTA_SIGNIN';
 var RECEIVE_OKTA_TOKEN = exports.RECEIVE_OKTA_TOKEN = 'RECEIVE_OKTA_TOKEN';
 var RECEIVE_OKTA_SESSION = exports.RECEIVE_OKTA_SESSION = 'RECEIVE_OKTA_SESSION';
+var REMOVE_OKTA_SESSION = exports.REMOVE_OKTA_SESSION = 'REMOVE_OKTA_SESSION';
 
 var receiveOktaSignIn = exports.receiveOktaSignIn = function receiveOktaSignIn(okta) {
 	return {
@@ -8209,6 +8210,12 @@ var receiveOktaSession = exports.receiveOktaSession = function receiveOktaSessio
 	return {
 		type: RECEIVE_OKTA_SESSION,
 		session: session
+	};
+};
+
+var removeOktaSession = exports.removeOktaSession = function removeOktaSession() {
+	return {
+		type: REMOVE_OKTA_SESSION
 	};
 };
 
@@ -10123,7 +10130,7 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
     formType: formType,
     error: state.error,
     currentUser: state.session.currentUser,
-    oktaSignIn: state.okta.okta
+    okta: state.okta.okta
   };
 };
 
@@ -36094,6 +36101,12 @@ var oktaReducer = function oktaReducer() {
 			newState = Object.assign({}, state);
 			newState['session'] = action.session;
 			return newState;
+		case _okta.REMOVE_OKTA_SESSION:
+			newState = Object.assign({}, state);
+			delete newState['accessToken'];
+			delete newState['session'];
+			delete newState['idToken'];
+			return newState;
 		default:
 			return state;
 	}
@@ -38636,9 +38649,9 @@ var _session_form_container2 = _interopRequireDefault(_session_form_container);
 
 var _oktaReact = __webpack_require__(72);
 
-var _okta_callback = __webpack_require__(366);
+var _okta_container = __webpack_require__(367);
 
-var _okta_callback2 = _interopRequireDefault(_okta_callback);
+var _okta_container2 = _interopRequireDefault(_okta_container);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38665,7 +38678,7 @@ var App = function App() {
         _react2.default.createElement(_route_util.ProtectedRoute, { exact: true, path: '/', component: _home_container2.default }),
         _react2.default.createElement(_route_util.AuthRoute, { path: '/signup', component: _session_form_container2.default }),
         _react2.default.createElement(_route_util.AuthRoute, { path: '/login', component: _session_form_container2.default }),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/okta', component: _okta_callback2.default }),
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/okta', component: _okta_container2.default }),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/implicit/callback', component: _oktaReact.ImplicitCallback })
       )
     )
@@ -38684,7 +38697,7 @@ exports.default = App;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ProtectedRoute = exports.AuthRoute = undefined;
+exports.ProtectedRoute = exports.OktaRoute = exports.AuthRoute = undefined;
 
 var _react = __webpack_require__(0);
 
@@ -38718,14 +38731,26 @@ var Protected = function Protected(_ref2) {
   });
 };
 
+var Okta = function Okta(_ref3) {
+  var Component = _ref3.component,
+      path = _ref3.path,
+      oktaLoggedIn = _ref3.oktaLoggedIn,
+      exact = _ref3.exact;
+  return _react2.default.createElement(_reactRouterDom.Route, { path: path, exact: exact, render: function render(props) {
+      return oktaLoggedIn ? _react2.default.createElement(Component, props) : _react2.default.createElement(_reactRouterDom.Redirect, { to: '/login' });
+    }
+  });
+};
+
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    loggedIn: Boolean(state.session.currentUser && state.session.currentUser['access-token'])
+    loggedIn: Boolean(state.session.currentUser && state.session.currentUser['access-token']),
+    oktaLoggedIn: Boolean(state.okta.accessToken && state.okta.idToken || state.okta.session)
   };
 };
 
 var AuthRoute = exports.AuthRoute = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, null)(Auth));
-
+var OktaRoute = exports.OktaRoute = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, null)(Okta));
 var ProtectedRoute = exports.ProtectedRoute = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, null)(Protected));
 
 /***/ }),
@@ -39084,8 +39109,8 @@ var SessionForm = function (_React$Component) {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
 			if (this.props.formType === 'login') {
-				if (this.props.oktaSignIn) {
-					this.checkOktaSession(this.props.oktaSignIn);
+				if (this.props.okta) {
+					this.checkOktaSession(this.props.okta);
 					console.log('~~~~~~~~~~~~~~~~~~~~~');
 				} else {
 					console.log('&&&&&&&&&&&&&&&&&&&&&&&&&');
@@ -39134,9 +39159,9 @@ var SessionForm = function (_React$Component) {
 		value: function componentDidUpdate(prevProps, prevState) {
 			// initialOkta();
 			if (prevProps.formType !== this.props.formType && this.props.formType === 'login') {
-				if (this.props.oktaSignIn) {
+				if (this.props.okta) {
 					console.log('******************');
-					this.checkOktaSession(this.props.oktaSignIn);
+					this.checkOktaSession(this.props.okta);
 				} else {
 					console.log('++++++++++++++++++++++++++++');
 					var oktaSignIn = this.initialOkta();
@@ -52324,7 +52349,50 @@ var sendService = exports.sendService = function sendService(data, token) {
 // dataType: 'html',
 
 /***/ }),
-/* 366 */
+/* 366 */,
+/* 367 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _reactRedux = __webpack_require__(17);
+
+var _okta = __webpack_require__(106);
+
+var _oktaReact = __webpack_require__(72);
+
+var _okta2 = __webpack_require__(368);
+
+var _okta3 = _interopRequireDefault(_okta2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(state) {
+	return {
+		okta: state.okta.okta,
+		accessToken: state.okta.accessToken,
+		idToken: state.okta.idToken,
+		session: state.okta.session
+	};
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	return {
+		removeOktaSession: function removeOktaSession() {
+			return dispatch((0, _okta.removeOktaSession)());
+		}
+	};
+};
+
+exports.default = (0, _oktaReact.withAuth)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_okta3.default));
+
+/***/ }),
+/* 368 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52342,6 +52410,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _oktaReact = __webpack_require__(72);
 
+var _key = __webpack_require__(205);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -52352,34 +52422,55 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-exports.default = (0, _oktaReact.withAuth)(function (_React$Component) {
-	_inherits(oktaCallback, _React$Component);
+var Okta = function (_React$Component) {
+	_inherits(Okta, _React$Component);
 
-	function oktaCallback() {
-		_classCallCheck(this, oktaCallback);
+	function Okta() {
+		_classCallCheck(this, Okta);
 
-		var _this = _possibleConstructorReturn(this, (oktaCallback.__proto__ || Object.getPrototypeOf(oktaCallback)).call(this));
+		var _this = _possibleConstructorReturn(this, (Okta.__proto__ || Object.getPrototypeOf(Okta)).call(this));
 
 		_this.state = {};
 		return _this;
 	}
 
-	_createClass(oktaCallback, [{
+	_createClass(Okta, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {}
+	}, {
+		key: 'initialOkta',
+		value: function initialOkta() {
+			var oktaSignIn = new OktaSignIn({
+				baseUrl: "https://dev-772839.oktapreview.com",
+				clientId: _key.OKTA_CLIENT_ID,
+				redirectUri: 'http://localhost:3000',
+				authParams: {
+					issuer: "https://dev-772839.oktapreview.com/oauth2/default",
+					responseType: ['token', 'id_token'],
+					display: 'json',
+					scopes: ['openid', 'email', 'profile', 'address', 'phone']
+				}
+			});
+			return oktaSignIn;
+		}
 	}, {
 		key: 'logout',
 		value: function () {
 			var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+				var res;
 				return regeneratorRuntime.wrap(function _callee$(_context) {
 					while (1) {
 						switch (_context.prev = _context.next) {
 							case 0:
-								// Redirect to '/' after logout
-								// this.props.logout('/login')
-								this.props.auth.logout('/login');
+								_context.next = 2;
+								return this.props.auth.logout('/login');
 
-							case 1:
+							case 2:
+								res = _context.sent;
+
+								this.props.removeOktaSession();
+
+							case 4:
 							case 'end':
 								return _context.stop();
 						}
@@ -52417,10 +52508,10 @@ exports.default = (0, _oktaReact.withAuth)(function (_React$Component) {
 		}
 	}]);
 
-	return oktaCallback;
-}(_react2.default.Component));
+	return Okta;
+}(_react2.default.Component);
 
-// export default oktaCallback;
+exports.default = Okta;
 
 /***/ })
 /******/ ]);

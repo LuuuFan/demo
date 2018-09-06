@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, Switch, Redirect, BrowserRouter as Router } from 'react-router-dom';
-import { AuthRoute, ProtectedRoute } from '../util/route_util';
+import { AuthRoute, ProtectedRoute, OktaRoute } from '../util/route_util';
 import HomeContainer from './home/home_container';
 import SessionFormContainer from './session/session_form_container';
 import { Security, ImplicitCallback  } from '@okta/okta-react';
-import oktaCallback from './okta_callback';
+import OKtaContainer from './okta/okta_container';
 
 const config = {
   issuer: 'https://dev-772839.oktapreview.com/oauth2/default',
@@ -23,7 +23,7 @@ const App = () => (
         <ProtectedRoute exact path='/' component = { HomeContainer } />
         <AuthRoute path='/signup' component={SessionFormContainer} />
         <AuthRoute path='/login' component={SessionFormContainer} />
-        <Route path='/okta' component={oktaCallback}/>
+        <Route path='/okta' component={OKtaContainer}/>
         <Route path='/implicit/callback' component={ImplicitCallback}/>
       </Security>
     </Switch>  

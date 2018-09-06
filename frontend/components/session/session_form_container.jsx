@@ -12,7 +12,7 @@ const mapStateToProps = (state, ownProps) => {
     formType,
     error: state.error,
     currentUser: state.session.currentUser,
-    oktaSignIn: state.okta.okta,
+    okta: state.okta.okta,
   });
 };
 

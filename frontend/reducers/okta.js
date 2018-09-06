@@ -1,4 +1,4 @@
-import {RECEIVE_OKTA_SIGNIN, RECEIVE_OKTA_TOKEN, RECEIVE_OKTA_SESSION} from '../actions/okta';
+import {RECEIVE_OKTA_SIGNIN, RECEIVE_OKTA_TOKEN, RECEIVE_OKTA_SESSION, REMOVE_OKTA_SESSION} from '../actions/okta';
 
 const oktaReducer = (state={}, action) => {
 	Object.freeze(state);
@@ -16,6 +16,12 @@ const oktaReducer = (state={}, action) => {
 		case RECEIVE_OKTA_SESSION:
 			newState = Object.assign({}, state);
 			newState['session'] = action.session;
+			return newState;
+		case REMOVE_OKTA_SESSION:
+			newState = Object.assign({}, state);
+			delete newState['accessToken'];
+			delete newState['session'];
+			delete newState['idToken'];
 			return newState;
 		default: 
 			return state;
