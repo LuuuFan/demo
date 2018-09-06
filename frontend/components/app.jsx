@@ -14,7 +14,7 @@ const config = {
 
 const App = () => (
   <div className = 'main'>
-    <Router>
+    <Switch>
       <Security 
         issuer={config.issuer}
         client_id={config.client_id}
@@ -23,9 +23,9 @@ const App = () => (
         <ProtectedRoute exact path='/' component = { HomeContainer } />
         <AuthRoute path='/signup' component={SessionFormContainer} />
         <AuthRoute path='/login' component={SessionFormContainer} />
-        <Route path='/implicit/callback' component={oktaCallback}/>
+        <Route path='/implicit/callback' component={ImplicitCallback}/>
       </Security>
-    </Router>  
+    </Switch>  
   </div>
 );
 

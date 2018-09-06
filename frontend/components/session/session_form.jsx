@@ -1,6 +1,7 @@
 import React from 'react';
-import 'babel-polyfill';
+// import 'babel-polyfill';
 import { withAuth } from '@okta/okta-react';
+import {initialOkta} from '../../util/okta_util';
 
 class SessionForm extends React.Component {
 	constructor(){
@@ -12,10 +13,10 @@ class SessionForm extends React.Component {
 			passwordError: '',
 			authenticated: null,
 		};
-		this.checkAuthentication = this.checkAuthentication.bind(this);
+		// this.checkAuthentication = this.checkAuthentication.bind(this);
     // this.checkAuthentication();
-    this.login = this.login.bind(this);
-    this.logout = this.logout.bind(this);
+ //    this.login = this.login.bind(this);
+ //    this.logout = this.logout.bind(this);
 	}
 
 	handleInput(type){
@@ -25,31 +26,32 @@ class SessionForm extends React.Component {
 	}
 
 	componentDidMount(){
-		this.checkAuthentication();
+		initialOkta();
+		// this.checkAuthentication();
 	}
 
-	 async checkAuthentication() {
-    const authenticated = await this.props.auth.isAuthenticated();
-    if (authenticated !== this.state.authenticated) {
-      this.setState({ authenticated });
-    }
-  }
+	 // async checkAuthentication() {
+  //   const authenticated = await this.props.auth.isAuthenticated();
+  //   if (authenticated !== this.state.authenticated) {
+  //     this.setState({ authenticated });
+  //   }
+  // }
 
   componentDidUpdate() {
-    this.checkAuthentication();
+    // this.checkAuthentication();
   }
 
-  async login() {
-    // Redirect to '/' after login
-    // this.props.login('/')
-    this.props.auth.login('/');
-  }
+  // async login() {
+  //   // Redirect to '/' after login
+  //   // this.props.login('/')
+  //   this.props.auth.login('/');
+  // }
 
-  async logout() {
-    // Redirect to '/' after logout
-    // this.props.logout('/login')
-    this.props.auth.logout('/login');
-  }
+  // async logout() {
+  //   // Redirect to '/' after logout
+  //   // this.props.logout('/login')
+  //   this.props.auth.logout('/login');
+  // }
 
 
 	handleSubmit(e){
@@ -123,8 +125,11 @@ class SessionForm extends React.Component {
 					}
 				</div>
 				<div className='okta-test'>
-					<button onClick={this.logout}>Logout</button>
-					<button onClick={this.login}>Login</button>
+					{/*
+						<button onClick={this.logout}>Logout</button>
+						<button onClick={this.login}>Login</button>
+					*/}
+					<div id="okta-login-container"></div>
 				</div>
 			</div>
 		);

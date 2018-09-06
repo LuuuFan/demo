@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8'>
+		<title>Experiments</title>
+
+		<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
+		<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+		<!-- <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.3.6/fabric.min.js'></script> -->
+		<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.3.6/fabric.js'></script>
+		<!-- <script src=“//cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/2.1.2/jquery.scrollTo.min.js”></script> -->
+		<script type="text/javascript" src="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.6.0/js/okta-sign-in.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.6.0/css/okta-sign-in.min.css"/>
+		<link type="text/css" rel="stylesheet" href="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.6.0/css/okta-theme.css"/>
+	</head>
+	<body>
+		<div id='root'></div>
+		<div id="okta-login-container"></div>
+
+		<script type="text/javascript">
+		  var oktaSignIn = new OktaSignIn({
+		    baseUrl: "https://dev-772839.oktapreview.com",
+		    clientId: "0oag546kkrj3ZXEeW0h7",
+		    authParams: {
+		      issuer: "https://dev-772839.oktapreview.com/oauth2/default",
+		      responseType: ['token', 'id_token'],
+		      display: 'page'
+		    }
+		  });
+		  if (oktaSignIn.token.hasTokensInUrl()) {
+		    oktaSignIn.token.parseTokensFromUrl(
+		      function success(res) {
+		        // The tokens are returned in the order requested by `responseType` above
+		        var accessToken = res[0];
+		        var idToken = res[1]
+
+		        // Say hello to the person who just signed in:
+		        console.log('Hello, ' + idToken.claims.email);
+
+		        // Save the tokens for later use, e.g. if the page gets refreshed:
+		        oktaSignIn.tokenManager.add('accessToken', accessToken);
+		        oktaSignIn.tokenManager.add('idToken', idToken);
+
+		        // Remove the tokens from the window location hash
+		        window.location.hash='';
+		      },
+		      function error(err) {
+		        // handle errors as needed
+		        console.error(err);
+		      }
+		    );
+		  } else {
+		    oktaSignIn.session.get(function (res) {
+		      // Session exists, show logged in state.
+		      	debugger
+		      if (res.status === 'ACTIVE') {
+		        console.log('Welcome back, ' + res.login);
+		        return;
+		      }
+		      // No session, show the login form
+		      oktaSignIn.renderEl(
+		        { el: '#okta-login-container' },
+		        function success(res) {
+		          // Nothing to do in this case, the widget will automatically redirect
+		          // the user to Okta for authentication, then back to this page if successful
+		        },
+		        function error(err) {
+							debugger		     
+		          // handle errors as needed
+		          console.error(err);
+		        }
+		      );
+		    });
+		  }
+		</script>
+	</body>
+</html>

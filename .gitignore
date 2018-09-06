@@ -8,4 +8,5 @@ log/
 .sass-cache/
 backend/.idea/
 backend/venv/
+config/
 

@@ -1,0 +1,1 @@
+export const OKTA_CLIENT_ID = '0oag546kkrj3ZXEeW0h7';
