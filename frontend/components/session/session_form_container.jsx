@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 import {createUser, createSession} from '../../actions/session';
 import SessionForm from './session_form';
 import {clearError} from '../../actions/error';
-import {receiveOktaSignIn} from '../../actions/okta';
+import {receiveOktaSignIn, receiveOktaToken, receiveOktaSession} from '../../actions/okta';
 import { withAuth } from '@okta/okta-react';
 
 
@@ -20,7 +20,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return ({
     action: user => dispatch(action(user)),
     clearError: () => dispatch(clearError()),
+    receiveOktaSession: (session) => dispatch(receiveOktaSession(session)),
     receiveOktaSignIn: (okta) => dispatch(receiveOktaSignIn(okta)),
+    receiveOktaToken: (accessToken, idToken) => dispatch(receiveOktaToken(accessToken, idToken)),
   });
 };
 

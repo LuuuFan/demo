@@ -10135,8 +10135,14 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
     clearError: function clearError() {
       return dispatch((0, _error.clearError)());
     },
+    receiveOktaSession: function receiveOktaSession(session) {
+      return dispatch((0, _okta.receiveOktaSession)(session));
+    },
     receiveOktaSignIn: function receiveOktaSignIn(okta) {
       return dispatch((0, _okta.receiveOktaSignIn)(okta));
+    },
+    receiveOktaToken: function receiveOktaToken(accessToken, idToken) {
+      return dispatch((0, _okta.receiveOktaToken)(accessToken, idToken));
     }
   };
 };
@@ -36083,6 +36089,10 @@ var oktaReducer = function oktaReducer() {
 			newState = Object.assgin({}, state);
 			newState['accessToken'] = action.accessToken, newState['idToken'] = action.idToken;
 			return newState;
+		case _okta.RECEIVE_OKTA_SESSION:
+			newState = Object.assign({}, state);
+			newState['session'] = action.session;
+			return newState;
 		default:
 			return state;
 	}
@@ -39028,9 +39038,21 @@ var SessionForm = function (_React$Component) {
 	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
+			var _this3 = this;
+
 			var oktaSignIn = this.initialOkta();
 			oktaSignIn.session.get(function (res) {
-				debugger;
+				console.log(res);
+				if (res.status === 'ACTIVE') {
+					_this3.props.receiveOktaSession(res);
+				} else {
+					oktaSignIn.renderEl({ el: '#okta-login-container' }, function (res) {
+						_this3.props.receiveOktaToken(res[0], res[1]);
+					}, function (err) {
+						console.log('~~~~~~~~~~~~~~~~~');
+						console.log(err);
+					});
+				}
 			});
 			// checkSession(oktaSignIn)
 			// this.checkAuthentication();
@@ -39129,7 +39151,7 @@ var SessionForm = function (_React$Component) {
 	}, {
 		key: 'handleSubmit',
 		value: function handleSubmit(e) {
-			var _this3 = this;
+			var _this4 = this;
 
 			e.preventDefault();
 			if (this.props.error || this.props.error) {
@@ -39138,13 +39160,13 @@ var SessionForm = function (_React$Component) {
 			if (this.state.username && this.state.password) {
 				var user = { username: this.state.username, password: this.state.password };
 				this.props.action(user).then(function (res) {
-					if (_this3.props.formType === 'signup') {
+					if (_this4.props.formType === 'signup') {
 						if (!res.error) {
-							_this3.props.history.push('/login');
+							_this4.props.history.push('/login');
 						}
 					} else {
 						localStorage.setItem('access_token', res.currentUser['access-token']);
-						_this3.props.history.push('/');
+						_this4.props.history.push('/');
 					}
 				});
 			} else {
@@ -39163,7 +39185,7 @@ var SessionForm = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this4 = this;
+			var _this5 = this;
 
 			var _props = this.props,
 			    error = _props.error,
@@ -39203,7 +39225,7 @@ var SessionForm = function (_React$Component) {
 						_react2.default.createElement(
 							'span',
 							{ onClick: function onClick() {
-									return _this4.clearError();
+									return _this5.clearError();
 								} },
 							'\xD7'
 						)
@@ -39218,7 +39240,7 @@ var SessionForm = function (_React$Component) {
 						_react2.default.createElement(
 							'span',
 							{ onClick: function onClick() {
-									return _this4.clearError();
+									return _this5.clearError();
 								} },
 							'\xD7'
 						)
@@ -39226,7 +39248,7 @@ var SessionForm = function (_React$Component) {
 					_react2.default.createElement(
 						'form',
 						{ className: 'form-signin', onSubmit: function onSubmit(e) {
-								return _this4.handleSubmit(e);
+								return _this5.handleSubmit(e);
 							} },
 						_react2.default.createElement(
 							'div',

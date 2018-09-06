@@ -45,7 +45,20 @@ class SessionForm extends React.Component {
 	componentDidMount(){
 		let oktaSignIn = this.initialOkta();
 		oktaSignIn.session.get((res) => {
-			debugger
+			console.log(res);
+			if (res.status === 'ACTIVE') {
+				this.props.receiveOktaSession(res);
+			} else {
+				 oktaSignIn.renderEl(
+      		{ el: '#okta-login-container' },
+      		(res) => {
+      			this.props.receiveOktaToken(res[0], res[1]);
+      		}, (err) => {
+      			console.log('~~~~~~~~~~~~~~~~~');
+      			console.log(err);
+      		}
+	      )
+			}
 		})
 		// checkSession(oktaSignIn)
 		// this.checkAuthentication();
