@@ -23,6 +23,7 @@ const App = () => (
         <ProtectedRoute exact path='/' component = { HomeContainer } />
         <AuthRoute path='/signup' component={SessionFormContainer} />
         <AuthRoute path='/login' component={SessionFormContainer} />
+        <Route path='/okta' component={oktaCallback}/>
         <Route path='/implicit/callback' component={ImplicitCallback}/>
       </Security>
     </Switch>  

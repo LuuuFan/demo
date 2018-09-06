@@ -10122,7 +10122,8 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
     formType: formType,
     error: state.error,
-    currentUser: state.session.currentUser
+    currentUser: state.session.currentUser,
+    oktaSignIn: state.okta.okta
   };
 };
 
@@ -36086,7 +36087,7 @@ var oktaReducer = function oktaReducer() {
 			newState['okta'] = action.okta;
 			return newState;
 		case _okta.RECEIVE_OKTA_TOKEN:
-			newState = Object.assgin({}, state);
+			newState = Object.assign({}, state);
 			newState['accessToken'] = action.accessToken, newState['idToken'] = action.idToken;
 			return newState;
 		case _okta.RECEIVE_OKTA_SESSION:
@@ -38664,6 +38665,7 @@ var App = function App() {
         _react2.default.createElement(_route_util.ProtectedRoute, { exact: true, path: '/', component: _home_container2.default }),
         _react2.default.createElement(_route_util.AuthRoute, { path: '/signup', component: _session_form_container2.default }),
         _react2.default.createElement(_route_util.AuthRoute, { path: '/login', component: _session_form_container2.default }),
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/okta', component: _okta_callback2.default }),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/implicit/callback', component: _oktaReact.ImplicitCallback })
       )
     )
@@ -38967,8 +38969,6 @@ var _react2 = _interopRequireDefault(_react);
 
 var _oktaReact = __webpack_require__(72);
 
-var _okta_util = __webpack_require__(107);
-
 var _key = __webpack_require__(205);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -38983,6 +38983,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 // import 'babel-polyfill';
+
+// import {checkSession} from '../../util/okta_util';
 
 
 var SessionForm = function (_React$Component) {
@@ -39036,24 +39038,61 @@ var SessionForm = function (_React$Component) {
 			return oktaSignIn;
 		}
 	}, {
-		key: 'componentDidMount',
-		value: function componentDidMount() {
+		key: 'checkOktaSession',
+		value: function checkOktaSession(oktaSignIn) {
 			var _this3 = this;
 
-			var oktaSignIn = this.initialOkta();
-			oktaSignIn.session.get(function (res) {
-				console.log(res);
-				if (res.status === 'ACTIVE') {
-					_this3.props.receiveOktaSession(res);
+			if (oktaSignIn.token.hasTokensInUrl()) {
+				oktaSignIn.token.parseTokensFromUrl(function (res) {
+					alert('now we have token in url, handle it');
+					// The tokens are returned in the order requested by `responseType` above
+					var accessToken = res[0];
+					var idToken = res[1];
+					_this3.props.receiveOktaToken(accessToken, idToken);
+					// Say hello to the person who just signed in:
+					console.log('Hello, ' + idToken.claims.email);
+
+					// Save the tokens for later use, e.g. if the page gets refreshed:
+					oktaSignIn.tokenManager.add('accessToken', accessToken);
+					oktaSignIn.tokenManager.add('idToken', idToken);
+
+					// Remove the tokens from the window location hash
+					window.location.hash = '';
+				}, function (err) {
+					// handle errors as needed
+					console.error(err);
+				});
+			} else {
+				oktaSignIn.session.get(function (res) {
+					if (res.status === 'ACTIVE') {
+						_this3.props.receiveOktaSession(res);
+						_this3.props.history.push('/okta');
+					} else {
+						console.log('render signin window');
+						oktaSignIn.renderEl({ el: '#okta-login-container' }, function (res) {
+							_this3.props.receiveOktaToken(res[0], res[1]);
+							_this3.props.history.push('/okta');
+						}, function (err) {
+							console.log('~~~~~~~~~~~~~~~~~');
+							console.log(err);
+						});
+					}
+				});
+			}
+		}
+	}, {
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			if (this.props.formType === 'login') {
+				if (this.props.oktaSignIn) {
+					this.checkOktaSession(this.props.oktaSignIn);
+					console.log('~~~~~~~~~~~~~~~~~~~~~');
 				} else {
-					oktaSignIn.renderEl({ el: '#okta-login-container' }, function (res) {
-						_this3.props.receiveOktaToken(res[0], res[1]);
-					}, function (err) {
-						console.log('~~~~~~~~~~~~~~~~~');
-						console.log(err);
-					});
+					console.log('&&&&&&&&&&&&&&&&&&&&&&&&&');
+					var oktaSignIn = this.initialOkta();
+					this.checkOktaSession(oktaSignIn);
 				}
-			});
+			}
 			// checkSession(oktaSignIn)
 			// this.checkAuthentication();
 		}
@@ -39092,8 +39131,18 @@ var SessionForm = function (_React$Component) {
 		}()
 	}, {
 		key: 'componentDidUpdate',
-		value: function componentDidUpdate() {
+		value: function componentDidUpdate(prevProps, prevState) {
 			// initialOkta();
+			if (prevProps.formType !== this.props.formType && this.props.formType === 'login') {
+				if (this.props.oktaSignIn) {
+					console.log('******************');
+					this.checkOktaSession(this.props.oktaSignIn);
+				} else {
+					console.log('++++++++++++++++++++++++++++');
+					var oktaSignIn = this.initialOkta();
+					this.checkOktaSession(oktaSignIn);
+				}
+			}
 			// this.checkAuthentication();
 		}
 	}, {
@@ -39294,17 +39343,7 @@ var SessionForm = function (_React$Component) {
 				),
 				_react2.default.createElement(
 					'div',
-					{ className: 'okta-test' },
-					_react2.default.createElement(
-						'button',
-						{ onClick: this.logout },
-						'Logout'
-					),
-					_react2.default.createElement(
-						'button',
-						{ onClick: this.login },
-						'Login'
-					),
+					{ className: 'okta' },
 					_react2.default.createElement('div', { id: 'okta-login-container' })
 				)
 			);
@@ -52301,7 +52340,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _oktaReact = __webpack_require__(72);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -52309,7 +52352,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var oktaCallback = function (_React$Component) {
+exports.default = (0, _oktaReact.withAuth)(function (_React$Component) {
 	_inherits(oktaCallback, _React$Component);
 
 	function oktaCallback() {
@@ -52323,20 +52366,61 @@ var oktaCallback = function (_React$Component) {
 
 	_createClass(oktaCallback, [{
 		key: 'componentDidMount',
-		value: function componentDidMount() {
-			debugger;
-		}
+		value: function componentDidMount() {}
+	}, {
+		key: 'logout',
+		value: function () {
+			var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+				return regeneratorRuntime.wrap(function _callee$(_context) {
+					while (1) {
+						switch (_context.prev = _context.next) {
+							case 0:
+								// Redirect to '/' after logout
+								// this.props.logout('/login')
+								this.props.auth.logout('/login');
+
+							case 1:
+							case 'end':
+								return _context.stop();
+						}
+					}
+				}, _callee, this);
+			}));
+
+			function logout() {
+				return _ref.apply(this, arguments);
+			}
+
+			return logout;
+		}()
 	}, {
 		key: 'render',
 		value: function render() {
-			_react2.default.createElement('div', null);
+			var _this2 = this;
+
+			return _react2.default.createElement(
+				'div',
+				null,
+				_react2.default.createElement(
+					'h1',
+					null,
+					'Login Okta'
+				),
+				_react2.default.createElement(
+					'button',
+					{ onClick: function onClick() {
+							return _this2.logout();
+						} },
+					'Logout'
+				)
+			);
 		}
 	}]);
 
 	return oktaCallback;
-}(_react2.default.Component);
+}(_react2.default.Component));
 
-exports.default = oktaCallback;
+// export default oktaCallback;
 
 /***/ })
 /******/ ]);

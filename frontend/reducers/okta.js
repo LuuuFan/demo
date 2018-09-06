@@ -9,7 +9,7 @@ const oktaReducer = (state={}, action) => {
 			newState['okta'] = action.okta;
 			return newState;
 		case RECEIVE_OKTA_TOKEN:
-			newState = Object.assgin({}, state);
+			newState = Object.assign({}, state);
 			newState['accessToken'] = action.accessToken,
 			newState['idToken'] = action.idToken;
 			return newState;

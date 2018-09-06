@@ -1,7 +1,7 @@
 import React from 'react';
 // import 'babel-polyfill';
 import { withAuth } from '@okta/okta-react';
-import {checkSession} from '../../util/okta_util';
+// import {checkSession} from '../../util/okta_util';
 import {OKTA_CLIENT_ID} from '../../../config/key';
 
 class SessionForm extends React.Component {
@@ -42,24 +42,63 @@ class SessionForm extends React.Component {
 		return oktaSignIn;
 	};
 
+	checkOktaSession(oktaSignIn){
+		if (oktaSignIn.token.hasTokensInUrl()) {
+		  oktaSignIn.token.parseTokensFromUrl(
+		    (res) => {
+		    	alert('now we have token in url, handle it');
+		      // The tokens are returned in the order requested by `responseType` above
+		      var accessToken = res[0];
+		      var idToken = res[1]
+		      this.props.receiveOktaToken(accessToken, idToken);
+		      // Say hello to the person who just signed in:
+		      console.log('Hello, ' + idToken.claims.email);
+
+		      // Save the tokens for later use, e.g. if the page gets refreshed:
+		      oktaSignIn.tokenManager.add('accessToken', accessToken);
+		      oktaSignIn.tokenManager.add('idToken', idToken);
+
+		      // Remove the tokens from the window location hash
+		      window.location.hash='';
+		    },
+		    (err) => {
+		      // handle errors as needed
+		      console.error(err);
+		    }
+		  );
+		} else {
+			oktaSignIn.session.get((res) => {
+				if (res.status === 'ACTIVE') {
+					this.props.receiveOktaSession(res);
+	  			this.props.history.push('/okta');
+				} else {
+					console.log('render signin window');
+					 oktaSignIn.renderEl(
+	      		{ el: '#okta-login-container' },
+	      		(res) => {
+	      			this.props.receiveOktaToken(res[0], res[1]);
+	      			this.props.history.push('/okta');
+	      		}, (err) => {
+	      			console.log('~~~~~~~~~~~~~~~~~');
+	      			console.log(err);
+	      		}
+		      )
+				}
+			})
+		}
+	}
+
 	componentDidMount(){
-		let oktaSignIn = this.initialOkta();
-		oktaSignIn.session.get((res) => {
-			console.log(res);
-			if (res.status === 'ACTIVE') {
-				this.props.receiveOktaSession(res);
+		if (this.props.formType === 'login') {
+			if (this.props.oktaSignIn) {
+				this.checkOktaSession(this.props.oktaSignIn);
+				console.log('~~~~~~~~~~~~~~~~~~~~~')
 			} else {
-				 oktaSignIn.renderEl(
-      		{ el: '#okta-login-container' },
-      		(res) => {
-      			this.props.receiveOktaToken(res[0], res[1]);
-      		}, (err) => {
-      			console.log('~~~~~~~~~~~~~~~~~');
-      			console.log(err);
-      		}
-	      )
+				console.log('&&&&&&&&&&&&&&&&&&&&&&&&&')
+				const oktaSignIn = this.initialOkta();
+				this.checkOktaSession(oktaSignIn);
 			}
-		})
+		}
 		// checkSession(oktaSignIn)
 		// this.checkAuthentication();
 	}
@@ -71,8 +110,18 @@ class SessionForm extends React.Component {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
 		// initialOkta();
+		if (prevProps.formType !== this.props.formType && this.props.formType === 'login') {
+			if (this.props.oktaSignIn) {
+				console.log('******************')
+				this.checkOktaSession(this.props.oktaSignIn);
+			} else {
+				console.log('++++++++++++++++++++++++++++')
+				const oktaSignIn = this.initialOkta();
+				this.checkOktaSession(oktaSignIn);
+			}
+		}
     // this.checkAuthentication();
   }
 
@@ -159,11 +208,11 @@ class SessionForm extends React.Component {
 						<small className='text-muted'>Need an account? <a href='/#/signup'>Sign Up</a></small>
 					}
 				</div>
-				<div className='okta-test'>
+				<div className='okta'>
 					{
+						// <button onClick={this.logout}>Logout</button>
+						// <button onClick={this.login}>Login</button>
 					}
-						<button onClick={this.logout}>Logout</button>
-						<button onClick={this.login}>Login</button>
 					<div id="okta-login-container"></div>
 				</div>
 			</div>
