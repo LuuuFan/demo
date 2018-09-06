@@ -13,10 +13,10 @@ class SessionForm extends React.Component {
 			passwordError: '',
 			authenticated: null,
 		};
-		// this.checkAuthentication = this.checkAuthentication.bind(this);
+		this.checkAuthentication = this.checkAuthentication.bind(this);
     // this.checkAuthentication();
- //    this.login = this.login.bind(this);
- //    this.logout = this.logout.bind(this);
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
 	}
 
 	handleInput(type){
@@ -27,31 +27,32 @@ class SessionForm extends React.Component {
 
 	componentDidMount(){
 		initialOkta();
-		// this.checkAuthentication();
+		this.checkAuthentication();
 	}
 
-	 // async checkAuthentication() {
-  //   const authenticated = await this.props.auth.isAuthenticated();
-  //   if (authenticated !== this.state.authenticated) {
-  //     this.setState({ authenticated });
-  //   }
-  // }
-
-  componentDidUpdate() {
-    // this.checkAuthentication();
+	 async checkAuthentication() {
+    const authenticated = await this.props.auth.isAuthenticated();
+    if (authenticated !== this.state.authenticated) {
+      this.setState({ authenticated });
+    }
   }
 
-  // async login() {
-  //   // Redirect to '/' after login
-  //   // this.props.login('/')
-  //   this.props.auth.login('/');
-  // }
+  componentDidUpdate() {
+		// initialOkta();
+    this.checkAuthentication();
+  }
 
-  // async logout() {
-  //   // Redirect to '/' after logout
-  //   // this.props.logout('/login')
-  //   this.props.auth.logout('/login');
-  // }
+  async login() {
+    // Redirect to '/' after login
+    // this.props.login('/')
+    this.props.auth.login('/');
+  }
+
+  async logout() {
+    // Redirect to '/' after logout
+    // this.props.logout('/login')
+    this.props.auth.logout('/login');
+  }
 
 
 	handleSubmit(e){
@@ -125,10 +126,10 @@ class SessionForm extends React.Component {
 					}
 				</div>
 				<div className='okta-test'>
-					{/*
+					{
+					}
 						<button onClick={this.logout}>Logout</button>
 						<button onClick={this.login}>Login</button>
-					*/}
 					<div id="okta-login-container"></div>
 				</div>
 			</div>

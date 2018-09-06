@@ -8,6 +8,7 @@ import channelReducer from './channel';
 import selectedImgReducer from './selected_img';
 import chatReducer from './chat';
 import userReducer from './user';
+import oktaReducer from './okta';
 
 const rootReducer = combineReducers({
   session: sessionReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   channel: channelReducer,
   selectedImg: selectedImgReducer,
   chat: chatReducer,
+  okta: oktaReducer,
 });
 
 export default rootReducer;

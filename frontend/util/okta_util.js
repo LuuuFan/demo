@@ -10,6 +10,8 @@ export const initialOkta = () => {
 	    display: 'page'
 	  }
 	});
+
+	
 	if (oktaSignIn.token.hasTokensInUrl()) {
 	  oktaSignIn.token.parseTokensFromUrl(
 	    function success(res) {

@@ -35472,6 +35472,10 @@ var _user = __webpack_require__(200);
 
 var _user2 = _interopRequireDefault(_user);
 
+var _okta = __webpack_require__(365);
+
+var _okta2 = _interopRequireDefault(_okta);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
@@ -35483,7 +35487,8 @@ var rootReducer = (0, _redux.combineReducers)({
   message: _message2.default,
   channel: _channel2.default,
   selectedImg: _selected_img2.default,
-  chat: _chat2.default
+  chat: _chat2.default,
+  okta: _okta2.default
 });
 
 exports.default = rootReducer;
@@ -38772,6 +38777,8 @@ var _okta_util = __webpack_require__(320);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -38797,10 +38804,10 @@ var SessionForm = function (_React$Component) {
 			passwordError: '',
 			authenticated: null
 		};
-		// this.checkAuthentication = this.checkAuthentication.bind(this);
+		_this.checkAuthentication = _this.checkAuthentication.bind(_this);
 		// this.checkAuthentication();
-		//    this.login = this.login.bind(this);
-		//    this.logout = this.logout.bind(this);
+		_this.login = _this.login.bind(_this);
+		_this.logout = _this.logout.bind(_this);
 		return _this;
 	}
 
@@ -38819,35 +38826,99 @@ var SessionForm = function (_React$Component) {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
 			(0, _okta_util.initialOkta)();
-			// this.checkAuthentication();
+			this.checkAuthentication();
 		}
+	}, {
+		key: 'checkAuthentication',
+		value: function () {
+			var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+				var authenticated;
+				return regeneratorRuntime.wrap(function _callee$(_context) {
+					while (1) {
+						switch (_context.prev = _context.next) {
+							case 0:
+								_context.next = 2;
+								return this.props.auth.isAuthenticated();
 
-		// async checkAuthentication() {
-		//   const authenticated = await this.props.auth.isAuthenticated();
-		//   if (authenticated !== this.state.authenticated) {
-		//     this.setState({ authenticated });
-		//   }
-		// }
+							case 2:
+								authenticated = _context.sent;
 
+								if (authenticated !== this.state.authenticated) {
+									this.setState({ authenticated: authenticated });
+								}
+
+							case 4:
+							case 'end':
+								return _context.stop();
+						}
+					}
+				}, _callee, this);
+			}));
+
+			function checkAuthentication() {
+				return _ref.apply(this, arguments);
+			}
+
+			return checkAuthentication;
+		}()
 	}, {
 		key: 'componentDidUpdate',
-		value: function componentDidUpdate() {}
-		// this.checkAuthentication();
+		value: function componentDidUpdate() {
+			// initialOkta();
+			this.checkAuthentication();
+		}
+	}, {
+		key: 'login',
+		value: function () {
+			var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+				return regeneratorRuntime.wrap(function _callee2$(_context2) {
+					while (1) {
+						switch (_context2.prev = _context2.next) {
+							case 0:
+								// Redirect to '/' after login
+								// this.props.login('/')
+								this.props.auth.login('/');
 
+							case 1:
+							case 'end':
+								return _context2.stop();
+						}
+					}
+				}, _callee2, this);
+			}));
 
-		// async login() {
-		//   // Redirect to '/' after login
-		//   // this.props.login('/')
-		//   this.props.auth.login('/');
-		// }
+			function login() {
+				return _ref2.apply(this, arguments);
+			}
 
-		// async logout() {
-		//   // Redirect to '/' after logout
-		//   // this.props.logout('/login')
-		//   this.props.auth.logout('/login');
-		// }
+			return login;
+		}()
+	}, {
+		key: 'logout',
+		value: function () {
+			var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+				return regeneratorRuntime.wrap(function _callee3$(_context3) {
+					while (1) {
+						switch (_context3.prev = _context3.next) {
+							case 0:
+								// Redirect to '/' after logout
+								// this.props.logout('/login')
+								this.props.auth.logout('/login');
 
+							case 1:
+							case 'end':
+								return _context3.stop();
+						}
+					}
+				}, _callee3, this);
+			}));
 
+			function logout() {
+				return _ref3.apply(this, arguments);
+			}
+
+			return logout;
+		}()
 	}, {
 		key: 'handleSubmit',
 		value: function handleSubmit(e) {
@@ -38995,6 +39066,16 @@ var SessionForm = function (_React$Component) {
 				_react2.default.createElement(
 					'div',
 					{ className: 'okta-test' },
+					_react2.default.createElement(
+						'button',
+						{ onClick: this.logout },
+						'Logout'
+					),
+					_react2.default.createElement(
+						'button',
+						{ onClick: this.login },
+						'Login'
+					),
 					_react2.default.createElement('div', { id: 'okta-login-container' })
 				)
 			);
@@ -44843,6 +44924,7 @@ var initialOkta = exports.initialOkta = function initialOkta() {
 			display: 'page'
 		}
 	});
+
 	if (oktaSignIn.token.hasTokensInUrl()) {
 		oktaSignIn.token.parseTokensFromUrl(function success(res) {
 			// The tokens are returned in the order requested by `responseType` above
@@ -52103,6 +52185,68 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var OKTA_CLIENT_ID = exports.OKTA_CLIENT_ID = '0oag546kkrj3ZXEeW0h7';
+
+/***/ }),
+/* 365 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _okta = __webpack_require__(366);
+
+var oktaReducer = function oktaReducer() {
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	var action = arguments[1];
+
+	Object.freeze(state);
+	var newState = void 0;
+	switch (action.type) {
+		case _okta.RECEIVE_OKTA_SIGNIN:
+			return { okta: action.okta };
+		default:
+			return state;
+	}
+};
+
+exports.default = oktaReducer;
+
+/***/ }),
+/* 366 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.initialOkta = exports.receiveOktaSignIn = exports.RECEIVE_OKTA_SIGNIN = undefined;
+
+var _okta_util = __webpack_require__(320);
+
+var OktaUtil = _interopRequireWildcard(_okta_util);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var RECEIVE_OKTA_SIGNIN = exports.RECEIVE_OKTA_SIGNIN = 'RECEIVE_OKTA_SIGNIN';
+
+var receiveOktaSignIn = exports.receiveOktaSignIn = function receiveOktaSignIn(okta) {
+	return {
+		type: RECEIVE_OKTA_SIGNIN,
+		okta: okta
+	};
+};
+
+var initialOkta = exports.initialOkta = function initialOkta() {
+	return function (dispatch) {
+		return OktaUtil.initialOkta().then();
+	};
+};
 
 /***/ })
 /******/ ]);
