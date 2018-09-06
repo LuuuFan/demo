@@ -22,4 +22,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   });
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SessionForm);
+export default withAuth(connect(mapStateToProps, mapDispatchToProps)(SessionForm));

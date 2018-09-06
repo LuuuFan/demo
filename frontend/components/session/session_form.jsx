@@ -1,7 +1,8 @@
 import React from 'react';
+import 'babel-polyfill';
 import { withAuth } from '@okta/okta-react';
 
-export default withAuth(class SessionForm extends React.Component {
+class SessionForm extends React.Component {
 	constructor(){
 		super();
 		this.state = {
@@ -11,10 +12,10 @@ export default withAuth(class SessionForm extends React.Component {
 			passwordError: '',
 			authenticated: null,
 		};
-		// this.checkAuthentication = this.checkAuthentication.bind(this);
-  //   this.checkAuthentication();
-  //   this.login = this.login.bind(this);
-  //   this.logout = this.logout.bind(this);
+		this.checkAuthentication = this.checkAuthentication.bind(this);
+    // this.checkAuthentication();
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
 	}
 
 	handleInput(type){
@@ -23,26 +24,32 @@ export default withAuth(class SessionForm extends React.Component {
 		};
 	}
 
-	 // async checkAuthentication() {
-  //   const authenticated = await this.props.auth.isAuthenticated();
-  //   if (authenticated !== this.state.authenticated) {
-  //     this.setState({ authenticated });
-  //   }
-  // }
+	componentDidMount(){
+		this.checkAuthentication();
+	}
 
-  componentDidUpdate() {
-    // this.checkAuthentication();
+	 async checkAuthentication() {
+    const authenticated = await this.props.auth.isAuthenticated();
+    if (authenticated !== this.state.authenticated) {
+      this.setState({ authenticated });
+    }
   }
 
-  // async login() {
-  //   // Redirect to '/' after login
-  //   this.props.login('/');
-  // }
+  componentDidUpdate() {
+    this.checkAuthentication();
+  }
 
-  // async logout() {
-  //   // Redirect to '/' after logout
-  //   this.props.logout('/login');
-  // }
+  async login() {
+    // Redirect to '/' after login
+    // this.props.login('/')
+    this.props.auth.login('/');
+  }
+
+  async logout() {
+    // Redirect to '/' after logout
+    // this.props.logout('/login')
+    this.props.auth.logout('/login');
+  }
 
 
 	handleSubmit(e){
@@ -115,9 +122,13 @@ export default withAuth(class SessionForm extends React.Component {
 						<small className='text-muted'>Need an account? <a href='/#/signup'>Sign Up</a></small>
 					}
 				</div>
+				<div className='okta-test'>
+					<button onClick={this.logout}>Logout</button>
+					<button onClick={this.login}>Login</button>
+				</div>
 			</div>
 		);
 	}
-});
+}
 
-// export default SessionForm;
+export default SessionForm;
