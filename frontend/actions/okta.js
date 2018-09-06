@@ -7,7 +7,3 @@ export const receiveOktaSignIn = (okta) => ({
 	okta,
 });
 
-export const initialOkta = () => dispatch => OktaUtil.initialOkta()
-	.then(
-		
-	)

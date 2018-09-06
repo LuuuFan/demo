@@ -1,4 +1,5 @@
 import {OKTA_CLIENT_ID} from '../../config/key';
+import {receiveOktaSignIn} from '../actions/okta';
 
 export const initialOkta = () => {
 	let oktaSignIn = new OktaSignIn({
@@ -11,7 +12,8 @@ export const initialOkta = () => {
 	  }
 	});
 
-	
+	receiveOktaSignIn(oktaSignIn);
+
 	if (oktaSignIn.token.hasTokensInUrl()) {
 	  oktaSignIn.token.parseTokensFromUrl(
 	    function success(res) {
