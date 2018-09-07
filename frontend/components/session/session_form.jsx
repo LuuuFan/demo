@@ -33,6 +33,7 @@ class SessionForm extends React.Component {
 		  baseUrl: "https://dev-772839.oktapreview.com",
 		  clientId: OKTA_CLIENT_ID,
 		  redirectUri: 'http://localhost:3000',
+		  logo: 'static/assets/images/bluelogo.png',
 		  authParams: {
 		    issuer: "https://dev-772839.oktapreview.com/oauth2/default",
 		    responseType: ['token', 'id_token'],
@@ -103,6 +104,10 @@ class SessionForm extends React.Component {
 		}
 		// checkSession(oktaSignIn)
 		// this.checkAuthentication();
+	}
+
+	componentWillUnmount(){
+		this.props.okta.remove();
 	}
 
 	 async checkAuthentication() {

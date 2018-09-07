@@ -39055,6 +39055,7 @@ var SessionForm = function (_React$Component) {
 				baseUrl: "https://dev-772839.oktapreview.com",
 				clientId: _key.OKTA_CLIENT_ID,
 				redirectUri: 'http://localhost:3000',
+				logo: 'static/assets/images/bluelogo.png',
 				authParams: {
 					issuer: "https://dev-772839.oktapreview.com/oauth2/default",
 					responseType: ['token', 'id_token'],
@@ -39123,6 +39124,11 @@ var SessionForm = function (_React$Component) {
 			}
 			// checkSession(oktaSignIn)
 			// this.checkAuthentication();
+		}
+	}, {
+		key: 'componentWillUnmount',
+		value: function componentWillUnmount() {
+			this.props.okta.remove();
 		}
 	}, {
 		key: 'checkAuthentication',
