@@ -20,6 +20,7 @@
   "homepage": "https://github.com/LuuuFan/demo",
   "dependencies": {
     "@okta/okta-react": "^1.0.3",
+    "@okta/okta-signin-widget": "^2.11.0",
     "babel": "^6.23.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",

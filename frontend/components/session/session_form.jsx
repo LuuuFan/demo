@@ -1,6 +1,7 @@
 import React from 'react';
 // import 'babel-polyfill';
 import { withAuth } from '@okta/okta-react';
+import {Link} from 'react-router-dom';
 // import {checkSession} from '../../util/okta_util';
 import {OKTA_CLIENT_ID} from '../../../config/key';
 
@@ -13,6 +14,7 @@ class SessionForm extends React.Component {
 			usernameError: '',
 			passwordError: '',
 			authenticated: null,
+			oktaLoading: false,
 		};
 		this.checkAuthentication = this.checkAuthentication.bind(this);
     // this.checkAuthentication();
@@ -203,9 +205,9 @@ class SessionForm extends React.Component {
 						<input type='submit' value={text} align='middle'/>
 					</form>
 					{formType === 'signup' ?
-						<small className='text-muted'>Already have an account? <a href='/#/login'>Log In</a></small>
+						<small className='text-muted'>Already have an account? <Link to='/login'>Log In</Link></small>
 						:
-						<small className='text-muted'>Need an account? <a href='/#/signup'>Sign Up</a></small>
+						<small className='text-muted'>Need an account? <Link to='/signup'>Sign Up</Link></small>
 					}
 				</div>
 				<div className='okta'>

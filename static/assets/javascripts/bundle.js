@@ -38994,6 +38994,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _oktaReact = __webpack_require__(72);
 
+var _reactRouterDom = __webpack_require__(67);
+
 var _key = __webpack_require__(205);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -39025,7 +39027,8 @@ var SessionForm = function (_React$Component) {
 			password: '',
 			usernameError: '',
 			passwordError: '',
-			authenticated: null
+			authenticated: null,
+			oktaLoading: false
 		};
 		_this.checkAuthentication = _this.checkAuthentication.bind(_this);
 		// this.checkAuthentication();
@@ -39351,8 +39354,8 @@ var SessionForm = function (_React$Component) {
 						{ className: 'text-muted' },
 						'Already have an account? ',
 						_react2.default.createElement(
-							'a',
-							{ href: '/#/login' },
+							_reactRouterDom.Link,
+							{ to: '/login' },
 							'Log In'
 						)
 					) : _react2.default.createElement(
@@ -39360,8 +39363,8 @@ var SessionForm = function (_React$Component) {
 						{ className: 'text-muted' },
 						'Need an account? ',
 						_react2.default.createElement(
-							'a',
-							{ href: '/#/signup' },
+							_reactRouterDom.Link,
+							{ to: '/signup' },
 							'Sign Up'
 						)
 					)
