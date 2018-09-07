@@ -17,7 +17,7 @@ class Header extends React.Component{
 					{/*
 						<i className="fab fa-viadeo"></i>
 					*/}
-					<h2>Expirements</h2>
+					<h2>Collaber</h2>
 				</a>
 				<div className='header-buttons'>
 					<ShareContainer receiveImg={receiveImg} sendEmail={sendEmail} message={message} clearMessage={clearMessage} sendService={sendService} canvas={canvas}/>

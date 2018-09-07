@@ -476,6 +476,10 @@ input[type=submit] {
   background: rgba(255, 0, 0, 0.3);
 }
 
+.auth-org-logo {
+  width: 40px;
+}
+
 .chat-area {
   z-index: 3;
   position: fixed;
