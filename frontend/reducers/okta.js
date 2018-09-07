@@ -12,16 +12,22 @@ const oktaReducer = (state={}, action) => {
 			newState = Object.assign({}, state);
 			newState['accessToken'] = action.accessToken,
 			newState['idToken'] = action.idToken;
+			localStorage.setItem('oktaAccessToken', JSON.stringify(action.accessToken));
+			localStorage.setItem('oktaIdToken', JSON.stringify(action.idToken));
 			return newState;
 		case RECEIVE_OKTA_SESSION:
 			newState = Object.assign({}, state);
 			newState['session'] = action.session;
+			localStorage.setItem('oktaSession', JSON.stringify(action.session));
 			return newState;
 		case REMOVE_OKTA_SESSION:
 			newState = Object.assign({}, state);
 			delete newState['accessToken'];
 			delete newState['session'];
 			delete newState['idToken'];
+			localStorage.removeItem('oktaAccessToken');
+			localStorage.removeItem('oktaIdToken');
+			localStorage.removeItem('oktaSession');
 			return newState;
 		default: 
 			return state;
