@@ -4,6 +4,7 @@ import { withAuth } from '@okta/okta-react';
 import {Link} from 'react-router-dom';
 // import {checkSession} from '../../util/okta_util';
 import {OKTA_CLIENT_ID} from '../../../config/key';
+import SignInWidget from './oktaWidget';
 
 class SessionForm extends React.Component {
 	constructor(){
@@ -132,6 +133,7 @@ class SessionForm extends React.Component {
     // this.checkAuthentication();
   }
 
+  // for react 
   async login() {
     // Redirect to '/' after login
     // this.props.login('/')
@@ -174,6 +176,16 @@ class SessionForm extends React.Component {
 	clearError(){
 		this.props.clearError();
 	}
+
+	onSuccess(res){
+		return this.props.auth.redirect({
+			sessionToken: res.session.token
+		});
+	};
+
+	onError(err) {
+		console.log('error logging in', err);
+	};
 
 
 	render(){
